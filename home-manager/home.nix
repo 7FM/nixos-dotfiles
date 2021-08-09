@@ -7,6 +7,14 @@
     modules/git.nix
     modules/zsh.nix
     modules/neovim.nix
+
+    modules/collections/utilities.nix
+    modules/collections/communication.nix
+    modules/collections/development.nix
+    modules/collections/office.nix
+    #modules/collections/diyStuff.nix
+    #modules/collections/gaming.nix
+
   ];
 
   # Let Home Manager install and manage itself.
