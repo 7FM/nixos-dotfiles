@@ -30,8 +30,12 @@
     shellAliases = {
       "ll" = "ls -l";
       ".." = "cd ..";
-      "got" = "git";
       "g" = "git";
+      "gc" = "git-crypt";
+      # Common typos...
+      "got" = "git";
+      "ös" = "ls";
+      "cd.." = "cd ..";
     };
 
     initExtra = ''
