@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     # Utilities
-    sshfs
     wget
     htop
     gparted
