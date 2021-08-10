@@ -6,7 +6,7 @@
     wget
     htop
     gparted
-    nmap
+    #nmap
     nmap-graphical
     x2goclient
     syncthing
