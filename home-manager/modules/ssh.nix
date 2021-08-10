@@ -8,6 +8,6 @@
 
   programs.ssh = {
     enable = true;
-    matchBlocks = import ../configs/secrets/sshConfig.nix;
+    matchBlocks = import ../configs/secrets/sshConfig.nix{ config = config; pkgs = pkgs; lib = lib; };
   };
 }
