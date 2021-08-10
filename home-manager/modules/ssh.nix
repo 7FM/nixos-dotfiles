@@ -8,7 +8,6 @@
 
   programs.ssh = {
     enable = true;
-    startAgent = true;
     matchBlocks = import ../configs/secrets/sshConfig.nix;
   };
 }
