@@ -28,7 +28,7 @@
     ];
 
     shellAliases = {
-      "ll" = "ls -l";
+      "ll" = "ls -alh";
       ".." = "cd ..";
       "g" = "git";
       "gc" = "git-crypt";
