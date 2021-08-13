@@ -12,7 +12,8 @@ in {
 
   imports = [
     # Hardware specifics
-    ./devices/virtualbox.nix
+    #./devices/virtualbox.nix
+    ./devices/desktop.nix
 
     ./common/systemConfig.nix
 
