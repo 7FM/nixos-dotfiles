@@ -8,6 +8,7 @@ in {
   boot.loader.grub.version = 2;
 
   boot.loader.grub.efiSupport = useUEFI;
+  boot.loader.efi.canTouchEfiVariables = useUEFI;
   #boot.loader.grub.efiInstallAsRemovable = true;
   #boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.systemd-boot.enable = useUEFI;
