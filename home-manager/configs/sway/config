@@ -243,17 +243,27 @@ output * bg ~/.config/sway/backgrounds/cheatsheet.jpg fit
 # Set default focus:
 #   exec swaymsg focus output <name-or-identifier>
 #
+
+# Desktop Setup:
+
+output DVI-D-1 res 1920x1080@144Hz pos 0,0
+output HDMI-A-1 res 1920x1080 pos 1920,0
+
 # Bind workspaces to monitors
-# workspace 1 output <name-or-identifier>
-# workspace 2 output <name-or-identifier>
-# workspace 3 output <name-or-identifier>
-# workspace 4 output <name-or-identifier>
-# workspace 5 output <name-or-identifier>
-# workspace 6 output <name-or-identifier>
-# workspace 7 output <name-or-identifier>
-# workspace 8 output <name-or-identifier>
-# workspace 9 output <name-or-identifier>
-# workspace 10 output <name-or-identifier>
+workspace 1 output DVI-D-1
+workspace 2 output DVI-D-1
+workspace 3 output DVI-D-1
+workspace 4 output DVI-D-1
+workspace 5 output DVI-D-1
+workspace 6 output HDMI-A-1
+workspace 7 output HDMI-A-1
+workspace 8 output HDMI-A-1
+workspace 9 output HDMI-A-1
+workspace 10 output HDMI-A-1
+
+exec swaymsg focus output DVI-D-1
+
+
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
