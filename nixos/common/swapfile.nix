@@ -1,15 +1,20 @@
 { config, pkgs, lib, ... }:
 
-{
+let
+  useSwapFile = config.custom.useSwapFile;
+  swapFileSize = config.custom.swapFileSize;
+  swapFilePath = config.custom.swapFilePath;
+in {
 
-  # overwrite the swap settings
-  swapDevices = lib.mkForce [
-    { 
-      device = "/swapfile";
-      priority = 10;
-      size = 1024;
-    }
-  ];
-
+  config = lib.mkIf useSwapFile {
+    # overwrite the swap settings
+    swapDevices = lib.mkForce [
+      {
+        device = swapFilePath;
+        priority = 10;
+        size = swapFileSize;
+      }
+    ];
+  };
 }
 

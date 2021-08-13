@@ -37,6 +37,30 @@ with lib;
       '';
     };
 
+    useSwapFile = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Specifies whether a swap file should used instead of a swap partition.
+      '';
+    };
+
+    swapFileSize = mkOption {
+      type = types.ints.positive;
+      default = 20 * 1024;
+      description = ''
+        Specifies the swap file size in MiB.
+      '';
+    };
+
+    swapFilePath = mkOption {
+      type = types.str;
+      default = "/swapfile";
+      description = ''
+        Specifies the swap file path.
+      '';
+    };
+
     runSSHServer = mkOption {
       type = types.bool;
       default = false;

@@ -42,4 +42,9 @@ in {
   custom.cpu = "generic";
   custom.gui = "wayland";
   custom.useUEFI = false;
+  custom.useSwapFile = true;
+  custom.swapFileSize = 1024;
+
+  networking.interfaces.enp0s3.useDHCP = true;
+
 }
