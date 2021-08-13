@@ -47,8 +47,6 @@ in {
 
   services.xserver.displayManager.autoLogin.enable = false;
 
-  networking.interfaces.enp0s3.useDHCP = true;
-
   # Enable CUPS to print documents.
   services.printing.enable = !runHeadless;
 
