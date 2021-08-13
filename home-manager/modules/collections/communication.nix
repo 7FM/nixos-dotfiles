@@ -4,7 +4,7 @@
   home.packages = with pkgs; [
     # Communication
     discord
-    mattermost
+    mattermost-desktop
     zoom-us
     teamspeak_client
   ];

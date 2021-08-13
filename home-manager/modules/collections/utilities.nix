@@ -10,5 +10,6 @@
     nmap-graphical
     x2goclient
     syncthing
+    speedtest-cli
   ];
 }
