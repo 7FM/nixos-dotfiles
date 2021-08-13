@@ -6,7 +6,7 @@
     steam
     steam-run
     lutris-unwrapped
-    wine
+    #wine
     winetricks
     wineWowPackages.full
   ];
