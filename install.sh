@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+#sudo rm -rf /etc/nixos
+#sudo ln -s $(pwd)/nixos /etc/nixos
+
 # Quit on error
 set -e
 
