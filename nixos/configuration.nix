@@ -38,6 +38,8 @@ in {
 
     # Features
     ./common/optimize_storage_space.nix
+    ./common/powermanagement.nix
+    ./common/networking.nix
 
     ./common/wayland.nix
     ./common/x11.nix
