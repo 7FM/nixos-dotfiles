@@ -11,5 +11,7 @@
     x2goclient
     syncthing
     speedtest-cli
+    usbutils
+    pciutils
   ];
 }
