@@ -25,7 +25,8 @@
 		"pulseaudio#in",
 		"idle_inhibitor",
 		"battery",
-		"clock"
+		"clock",
+		"custom/logout"
 	],
 
 	// Modules configuration
@@ -56,6 +57,11 @@
 		"format": "💽 {} ",
 		"interval": 60,
 		"exec": "df -h --output=avail / | tail -1 | tr -d ' '"
+	},
+	"custom/logout" : {
+		"format": " ",
+		"on-click" : "wlogout",
+		"on-click-right" : "wlogout",
 	},
 	"temperature": {
 		// "thermal-zone": 2,

@@ -44,6 +44,7 @@ in {
         xorg.xlsclients # Helper program to show programs>
         clipman # Clipboard manager
         swaybg # TODO is this explicitly needed?
+        wlogout # logout menu
       ];
     };
 
