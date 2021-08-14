@@ -34,6 +34,7 @@
       "gc" = "git-crypt";
       # Common typos...
       "got" = "git";
+      "exot" = "exit";
       "ös" = "ls";
       "cd.." = "cd ..";
     };
