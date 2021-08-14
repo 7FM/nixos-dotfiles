@@ -13,5 +13,6 @@
     speedtest-cli
     usbutils
     pciutils
+    xorg.xeyes
   ];
 }
