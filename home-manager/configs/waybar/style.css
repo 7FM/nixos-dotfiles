@@ -2,7 +2,7 @@
 	border: none;
 	border-radius: 0;
 	font-family: "monospace";
-	font-size: 9px;
+	font-size: 10px;
 	min-height: 0;
 	margin: 0px;
 }
@@ -57,7 +57,11 @@ window#waybar {
 	background: #af005f;
 	color: #1b1d1e;
 }
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+
+#temperature, #custom-disk_home, #custom-disk_root, #clock,
+#battery, #cpu, #memory, #network, #pulseaudio,
+#custom-mail, #custom-logout, #backlight, #idle_inhibitor
+#custom-media, #tray, #mode, #mpd {
 	padding: 0 3px;
 	margin: 0 2px;
 }

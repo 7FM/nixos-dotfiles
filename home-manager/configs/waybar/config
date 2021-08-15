@@ -30,36 +30,38 @@
 	],
 
 	// Modules configuration
-	// "sway/workspaces": {
-	// 	"disable-scroll": true,
-	// 	"all-outputs": true,
-	// 	"format": "{name}: {icon}",
-	// 	"format-icons": {
-	// 		"1": "",
-	// 		"2": "",
-	// 		"3": "",
-	// 		"4": "",
-	// 		"5": "",
-	// 		"urgent": "",
-	// 		"focused": "",
-	// 		"default": ""
-	// 	}
-	// },
+	"sway/workspaces": {
+		"disable-scroll": false,
+		"all-outputs": false,
+//		"format": "{index}{icon}",
+		"format-icons": {
+			"1:term": ": ",
+			"2:web": ": ",
+			"3:code": ": ",
+			"4:music": ": ",
+			"5:chat": ": ",
+			"urgent": ": ",
+//			"focused": ": ",
+			"focused": "",
+//			"default": ""
+			"default": ""
+		}
+	},
 	"sway/mode": {
 		"format": "{}"
 	},
 	"custom/disk_home": {
-		"format": "🏠 {} ",
+		"format": "🏠 {}",
 		"interval": 180,
 		"exec": "df -h --output=avail $HOME | tail -1 | tr -d ' '"
 	},
 	"custom/disk_root": {
-		"format": "💽 {} ",
+		"format": "💽 {}",
 		"interval": 180,
 		"exec": "df -h --output=avail / | tail -1 | tr -d ' '"
 	},
 	"custom/logout" : {
-		"format": " ",
+		"format": "",
 		"on-click" : "wlogout",
 		"on-click-right" : "wlogout",
 	},
@@ -68,7 +70,7 @@
 		"hwmon-path": "/sys/class/hwmon/hwmon0/temp1_input",
 		"critical-threshold": 80,
 		// "format-critical": "{temperatureC:3d}°C {icon}",
-		"format": "<span color='#e88939'>{icon}</span> {temperatureC}°C ",
+		"format": "<span color='#e88939'>{icon}</span> {temperatureC}°C",
 		"format-icons": [
 			"", // Icon: temperature-empty
 			"", // Icon: temperature-quarter
@@ -78,31 +80,32 @@
 		]
 	},
 	"cpu": {
-		"format": " {usage:3d}% ",
+		"format": " {usage:3d}%",
 		"tooltip": false
 	},
 	"memory": {
-		"format": " {used:0.1f}G "
+		"format": " {used:0.1f}G"
 	},
 	"custom/mail": {
-		"format": "📩{} ",
+		"format": "📩{}",
 		"interval": 180,
 		"exec": "notmuch count tag:flagged OR tag:inbox AND NOT tag:killed"
 	},
 	"network": {
 		"family": "ipv4",
 		// "interface": "wlp2*", // (Optional) To force the use of this interface
-		"format-wifi": "<span color='#589df6'></span> <span color='gray'>{essid}</span> <span color='#589df6'>{signaldBm} dB</span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits} ",
-		"format-ethernet": " {ifname}: {ipaddr} ",
-		"format-linked": " {ifname} (No IP) ",
-		"format-disconnected": "⚠ Disconnected ",
+		"format-wifi": "<span color='#589df6'></span> <span color='gray'>{essid}</span> <span color='#589df6'>{signaldBm} dB</span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits}",
+		"format-ethernet": " {ifname}: {ipaddr}",
+		"format-linked": " {ifname} (No IP)",
+		"format-disconnected": "⚠ Disconnected",
 		"interval": 10,
 		"on-click": "nm-connection-editor",
 		"on-click-right": "nm-connection-editor"
 	},
 	"backlight": {
-		// "device": "acpi_video1",
-		"format": "{icon} {percent:3d}% ",
+		"device": "intel_backlight",
+//		"format": "{icon} {percent:3d}%",
+		"format": "{icon} {percent}%",
 		"format-icons": ["🔅", "🔆"]
 	},
 	"pulseaudio#out": {
@@ -134,15 +137,15 @@
 		"format-bluetooth": "{format_source}",
 		"format-bluetooth-muted": "{format_source}",
 
-		"format-source": " {volume:3d}% ",
-		"format-source-muted": "   0% ",
+		"format-source": " {volume:3d}%",
+		"format-source-muted": "   0%",
 
 		"on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
 		"on-click-right": "pavucontrol"
 	},
 	"clock": {
 		"interval": 60,
-		"format": "⏰ {:%H:%M} ",
+		"format": "⏰ {:%H:%M}",
 		"tooltip-format": "{:%d-%m-%Y | %H:%M}"
 	},
 	"battery": {
@@ -151,15 +154,15 @@
 			"warning": 20,
 			"critical": 10
 		},
-		"format": "{icon}{capacity:3d}% {time} ",
-		"format-charging": "{icon} <span color='#e88939'></span>{capacity:3d}% {time} ",
-		"format-plugged":  "{icon} <span color='#e88939'></span>{capacity:3d}% {time} ",
+		"format": "{icon}{capacity:3d}% {time}",
+		"format-charging": "{icon} <span color='#e88939'></span>{capacity:3d}% {time}",
+		"format-plugged":  "{icon} <span color='#e88939'></span>{capacity:3d}% {time}",
 		// "format-good": "", // An empty format will hide the module
 		// "format-full": "",
 		"format-icons": ["", "", "", "", ""]
 	},
 	"idle_inhibitor": {
-		"format": "<span color='#589df6'>{icon}</span> ",
+		"format": "<span color='#589df6'>{icon}</span>",
 		"format-icons": {
 			"activated": "",
 			"deactivated": ""
