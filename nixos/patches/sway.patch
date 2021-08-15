@@ -1,0 +1,39 @@
+From d06f7f1a1cbcbd00676d0cfd26b66549dcb011f3 Mon Sep 17 00:00:00 2001
+From: Adam Kürthy <adikurthy@gmail.com>
+Date: Sat, 6 Mar 2021 09:54:29 +0100
+Subject: No input reconfigure on output changes
+
+To prevent double key input in swaylock when output comes back
+from dpms off.
+
+diff --git a/sway/config/output.c b/sway/config/output.c
+index 7d0ed395..aae7d06e 100644
+--- a/sway/config/output.c
++++ b/sway/config/output.c
+@@ -479,10 +479,6 @@ bool apply_output_config(struct output_config *oc, struct sway_output *output) {
+ 		output->max_render_time = oc->max_render_time;
+ 	}
+ 
+-	// Reconfigure all devices, since input config may have been applied before
+-	// this output came online, and some config items (like map_to_output) are
+-	// dependent on an output being present.
+-	input_manager_configure_all_inputs();
+ 	// Reconfigure the cursor images, since the scale may have changed.
+ 	input_manager_configure_xcursor();
+ 	return true;
+diff --git a/sway/tree/output.c b/sway/tree/output.c
+index c095dce0..bf5ef0bb 100644
+--- a/sway/tree/output.c
++++ b/sway/tree/output.c
+@@ -274,11 +274,6 @@ void output_disable(struct sway_output *output) {
+ 	output->current_mode = NULL;
+ 
+ 	arrange_root();
+-
+-	// Reconfigure all devices, since devices with map_to_output directives for
+-	// an output that goes offline should stop sending events as long as the
+-	// output remains offline.
+-	input_manager_configure_all_inputs();
+ }
+ 
+ void output_begin_destroy(struct sway_output *output) {
