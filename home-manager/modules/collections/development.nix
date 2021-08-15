@@ -238,6 +238,7 @@ in {
       "workbench.editorAssociations" = {
           "*.ipynb" = "jupyter-notebook";
       };
+      "workbench.colorTheme" = "Default Dark+";
       "cmake.configureOnOpen" = false;
       "notebook.cellToolbarLocation" = {
         "default" = "right";
