@@ -21,6 +21,11 @@
 
   boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/c6633503-8f49-42b5-86a7-35554d7e7a4b";
 
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/F486-1131";
+      fsType = "vfat";
+    };
+
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/0061e991-0ff8-4887-abfe-b94652ffbc8b";
       fsType = "btrfs";
