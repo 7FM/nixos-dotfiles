@@ -14,6 +14,7 @@ in {
     # Hardware specifics
     #./devices/virtualbox.nix
     ./devices/desktop.nix
+    #./devices/lenovo_laptop.nix
 
     ./common/systemConfig.nix
 
