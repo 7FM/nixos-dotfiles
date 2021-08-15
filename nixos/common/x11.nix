@@ -16,8 +16,8 @@ in {
 
       touchpad = {
         tapping = true;
-        scrolMethod = "twofinger";
-        naturalScolling = true;
+        scrollMethod = "twofinger";
+        naturalScrolling = true;
       };
     };
 
