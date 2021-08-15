@@ -10,8 +10,8 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [ "kvm-intel" "acpi_call" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/0061e991-0ff8-4887-abfe-b94652ffbc8b";
@@ -51,6 +51,24 @@
 
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
+
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.emulateWheel = config.hardware.trackpoint.enable;
+
+  # automatic screen orientation
+  hardware.sensor.iio.enable = true;
+
+  # SSD optimization
+  services.fstrim.enable = true;
+
+  # Fingerprint reader: add fingerprint with fprintd-enroll
+  # services.fprintd.enable = true;
+
+  # Gnome 40 introduced a new way of managing power, without tlp.
+  # However, these 2 services clash when enabled simultaneously.
+  # https://github.com/NixOS/nixos-hardware/issues/260
+  services.tlp.enable = lib.mkDefault ((lib.versionOlder (lib.versions.majorMinor lib.version) "21.05")
+                                       || !config.services.power-profiles-daemon.enable);
 
   # System settings
   custom.gpu = "intel";
