@@ -149,9 +149,9 @@
 			"warning": 20,
 			"critical": 10
 		},
-		"format": "<span color='#e88939'>{icon}</span> {capacity:3d}% ({time}) ",
-		"format-charging": "<span color='#e88939'> </span> {capacity:3d}% ",
-		"format-plugged":  "<span color='#e88939'>{icon} </span> {capacity:3d}% ({time}) ",
+		"format": "{icon}{capacity:3d}% {time} ",
+		"format-charging": "{icon} <span color='#e88939'></span>{capacity:3d}% {time} ",
+		"format-plugged":  "{icon} <span color='#e88939'></span>{capacity:3d}% {time} ",
 		// "format-good": "", // An empty format will hide the module
 		// "format-full": "",
 		"format-icons": ["", "", "", "", ""]
