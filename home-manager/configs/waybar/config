@@ -23,8 +23,8 @@
 		"backlight",
 		"pulseaudio#out",
 		"pulseaudio#in",
-		"idle_inhibitor",
 		"battery",
+		"idle_inhibitor",
 		"clock",
 		"custom/logout"
 	],
