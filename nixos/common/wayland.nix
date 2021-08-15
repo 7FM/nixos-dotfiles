@@ -57,6 +57,7 @@ in {
         clipman # Clipboard manager
         swaybg # TODO is this explicitly needed?
         wlogout # logout menu
+        networkmanagerapplet # NetworkManager Front-End
       ];
     };
 
