@@ -50,12 +50,12 @@
 	},
 	"custom/disk_home": {
 		"format": "🏠 {} ",
-		"interval": 60,
+		"interval": 180,
 		"exec": "df -h --output=avail $HOME | tail -1 | tr -d ' '"
 	},
 	"custom/disk_root": {
 		"format": "💽 {} ",
-		"interval": 60,
+		"interval": 180,
 		"exec": "df -h --output=avail / | tail -1 | tr -d ' '"
 	},
 	"custom/logout" : {
@@ -141,7 +141,7 @@
 	"clock": {
 		"interval": 60,
 		"format": "⏰ {:%H:%M} ",
-		"tooltip-format": "{:%d-%m-%Y | %H:%M:%S}"
+		"tooltip-format": "{:%d-%m-%Y | %H:%M}"
 	},
 	"battery": {
 		"states": {
