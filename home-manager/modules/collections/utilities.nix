@@ -15,4 +15,7 @@
     pciutils
     xorg.xeyes
   ];
+
+  # Config for htop
+  home.file.".config/htop".source = ../configs/htop;
 }
