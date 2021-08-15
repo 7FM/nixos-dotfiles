@@ -13,6 +13,12 @@ in {
     # Enable touchpad support (enabled default in most desktopManager).
     services.xserver.libinput = {
       enable = true;
+
+      touchpad = {
+        tapping = true;
+        scrolMethod = "twofinger";
+        naturalScolling = true;
+      };
     };
 
     # Display Manager: provides graphical login
