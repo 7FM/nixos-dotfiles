@@ -96,7 +96,9 @@
 		"format-ethernet": " {ifname}: {ipaddr} ",
 		"format-linked": " {ifname} (No IP) ",
 		"format-disconnected": "⚠ Disconnected ",
-		"interval": 10
+		"interval": 10,
+		"on-click": "nm-connection-editor",
+		"on-click-right": "nm-connection-editor"
 	},
 	"backlight": {
 		// "device": "acpi_video1",
