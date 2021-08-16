@@ -145,6 +145,7 @@
 	},
 	"clock": {
 		"interval": 60,
+		"timezone": "Europe/Berlin",
 		"format": "⏰ {:%H:%M}",
 		"tooltip-format": "{:%d-%m-%Y | %H:%M}"
 	},
