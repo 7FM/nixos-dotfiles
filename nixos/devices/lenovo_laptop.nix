@@ -61,6 +61,9 @@
   # SSD optimization
   services.fstrim.enable = true;
 
+  # Autostart WWAN service
+  systemd.services.ModemManager.wantedBy = [ "network.target" ];
+
   # Fingerprint reader: add fingerprint with fprintd-enroll
   # services.fprintd.enable = true;
 
