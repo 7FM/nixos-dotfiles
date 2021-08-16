@@ -10,6 +10,12 @@
     userName = "7FM";
     userEmail = "41307817+7FM@users.noreply.github.com";
 
+    extraConfig = {
+      pull = {
+        rebase = false; # merge
+      };
+    };
+
     aliases = {
       a = "add";
       c = "commit";
