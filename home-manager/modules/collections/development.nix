@@ -244,6 +244,8 @@ in {
         "default" = "right";
         "jupyter-notebook" = "left";
       };
+      "update.mode" = "none";
+      "extensions.autoUpdate" = false;
     };
 
   };
