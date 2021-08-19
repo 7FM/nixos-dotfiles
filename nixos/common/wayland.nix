@@ -4,12 +4,12 @@ let
   enable = config.custom.gui == "wayland";
 
   myPolkitGnome = pkgs.polkit_gnome.overrideAttrs (oldAttrs: {
-
     postInstall = (oldAttrs.postInstall or "") + ''
       mkdir -p $out/bin
       ln -s $out/libexec/polkit-gnome-authentication-agent-1 $out/bin/polkit-gnome-authentication-agent-1
     '';
   });
+
 in {
 
   config = lib.mkIf enable {
@@ -61,8 +61,11 @@ in {
         wofi # program launcher
         waybar # Highly customizable wayland bar for sway
         brightnessctl
+
         #polkit_gnome # Service to bring up authentication popups
         myPolkitGnome
+        #lxqt.lxqt-policykit
+
         pavucontrol # GUI to control pulseaudio settings
         xorg.xlsclients # Helper program to show programs running using xwayland
         xorg.xhost # can be used to allow Xwayland applications to run as root, i.e. gparted

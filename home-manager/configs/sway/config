@@ -224,7 +224,8 @@ bar {
 }
 
 # Start authentication dialog daemon
-exec_always polkit-gnome-authentication-agent-1
+exec --no-startup-id polkit-gnome-authentication-agent-1
+#exec --no-startup-id lxqt-policykit-agent
 
 # Start clipboard manager
 exec wl-paste -t text --watch clipman store
