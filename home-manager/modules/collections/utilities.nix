@@ -6,6 +6,8 @@
     wget
     htop
     gparted
+    zip
+    unzip
     #nmap
     nmap-graphical
     x2goclient
@@ -13,7 +15,6 @@
     speedtest-cli
     usbutils
     pciutils
-    xorg.xeyes
   ];
 
   # Config for htop
