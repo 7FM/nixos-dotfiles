@@ -8,6 +8,8 @@
     modules/git.nix
     modules/zsh.nix
     modules/neovim.nix
+    modules/gtk.nix
+    modules/qt.nix
 
     modules/collections/utilities.nix
     modules/collections/communication.nix
