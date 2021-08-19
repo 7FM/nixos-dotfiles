@@ -13,13 +13,13 @@
 		"tray"
 	],
 	"modules-right": [
+		"network",
 		"temperature",
 		"cpu",
+		"memory",
 		"custom/disk_home",
 		"custom/disk_root",
-		"memory",
 		"custom/mail",
-		"network",
 		"backlight",
 		"pulseaudio#out",
 		"pulseaudio#in",
