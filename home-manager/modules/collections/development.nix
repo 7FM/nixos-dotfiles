@@ -25,12 +25,12 @@ in {
     myClang # use the patched clang version
     cmake
     gdb
-    jdk
     # IDEs
     jetbrains.idea-community
     gtkwave
   ];
 
+  programs.java.enable = true;
 
   #services.gnome.gnome-keyring.enable = true;
   # vscode liveshare needs a keyring
