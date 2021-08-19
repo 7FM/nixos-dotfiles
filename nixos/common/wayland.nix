@@ -36,6 +36,8 @@ in {
       # QT needs qt5.qtwayland in systemPackages
       QT_QPA_PLATFORM = "wayland-egl";
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+      # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
+      LIBSEAT_BACKEND = "logind";
     };
 
     # Window system settings:
