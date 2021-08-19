@@ -224,7 +224,7 @@ bar {
 }
 
 # Start authentication dialog daemon
-#exec_always polkit-gnome-authentication-agent-1
+exec_always polkit-gnome-authentication-agent-1
 
 # Start clipboard manager
 exec wl-paste -t text --watch clipman store

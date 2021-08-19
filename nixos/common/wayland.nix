@@ -2,6 +2,14 @@
 
 let
   enable = config.custom.gui == "wayland";
+
+  myPolkitGnome = pkgs.polkit_gnome.overrideAttrs (oldAttrs: {
+
+    postInstall = (oldAttrs.postInstall or "") + ''
+      mkdir -p $out/bin
+      ln -s $out/libexec/polkit-gnome-authentication-agent-1 $out/bin/polkit-gnome-authentication-agent-1
+    '';
+  });
 in {
 
   config = lib.mkIf enable {
@@ -47,13 +55,15 @@ in {
         swayidle
         wl-clipboard
         mako # notification daemon
-        alacritty # Alacritty is the default terminal in >
-        wofi # Dmenu is the default in the config but I r>
-        waybar # Highly customizable wayland bar for sway>
+        alacritty # gpu accelerated terminal emulator
+        wofi # program launcher
+        waybar # Highly customizable wayland bar for sway
         brightnessctl
-        polkit_gnome # Service to bring up authentication>
+        #polkit_gnome # Service to bring up authentication popups
+        myPolkitGnome
         pavucontrol # GUI to control pulseaudio settings
-        xorg.xlsclients # Helper program to show programs>
+        xorg.xlsclients # Helper program to show programs running using xwayland
+        xorg.xhost # can be used to allow Xwayland applications to run as root, i.e. gparted
         clipman # Clipboard manager
         swaybg # TODO is this explicitly needed?
         wlogout # logout menu
