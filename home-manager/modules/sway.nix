@@ -84,6 +84,9 @@ in {
         { command = "wl-paste -t text --watch clipman store"; always = false; }
         # Swayidle
         { command = "swayidle -w timeout 300 \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
+        # Import the most important environment variables into the D-Bus and systemd
+        # user environments (e.g. required for screen sharing and Pinentry prompts):
+        { command = "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"; always = false; }
       ] ++ lib.optional desktop { command = "swaymsg focus output DVI-D-1"; always = false; }
         ++ lib.optional (laptopDisplay != null) { command = "~/.config/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; };
 
@@ -105,9 +108,10 @@ in {
 
       # Output settings
       output = {
-        "*" = {
-          "bg" = "~/.config/sway/backgrounds/cheatsheet.jpg fit";
-        };
+      # Does not work, dont know why
+      #  "*" = {
+      #    bg = "~/.config/sway/backgrounds/cheatsheet.jpg fit";
+      #  };
       } // lib.mkIf desktop {
         "DVI-D-1" = {
           res = "1920x1080@144Hz";
@@ -137,6 +141,11 @@ in {
     extraConfig = lib.optionalString (laptopDisplay != null) ''
       bindswitch --reload --locked lid:on output ${laptopDisplay} disable
       bindswitch --reload --locked lid:off output ${laptopDisplay} enable
+    '' + ''
+      output * bg ~/.config/sway/backgrounds/cheatsheet.jpg fit
+      # Import the most important environment variables into the D-Bus and systemd
+      # user environments (e.g. required for screen sharing and Pinentry prompts):
+      #exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
     '';
   };
 
