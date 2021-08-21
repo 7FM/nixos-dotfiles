@@ -49,9 +49,16 @@ in {
     programs.xwayland.enable = true;
 
     # Enable support for screen sharing
-    xdg.portal.enable = true;
     services.pipewire.enable = true;
-    xdg.portal.gtkUsePortal = true;
+    xdg.portal = {
+      enable = true;
+      gtkUsePortal = true;
+
+      extraPortals = with pkgs; [
+       xdg-desktop-portal-wlr
+       xdg-desktop-portal-gtk
+      ];
+    };
 
     # Sway customization
     programs.sway = {

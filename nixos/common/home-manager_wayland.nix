@@ -21,10 +21,16 @@ in {
     programs.dconf.enable = true;
 
     # Enable support for screen sharing
-    xdg.portal.enable = true;
     services.pipewire.enable = true;
-    xdg.portal.gtkUsePortal = true;
-    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    xdg.portal = {
+      enable = true;
+      gtkUsePortal = true;
+
+      extraPortals = with pkgs; [
+       xdg-desktop-portal-wlr
+       xdg-desktop-portal-gtk
+      ];
+    };
   };
 
 }
