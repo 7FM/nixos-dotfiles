@@ -87,9 +87,11 @@ in {
       ] ++ lib.optional desktop { command = "swaymsg focus output DVI-D-1"; always = false; }
         ++ lib.optional (laptopDisplay != null) { command = "~/.config/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; };
 
-      bars = {
-        command = "${pkgs.waybar}/bin/waybar";
-      };
+      bars = [
+        {
+          command = "${pkgs.waybar}/bin/waybar";
+        }
+      ];
 
       # Input settings
       input = {
@@ -130,13 +132,12 @@ in {
         { workspace = "9"; output = "HDMI-A-1"; }
         { workspace = "10"; output = "HDMI-A-1"; }
       ] else [];
-
-      extraConfig = lib.optionalString (laptopDisplay != null) ''
-        bindswitch --reload --locked lid:on output ${laptopDisplay} disable
-        bindswitch --reload --locked lid:off output ${laptopDisplay} enable
-      '';
-
     };
+
+    extraConfig = lib.optionalString (laptopDisplay != null) ''
+      bindswitch --reload --locked lid:on output ${laptopDisplay} disable
+      bindswitch --reload --locked lid:off output ${laptopDisplay} enable
+    '';
   };
 
   # This enables discovering fonts that where installed with home.packages
