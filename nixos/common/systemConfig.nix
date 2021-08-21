@@ -22,7 +22,7 @@ with lib;
     };
 
     gui = mkOption {
-      type = types.nullOr (types.enum [ "x11" "wayland" "headless" ]);
+      type = types.nullOr (types.enum [ "x11" "wayland" "headless" "hm-wayland" ]);
       default = null;
       description = ''
         Specifies the user frontend to use.

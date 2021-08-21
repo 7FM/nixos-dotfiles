@@ -43,6 +43,7 @@ in {
     ./common/networking.nix
 
     ./common/wayland.nix
+    ./common/home-manager_wayland.nix
     ./common/x11.nix
   ];
 

@@ -48,6 +48,11 @@ in {
     # Allow backwards compatibility for X programs
     programs.xwayland.enable = true;
 
+    # Enable support for screen sharing
+    xdg.portal.enable = true;
+    services.pipewire.enable = true;
+    xdg.portal.gtkUsePortal = true;
+
     # Sway customization
     programs.sway = {
       wrapperFeatures.gtk = true; # so that gtk works pro>
