@@ -246,6 +246,11 @@ output * bg ~/.config/sway/backgrounds/cheatsheet.jpg fit
 #   exec swaymsg focus output <name-or-identifier>
 #
 
+# Remove titlebars
+default_border pixel
+#default_border none
+#default_border normal
+
 # Desktop Setup:
 
 output DVI-D-1 res 1920x1080@144Hz pos 0,0
