@@ -149,6 +149,12 @@ in {
     '';
   };
 
+  # Autostart sway in zsh
+  programs.zsh.initExtra = ''
+    # If running from tty1 start sway
+    [[ "$(tty)" == /dev/tty1 ]] && exec sway
+  '';
+
   # This enables discovering fonts that where installed with home.packages
   fonts.fontconfig.enable = true;
 

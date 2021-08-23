@@ -10,6 +10,8 @@ let
     '';
   });
 
+  autostartSway = false;
+
 in {
 
   config = lib.mkIf enable {
@@ -43,7 +45,7 @@ in {
     # Window system settings:
     # Wayland in the form of sway
     programs.sway.enable = true;
-    environment.loginShellInit = lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway'';
+    environment.loginShellInit = lib.optionalString autostartSway (lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway'');
     #environment.loginShellInit = lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway -d 2> ~/sway.log'';
     # Allow backwards compatibility for X programs
     programs.xwayland.enable = true;
