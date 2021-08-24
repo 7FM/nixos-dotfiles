@@ -12,8 +12,11 @@ nix-channel --update
 # Then: On NixOs you have to log out and sign back in
 
 #TODO is there a work around?
+rehash
 
 nix-shell '<home-manager>' -A install
+
+rehash
 
 rm -rf ~/.config/nixpkgs
 ln -s $(pwd)/home-manager ~/.config/nixpkgs
