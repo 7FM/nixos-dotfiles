@@ -41,6 +41,7 @@ in {
     ./common/optimize_storage_space.nix
     ./common/powermanagement.nix
     ./common/networking.nix
+    ./common/bluetooth.nix
 
     ./common/wayland.nix
     ./common/home-manager_wayland.nix

@@ -15,6 +15,8 @@ let
 in {
 
   config = lib.mkIf enable {
+    # Enable bluetooth manager when bluetooth is enabled
+    services.blueman.enable = config.hardware.bluetooth.enable;
 
     # Add an overlay for sway to include apply some experimental patches
 #    nixpkgs.overlays = [

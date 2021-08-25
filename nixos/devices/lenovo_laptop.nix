@@ -79,6 +79,7 @@
   custom.gui = "wayland";
   custom.useUEFI = true;
   custom.cpuFreqGovernor = "powersave";
+  custom.bluetooth = true;
 
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.wlp4s0.useDHCP = true;

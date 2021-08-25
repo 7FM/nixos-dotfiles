@@ -70,6 +70,14 @@ with lib;
       '';
     };
 
+    bluetooth = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable Bluetooth Support!
+      '';
+    };
+
     cpuFreqGovernor = mkOption {
       type = types.nullOr (types.enum [ "ondemand" "powersave" "performance" ]);
       default = "ondemand";
