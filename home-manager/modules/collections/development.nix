@@ -24,6 +24,7 @@ in {
 #    clang
     myClang # use the patched clang version
     cmake
+    gnumake
     gdb
     # IDEs
     jetbrains.idea-community
