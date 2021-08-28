@@ -14,30 +14,7 @@ in {
   home.packages = with pkgs; [
     # needed for waybar customization
     font-awesome
-
-    qt5.qtwayland
-
-    swaylock
-    swaylock-fancy
-    swayidle
-    wl-clipboard
-    mako # notification daemon
-    alacritty # gpu accelerated terminal emulator
-    wofi # program launcher
-    waybar # Highly customizable wayland bar for sway
-    brightnessctl
-
-    polkit_gnome # Service to bring up authentication popups
-
-    pavucontrol # GUI to control pulseaudio settings
-    xorg.xlsclients # Helper program to show programs running using xwayland
-    xorg.xhost # can be used to allow Xwayland applications to run as root, i.e. gparted
-    #clipman # Clipboard manager
-    wl-clipboard # Clipboard manager
-    swaybg # TODO is this explicitly needed?
-    wlogout # logout menu
-    networkmanagerapplet # NetworkManager Front-End
-  ];
+  ] ++ lib.optional config.wayland.windowManager.sway.enable pkgs.ksshaskpass;
 
   wayland.windowManager.sway = {
     #enable = true;
@@ -54,6 +31,8 @@ in {
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
       # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
       export LIBSEAT_BACKEND="logind"
+      export SUDO_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
+      export SSH_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
     '';
 
     config = {

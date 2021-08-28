@@ -31,7 +31,9 @@ in {
 
     services.xserver.displayManager.gdm.wayland = true;
 
-    environment.systemPackages = with pkgs; [ qt5.qtwayland ];
+    environment.systemPackages = with pkgs; [
+      qt5.qtwayland
+    ];
 
     environment.sessionVariables = {
       _JAVA_AWT_WM_NONREPARENTING = "1";
@@ -42,7 +44,10 @@ in {
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
       LIBSEAT_BACKEND = "logind";
+      SUDO_ASKPASS = "${pkgs.ksshaskpass}/bin/ksshaskpass";
     };
+    programs.ssh.askPassword = pkgs.ksshaskpass;
+
 
     # Window system settings:
     # Wayland in the form of sway
