@@ -37,6 +37,8 @@
       "exot" = "exit";
       "ös" = "ls";
       "cd.." = "cd ..";
+      # TERM variable is passed, so set it to a sane value before connecting
+      "ssh" = "TERM=xterm ssh";
     };
 
     initExtra = ''
