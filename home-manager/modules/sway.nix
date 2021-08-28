@@ -14,7 +14,7 @@ in {
   home.packages = with pkgs; [
     # needed for waybar customization
     font-awesome
-  ] ++ lib.optional config.wayland.windowManager.sway.enable pkgs.ksshaskpass;
+  ];
 
   wayland.windowManager.sway = {
     #enable = true;
