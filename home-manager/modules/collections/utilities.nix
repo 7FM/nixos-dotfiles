@@ -28,6 +28,6 @@
   home.file.".config/nnn/plugins".source = ../../configs/nnn/plugins;
   # Enable certain plugins
   home.sessionVariables = {
-    NNN_PLUG = "v:imgview;q:mocq;e:suedit;c:rsynccp;x:!chmod +x $nnn;h:hexview";
+    NNN_PLUG = "v:imgview;q:mocq;e:suedit;c:rsynccp;h:hexview";
   };
 }
