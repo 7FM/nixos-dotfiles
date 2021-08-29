@@ -20,6 +20,10 @@ in {
     # Enfore nixstore to be readonly
     nix.readOnlyStore = true;
 
+    # Allow impure builds :-(
+    # Needed for some haskell stuff
+    nix.useSandbox = "relaxed";
+
     # User settings as i.e. the password may not be changed! Also no new users or groups can be added!
     users.mutableUsers = false;
 
