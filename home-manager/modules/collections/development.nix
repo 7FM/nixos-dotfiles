@@ -19,7 +19,7 @@ let
 in {
   home.packages = with pkgs; [
     # Compiler & related
-    python3Minimal
+    #python3Minimal
     gcc # For now use gcc as default for the cpp binary
 #    clang
     myClang # use the patched clang version
