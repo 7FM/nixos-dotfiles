@@ -16,36 +16,36 @@ in {
     ./devices/desktop.nix
     #./devices/lenovo_laptop.nix
 
-    ./common/systemConfig.nix
+    ./modules/systemConfig.nix
 
-    ./common/cpu_amd.nix
-    ./common/cpu_intel.nix
-    ./common/cpu_generic.nix
-    ./common/gpu.nix
-    ./common/gpu_amd.nix
-    ./common/gpu_intel.nix
-    ./common/gpu_nvidia.nix
-    ./common/gpu_generic.nix
+    ./modules/cpu_amd.nix
+    ./modules/cpu_intel.nix
+    ./modules/cpu_generic.nix
+    ./modules/gpu.nix
+    ./modules/gpu_amd.nix
+    ./modules/gpu_intel.nix
+    ./modules/gpu_nvidia.nix
+    ./modules/gpu_generic.nix
 
-    ./common/swapfile.nix
+    ./modules/swapfile.nix
 
     # Internationalisation specifics
-    ./common/internationalization.nix
+    ./modules/internationalization.nix
 
     # Shared settings
-    ./common/grub.nix
-    ./common/ssh.nix
-    ./common/security.nix
+    ./modules/grub.nix
+    ./modules/ssh.nix
+    ./modules/security.nix
 
     # Features
-    ./common/optimize_storage_space.nix
-    ./common/powermanagement.nix
-    ./common/networking.nix
-    ./common/bluetooth.nix
+    ./modules/optimize_storage_space.nix
+    ./modules/powermanagement.nix
+    ./modules/networking.nix
+    ./modules/bluetooth.nix
 
-    ./common/wayland.nix
-    ./common/home-manager_wayland.nix
-    ./common/x11.nix
+    ./modules/wayland.nix
+    ./modules/home-manager_wayland.nix
+    ./modules/x11.nix
   ];
 
   # Additional hardware settings
