@@ -53,9 +53,10 @@
   custom.gpu = "amd";
   custom.cpu = "amd";
   custom.gui = "wayland";
+  #custom.gui = "hm-wayland";
   custom.useUEFI = true;
   custom.bluetooth = true;
 
   networking.interfaces.eno1.useDHCP = true;
-  networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;
+  #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;
 }
