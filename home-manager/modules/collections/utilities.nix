@@ -19,7 +19,14 @@
     speedtest-cli
     usbutils
     pciutils
+    # Autoload shell.nix files
+    direnv
   ];
+
+  # Direnv shell integration: https://direnv.net/docs/hook.html
+  programs.zsh.initExtra = ''
+    eval "$(direnv hook zsh)"
+  '';
 
   # Config for htop
   home.file.".config/htop".source = ../../configs/htop;
