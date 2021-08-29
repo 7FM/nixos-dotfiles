@@ -1,3 +1,5 @@
+{ pkgs }:
+
 let
   myPolkitGnome = pkgs.polkit_gnome.overrideAttrs (oldAttrs: {
     postInstall = (oldAttrs.postInstall or "") + ''

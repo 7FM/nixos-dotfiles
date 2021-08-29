@@ -16,7 +16,7 @@ in {
   home.packages = with pkgs; [
     # needed for waybar customization
     font-awesome
-  ] ++ lib.optional enableSystemdSway (import ../../common/sway_extra_packages.nix);
+  ] ++ lib.optional enableSystemdSway (import ../common/sway_extra_packages.nix { inherit pkgs; });
 
   wayland.windowManager.sway = {
     enable = enableSystemdSway;

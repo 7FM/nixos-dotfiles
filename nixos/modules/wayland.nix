@@ -59,7 +59,7 @@ in {
     # Sway customization
     programs.sway = {
       wrapperFeatures.gtk = true; # so that gtk works pro>
-      extraPackages = import ../../common/sway_extra_packages.nix;
+      extraPackages = import ../common/sway_extra_packages.nix { inherit pkgs; };
     };
 
   };
