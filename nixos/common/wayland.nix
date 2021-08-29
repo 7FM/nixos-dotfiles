@@ -3,13 +3,6 @@
 let
   enable = config.custom.gui == "wayland";
 
-  myPolkitGnome = pkgs.polkit_gnome.overrideAttrs (oldAttrs: {
-    postInstall = (oldAttrs.postInstall or "") + ''
-      mkdir -p $out/bin
-      ln -s $out/libexec/polkit-gnome-authentication-agent-1 $out/bin/polkit-gnome-authentication-agent-1
-    '';
-  });
-
   autostartSway = false;
 
 in {
@@ -30,10 +23,6 @@ in {
 #    ];
 
     services.xserver.displayManager.gdm.wayland = true;
-
-    environment.systemPackages = with pkgs; [
-      qt5.qtwayland
-    ];
 
     environment.sessionVariables = {
       _JAVA_AWT_WM_NONREPARENTING = "1";
@@ -70,29 +59,7 @@ in {
     # Sway customization
     programs.sway = {
       wrapperFeatures.gtk = true; # so that gtk works pro>
-      extraPackages = with pkgs; [
-        swaylock
-        swaylock-fancy
-        swayidle
-        wl-clipboard
-        mako # notification daemon
-        alacritty # gpu accelerated terminal emulator
-        wofi # program launcher
-        waybar # Highly customizable wayland bar for sway
-        brightnessctl
-
-        #polkit_gnome # Service to bring up authentication popups
-        myPolkitGnome
-        #lxqt.lxqt-policykit
-
-        pavucontrol # GUI to control pulseaudio settings
-        xorg.xlsclients # Helper program to show programs running using xwayland
-        xorg.xhost # can be used to allow Xwayland applications to run as root, i.e. gparted
-        clipman # Clipboard manager
-        swaybg # TODO is this explicitly needed?
-        wlogout # logout menu
-        networkmanagerapplet # NetworkManager Front-End
-      ];
+      extraPackages = import ../../common/sway_extra_packages.nix;
     };
 
   };

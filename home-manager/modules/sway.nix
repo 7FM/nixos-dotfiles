@@ -10,14 +10,16 @@ let
   disableDisplayCmd = "";
   enableDisplayCmd = "resume 'swaymsg \"output * dpms on\"'";
 
+  enableSystemdSway = false;
+
 in {
   home.packages = with pkgs; [
     # needed for waybar customization
     font-awesome
-  ];
+  ] ++ lib.optional enableSystemdSway (import ../../common/sway_extra_packages.nix);
 
   wayland.windowManager.sway = {
-    #enable = true;
+    enable = enableSystemdSway;
     wrapperFeatures.gtk = true;
     xwayland = true;
     systemdIntegration = true;
@@ -31,8 +33,8 @@ in {
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
       # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
       export LIBSEAT_BACKEND="logind"
-      export SUDO_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
-      export SSH_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
+      #export SUDO_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
+      #export SSH_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
     '';
 
     config = {
