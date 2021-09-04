@@ -5,7 +5,9 @@
     # Gaming
     steam
     steam-run
-    lutris-unwrapped
+    lutris
+    # Install compatible icon theme for Lutris
+    gnome3.adwaita-icon-theme
     #wine
     winetricks
     wineWowPackages.full
