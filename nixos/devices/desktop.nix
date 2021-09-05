@@ -13,41 +13,56 @@
   boot.kernelModules = [ "kvm-amd" "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+  boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/04f23024-ffa1-4fd7-8b94-ec8d0269cbbd";
+
+  fileSystems = {
+    "/boot" = {
+      device = "/dev/disk/by-uuid/D430-45C2";
+      fsType = "vfat";
+    };
+
+    "/" = {
+      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
       fsType = "btrfs";
       options = [ "subvol=root" "compress=zstd" "noatime" ];
     };
 
-  boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/04f23024-ffa1-4fd7-8b94-ec8d0269cbbd";
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/D430-45C2";
-      fsType = "vfat";
-    };
-
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+    "/home" = {
+      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };
 
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+    "/nix" = {
+      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" "noatime" ];
     };
 
-  fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+    "/var/log" = {
+      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
       fsType = "btrfs";
       options = [ "subvol=log" "compress=zstd" "noatime" ];
       neededForBoot = true;
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/002b659d-f634-4cc4-8c97-9b3be20b9bfb"; }
-    ];
+    "/home/tm/games" = {
+      device = "/dev/disk/by-partuuid/63d76ef1-f532-5946-a17e-ad4079f61f09";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "noatime" ];
+    };
+
+    "/home/tm/docs" = {
+      device = "/dev/disk/by-partuuid/425a0f3a-1f77-4d36-8d13-19ffba02ec0c";
+      fsType = "exfat";
+      options = [ "defaults" "uid=1000" "gid=100" ];
+    };
+  };
+
+
+  swapDevices = [{
+    device = "/dev/disk/by-uuid/002b659d-f634-4cc4-8c97-9b3be20b9bfb";
+  }];
 
   # System settings
   custom.gpu = "amd";
