@@ -26,6 +26,10 @@ in {
 
     # User settings as i.e. the password may not be changed! Also no new users or groups can be added!
     users.mutableUsers = false;
+    # Disable root login
+    users.users.root.hashedPassword = "!";
+    # Emergency mode requires root -> not usable anyway
+    systemd.enableEmergencyMode = false;
 
     warnings = if (config.services.usbguard.implictPolicyTarget != "block") then [
       ''

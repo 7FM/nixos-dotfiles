@@ -47,6 +47,6 @@ sudo nixos-generate-config --root /mnt
 sudo nano /mnt/etc/nixos/*.nix
 
 # When done modifying:
-# sudo nixos-install --root /mnt
+# sudo nixos-install --no-root-passwd --root /mnt
 # sudo reboot
 
