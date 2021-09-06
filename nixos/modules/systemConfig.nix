@@ -29,6 +29,15 @@ with lib;
       '';
     };
 
+    enableVirtualisation = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable support for virtualisation.
+        More specifically: docker, virtualbox, libvirtd
+      '';
+    };
+
     useUEFI = mkOption {
       type = types.nullOr types.bool;
       default = null;

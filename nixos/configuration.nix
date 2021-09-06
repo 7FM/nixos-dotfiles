@@ -42,6 +42,7 @@ in {
     ./modules/powermanagement.nix
     ./modules/networking.nix
     ./modules/bluetooth.nix
+    ./modules/virtualisation.nix
 
     ./modules/wayland.nix
     ./modules/home-manager_wayland.nix

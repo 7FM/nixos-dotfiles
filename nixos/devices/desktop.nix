@@ -10,7 +10,7 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" "wl" ];
+  boot.kernelModules = [ "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
   boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/04f23024-ffa1-4fd7-8b94-ec8d0269cbbd";
@@ -71,6 +71,7 @@
   #custom.gui = "hm-wayland";
   custom.useUEFI = true;
   custom.bluetooth = true;
+  custom.enableVirtualisation = true;
 
   networking.interfaces.eno1.useDHCP = true;
   #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;
