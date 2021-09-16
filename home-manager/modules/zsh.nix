@@ -30,6 +30,7 @@
     shellAliases = {
       "ll" = "ls -alh";
       ".." = "cd ..";
+      "v" = "vim";
       "g" = "git";
       "gc" = "git-crypt";
       # Common typos...
