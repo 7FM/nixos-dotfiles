@@ -53,9 +53,9 @@
     };
 
     "/home/tm/docs" = {
-      device = "/dev/disk/by-partuuid/425a0f3a-1f77-4d36-8d13-19ffba02ec0c";
-      fsType = "exfat";
-      options = [ "defaults" "uid=1000" "gid=100" ];
+      device = "/dev/disk/by-partuuid/7a8d7f67-77eb-4723-b452-de0c9eb527cf";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "noatime" ];
     };
   };
 
