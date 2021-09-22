@@ -11,7 +11,11 @@ in pkgs.mkShell {
     gnumake
     clang
     nextpnrWithGui
-    yosys
+    (yosys.overrideAttrs (oldAttrs: {
+      patches = [
+        ./yosys.patch
+      ] ++ (oldAttrs.patches or []);
+    }))
 
     (pkgs.callPackage ./verilator.nix { inherit verilatorVersion verilatorSha256; })
 
