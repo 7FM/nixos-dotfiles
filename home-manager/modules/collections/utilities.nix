@@ -5,6 +5,7 @@
     # Utilities
     wget
     htop
+    screen
     gparted
     zip
     unzip
@@ -19,6 +20,7 @@
     speedtest-cli
     usbutils
     pciutils
+    inetutils
     # Autoload shell.nix files
     direnv
   ];
