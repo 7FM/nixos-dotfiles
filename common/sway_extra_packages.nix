@@ -30,4 +30,8 @@ in with pkgs; [
   swaybg # TODO is this explicitly needed?
   wlogout # logout menu
   networkmanagerapplet # NetworkManager Front-End
+
+  wf-recorder # screen recording
+  slurp # wayland region selector
+  jq # json parser, needed for sway screensharing script
 ]
