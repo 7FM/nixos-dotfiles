@@ -40,6 +40,8 @@ in {
   programs.vscode = {
     enable = true;
 
+    package = pkgs.callPackage ../vscode-wayland-wrapper.nix { };
+
     extensions = with pkgs.vscode-extensions; [
       # Live share
       ms-vsliveshare.vsliveshare
