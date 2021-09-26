@@ -21,6 +21,7 @@
     usbutils
     pciutils
     inetutils
+    idasen # Python API and CLI for the ikea IDÅSEN desk
     # Autoload shell.nix files
     direnv
   ];
