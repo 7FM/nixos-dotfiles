@@ -34,6 +34,9 @@
   # Config for htop
   home.file.".config/htop".source = ../../configs/htop;
 
+  # Config for idasen
+  home.file.".config/idasen".source = ../../configs/secrets/idasen;
+
   # Plugins for nnn
   home.file.".config/nnn/plugins".source = ../../configs/nnn/plugins;
   # Enable certain plugins
