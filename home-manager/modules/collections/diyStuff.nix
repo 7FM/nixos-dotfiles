@@ -8,4 +8,7 @@
     openscad
     kicad
   ];
+
+  home.file.".config/cura/baseSettings".source = ../../configs/cura/config;
+  home.file.".local/share/cura/baseSettings".source = ../../configs/cura/local;
 }
