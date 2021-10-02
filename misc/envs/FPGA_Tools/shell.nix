@@ -10,6 +10,8 @@ in pkgs.mkShell {
     gtkwave
     gnumake
     clang
+    icestorm # ice40 tools
+    trellis # ecp5 tools
     nextpnrWithGui
     (yosys.overrideAttrs (oldAttrs: {
       patches = [
