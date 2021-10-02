@@ -121,16 +121,16 @@ input "2:7:SynPS/2_Synaptics_TouchPad" {
     set $ws9  "9"
     set $ws10 "10"
 
-    set $wsa1  "A1"
-    set $wsa2  "A2"
-    set $wsa3  "A3"
-    set $wsa4  "A4"
-    set $wsa5  "A5"
-    set $wsa6  "A6"
-    set $wsa7  "A7"
-    set $wsa8  "A8"
-    set $wsa9  "A9"
-    set $wsa10 "A10"
+    set $wsa1  "11:A1"
+    set $wsa2  "12:A2"
+    set $wsa3  "13:A3"
+    set $wsa4  "14:A4"
+    set $wsa5  "15:A5"
+    set $wsa6  "16:A6"
+    set $wsa7  "17:A7"
+    set $wsa8  "18:A8"
+    set $wsa9  "19:A9"
+    set $wsa10 "20:A10"
 
     # Switch to workspace
     bindsym $mod+1 workspace $ws1
