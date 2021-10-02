@@ -30,5 +30,11 @@
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 
+  # network debugging
+  programs.wireshark.enable = true;
+  users.users.tm.extraGroups = [
+    "wireshark"
+  ];
+
 }
 
