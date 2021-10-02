@@ -33,18 +33,18 @@
 	"sway/workspaces": {
 		"disable-scroll": false,
 		"all-outputs": false,
-		"format": "{name}",
+		"format": "{name}{icon}",
 //		"format": "{index}{icon}",
 		"format-icons": {
-			"1:term": ": ",
-			"2:web": ": ",
-			"3:code": ": ",
-			"4:music": ": ",
-			"5:chat": ": ",
-			"urgent": ": ",
-//			"focused": ": ",
+			"1:term": " ",
+			"2:web": " ",
+			"3:code": " ",
+			"4:music": " ",
+			"5:chat": " ",
+			"urgent": " ",
+//			"focused": " ",
 			"focused": "",
-//			"default": ""
+//			"default": " "
 			"default": ""
 		}
 	},
