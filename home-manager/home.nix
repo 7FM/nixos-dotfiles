@@ -17,6 +17,8 @@
     modules/collections/office.nix
     #modules/collections/diyStuff.nix
     #modules/collections/gaming.nix
+
+    modules/optimize_storage_space.nix
   ];
 
   # Let Home Manager install and manage itself.
