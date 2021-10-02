@@ -19,7 +19,10 @@ in pkgs.mkShell {
 
     (pkgs.callPackage ./verilator.nix { inherit verilatorVersion verilatorSha256; })
 
-    # Custom packed sv2v
-    #(pkgs.callPackage ./sv2v.nix { })
+    # packages to build a stack project (here sv2v)
+    # 1. git clone https://github.com/zachjs/sv2v && cd sv2v
+    # 2. stack --nix build
+    # 3. stack --nix install
+    stack
   ];
 }
