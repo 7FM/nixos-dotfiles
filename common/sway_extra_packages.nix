@@ -33,5 +33,6 @@ in with pkgs; [
 
   wf-recorder # screen recording
   slurp # wayland region selector
+  grim # wayland cli screenshot tool
   jq # json parser, needed for sway screensharing script
 ]

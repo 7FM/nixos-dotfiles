@@ -30,6 +30,10 @@ in {
       # QT needs qt5.qtwayland in systemPackages
       export QT_QPA_PLATFORM="wayland-egl"
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+      export QT_WAYLAND_FORCE_DPI="physical"
+      # Elementary/EFL
+      export ECORE_EVAS_ENGINE="wayland_egl"
+      export ELM_ENGINE="wayland_egl"
       # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
       export LIBSEAT_BACKEND="logind"
       #export SUDO_ASKPASS="${pkgs.ksshaskpass}/bin/ksshaskpass"
@@ -56,6 +60,10 @@ in {
         "XF86AudioMute" = "exec \"pactl set-sink-mute @DEFAULT_SINK@ toggle\"";
         # Lockout hotkey
         "${mod}+${mod2}+l" = "exec ${lockcmd}";
+        # Screenshots
+        "Print" = "exec grim ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
+        # Take a screenshot of a selected region
+        "${mod}+Print" = "exec grim -g \"$(slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
       };
 
       startup = [
@@ -138,6 +146,9 @@ in {
 
   # This enables discovering fonts that where installed with home.packages
   fonts.fontconfig.enable = true;
+
+  # Empty dummy file to create the folder needed to store screenshots
+  home.file."screenshots/.keep".text = "";
 
   home.file.".config/sway".source = ../configs/sway;
   #home.file.".config/sway/config".source = ../configs/sway/config;
