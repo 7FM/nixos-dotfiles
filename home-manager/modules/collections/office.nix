@@ -15,5 +15,7 @@ in {
     gimp
     vlc
     keepassxc
+    # needed to open urls from discord, vscode, etc...
+    xdg-utils
   ];
 }
