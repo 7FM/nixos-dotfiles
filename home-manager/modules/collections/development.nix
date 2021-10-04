@@ -230,8 +230,8 @@ in {
       "liveshare.featureSet" = "stable";
       "liveshare.anonymousGuestApproval" = "reject";
       "liveshare.guestApprovalRequired" = true;
-      "liveshare.accountProvider" = "";
-      "liveshare.account" = "";
+#      "liveshare.accountProvider" = "";
+#      "liveshare.account" = "";
       "liveshare.focusBehavior" = "prompt";
       "liveshare.autoShareServers" = false;
       "liveshare.codeLens" = false;
@@ -250,6 +250,8 @@ in {
       };
       "update.mode" = "none";
       "extensions.autoUpdate" = false;
+      "liveshare.diagnosticLogging" = true;
+      "liveshare.diagnosticMode" = true;
     };
 
   };
