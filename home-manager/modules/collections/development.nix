@@ -92,12 +92,12 @@ let
 
       # PlatformIO
       #platformio.platformio-ide
-      {
-        name = "platformio-ide";
-        publisher = "platformio";
-        version = "2.3.2";
-        sha256 = "0z7cd6ya0mr10lwdbh47j8if3spwzz2scr8v06jfs0q4h8ybzgf4";
-      }
+      #{
+      #  name = "platformio-ide";
+      #  publisher = "platformio";
+      #  version = "2.3.2";
+      #  sha256 = "0z7cd6ya0mr10lwdbh47j8if3spwzz2scr8v06jfs0q4h8ybzgf4";
+      #}
 
       # Language support
       #antyos.openscad
