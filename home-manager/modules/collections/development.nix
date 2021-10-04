@@ -16,33 +16,20 @@ let
     '';
   });
 
-in {
-  home.packages = with pkgs; [
-    # Compiler & related
-    #python3Minimal
-    gcc # For now use gcc as default for the cpp binary
-#    clang
-    myClang # use the patched clang version
-    cmake
-    gnumake
-    gdb
-    # IDEs
-    jetbrains.idea-community
-    gtkwave
-  ];
-
-  programs.java.enable = true;
-
-  programs.vscode = {
-    enable = true;
-
-    package = pkgs.callPackage ../vscode-wayland-wrapper.nix { };
-
-    extensions = with pkgs.vscode-extensions; [
+  vsExtensions = with pkgs.vscode-extensions; [
       # Live share
       ms-vsliveshare.vsliveshare
 
+      # C++
       ms-vscode.cpptools
+
+      # Python
+      #ms-python.python
+      #ms-python.vscode-pylance
+      #ms-toolsai.jupyter
+      # Java
+      redhat.java
+
     ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       #ms-vscode.cmake-tools
       {
@@ -184,15 +171,43 @@ in {
         version = "0.32.2";
         sha256 = "0hn37li6wv5w0m92svr1bmmspwrwcn7k7bm59a58kfgs5j8sccax";
       }
-    ]) ++ (with pkgs.vscode-extensions; [
-
-      # Python
-      ms-python.python
-      ms-python.vscode-pylance
-      ms-toolsai.jupyter
-      # Java
-      redhat.java
     ]);
+
+  vsCodeWithExtPkg = (pkgs.vscode-with-extensions.override {
+    vscodeExtensions = vsExtensions;
+  }) // {pname = "vscode";};
+
+in {
+  home.packages = with pkgs; [
+    # Compiler & related
+    #python3Minimal
+    gcc # For now use gcc as default for the cpp binary
+#    clang
+    myClang # use the patched clang version
+    cmake
+    gnumake
+    gdb
+    # IDEs
+    jetbrains.idea-community
+    gtkwave
+
+    # Needed for vscode liveshare:
+    #xorg.xprop
+    #desktop-file-utils
+    #vsCodeWithExtPkg
+  ];
+
+  programs.java.enable = true;
+
+  programs.vscode = {
+    enable = true;
+
+#    package = pkgs.vscodium;
+#    package = pkgs.vscode-fhs;
+#    package = vsCodeWithExtPkg;
+    package = pkgs.callPackage ../vscode-wayland-wrapper.nix { vscode = vsCodeWithExtPkg; };
+
+#    extensions = vsExtensions;
 
     userSettings = {
       "editor.suggestSelection" = "first";
