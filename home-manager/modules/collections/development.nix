@@ -191,9 +191,6 @@ in {
     jetbrains.idea-community
     gtkwave
 
-    # Needed for vscode liveshare:
-    #xorg.xprop
-    #desktop-file-utils
     #vsCodeWithExtPkg
   ];
 
@@ -250,6 +247,8 @@ in {
       "liveshare.focusBehavior" = "prompt";
       "liveshare.autoShareServers" = false;
       "liveshare.codeLens" = false;
+      "liveshare.diagnosticLogging" = true;
+      "liveshare.diagnosticMode" = true;
       "java.semanticHighlighting.enabled" = true;
       "java.requirements.JDK11Warning" = false;
       "java.configuration.checkProjectSettingsExclusions" = false;
@@ -265,8 +264,6 @@ in {
       };
       "update.mode" = "none";
       "extensions.autoUpdate" = false;
-      "liveshare.diagnosticLogging" = true;
-      "liveshare.diagnosticMode" = true;
     };
 
   };
