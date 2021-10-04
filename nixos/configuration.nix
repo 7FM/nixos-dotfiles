@@ -86,7 +86,7 @@ in {
       "video" # For sound settings
     ];
     openssh.authorizedKeys.keys = import ./secrets/userAuthorizedSSHKeys.nix;
-    # Set password hash, generated with 'mkpasswd -m sha-512 <password>':
+    # Set password hash, generated with 'mkpasswd -m sha-512 -s':
     hashedPassword = import ./secrets/password.nix;
   };
 
