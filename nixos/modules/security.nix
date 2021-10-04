@@ -5,6 +5,9 @@ let
 in {
 
   config = {
+    # Keyring
+    services.gnome.gnome-keyring.enable = !runHeadless && (config.custom.gui != "x11");
+
     # Security
     services.usbguard.enable = true;
 

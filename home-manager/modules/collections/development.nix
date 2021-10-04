@@ -33,10 +33,6 @@ in {
 
   programs.java.enable = true;
 
-  #services.gnome.gnome-keyring.enable = true;
-  # vscode liveshare needs a keyring
-  services.gnome-keyring.enable = true;
-
   programs.vscode = {
     enable = true;
 
