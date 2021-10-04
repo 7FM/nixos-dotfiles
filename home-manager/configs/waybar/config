@@ -54,17 +54,20 @@
 	"custom/disk_home": {
 		"format": "🏠 {}",
 		"interval": 180,
-		"exec": "df -h --output=avail $HOME | tail -1 | tr -d ' '"
+		"exec": "df -h --output=avail $HOME | tail -1 | tr -d ' '",
+		"tooltip": false
 	},
 	"custom/disk_root": {
 		"format": "💽 {}",
 		"interval": 180,
-		"exec": "df -h --output=avail / | tail -1 | tr -d ' '"
+		"exec": "df -h --output=avail / | tail -1 | tr -d ' '",
+		"tooltip": false
 	},
 	"custom/logout" : {
 		"format": "",
 		"on-click" : "wlogout",
 		"on-click-right" : "wlogout",
+		"tooltip": false
 	},
 	"temperature": {
 		// "thermal-zone": 2,
@@ -78,7 +81,8 @@
 			"", // Icon: temperature-half
 			"", // Icon: temperature-three-quarters
 			""  // Icon: temperature-full
-		]
+		],
+		"tooltip": false
 	},
 	"cpu": {
 		"format": " {usage:3d}%",
@@ -101,7 +105,8 @@
 		"format-disconnected": "⚠ Disconnected",
 		"interval": 10,
 		"on-click": "nm-connection-editor",
-		"on-click-right": "nm-connection-editor"
+		"on-click-right": "nm-connection-editor",
+		"tooltip": false
 	},
 	"backlight": {
 		"device": "intel_backlight",
