@@ -84,5 +84,8 @@
 
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.wlp4s0.useDHCP = true;
+  networking.wireless.interfaces = [
+    "wlp4s0"
+  ];
   networking.interfaces.wwp0s20f0u6i12.useDHCP = true;
 }
