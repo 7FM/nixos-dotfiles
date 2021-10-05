@@ -30,7 +30,6 @@ in {
       # QT needs qt5.qtwayland in systemPackages
       export QT_QPA_PLATFORM="wayland-egl"
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-      export QT_WAYLAND_FORCE_DPI="physical"
       # Elementary/EFL
       export ECORE_EVAS_ENGINE="wayland_egl"
       export ELM_ENGINE="wayland_egl"
