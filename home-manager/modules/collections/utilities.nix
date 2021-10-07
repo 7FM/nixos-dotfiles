@@ -15,6 +15,8 @@
     unixtools.xxd # hexeditor
     #nmap
     nmap-graphical
+    openconnect
+    openvpn
     x2goclient
     syncthing
     speedtest-cli
