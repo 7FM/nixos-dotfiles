@@ -30,6 +30,7 @@ in with pkgs; [
   swaybg # TODO is this explicitly needed?
   wlogout # logout menu
   networkmanagerapplet # NetworkManager Front-End
+  wpa_supplicant_gui # wpasupplicant Front-End
 
   wf-recorder # screen recording
   slurp # wayland region selector
