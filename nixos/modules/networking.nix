@@ -15,7 +15,7 @@
   # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
   #       To do this you need to instruct NetworkManager to ignore those interfaces like:
   networking.networkmanager.unmanaged = [
-    "*" "except:type:wwan" "except:type:gsm"
+    "*" "except:type:ethernet" "except:type:wwan" "except:type:gsm"
   ];
   # NetworkManager plugins
   networking.networkmanager.packages = with pkgs; [
