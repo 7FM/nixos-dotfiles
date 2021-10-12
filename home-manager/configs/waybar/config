@@ -73,7 +73,7 @@
 		// "thermal-zone": 2,
 		"hwmon-path": "/sys/class/hwmon/hwmon0/temp1_input",
 		"critical-threshold": 80,
-		// "format-critical": "{temperatureC:3d}°C {icon}",
+		// "format-critical": "{temperatureC:>3}°C {icon}",
 		"format": "<span color='#e88939'>{icon}</span> {temperatureC}°C",
 		"format-icons": [
 			"", // Icon: temperature-empty
@@ -85,7 +85,7 @@
 		"tooltip": false
 	},
 	"cpu": {
-		"format": " {usage:3d}%",
+		"format": "{usage:>3}%",
 		"tooltip": false
 	},
 	"memory": {
@@ -110,15 +110,15 @@
 	},
 	"backlight": {
 		"device": "intel_backlight",
-//		"format": "{icon} {percent:3d}%",
+//		"format": "{icon} {percent:>3}%",
 		"format": "{icon} {percent}%",
 		"format-icons": ["🔅", "🔆"]
 	},
 	"pulseaudio#out": {
 		// "scroll-step": 1, // %, can be a float
-		"format": "{icon} {volume:3d}%",
+		"format": "{icon} {volume:>3}%",
 		"format-muted": "🔇   0%",
-		"format-bluetooth": "{icon} {volume:3d}%",
+		"format-bluetooth": "{icon} {volume:>3}%",
 		"format-bluetooth-muted": "🔇   0%",
 
 		"format-source": "",
@@ -143,7 +143,7 @@
 		"format-bluetooth": "{format_source}",
 		"format-bluetooth-muted": "{format_source}",
 
-		"format-source": " {volume:3d}%",
+		"format-source": " {volume:>3}%",
 		"format-source-muted": "   0%",
 
 		"on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
@@ -161,9 +161,9 @@
 			"warning": 20,
 			"critical": 10
 		},
-		"format": "{icon}{capacity:3d}% {time}",
-		"format-charging": "{icon} <span color='#e88939'></span>{capacity:3d}% {time}",
-		"format-plugged":  "{icon} <span color='#e88939'></span>{capacity:3d}% {time}",
+		"format": "{icon}{capacity:>3}% {time}",
+		"format-charging": "{icon} <span color='#e88939'></span>{capacity:>3}% {time}",
+		"format-plugged":  "{icon} <span color='#e88939'></span>{capacity:>3}% {time}",
 		// "format-good": "", // An empty format will hide the module
 		// "format-full": "",
 		"format-icons": ["", "", "", "", ""]
