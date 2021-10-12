@@ -34,7 +34,7 @@
   '';
 
   # Config for htop
-  home.file.".config/htop".source = ../../configs/htop;
+  home.file.".config/htop/htoprc".source = ../../configs/htop/htoprc;
 
   # Config for idasen
   home.file.".config/idasen".source = ../../configs/secrets/idasen;
