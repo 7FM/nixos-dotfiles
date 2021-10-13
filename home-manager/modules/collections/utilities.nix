@@ -9,10 +9,6 @@
     gparted
     zip
     unzip
-    sxiv # Image viewer
-    nnn # CLI file browser
-    moc # CLI audio player
-    unixtools.xxd # hexeditor
     #nmap
     nmap-graphical
     openconnect
@@ -39,10 +35,39 @@
   # Config for idasen
   home.file.".config/idasen".source = ../../configs/secrets/idasen;
 
-  # Plugins for nnn
-  home.file.".config/nnn/plugins".source = ../../configs/nnn/plugins;
-  # Enable certain plugins
-  home.sessionVariables = {
-    NNN_PLUG = "v:imgview;q:mocq;e:suedit;c:rsynccp;h:hexview";
+  # NNN: CLI file browser 
+  programs.nnn = {
+    enable = true;
+    package = pkgs.nnn.override { withNerdIcons = true; };
+
+    bookmarks = {
+      d = "~/docs";
+      D = "~/Downloads";
+      s = "~/docs/Studium";
+    };
+    # Extra packages that are used for i.e. plugins
+    extraPackages = with pkgs; [
+      sxiv # Image viewer
+      moc # CLI audio player
+      unixtools.xxd # hexeditor
+    ];
+
+    plugins = {
+      mappings = {
+        v = "imgview";
+        q = "mocq";
+        e = "suedit";
+        c = "rsynccp";
+        h = "hexview";
+      };
+
+#      src = (pkgs.fetchFromGitHub {
+#        owner = "jarun";
+#        repo = "nnn";
+#        rev = "v4.3";
+#        sha256 = "sha256-Hpc8YaJeAzJoEi7aJ6DntH2VLkoR6ToP6tPYn3llR7k=";
+#      }) + "/plugins";
+       src = (pkgs.nnn.src) + "/plugins";
+    };
   };
 }
