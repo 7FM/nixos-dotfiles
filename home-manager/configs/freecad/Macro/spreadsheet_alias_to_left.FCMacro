@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+
+# Macro Begin: spreadsheet_alias_to_left.FCMacro +++++++++++++++++++++++++++++++
+import FreeCAD
+doc = App.ActiveDocument
+ss = doc.Spreadsheet  # spreadsheet name is hardcoded for now
+
+print(ss)
+
+a = ord('B')
+
+
+print(a)
+
+for i in range(1, 50):
+  cellalias = ss.getAlias(chr(a) + str(i))  
+  if not cellalias:  # write alias string to left cell
+    name = ss.getContents(chr(a-1) + str(i)) 
+    if name:  # write alias string to left cell
+      ss.setAlias(chr(a) + str(i), name)
+    else:
+      break
+  unit = ss.getDisplayUnit(chr(a) + str(i))
+  if not unit:
+    ss.setDisplayUnit(chr(a) + str(i), 'mm')
+
+doc.recompute()
+# Macro End: spreadsheet_alias_to_left.FCMacro +++++++++++++++++++++++++++++++++

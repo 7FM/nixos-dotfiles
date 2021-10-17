@@ -1,0 +1,49 @@
+import Part, math, Draft
+from FreeCAD import Base
+import FreeCAD as App
+
+doc = App.ActiveDocument
+
+template = doc.getObject("Sketch005")
+body = doc.getObject("Body")
+
+clones = 16
+angleDistance = 360 / clones
+
+# Hide current Tip
+Gui.activeDocument().hide(body.Tip.Name)
+
+for i in range(clones):
+# pocket name
+  pocket_name = "AutoGenPocket"+str(i)
+# remove pocket and clone if already exists
+  pocket = body.getObject(pocket_name)
+  if pocket is not None:
+    deleteClone = pocket.Profile
+    body.removeObject(pocket)
+    body.removeObject(deleteClone)
+    doc.removeObject(pocket.Name)
+    doc.removeObject(deleteClone.Name)
+
+# Create clone
+  clone = Draft.clone(template)
+# rotate clone
+  clone.Placement.Rotation = App.Rotation(App.Vector(0,0,1),angleDistance * i)
+# add clone to body
+  body.addObject(clone)
+# create pocket
+  pocket = body.newObject("PartDesign::Pocket", pocket_name)
+# assign clone to pocket profile
+  pocket.Profile = clone
+# reverse pocket direction
+  pocket.Reversed = 1
+# set pocket length via parameter
+  pocket.setExpression('Length', u'Params.lock_cutout_height')
+# Finally hide clone
+  Gui.activeDocument().hide(clone.Name)
+# hide pocket if not last
+  if i != clones - 1:
+    Gui.activeDocument().hide(pocket.Name)
+
+# finally recompute
+doc.recompute()
