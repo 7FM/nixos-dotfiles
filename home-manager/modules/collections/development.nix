@@ -100,6 +100,13 @@ let
       #}
 
       # Language support
+      #jakob-erzar.llvm-tablegen
+      {
+        name = "llvm-tablegen";
+        publisher = "jakob-erzar";
+        version = "0.0.2";
+        sha256 = "12fdq1wv3459hz3w300x2w1dq5wphcsmh3dgf233qabr76vr1kav";        
+      }
       #antyos.openscad
       {
         name = "openscad";
