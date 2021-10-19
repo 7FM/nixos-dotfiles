@@ -9,6 +9,7 @@
     gparted
     zip
     unzip
+    jmtpfs # For MTP connection with an android phone
     #nmap
     nmap-graphical
     openconnect
