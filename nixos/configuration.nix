@@ -55,7 +55,12 @@ in {
   services.xserver.displayManager.autoLogin.enable = false;
 
   # Enable CUPS to print documents.
-  services.printing.enable = !runHeadless;
+  services.printing = {
+    enable = !runHeadless;
+    drivers = with pkgs; [
+      cnijfilter2 # Canon Pixma Drivers
+    ];
+  };
 
   # Enable sound.
   sound.enable = !runHeadless;
