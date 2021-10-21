@@ -17,6 +17,9 @@ let
   });
 
   vsExtensions = with pkgs.vscode-extensions; [
+      # Nix language support
+      bbenoist.nix
+
       # Live share
       ms-vsliveshare.vsliveshare
 
