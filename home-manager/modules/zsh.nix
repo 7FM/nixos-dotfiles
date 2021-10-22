@@ -12,8 +12,6 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    #promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-    #initExtraFirst = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
     plugins = [
       {
         name = "powerlevel10k";
