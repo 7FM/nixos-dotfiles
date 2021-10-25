@@ -41,6 +41,10 @@
       "ssh" = "TERM=xterm ssh";
     };
 
+    history = {
+      share = false; # Each shell has its own history!
+    };
+
     initExtra = ''
       bindkey ";5C" forward-word
       bindkey ";5D" backward-word
