@@ -124,6 +124,26 @@ in {
         { workspace = "9"; output = "HDMI-A-1"; }
         { workspace = "10"; output = "HDMI-A-1"; }
       ] else [];
+
+      gaps = {
+        inner = 2;
+        smartGaps = true;
+        smartBorders = true;
+      };
+
+      floating = {
+        criteria = [
+          { title = "Steam - Update News"; }
+          { app_id = "pavucontrol"; }
+          { app_id = "nm-connection-editor"; }
+          { title = "wpa_gui"; }
+          # Zoom fixes
+          { title = "zoom"; }
+          { title = "Settings"; }
+          { title = "Select a window or an application that you want to share"; }
+        ];
+      };
+
     };
 
     extraConfig = lib.optionalString (laptopDisplay != null) ''

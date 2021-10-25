@@ -303,6 +303,56 @@ default_border pixel
 #default_border none
 #default_border normal
 
+# Gaps between windows
+gaps inner 2
+smart_borders on
+smart_gaps on
+
+# Default floating windows:
+
+for_window {
+  [title="Steam - Update News"] {
+    floating enable
+  }
+}
+for_window {
+  [app_id="pavucontrol"] {
+    floating enable
+  }
+}
+for_window {
+  [app_id="nm-connection-editor"] {
+    floating enable
+  }
+}
+for_window {
+  [title="wpa_gui"] {
+    floating enable
+  }
+}
+
+# Zoom fixes
+for_window {
+  [title="Settings"] {
+    floating enable
+  }
+}
+for_window {
+  [title="zoom"] {
+    floating enable
+  }
+}
+for_window {
+  [title="Select a window or an application that you want to share"] {
+    floating enable
+  }
+}
+#for_window {
+#  [title="^🌴⬆🪟"] {
+#    floating enable
+#  }
+#}
+
 # Desktop Setup:
 
 set $disp1 DVI-D-1
