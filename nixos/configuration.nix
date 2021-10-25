@@ -49,6 +49,14 @@ in {
     ./modules/x11.nix
   ];
 
+  # UDP performance fixes
+  boot.kernel.sysctl = {
+#    "net.core.rmem_max" = 512 * 1024;
+    "net.core.rmem_max" = 25 * 1024 * 1024;
+#    "net.core.rmem_default" = 512 * 1024;
+    "net.core.rmem_default" = 25 * 1024 * 1024;
+  };
+
   # Additional hardware settings
   #hardware.usbWwan.enable = true;
 
