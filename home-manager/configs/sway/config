@@ -326,6 +326,11 @@ for_window {
   }
 }
 for_window {
+  [title="Print"] {
+    floating enable
+  }
+}
+for_window {
   [title="wpa_gui"] {
     floating enable
   }

@@ -136,6 +136,7 @@ in {
           { title = "Steam - Update News"; }
           { app_id = "pavucontrol"; }
           { app_id = "nm-connection-editor"; }
+          { title = "Print"; }
           { title = "wpa_gui"; }
           # Zoom fixes
           { title = "zoom"; }
