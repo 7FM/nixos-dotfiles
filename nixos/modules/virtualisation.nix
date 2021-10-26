@@ -30,7 +30,7 @@ in {
 
       libvirtd = {
         enable = true;
-        qemuRunAsRoot = false;
+        qemu.runAsRoot = false;
       };
 
       kvmgt = {
