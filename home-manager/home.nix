@@ -15,6 +15,7 @@
     modules/collections/communication.nix
     modules/collections/development.nix
     modules/collections/office.nix
+    modules/collections/media.nix
     #modules/collections/diyStuff.nix
     #modules/collections/gaming.nix
 

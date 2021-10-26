@@ -16,7 +16,7 @@ in with pkgs; [
   mako # notification daemon
   alacritty # gpu accelerated terminal emulator
   wofi # program launcher
-  waybar # Highly customizable wayland bar for sway
+  (waybar.override { withMediaPlayer = true;  }) # Highly customizable wayland bar for sway
   brightnessctl
 
   #polkit_gnome # Service to bring up authentication popups

@@ -13,7 +13,6 @@ in {
     (if useWayland then firefox-wayland else firefox)
     thunderbird
     gimp
-    vlc
     keepassxc
     # needed to open urls from discord, vscode, etc...
     xdg-utils

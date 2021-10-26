@@ -13,6 +13,8 @@
 		"tray"
 	],
 	"modules-right": [
+		"custom/spotify",
+		"custom/media_firefox",
 		"network",
 		"temperature",
 		"cpu",
@@ -180,17 +182,37 @@
 		// "icon-size": 21,
 		"spacing": 10
 	},
-	"custom/media": {
+	"custom/spotify": {
 		"format": "{icon} {}",
 		"return-type": "json",
-		"max-length": 40,
+//		"max-length": 40,
 		"format-icons": {
 			"spotify": "",
+			"firefox": "",
 			"default": "🎜"
 		},
 		"escape": true,
-		"exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-		// "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+		// Filter player based on name
+		"exec": "waybar-mediaplayer.py --player spotify 2> /dev/null", // Script in resources folder
+                "exec-if": "pgrep spotify",
+                "on-click": "playerctl -p spotify play-pause",
+		"on-click-right": "playerctl -p spotify next"
+	},
+	"custom/media_firefox": {
+		"format": "{icon} {}",
+		"return-type": "json",
+//		"max-length": 40,
+		"format-icons": {
+			"spotify": "",
+			"firefox": "",
+			"default": "🎜"
+		},
+		"escape": true,
+		// Filter player based on name
+		"exec": "waybar-mediaplayer.py --player firefox 2> /dev/null", // Script in resources folder
+                "exec-if": "pgrep 'Web Content'",
+                "on-click": "playerctl -p firefox play-pause",
+		"on-click-right": "playerctl -p firefox next"
 	},
 	"mpd": {
 		"format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
