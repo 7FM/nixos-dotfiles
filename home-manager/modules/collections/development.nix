@@ -19,6 +19,8 @@ let
   vsExtensions = with pkgs.vscode-extensions; [
       # Nix language support
       bbenoist.nix
+      # Nix env selector
+      arrterian.nix-env-selector
 
       # Live share
       ms-vsliveshare.vsliveshare
@@ -27,9 +29,9 @@ let
       ms-vscode.cpptools
 
       # Python
-      #ms-python.python
-      #ms-python.vscode-pylance
-      #ms-toolsai.jupyter
+      ms-python.python
+      ms-python.vscode-pylance
+      ms-toolsai.jupyter
       # Java
       redhat.java
 
@@ -109,6 +111,13 @@ let
         publisher = "jakob-erzar";
         version = "0.0.2";
         sha256 = "12fdq1wv3459hz3w300x2w1dq5wphcsmh3dgf233qabr76vr1kav";        
+      }
+      # llvm-vs-code-extensions.vscode-mlir
+      {
+        name = "vscode-mlir";
+        publisher = "llvm-vs-code-extensions";
+        version = "0.0.2";
+        sha256 = "1sf9l4qhki2pnmbdc1py7qigpk36h1hn8ickiizhi0zznprjbaqr";
       }
       #antyos.openscad
       {
@@ -219,8 +228,10 @@ in {
     userSettings = {
       "editor.suggestSelection" = "first";
       "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
+      "vsintellicode.modelDownloadPath" = ".cache/vscode";
       "telemetry.enableTelemetry" = false;
       "telemetry.enableCrashReporter" = false;
+      "telemetry.telemetryLevel" = "off";
       "C_Cpp.updateChannel" = "Insiders";
       "editor.formatOnPaste" = false;
       "editor.formatOnType" = true;
@@ -252,8 +263,6 @@ in {
       "liveshare.featureSet" = "stable";
       "liveshare.anonymousGuestApproval" = "reject";
       "liveshare.guestApprovalRequired" = true;
-#      "liveshare.accountProvider" = "";
-#      "liveshare.account" = "";
       "liveshare.focusBehavior" = "prompt";
       "liveshare.autoShareServers" = false;
       "liveshare.codeLens" = false;
@@ -277,4 +286,7 @@ in {
     };
 
   };
+
+  # Create dummy file to ensure that the vscode intellisense cache folder exists
+  home.file.".cache/vscode/.keep".text = "";
 }
