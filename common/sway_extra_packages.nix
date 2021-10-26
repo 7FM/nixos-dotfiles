@@ -13,7 +13,6 @@ in with pkgs; [
   swaylock
   swaylock-fancy
   swayidle
-  mako # notification daemon
   alacritty # gpu accelerated terminal emulator
   wofi # program launcher
   (waybar.override { withMediaPlayer = true;  }) # Highly customizable wayland bar for sway

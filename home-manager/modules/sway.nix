@@ -158,6 +158,13 @@ in {
     '';
   };
 
+  # Notification daemon, Mako configuration
+  programs.mako = {
+    enable = true;
+    # default timeout in milliseconds
+    defaultTimeout = 5000;
+  };
+
   # Autostart sway in zsh
   programs.zsh.initExtra = ''
     # If running from tty1 start sway
