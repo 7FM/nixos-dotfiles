@@ -348,6 +348,11 @@ for_window {
   }
 }
 for_window {
+  [title="Polls"] {
+    floating enable
+  }
+}
+for_window {
   [title="Select a window or an application that you want to share"] {
     floating enable
   }

@@ -141,6 +141,7 @@ in {
           # Zoom fixes
           { title = "zoom"; }
           { title = "Settings"; }
+          { title = "Polls"; }
           { title = "Select a window or an application that you want to share"; }
         ];
       };
