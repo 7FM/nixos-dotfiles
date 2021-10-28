@@ -88,10 +88,14 @@
 	},
 	"cpu": {
 		"format": "{usage:>3}%",
-		"tooltip": false
+		"tooltip": false,
+		"on-click": "alacritty --command htop",
+		"on-click-right": "alacritty --command htop"
 	},
 	"memory": {
-		"format": " {used:0.1f}G"
+		"format": " {used:0.1f}G",
+		"on-click": "alacritty --command htop",
+		"on-click-right": "alacritty --command htop"
 	},
 	"custom/mail": {
 		"format": "📩{}",
@@ -176,7 +180,7 @@
 			"activated": "",
 			"deactivated": ""
 		},
-		"on-click-right": "swaylock -eFfki ~/.config/lockscreen-origin.png"
+		"on-click-right": "swaylock-fancy --daemonize"
 	},
 	"tray": {
 		// "icon-size": 21,
