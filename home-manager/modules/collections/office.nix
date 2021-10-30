@@ -18,5 +18,7 @@ in {
     xdg-utils
     # printer utils
     system-config-printer
+    # scanner utils
+    gnome.simple-scan
   ];
 }

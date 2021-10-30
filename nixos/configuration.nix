@@ -69,6 +69,8 @@ in {
       cnijfilter2 # Canon Pixma Drivers
     ];
   };
+  # Scanner Support
+  hardware.sane.enable = !runHeadless;
 
   # Enable sound.
   sound.enable = !runHeadless;
@@ -97,6 +99,8 @@ in {
       "wheel" # Enable ‘sudo’ for the user.
       "networkmanager" # Allow changing the network settings
       "video" # For sound settings
+      "scanner" # For scanners
+      "lp" # For scanners
     ];
     openssh.authorizedKeys.keys = import ./secrets/userAuthorizedSSHKeys.nix;
     # Set password hash, generated with 'mkpasswd -m sha-512 -s':
