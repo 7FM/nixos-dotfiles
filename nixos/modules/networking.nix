@@ -7,6 +7,9 @@
   networking.wireless.enable = true;
   # Allow changes with wpa_gui & wpa_cli
   networking.wireless.userControlled.enable = true;
+  # Allow coexistence of declaratively & imeratively network configs!
+  networking.wireless.allowAuxiliaryImperativeNetworks = true;
+
   # Device specific wireless network adapters, should be listed in their corresponding conf file!
   #networking.wireless.interfaces = [
   #];
