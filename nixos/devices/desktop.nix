@@ -13,34 +13,34 @@
   boot.kernelModules = [ "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
-  boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/04f23024-ffa1-4fd7-8b94-ec8d0269cbbd";
+  boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/b2a512fd-5112-41e0-8228-58149ca65618";
 
   fileSystems = {
     "/boot" = {
-      device = "/dev/disk/by-uuid/D430-45C2";
+      device = "/dev/disk/by-uuid/494A-BA1F";
       fsType = "vfat";
     };
 
     "/" = {
-      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+      device = "/dev/disk/by-uuid/99f14769-79f4-4ccf-bcb8-cc7061d9dde8";
       fsType = "btrfs";
       options = [ "subvol=root" "compress=zstd" "noatime" ];
     };
 
     "/home" = {
-      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+      device = "/dev/disk/by-uuid/99f14769-79f4-4ccf-bcb8-cc7061d9dde8";
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };
 
     "/nix" = {
-      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+      device = "/dev/disk/by-uuid/99f14769-79f4-4ccf-bcb8-cc7061d9dde8";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" "noatime" ];
     };
 
     "/var/log" = {
-      device = "/dev/disk/by-uuid/7eafb9a5-b234-4684-8c3e-0ff1b0fc7191";
+      device = "/dev/disk/by-uuid/99f14769-79f4-4ccf-bcb8-cc7061d9dde8";
       fsType = "btrfs";
       options = [ "subvol=log" "compress=zstd" "noatime" ];
       neededForBoot = true;
