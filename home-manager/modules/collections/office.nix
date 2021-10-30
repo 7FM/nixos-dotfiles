@@ -14,6 +14,7 @@ in {
     thunderbird
     gimp
     keepassxc
+    libreoffice
     # needed to open urls from discord, vscode, etc...
     xdg-utils
     # printer utils
