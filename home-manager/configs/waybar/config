@@ -189,7 +189,7 @@
 	"custom/spotify": {
 		"format": "{icon} {}",
 		"return-type": "json",
-//		"max-length": 40,
+		"max-length": 40,
 		"format-icons": {
 			"spotify": "",
 			"firefox": "",
@@ -205,7 +205,7 @@
 	"custom/media_firefox": {
 		"format": "{icon} {}",
 		"return-type": "json",
-//		"max-length": 40,
+		"max-length": 40,
 		"format-icons": {
 			"spotify": "",
 			"firefox": "",

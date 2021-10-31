@@ -61,7 +61,7 @@ window#waybar {
 #temperature, #custom-disk_home, #custom-disk_root, #clock,
 #battery, #cpu, #memory, #network, #pulseaudio,
 #custom-mail, #custom-logout, #backlight, #idle_inhibitor
-#custom-media, #tray, #mode, #mpd {
+#custom-spotify, #custom-media_firefox, #tray, #mode, #mpd {
 	padding: 0 3px;
 	margin: 0 2px;
 }
