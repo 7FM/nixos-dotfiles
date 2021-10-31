@@ -15,6 +15,7 @@ in {
     gimp
     keepassxc
     libreoffice
+    libsForQt5.okular # PDF viewer
     # needed to open urls from discord, vscode, etc...
     xdg-utils
     # printer utils
