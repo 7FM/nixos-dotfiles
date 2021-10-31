@@ -311,7 +311,12 @@ smart_gaps on
 # Default floating windows:
 
 for_window {
-  [title="^Steam - Update News$"] {
+  [title="^Steam - News" class="^Steam$"] {
+    floating enable
+  }
+}
+for_window {
+  [title="^Friends List$" class="^Steam$"] {
     floating enable
   }
 }

@@ -133,7 +133,8 @@ in {
 
       floating = {
         criteria = [
-          { title = "^Steam - Update News$"; }
+          { title = "^Steam - News"; class = "^Steam$"; }
+          { title = "^Friends List$"; class = "^Steam$"; }
           { app_id = "^pavucontrol$"; }
           { app_id = "^nm-connection-editor$"; }
           { title = "^Print$"; }
