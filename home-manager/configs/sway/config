@@ -311,49 +311,49 @@ smart_gaps on
 # Default floating windows:
 
 for_window {
-  [title="Steam - Update News"] {
+  [title="^Steam - Update News$"] {
     floating enable
   }
 }
 for_window {
-  [app_id="pavucontrol"] {
+  [app_id="^pavucontrol$"] {
     floating enable
   }
 }
 for_window {
-  [app_id="nm-connection-editor"] {
+  [app_id="^nm-connection-editor$"] {
     floating enable
   }
 }
 for_window {
-  [title="Print"] {
+  [title="^Print$"] {
     floating enable
   }
 }
 for_window {
-  [title="wpa_gui"] {
+  [title="^wpa_gui$"] {
     floating enable
   }
 }
 
 # Zoom fixes
 for_window {
-  [title="Settings"] {
+  [app_id="$" title="^Settings$"] {
     floating enable
   }
 }
 for_window {
-  [title="zoom"] {
+  [app_id="$" title="^zoom$"] {
     floating enable
   }
 }
 for_window {
-  [title="Polls"] {
+  [app_id="$" title="^Polls$"] {
     floating enable
   }
 }
 for_window {
-  [title="Select a window or an application that you want to share"] {
+  [app_id="$" title="^Select a window or an application that you want to share$"] {
     floating enable
   }
 }

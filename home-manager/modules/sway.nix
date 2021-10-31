@@ -133,16 +133,16 @@ in {
 
       floating = {
         criteria = [
-          { title = "Steam - Update News"; }
-          { app_id = "pavucontrol"; }
-          { app_id = "nm-connection-editor"; }
-          { title = "Print"; }
-          { title = "wpa_gui"; }
+          { title = "^Steam - Update News$"; }
+          { app_id = "^pavucontrol$"; }
+          { app_id = "^nm-connection-editor$"; }
+          { title = "^Print$"; }
+          { title = "^wpa_gui$"; }
           # Zoom fixes
-          { title = "zoom"; }
-          { title = "Settings"; }
-          { title = "Polls"; }
-          { title = "Select a window or an application that you want to share"; }
+          { title = "^zoom$"; app_id = "$"; }
+          { title = "^Settings$"; app_id = "$"; }
+          { title = "^Polls$"; app_id = "$"; }
+          { title = "^Select a window or an application that you want to share$"; app_id = "$"; }
         ];
       };
 
