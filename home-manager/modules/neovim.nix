@@ -5,6 +5,7 @@
   programs.neovim = {
     enable = true;
     vimAlias = true;
+    viAlias = true;
     extraConfig = "colorscheme gruvbox";
     plugins = with pkgs.vimPlugins; [
       gruvbox
@@ -18,6 +19,11 @@
       verilog_systemverilog-vim
       vim-cpp-enhanced-highlight
     ];
+  };
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
 }
