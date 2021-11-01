@@ -46,8 +46,8 @@
     };
 
     initExtra = ''
-      bindkey ";5C" forward-word
-      bindkey ";5D" backward-word
+      bindkey "$terminfo[kRIT5]" forward-word
+      bindkey "$terminfo[kLFT5]" backward-word
     '';
 
     initExtraFirst = ''
