@@ -15,13 +15,13 @@
 	"modules-right": [
 		"custom/spotify",
 		"custom/media_firefox",
+		"custom/mail",
 		"network",
 		"temperature",
 		"cpu",
 		"memory",
 		"custom/disk_home",
 		"custom/disk_root",
-		"custom/mail",
 		"backlight",
 		"pulseaudio#out",
 		"pulseaudio#in",
@@ -98,7 +98,7 @@
 		"on-click-right": "alacritty --command htop"
 	},
 	"custom/mail": {
-		"format": "📩{}",
+		"format": "📩 {}",
 		"interval": 180,
 		"exec": "notmuch count tag:flagged OR tag:inbox AND NOT tag:killed"
 	},
