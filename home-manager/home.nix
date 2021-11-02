@@ -10,6 +10,7 @@
     modules/neovim.nix
     modules/gtk.nix
     modules/qt.nix
+    modules/email.nix
 
     modules/collections/utilities.nix
     modules/collections/communication.nix
