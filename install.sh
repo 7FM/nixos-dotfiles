@@ -4,7 +4,7 @@
 #sudo ln -s $(pwd)/nixos /etc/nixos
 
 # Quit on error
-set -e
+set -ueo pipefail
 
 # Add home manager channel 21.05
 nix-channel --add https://github.com/nix-community/home-manager/archive/release-21.05.tar.gz home-manager

@@ -1,4 +1,6 @@
 #!/bin/sh
+set -ueo pipefail
+
 # home-manager
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 # system

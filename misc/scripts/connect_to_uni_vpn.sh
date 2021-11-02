@@ -1,5 +1,11 @@
 #!/bin/sh
-set -e
+set -ueo pipefail
+
+failed() {
+  echo "Failed to open the KeepassXC database!"
+}
+
+trap 'failed' ERR
 
 KEEPASSDB_PATH="/home/tm/KeyManager/keepass.kdbx"
 KEEPASSDB_SEARCHTERM="hrz"
@@ -13,13 +19,13 @@ read KP_PASSWORD
 stty echo
 printf "\n"
 
-echo "Try to extract the VPN credentials from the KeepassXC DB, no interactions required!"
-VPN_ENTRY=$(echo "$KP_PASSWORD" | keepassxc-cli locate "$KEEPASSDB_PATH" "$KEEPASSDB_SEARCHTERM")
-VPN_DATA=$(echo "$KP_PASSWORD" | keepassxc-cli show "$KEEPASSDB_PATH" "$VPN_ENTRY")
+echo "Trying to extract the VPN credentials from the KeepassXC DB"
+VPN_ENTRY=$(echo "$KP_PASSWORD" | keepassxc-cli locate "$KEEPASSDB_PATH" "$KEEPASSDB_SEARCHTERM" 2> /dev/null)
+VPN_DATA=$(echo "$KP_PASSWORD" | keepassxc-cli show "$KEEPASSDB_PATH" "$VPN_ENTRY" 2> /dev/null)
 VPN_PASSWORD=$(echo "$VPN_DATA" | grep Password | awk '{print $2}')
 VPN_USER=$(echo "$VPN_DATA" | grep UserName | awk '{print $2}')
 
 echo "USER: $VPN_USER"
 
-echo "Try connecting to the VPN"
+echo "Connecting to the VPN"
 echo "$VPN_PASSWORD" | sudo openconnect -u "$VPN_USER" --authgroup="$UNI_VPN_GROUP" --passwd-on-stdin --non-inter "$UNI_VPN_URL"

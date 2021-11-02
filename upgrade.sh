@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -ueo pipefail
 
 # Update channels
 echo "Update nix channels!"
