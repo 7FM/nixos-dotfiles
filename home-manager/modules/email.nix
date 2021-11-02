@@ -25,6 +25,6 @@ in {
   programs.notmuch.enable = true;
   programs.offlineimap.enable = true;
 
-  accounts.email.accounts = import ../configs/secrets/emailAddresses.nix { inherit createPasswordLookupCmd offlineimapConf notmuchConf; };
+  accounts.email.accounts = import ../configs/secrets/email/emailAddresses.nix { inherit createPasswordLookupCmd offlineimapConf notmuchConf; };
 
 }
