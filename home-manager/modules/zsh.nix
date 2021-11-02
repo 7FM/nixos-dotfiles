@@ -48,6 +48,7 @@
     initExtra = ''
       bindkey "$terminfo[kRIT5]" forward-word
       bindkey "$terminfo[kLFT5]" backward-word
+      bindkey "^R" history-incremental-search-backward
     '';
 
     initExtraFirst = ''
