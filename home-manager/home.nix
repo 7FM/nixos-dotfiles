@@ -2,6 +2,7 @@
 
 {
   imports = [
+    modules/xdg.nix
     modules/sway.nix
     modules/alacritty.nix
     modules/ssh.nix
