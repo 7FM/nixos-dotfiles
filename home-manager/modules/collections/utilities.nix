@@ -14,7 +14,8 @@
     nmap-graphical
     openconnect
     openvpn
-    x2goclient
+    #x2goclient # Segfaults on wayland...
+    (callPackage ../x2go-wayland-wrapper.nix {}) # This wrapper forces QT to use xwayland instead!
     syncthing
     speedtest-cli
     usbutils
