@@ -15,6 +15,9 @@ in {
     gimp
     keepassxc
     libreoffice
+    hunspellDicts.de_DE # Dictionaries for spell checking in libreoffice
+    hunspellDicts.en_US-large # Dictionaries for spell checking in libreoffice
+    hunspellDicts.en_GB-large # Dictionaries for spell checking in libreoffice
     libsForQt5.okular # PDF viewer
     # needed to open urls from discord, vscode, etc...
     xdg-utils
