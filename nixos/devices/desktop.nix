@@ -72,6 +72,7 @@
   custom.useUEFI = true;
   custom.bluetooth = true;
   custom.enableVirtualisation = true;
+  custom.adb = "udevrules";
 
   networking.interfaces.eno1.useDHCP = true;
   #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;

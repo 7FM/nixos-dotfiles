@@ -43,6 +43,7 @@ in {
     ./modules/networking.nix
     ./modules/bluetooth.nix
     ./modules/virtualisation.nix
+    ./modules/adb.nix
 
     ./modules/wayland.nix
     ./modules/home-manager_wayland.nix

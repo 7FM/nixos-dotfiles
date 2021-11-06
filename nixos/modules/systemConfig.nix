@@ -102,6 +102,15 @@ with lib;
         Specifies the hostname of this system.
       '';
     };
+
+    adb = mkOption {
+      type = types.enum [ "disabled" "global" "udevrules" ];
+      default = "disabled";
+      description = ''
+        Specifies whether and how to add support for adb.
+        "global" installs adb globally whereas "udevrules" only install the required udev rules and adb must be installed via i.e. homemanager.
+      '';
+    };
   };
 
 
