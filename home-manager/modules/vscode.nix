@@ -239,6 +239,27 @@ in {
       "java.requirements.JDK11Warning" = false;
       "java.configuration.checkProjectSettingsExclusions" = false;
       "cSpell.language" = "en,en-US";
+      "cSpell.enableFiletypes" = [
+        "bat"
+        "bibtex"
+        "bsv"
+        "cmake"
+        "dockerfile"
+        "makefile"
+        "mlir"
+        "nix"
+        "powershell"
+        "r"
+        "ruby"
+        "scad"
+        "shellscript"
+        "sql"
+        "tablegen"
+        "tcl"
+        "tex"
+        "verilog"
+        "xml"
+      ];
       "workbench.editorAssociations" = {
           "*.ipynb" = "jupyter-notebook";
       };
