@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  enable = config.custom.hm.diyStuff.communication.enable;
+  enable = config.custom.hm.collections.diyStuff.enable;
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [

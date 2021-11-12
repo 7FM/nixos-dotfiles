@@ -37,26 +37,6 @@ in {
   config = {
     # sanity checks
     assertions = [
-      {
-        assertion = config.custom.gui != null;
-        message = "A user frontend must be specified!";
-      }
-      {
-        assertion = config.custom.gpu != null;
-        message = "A gpu must be specified!";
-      }
-      {
-        assertion = config.custom.cpu != null;
-        message = "A cpu must be specified!";
-      }
-      {
-        assertion = config.custom.device != null;
-        message = "A predefined device configuration must be specified!";
-      }
-      {
-        assertion = config.custom.useUEFI != null;
-        message = "It must be specified whether grub is to be installed on an UEFI system!";
-      }
     ];
   };
 }
