@@ -6,7 +6,10 @@
 let
   useWayland = config.custom.gui == "wayland";
   useX11 = config.custom.gui == "x11";
+
+  enable = config.custom.device == "virtualbox";
 in {
+  config = lib.mkIf enable {
   imports = [ ];
 
   boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "sd_mod" "sr_mod" ];
@@ -46,5 +49,5 @@ in {
   custom.swapFileSize = 1024;
 
   networking.interfaces.enp0s3.useDHCP = true;
-
+  };
 }

@@ -3,7 +3,10 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
-{
+let
+  enable = config.custom.device == "desktop";
+in {
+  config = lib.mkIf enable {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
@@ -76,4 +79,5 @@
 
   networking.interfaces.eno1.useDHCP = true;
   #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;
+  };
 }

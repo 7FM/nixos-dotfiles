@@ -2,19 +2,14 @@
 
 # Window system settings:
 let
-  additionalPackages = with pkgs; [
-    #linuxPackages_hardened.broadcom_sta
-    #linuxPackages.rtl8812au
-  ];
-
   runHeadless = config.custom.gui == "headless";
 in {
 
   imports = [
     # Hardware specifics
-    #./devices/virtualbox.nix
+    ./devices/virtualbox.nix
     ./devices/desktop.nix
-    #./devices/lenovo_laptop.nix
+    ./devices/lenovo_laptop.nix
 
     ./modules/systemConfig.nix
 
@@ -49,6 +44,10 @@ in {
     ./modules/home-manager_wayland.nix
     ./modules/x11.nix
   ];
+
+  # custom.device = "virtualbox";
+  # custom.device = "desktop";
+  # custom.device = "lenovo_laptop";
 
   # UDP performance fixes
   boot.kernel.sysctl = {
@@ -107,9 +106,6 @@ in {
     # Set password hash, generated with 'mkpasswd -m sha-512 -s':
     hashedPassword = import ./secrets/password.nix;
   };
-
-  environment.systemPackages = with pkgs; [
-  ] ++ additionalPackages;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

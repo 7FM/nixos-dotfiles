@@ -3,7 +3,10 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
-{
+let
+  enable = config.custom.device == "lenovo_laptop";
+in {
+  config = lib.mkIf enable {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
@@ -89,4 +92,5 @@
     "wlp4s0"
   ];
   networking.interfaces.wwp0s20f0u6i12.useDHCP = true;
+  };
 }
