@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 set -ueo pipefail
 # Taken from: https://mt-caret.github.io/blog/posts/2020-06-29-optin-state.html
 
@@ -46,6 +46,7 @@ sudo nixos-generate-config --root /mnt
 
 sudo nano /mnt/etc/nixos/*.nix
 
+# TODO append custom options to /mnt/etc/hardware.nix and further automate deploying on new devices!
 # When done modifying:
 # sudo nixos-install --no-root-passwd --root /mnt
 # sudo reboot
