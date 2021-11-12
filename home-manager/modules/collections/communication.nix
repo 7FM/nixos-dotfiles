@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-
   # Wayland screen sharing fix up!
   # https://github.com/NixOS/nixpkgs/issues/107233
   # ALSO: ensure that in ~/.config/zoomus.conf 'enableWaylandShare=true' is set https://github.com/NixOS/nixpkgs/issues/107233#issuecomment-757424877
@@ -21,17 +20,17 @@ let
     nss = pkgs.nss_latest;
   };
 
+  enable = config.custom.hm.collections.communication.enable;
 in {
-  home.packages = with pkgs; [
-    # Communication
-    #discord
-    myDiscord
-    mattermost-desktop
-    #zoom-us
-    myZoom
-    teamspeak_client
-  ];
+  config = lib.mkIf enable {
+    home.packages = with pkgs; [
+      # Communication
+      myDiscord
+      mattermost-desktop
+      myZoom
+      teamspeak_client
+    ];
 
-  home.file.".config/discord/settings.json".source = ../../configs/discord/settings.json;
-
+    home.file.".config/discord/settings.json".source = ../../configs/discord/settings.json;
+  };
 }
