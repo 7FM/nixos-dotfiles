@@ -16,9 +16,10 @@ let
   # 1. check required nss version: nix path-info $(which firefox) -r | grep nss-
   # 2. find correct package: https://search.nixos.org/packages/?query=nss_
   # 3. update nss package below
-  myDiscord = pkgs.discord.override {
-    nss = pkgs.nss_latest;
-  };
+  myDiscord = pkgs.discord;
+  #myDiscord = pkgs.discord.override {
+  #  nss = pkgs.nss_latest;
+  #};
 
   enable = config.custom.hm.collections.communication.enable;
 in {
