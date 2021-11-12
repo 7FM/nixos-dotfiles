@@ -1,8 +1,8 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  verilatorVersion = "4.212";
-  verilatorSha256 = "sha256:1sxijsy0yr7z9whr7db1afy374dxbylx4xfryw9brh002gbj8qj0";
+  verilatorVersion = "4.214";
+  verilatorSha256 = "sha256:07pl5q79glyapw4gjssaass0c75757aji8j1pl487z2c3s304gs8";
 
 in pkgs.mkShell {
   # nativeBuildInputs is usually what you want -- tools you need to run
