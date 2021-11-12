@@ -129,8 +129,8 @@ let
       {
         name = "veriloghdl";
         publisher = "mshr-h";
-        version = "1.5.0";
-        sha256 = "12dj0gbznmc55mggasgjcbdjm8wvryd6nyinq4vzz9jll37wrm6v";
+        version = "1.5.1";
+        sha256 = "16zpnzbp8sxv7xhkqpf2qgvrvr9a692yg0fdkmk86hq1lqa8cm7v";
       }
       #torn4dom4n.latex-support
       {
