@@ -3,7 +3,7 @@
 let
   enable = config.custom.hm.collections.utilities.enable;
 in {
-  config = lib.mkIf enable ({
+  config = lib.mkIf enable (lib.mkMerge [{
     home.packages = with pkgs; [
       # Utilities
       wget
@@ -30,5 +30,5 @@ in {
     # Config for htop
     home.file.".config/htop/htoprc".source = ../../configs/htop/htoprc;
 
-  } // (import ../submodule/nnn.nix { inherit config pkgs lib; }));
+  } (import ../submodule/nnn.nix { inherit config pkgs lib; })]);
 }

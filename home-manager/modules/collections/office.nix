@@ -6,7 +6,7 @@ let
 
   enable = config.custom.hm.collections.office.enable;
 in {
-  config = lib.mkIf enable ({
+  config = lib.mkIf enable (lib.mkMerge [{
     # imports = [
     #   (import ../firefox.nix { inherit useWayland; })
     # ];
@@ -28,5 +28,5 @@ in {
       # scanner utils
       gnome.simple-scan
     ];
-  } // (import ../submodule/firefox.nix { inherit useWayland; } { inherit config pkgs lib; }));
+  } (import ../submodule/firefox.nix { inherit useWayland; } { inherit config pkgs lib; })]);
 }

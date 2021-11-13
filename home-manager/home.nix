@@ -2,7 +2,7 @@
 
 {
   imports = [
-    modules/hmConfig.nix
+    ./modules/hmConfig.nix
   ];
 
   # Let Home Manager install and manage itself.
