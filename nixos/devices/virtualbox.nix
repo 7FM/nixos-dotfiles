@@ -10,44 +10,44 @@ let
   enable = config.custom.device == "virtualbox";
 in {
   config = lib.mkIf enable {
-  imports = [ ];
+    imports = [ ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+    boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "sd_mod" "sr_mod" ];
+    boot.initrd.kernelModules = [ ];
+    boot.kernelModules = [ ];
+    boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/792a19db-64fd-4d54-ae33-ef2387429bb5";
-      fsType = "ext4";
+    fileSystems."/" =
+      { device = "/dev/disk/by-uuid/792a19db-64fd-4d54-ae33-ef2387429bb5";
+        fsType = "ext4";
+      };
+
+    swapDevices = [ ];
+
+    #TODO How to get useWayland variable???
+
+    environment.sessionVariables = if useWayland then {
+      # Wayland fix invisible cursor
+      WLR_NO_HARDWARE_CURSORS = "1";
+    } else null;
+
+    # VirtualBox specifics
+    virtualisation.virtualbox.guest = {
+      enable = true;
+      x11 = useX11;
     };
 
-  swapDevices = [ ];
+    # Remove fsck at startup which fails with VirtualBox
+    boot.initrd.checkJournalingFS = false;
 
-  #TODO How to get useWayland variable???
+    # System settings
+    custom.gpu = "generic";
+    custom.cpu = "generic";
+    custom.gui = "wayland";
+    custom.useUEFI = false;
+    custom.useSwapFile = true;
+    custom.swapFileSize = 1024;
 
-  environment.sessionVariables = if useWayland then {
-    # Wayland fix invisible cursor
-    WLR_NO_HARDWARE_CURSORS = "1";
-  } else null;
-
-  # VirtualBox specifics
-  virtualisation.virtualbox.guest = {
-    enable = true;
-    x11 = useX11;
-  };
-
-  # Remove fsck at startup which fails with VirtualBox
-  boot.initrd.checkJournalingFS = false;
-
-  # System settings
-  custom.gpu = "generic";
-  custom.cpu = "generic";
-  custom.gui = "wayland";
-  custom.useUEFI = false;
-  custom.useSwapFile = true;
-  custom.swapFileSize = 1024;
-
-  networking.interfaces.enp0s3.useDHCP = true;
+    networking.interfaces.enp0s3.useDHCP = true;
   };
 }
