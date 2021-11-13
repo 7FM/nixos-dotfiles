@@ -8,13 +8,13 @@ in {
   options.custom.hm = {
 
     modules = {
-      xdg.enable = mkEnableOption "the xdg module";
+      xdg.enable = mkEnableDefaultTrueOption "the xdg module";
       sway.enable = mkEnableOption "the sway module";
       alacritty.enable = mkEnableOption "the alacritty module";
       ssh.enable = mkEnableOption "the ssh module";
       git.enable = mkEnableOption "the git module";
-      zsh.enable = mkEnableOption "the zsh module";
-      neovim.enable = mkEnableOption "the neovim module";
+      zsh.enable = mkEnableDefaultTrueOption "the zsh module";
+      neovim.enable = mkEnableDefaultTrueOption "the neovim module";
       gtk.enable = mkEnableOption "the gtk module";
       qt.enable = mkEnableOption "the qt module";
       email.enable = mkEnableOption "the email module";
@@ -22,7 +22,7 @@ in {
     };
 
     collections = {
-      utilities.enable = mkEnableOption "the utilities collection";
+      utilities.enable = mkEnableDefaultTrueOption "the utilities collection";
       communication.enable = mkEnableOption "the communication collection";
       development.enable = mkEnableOption "the development collection";
       office.enable = mkEnableOption "the office collection";
