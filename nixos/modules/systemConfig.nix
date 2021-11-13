@@ -3,6 +3,40 @@
 with lib;
 
 {
+  imports = [
+    # Hardware specifics
+    ./cpu_amd.nix
+    ./cpu_intel.nix
+    ./cpu_generic.nix
+    ./gpu.nix
+    ./gpu_amd.nix
+    ./gpu_intel.nix
+    ./gpu_nvidia.nix
+    ./gpu_generic.nix
+
+    ./swapfile.nix
+
+    # Internationalisation specifics
+    ./internationalization.nix
+
+    # Shared settings
+    ./grub.nix
+    ./ssh.nix
+    ./security.nix
+
+    # Features
+    ./optimize_storage_space.nix
+    ./powermanagement.nix
+    ./networking.nix
+    ./bluetooth.nix
+    ./virtualisation.nix
+    ./adb.nix
+
+    ./wayland.nix
+    ./home-manager_wayland.nix
+    ./x11.nix
+  ];
+
   options.custom = {
 
     device = mkOption {
