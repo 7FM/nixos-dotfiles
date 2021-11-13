@@ -22,8 +22,6 @@ in {
 
     swapDevices = [ ];
 
-    #TODO How to get useWayland variable???
-
     environment.sessionVariables = if useWayland then {
       # Wayland fix invisible cursor
       WLR_NO_HARDWARE_CURSORS = "1";
@@ -43,8 +41,10 @@ in {
     custom.cpu = "generic";
     custom.gui = "wayland";
     custom.useUEFI = false;
-    custom.useSwapFile = true;
-    custom.swapFileSize = 1024;
+    custom.swapfile = {
+      enable = true;
+      size = 1024;
+    };
 
     networking.interfaces.enp0s3.useDHCP = true;
   };

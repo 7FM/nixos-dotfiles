@@ -1,16 +1,39 @@
 { config, pkgs, lib, ... }:
 
 let
-  enable = config.custom.runSSHServer;
   runHeadless = config.custom.gui == "headless";
+
+  cfg = config.custom.sshServer;
+  enable = cfg.enable;
+  _ports = cfg.ports;
+  ports = if lib.types.path.check _ports then (import _ports) else _ports;
 in {
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = enable || runHeadless;
-  services.openssh.ports = import ../secrets/sshPorts.nix;
-  services.openssh.permitRootLogin = "no";
-  services.openssh.passwordAuthentication = false;
+  options.custom.sshServer = with lib; {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Specifies whether a ssh server should be run!
+        This is automagically enabled when running in headless mode.
+      '';
+    };
+    ports = mkOption {
+      type = types.either types.path (types.nonEmptyListOf types.string);
+      default = ../secrets/sshPorts.nix;
+      description = ''
+        Specifies the ports on which the ssh server should listen!
+      '';
+    };
+  };
 
-  # Start ssh agent to manage the ssh keys
-  programs.ssh.startAgent = !runHeadless;
+  config = {
+    # Enable the OpenSSH daemon.
+    services.openssh.enable = enable || runHeadless;
+    services.openssh.ports = ports;
+    services.openssh.permitRootLogin = "no";
+    services.openssh.passwordAuthentication = false;
+
+    # Start ssh agent to manage the ssh keys
+    programs.ssh.startAgent = !runHeadless;
+  };
 }
-
