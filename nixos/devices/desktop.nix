@@ -6,11 +6,7 @@
 let
   enable = config.custom.device == "desktop";
 in {
-  config = lib.mkIf enable {
-    imports =
-      [ (modulesPath + "/installer/scan/not-detected.nix")
-      ];
-
+  config = lib.mkIf enable ({
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "wl" ];
@@ -82,5 +78,5 @@ in {
 
     networking.interfaces.eno1.useDHCP = true;
     #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;
-  };
+  }  // (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; }));
 }

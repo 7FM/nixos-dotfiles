@@ -6,11 +6,7 @@
 let
   enable = config.custom.device == "lenovo_laptop";
 in {
-  config = lib.mkIf enable {
-    imports =
-      [ (modulesPath + "/installer/scan/not-detected.nix")
-      ];
-
+  config = lib.mkIf enable ({
     boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "acpi_call" ];
@@ -92,5 +88,5 @@ in {
       "wlp4s0"
     ];
     networking.interfaces.wwp0s20f0u6i12.useDHCP = true;
-  };
+  }  // (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; }));
 }
