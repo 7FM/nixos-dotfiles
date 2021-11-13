@@ -1,7 +1,11 @@
 { config, pkgs, lib, ... }:
 
-{
-  xdg = {
-    enable = true; # This sets environment variables such as: XDG_CACHE_HOME, XDG_CONFIG_HOME and XDG_DATA_HOME
+let
+  enable = config.custom.hm.modules.xdg.enable;
+in {
+  config = lib.mkIf enable {
+    xdg = {
+      enable = true; # This sets environment variables such as: XDG_CACHE_HOME, XDG_CONFIG_HOME and XDG_DATA_HOME
+    };
   };
 }

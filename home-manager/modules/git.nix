@@ -1,41 +1,45 @@
 { config, pkgs, lib, ... }:
 
-{
-  home.packages = with pkgs; [
-    gitAndTools.git-crypt
-  ];
+let
+  enable = config.custom.hm.modules.git.enable;
+in {
+  config = lib.mkIf enable {
+    home.packages = with pkgs; [
+      gitAndTools.git-crypt
+    ];
 
-  programs.git = {
-    enable = true;
-    userName = "7FM";
-    userEmail = "41307817+7FM@users.noreply.github.com";
+    programs.git = {
+      enable = true;
+      userName = "7FM";
+      userEmail = "41307817+7FM@users.noreply.github.com";
 
-    extraConfig = {
-      pull = {
-        rebase = false; # merge
+      extraConfig = {
+        pull = {
+          rebase = false; # merge
+        };
       };
-    };
 
-    aliases = {
-      a = "add";
-      c = "commit";
-      d = "diff";
-      s = "status";
-      b = "branch";
-      l = "log";
-      m = "merge";
-      ch = "checkout";
-      sh = "show";
-      pl = "pull";
-      ps = "push";
-    };
+      aliases = {
+        a = "add";
+        c = "commit";
+        d = "diff";
+        s = "status";
+        b = "branch";
+        l = "log";
+        m = "merge";
+        ch = "checkout";
+        sh = "show";
+        pl = "pull";
+        ps = "push";
+      };
 
-    delta = {
-      enable = true;
-    };
+      delta = {
+        enable = true;
+      };
 
-    lfs = {
-      enable = true;
+      lfs = {
+        enable = true;
+      };
     };
   };
 }
