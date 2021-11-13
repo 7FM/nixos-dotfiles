@@ -12,37 +12,6 @@ in {
     ./devices/lenovo_laptop.nix
 
     ./modules/systemConfig.nix
-
-    ./modules/cpu_amd.nix
-    ./modules/cpu_intel.nix
-    ./modules/cpu_generic.nix
-    ./modules/gpu.nix
-    ./modules/gpu_amd.nix
-    ./modules/gpu_intel.nix
-    ./modules/gpu_nvidia.nix
-    ./modules/gpu_generic.nix
-
-    ./modules/swapfile.nix
-
-    # Internationalisation specifics
-    ./modules/internationalization.nix
-
-    # Shared settings
-    ./modules/grub.nix
-    ./modules/ssh.nix
-    ./modules/security.nix
-
-    # Features
-    ./modules/optimize_storage_space.nix
-    ./modules/powermanagement.nix
-    ./modules/networking.nix
-    ./modules/bluetooth.nix
-    ./modules/virtualisation.nix
-    ./modules/adb.nix
-
-    ./modules/wayland.nix
-    ./modules/home-manager_wayland.nix
-    ./modules/x11.nix
   ];
 
   # custom.device = "virtualbox";
