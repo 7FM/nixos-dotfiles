@@ -12,5 +12,5 @@ in {
       # IDEs
       jetbrains.idea-community
     ];
-  } // (import ../vscode.nix { inherit config pkgs lib; }));
+  } // (import ../submodule/vscode.nix { inherit config pkgs lib; }));
 }

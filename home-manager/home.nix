@@ -3,26 +3,6 @@
 {
   imports = [
     modules/hmConfig.nix
-
-    modules/xdg.nix
-    modules/sway.nix
-    modules/alacritty.nix
-    modules/ssh.nix
-    modules/git.nix
-    modules/zsh.nix
-    modules/neovim.nix
-    modules/gtk.nix
-    modules/qt.nix
-    modules/email.nix
-    modules/optimize_storage_space.nix
-
-    modules/collections/utilities.nix
-    modules/collections/communication.nix
-    modules/collections/development.nix
-    modules/collections/office.nix
-    modules/collections/media.nix
-    modules/collections/diyStuff.nix
-    modules/collections/gaming.nix
   ];
 
   # Let Home Manager install and manage itself.
@@ -44,6 +24,7 @@
     };
     collections = {
       utilities.enable = false;
+      gui_utilities.enable = false;
       communication.enable = false;
       development.enable = false;
       office.enable = false;

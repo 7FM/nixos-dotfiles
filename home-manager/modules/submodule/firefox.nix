@@ -27,7 +27,7 @@
 
     profiles = {
       tm = {
-        bookmarks = import ../configs/secrets/bookmarks.nix;
+        bookmarks = import ../../configs/secrets/bookmarks.nix;
 
         settings = {
           "browser.search.region" = "GB";

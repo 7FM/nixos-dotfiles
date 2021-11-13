@@ -28,5 +28,5 @@ in {
       # scanner utils
       gnome.simple-scan
     ];
-  } // (import ../firefox.nix { inherit useWayland; } { inherit config pkgs lib; }));
+  } // (import ../submodule/firefox.nix { inherit useWayland; } { inherit config pkgs lib; }));
 }

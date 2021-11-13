@@ -5,6 +5,29 @@ with lib;
 let
   mkEnableDefaultTrueOption = name: mkEnableOption name // { default = true; };
 in {
+  imports = [
+    ./xdg.nix
+    ./sway.nix
+    ./alacritty.nix
+    ./ssh.nix
+    ./git.nix
+    ./zsh.nix
+    ./neovim.nix
+    ./gtk.nix
+    ./qt.nix
+    ./email.nix
+    ./optimize_storage_space.nix
+
+    ./collections/utilities.nix
+    ./collections/gui_utilities.nix
+    ./collections/communication.nix
+    ./collections/development.nix
+    ./collections/office.nix
+    ./collections/media.nix
+    ./collections/diyStuff.nix
+    ./collections/gaming.nix
+  ];
+
   options.custom.hm = {
 
     modules = {
@@ -23,6 +46,7 @@ in {
 
     collections = {
       utilities.enable = mkEnableDefaultTrueOption "the utilities collection";
+      gui_utilities.enable = mkEnableOption "the gui utilities collection";
       communication.enable = mkEnableOption "the communication collection";
       development.enable = mkEnableOption "the development collection";
       office.enable = mkEnableOption "the office collection";
