@@ -6,10 +6,10 @@ let
 
   enable = config.custom.hm.collections.office.enable;
 in {
-  config = lib.mkIf enable {
-    imports = [
-      (import ../firefox.nix { inherit useWayland; })
-    ];
+  config = lib.mkIf enable ({
+    # imports = [
+    #   (import ../firefox.nix { inherit useWayland; })
+    # ];
 
     home.packages = with pkgs; [
       # Some basic gui programs
@@ -28,5 +28,5 @@ in {
       # scanner utils
       gnome.simple-scan
     ];
-  };
+  } // (import ../firefox.nix { inherit useWayland; } { inherit config pkgs lib; }));
 }
