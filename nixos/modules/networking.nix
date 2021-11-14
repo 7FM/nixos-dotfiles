@@ -1,10 +1,41 @@
 { config, pkgs, lib, ... }:
 
-{
-  networking.hostName = config.custom.hostname;
+let
+  cfg = config.custom.networking;
+  hostname = cfg.hostname;
+  wifiSupport = cfg.wifiSupport;
+  withNetworkManager = cfg.withNetworkManager;
+in {
+  options.custom.networking = with lib; {
+    wifiSupport = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to add WiFi support with a collection of WAPs.
+      '';
+    };
+    withNetworkManager = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable NetworkManager for Ethernet, WWAN, VPN, etc..
+      '';
+    };
+
+    hostname = mkOption {
+      type = types.str;
+      default = "nixos_" + config.custom.device;
+      description = ''
+        Specifies the hostname of this system.
+      '';
+    };
+  };
+
+  config = {
+  networking.hostName = hostname;
 
   # Enables wireless support via wpa_supplicant.
-  networking.wireless.enable = true;
+  networking.wireless.enable = true && wifiSupport;
   # Allow changes with wpa_gui & wpa_cli
   networking.wireless.userControlled.enable = true;
   # Allow coexistence of declaratively & imeratively network configs!
@@ -14,7 +45,12 @@
   #networking.wireless.interfaces = [
   #];
 
-  networking.networkmanager.enable = true;
+  # Endpoints to use with wpa_supplicant
+  # WARNING: Be aware that keys will be written to the nix store in plaintext!
+  #          When no netwokrs are set it will default to using a configuration file at /etc/wpa_supplicant.conf
+  networking.wireless.networks = import ../secrets/waps.nix;
+
+  networking.networkmanager.enable = wifiSupport && withNetworkManager;
   # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
   #       To do this you need to instruct NetworkManager to ignore those interfaces like:
   networking.networkmanager.unmanaged = [
@@ -25,11 +61,6 @@
     networkmanager_openvpn
     networkmanager_openconnect
   ];
-
-  # Endpoints to use with wpa_supplicant
-  # WARNING: Be aware that keys will be written to the nix store in plaintext!
-  #          When no netwokrs are set it will default to using a configuration file at /etc/wpa_supplicant.conf
-  networking.wireless.networks = import ../secrets/waps.nix;
 
   # VPNs
   services.openvpn.servers = {
@@ -57,9 +88,9 @@
 
   # network debugging
   programs.wireshark.enable = true;
-  users.users.tm.extraGroups = [
+  users.users.tm.extraGroups = lib.optional config.programs.wireshark.enable
     "wireshark"
-  ];
-
+  ;
+  };
 }
 

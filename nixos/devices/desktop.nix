@@ -61,7 +61,6 @@ in {
       };
     };
 
-
     swapDevices = [{
       device = "/dev/disk/by-uuid/002b659d-f634-4cc4-8c97-9b3be20b9bfb";
     }];
@@ -75,6 +74,10 @@ in {
     custom.bluetooth = true;
     custom.enableVirtualisation = true;
     custom.adb = "udevrules";
+    custom.networking = {
+      wifiSupport = true;
+      withNetworkManager = true;
+    };
 
     networking.interfaces.eno1.useDHCP = true;
     #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;

@@ -81,6 +81,10 @@ in {
     custom.bluetooth = true;
     custom.enableVirtualisation = true;
     custom.adb = "udevrules";
+    custom.networking = {
+      wifiSupport = true;
+      withNetworkManager = true;
+    };
 
     networking.interfaces.enp0s31f6.useDHCP = true;
     networking.interfaces.wlp4s0.useDHCP = true;

@@ -104,14 +104,6 @@ with lib;
       '';
     };
 
-    hostname = mkOption {
-      type = types.str;
-      default = "nixos";
-      description = ''
-        Specifies the hostname of this system.
-      '';
-    };
-
     adb = mkOption {
       type = types.enum [ "disabled" "global" "udevrules" ];
       default = "disabled";

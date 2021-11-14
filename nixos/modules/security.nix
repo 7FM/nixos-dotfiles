@@ -2,7 +2,32 @@
 
 let
   runHeadless = config.custom.gui == "headless";
+
+  cfg = config.custom.security.usbguard;
+  fixedRules = cfg.fixedRules;
+  enforce = cfg.enforceRules || fixedRules != null;
 in {
+
+  options.custom.security.usbguard = with lib; {
+    enforceRules = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enforces the usbguard rules and might make interactions impossible, if not properly configured.
+        Still, it is strongly recommended to enable this option.
+      '';
+    };
+    fixedRules = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      description = ''
+        Running 'usbguard generate-policy' as root will generate
+        a config for your currently plugged in devices.
+        If you do not set this option, the USBGuard daemon will
+        load it's policy rule set from '/var/lib/usbguard/rules.conf'
+      '';
+    };
+  };
 
   config = {
     # Keyring
@@ -11,8 +36,9 @@ in {
     # Security
     services.usbguard.enable = true;
 
-    # TODO change back to "block" once a policy is inplace!
-    services.usbguard.implictPolicyTarget = "allow";
+    services.usbguard.implictPolicyTarget = if enforce then "block" else "allow";
+
+    services.usbguard.rules = fixedRules;
 
     # For headless:
     services.usbguard.package = if runHeadless then pkgs.usbguard-nox else pkgs.usbguard;
