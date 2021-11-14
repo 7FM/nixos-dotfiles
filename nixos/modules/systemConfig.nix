@@ -38,15 +38,6 @@ with lib;
   ];
 
   options.custom = {
-
-    device = mkOption {
-      type = types.nullOr (types.enum [ "virtualbox" "lenovo_laptop" "desktop" ]);
-      default = null;
-      description = ''
-        Specifies the custom device configuration to use!
-      '';
-    };
-
     cpu = mkOption {
       type = types.nullOr (types.enum [ "amd" "intel" "generic" ]);
       default = null;

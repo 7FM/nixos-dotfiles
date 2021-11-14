@@ -6,17 +6,9 @@ let
 in {
 
   imports = [
-    # Hardware specifics
-    ./devices/virtualbox.nix
-    ./devices/desktop.nix
-    ./devices/lenovo_laptop.nix
-
+    ./common/devices.nix
     ./modules/systemConfig.nix
   ];
-
-  # custom.device = "virtualbox";
-  # custom.device = "desktop";
-  # custom.device = "lenovo_laptop";
 
   # UDP performance fixes
   boot.kernel.sysctl = {
