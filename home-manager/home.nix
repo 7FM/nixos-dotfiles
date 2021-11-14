@@ -2,37 +2,12 @@
 
 {
   imports = [
+    ./common/devices.nix
     ./modules/hmConfig.nix
   ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
-  custom.hm = {
-    modules = {
-      xdg.enable = false;
-      sway.enable = false;
-      alacritty.enable = false;
-      ssh.enable = false;
-      git.enable = false;
-      zsh.enable = false;
-      neovim.enable = false;
-      gtk.enable = false;
-      qt.enable = false;
-      email.enable = false;
-      optimize_storage.enable = false;
-    };
-    collections = {
-      utilities.enable = false;
-      gui_utilities.enable = false;
-      communication.enable = false;
-      development.enable = false;
-      office.enable = false;
-      media.enable = false;
-      diyStuff.enable = false;
-      gaming.enable = false;
-    };
-  };
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
