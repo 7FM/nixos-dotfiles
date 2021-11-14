@@ -11,17 +11,6 @@ in {
     # Enable bluetooth manager when bluetooth is enabled
     services.blueman.enable = config.hardware.bluetooth.enable;
 
-    # Add an overlay for sway to include apply some experimental patches
-#    nixpkgs.overlays = [
-#      (self: super: {
-#        sway = super.sway.overrideAttrs (oldAttrs: {
-#          patches = (oldAttrs.patches or []) ++ [
-#            ../patches/sway.patch
-#          ];
-#        });
-#      })
-#    ];
-
     services.xserver.displayManager.gdm.wayland = true;
 
     environment.sessionVariables = {
