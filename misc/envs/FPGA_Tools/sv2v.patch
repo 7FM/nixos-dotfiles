@@ -1,0 +1,12 @@
+diff --git a/stack.yaml b/stack.yaml
+index 76ac753..e562323 100644
+--- a/stack.yaml
++++ b/stack.yaml
+@@ -1,4 +1,6 @@
+-resolver: lts-18.4
++nix:
++  enable: true
++resolver: lts-18.12
+ pvp-bounds: both
+ ghc-options:
+     $locals: -j2
