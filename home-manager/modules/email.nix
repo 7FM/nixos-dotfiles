@@ -52,7 +52,12 @@ in {
       extraConfig = {
         # poll.interval = 0;
         poll.interval = 180;
-        editor.attachment_words = "attach,anbei,anhang,angehängt";
+        editor = {
+          attachment_words = "attach,anbei,anhang,angehängt";
+          external_editor = true;
+          save_draft_on_force_quit = true;
+          cmd = "alacritty --embed %3 -e nvim -c 'set ft=mail' %1";
+        };
       };
     };
     # Email indexer
