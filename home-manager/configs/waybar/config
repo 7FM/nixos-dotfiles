@@ -100,7 +100,7 @@
 	"custom/mail": {
 		"format": "📩 {}",
 		"interval": 180,
-		"exec": "notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND tag:unread)'"
+		"exec": "notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND NOT tag:spam AND tag:unread)'"
 	},
 	"network": {
 		"family": "ipv4",
