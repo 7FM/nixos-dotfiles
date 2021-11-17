@@ -58,6 +58,7 @@ in {
           attachment_words = "attach,anbei,anhang,angehängt";
           save_draft_on_force_quit = true;
         };
+        startup.queries = import ../configs/secrets/email/startupQueries.nix;
       };
     };
     # Email indexer
