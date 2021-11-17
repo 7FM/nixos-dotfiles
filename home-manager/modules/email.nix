@@ -50,14 +50,13 @@ in {
 
         offlineimap
       '';
+      externalEditor = "alacritty -e nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1";
       extraConfig = {
         # poll.interval = 0;
         poll.interval = 180;
         editor = {
           attachment_words = "attach,anbei,anhang,angehängt";
-          external_editor = true;
           save_draft_on_force_quit = true;
-          cmd = "alacritty -e nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1";
         };
       };
     };
