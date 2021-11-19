@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+# Source: https://github.com/astroidmail/astroid/wiki/User-defined-keyboard-hooks#example-toggle-custom-tag-on-a-single-email-in-thread-view
 # get a tag as first argument and message id as second argument
 #
 
