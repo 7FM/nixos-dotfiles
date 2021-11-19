@@ -61,6 +61,9 @@ in {
         startup.queries = import ../configs/secrets/email/startupQueries.nix;
       };
     };
+    home.file.".config/astroid/hooks".source = ../configs/astroid/hooks;
+    home.file.".config/astroid/keybindings".source = ../configs/astroid/keybindings;
+
     # Email indexer
     programs.notmuch.enable = true;
     # Email fetcher
