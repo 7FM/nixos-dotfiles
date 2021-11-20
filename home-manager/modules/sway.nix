@@ -21,15 +21,14 @@ in {
       font-awesome
     ] ++ lib.optionals hmManageSway (import ../common/sway_extra_packages.nix { inherit pkgs; });
 
-    wayland.windowManager.sway = rec {
+    wayland.windowManager.sway = (lib.optionalAttrs (!hmManageSway) { package = null; } ) // {
       enable = true;
 
-      package = if hmManageSway then pkgs.sway else null;
       wrapperFeatures.gtk = true;
       systemdIntegration = enableSystemdSway;
       extraSessionCommands = import ../common/sway_extra_session_commands.nix;
 
-      xwayland = package != null;
+      xwayland = hmManageSway;
 
       config = let
         mod = "Mod4";
