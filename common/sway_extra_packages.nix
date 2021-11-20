@@ -15,7 +15,6 @@ in with pkgs; [
   swayidle
   alacritty # gpu accelerated terminal emulator
   wofi # program launcher
-  (waybar.override { withMediaPlayer = true;  }) # Highly customizable wayland bar for sway
   brightnessctl
 
   #polkit_gnome # Service to bring up authentication popups
