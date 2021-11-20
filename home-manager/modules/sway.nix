@@ -14,6 +14,8 @@ let
   hmManageSway = config.custom.gui == "hm-wayland";
   enable = hmManageSway || (config.custom.gui == "wayland");
 
+  usesVirtualbox = config.custom.device == "virtualbox";
+
   # Waybar settings
   enableSystemdWaybar = false;
   waybarLaptopFeatures = laptopDisplay != null;
@@ -88,9 +90,7 @@ in {
 
         menu = "wofi --show=drun --lines=5 --prompt=\"\"";
 
-        terminal = "alacritty";
-        #TODO change for virtualbox host!
-        #terminal = "LIBGL_ALWAYS_SOFTWARE=1 alacritty";
+        terminal = (if usesVirtualbox then "LIBGL_ALWAYS_SOFTWARE=1 " else "") + "alacritty";
 
         modifier = mod;
 
