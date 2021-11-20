@@ -13,27 +13,9 @@ in {
 
     services.xserver.displayManager.gdm.wayland = true;
 
-    environment.sessionVariables = {
-      _JAVA_AWT_WM_NONREPARENTING = "1";
-      SDL_VIDEODRIVER = "wayland";
-      XDG_SESSION_TYPE = "wayland";
-      # QT needs qt5.qtwayland in systemPackages
-      QT_QPA_PLATFORM = "wayland-egl";
-      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-      # Elementary/EFL
-      ECORE_EVAS_ENGINE = "wayland_egl";
-      ELM_ENGINE = "wayland_egl";
-      # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
-      LIBSEAT_BACKEND = "logind";
-      MOZ_DBUS_REMOTE = "1";
-    };
-
-
     # Window system settings:
     # Wayland in the form of sway
     programs.sway.enable = true;
-    environment.loginShellInit = lib.optionalString autostartSway (lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway'');
-    #environment.loginShellInit = lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway -d 2> ~/sway.log'';
     # Allow backwards compatibility for X programs
     programs.xwayland.enable = true;
 
@@ -51,7 +33,8 @@ in {
 
     # Sway customization
     programs.sway = {
-      wrapperFeatures.gtk = true; # so that gtk works pro>
+      wrapperFeatures.gtk = true; # so that gtk works properly
+      extraSessionCommands = import ../common/sway_extra_session_commands.nix;
       extraPackages = import ../common/sway_extra_packages.nix { inherit pkgs; };
     };
 
