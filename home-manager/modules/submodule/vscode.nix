@@ -19,7 +19,8 @@ let
       ms-toolsai.jupyter
       # Java
       redhat.java
-
+      # Scala
+      scala-lang.scala
     ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       #ms-vscode.cmake-tools
       {
