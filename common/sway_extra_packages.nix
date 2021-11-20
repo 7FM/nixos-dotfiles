@@ -10,7 +10,7 @@ let
 in with pkgs; [
   qt5.qtwayland
 
-  swaylock
+  #swaylock
   swaylock-fancy
   swayidle
   alacritty # gpu accelerated terminal emulator
