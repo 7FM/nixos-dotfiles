@@ -36,10 +36,6 @@ in {
     # Remove fsck at startup which fails with VirtualBox
     boot.initrd.checkJournalingFS = false;
 
-    # System settings
-    custom.gpu = "generic";
-    custom.cpu = "generic";
-    custom.gui = "wayland";
     custom.useUEFI = false;
     custom.swapfile = {
       enable = true;

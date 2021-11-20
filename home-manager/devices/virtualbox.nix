@@ -7,7 +7,6 @@ in {
     custom.hm = {
       modules = {
         xdg.enable = true;
-        sway.enable = true;
         alacritty.enable = true;
         ssh.enable = true;
         git.enable = true;

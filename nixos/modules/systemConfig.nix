@@ -38,30 +38,6 @@ with lib;
   ];
 
   options.custom = {
-    cpu = mkOption {
-      type = types.nullOr (types.enum [ "amd" "intel" "generic" ]);
-      default = null;
-      description = ''
-        Specifies cpu brand in use, to apply microcode patches or cpu specific settings!
-      '';
-    };
-
-    gpu = mkOption {
-      type = types.nullOr (types.enum [ "amd" "intel" "nvidia" "generic" ]);
-      default = null;
-      description = ''
-        Specifies gpu brand in use, to apply specific settings!
-      '';
-    };
-
-    gui = mkOption {
-      type = types.nullOr (types.enum [ "x11" "wayland" "headless" "hm-wayland" ]);
-      default = null;
-      description = ''
-        Specifies the user frontend to use.
-      '';
-    };
-
     enableVirtualisation = mkOption {
       type = types.bool;
       default = false;
@@ -109,22 +85,6 @@ with lib;
   config = {
     # System sanity checks
     assertions = [
-      {
-        assertion = config.custom.gui != null;
-        message = "A user frontend must be specified!";
-      }
-      {
-        assertion = config.custom.gpu != null;
-        message = "A gpu must be specified!";
-      }
-      {
-        assertion = config.custom.cpu != null;
-        message = "A cpu must be specified!";
-      }
-      {
-        assertion = config.custom.device != null;
-        message = "A predefined device configuration must be specified!";
-      }
       {
         assertion = config.custom.useUEFI != null;
         message = "It must be specified whether grub is to be installed on an UEFI system!";

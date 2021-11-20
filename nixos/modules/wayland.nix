@@ -32,7 +32,7 @@ in {
     programs.sway = {
       wrapperFeatures.gtk = true; # so that gtk works properly
       extraSessionCommands = import ../common/sway_extra_session_commands.nix;
-      # extraPackages = import ../common/sway_extra_packages.nix { inherit pkgs; };
+      extraPackages = import ../common/sway_extra_packages.nix { inherit pkgs; };
     };
 
   };

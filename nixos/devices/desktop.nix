@@ -65,11 +65,6 @@ in {
       device = "/dev/disk/by-uuid/002b659d-f634-4cc4-8c97-9b3be20b9bfb";
     }];
 
-    # System settings
-    custom.gpu = "amd";
-    custom.cpu = "amd";
-    custom.gui = "wayland";
-    #custom.gui = "hm-wayland";
     custom.useUEFI = true;
     custom.bluetooth = true;
     custom.enableVirtualisation = true;

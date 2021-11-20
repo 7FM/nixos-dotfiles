@@ -8,17 +8,12 @@ in {
 
     services.xserver.displayManager.gdm.wayland = true;
 
-    #environment.systemPackages = with pkgs; [ qt5.qtwayland ];
-
-    # Window system settings:
-    # Wayland in the form of sway
-    #programs.sway.enable = true;
-    #environment.loginShellInit = lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway'';
-    #environment.loginShellInit = lib.mkAfter ''[[ "$(tty)" == /dev/tty1 ]] && exec sway -d 2> ~/sway.log'';
-
     security.pam.services.swaylock = {};
-    fonts.enableDefaultFonts = true;
     programs.dconf.enable = true;
+
+    # TODO check if this fixes the broken layout for sway on HM
+    # Else try installing the same default fonts manually in HM
+    fonts.enableDefaultFonts = true;
 
     # Enable support for screen sharing
     services.pipewire.enable = true;
@@ -34,4 +29,3 @@ in {
   };
 
 }
-

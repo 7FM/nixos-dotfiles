@@ -11,21 +11,20 @@ let
   enableDisplayCmd = "resume 'swaymsg \"output * dpms on\"'";
 
   enableSystemdSway = false;
-  hmManageSway = true;
+  hmManageSway = config.custom.gui == "hm-wayland";
 
-  enable = config.custom.hm.modules.sway.enable;
+  enable = hmManageSway || (config.custom.gui == "wayland");
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # needed for waybar customization
       font-awesome
-    # ] ++ lib.optionals (hmManageSway && config.wayland.windowManager.sway.package != null) (import ../common/sway_extra_packages.nix { inherit pkgs; });
     ] ++ lib.optionals hmManageSway (import ../common/sway_extra_packages.nix { inherit pkgs; });
 
     wayland.windowManager.sway = rec {
-      enable = hmManageSway;
+      enable = true;
 
-      package = null;
+      package = if hmManageSway then pkgs.sway else null;
       wrapperFeatures.gtk = true;
       systemdIntegration = enableSystemdSway;
       extraSessionCommands = import ../common/sway_extra_session_commands.nix;

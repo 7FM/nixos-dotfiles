@@ -32,7 +32,6 @@ in {
 
     modules = {
       xdg.enable = mkEnableDefaultTrueOption "the xdg module";
-      sway.enable = mkEnableOption "the sway module";
       alacritty.enable = mkEnableOption "the alacritty module";
       ssh.enable = mkEnableOption "the ssh module";
       git.enable = mkEnableOption "the git module";

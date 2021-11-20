@@ -72,10 +72,6 @@ in {
     services.tlp.enable = lib.mkDefault ((lib.versionOlder (lib.versions.majorMinor lib.version) "21.05")
                                         || !config.services.power-profiles-daemon.enable);
 
-    # System settings
-    custom.gpu = "intel";
-    custom.cpu = "intel";
-    custom.gui = "wayland";
     custom.useUEFI = true;
     custom.cpuFreqGovernor = "powersave";
     custom.bluetooth = true;
