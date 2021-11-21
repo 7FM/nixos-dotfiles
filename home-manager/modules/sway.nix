@@ -189,6 +189,7 @@ in {
 
         # Input settings
         input = {
+          # TODO this should'nt be hardcoded!
           "2:7:SynPS/2_Synaptics_TouchPad" = {
             "dwt" = "enabled";
             "tap" = "enabled";
@@ -204,6 +205,7 @@ in {
         #    bg = "~/.config/sway/backgrounds/cheatsheet.jpg fit";
         #  };
         } // lib.mkIf desktop {
+          #TODO these should'nt be hardcoded either!
           "${disp1}" = {
             res = "1920x1080@144Hz";
             pos = "0,0";
