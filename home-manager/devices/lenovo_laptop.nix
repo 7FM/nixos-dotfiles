@@ -16,6 +16,15 @@ in {
         qt.enable = true;
         email.enable = true;
         optimize_storage.enable = true;
+        sway = rec {
+          laptopDisplay = "eDP-1";
+          disp1 = laptopDisplay;
+          disp2 = laptopDisplay;
+        };
+        waybar = {
+          hwmonPath = null;
+          thermalZone = null;
+        };
       };
       collections = {
         utilities.enable = true;

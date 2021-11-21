@@ -16,6 +16,15 @@ in {
         qt.enable = true;
         email.enable = true;
         optimize_storage.enable = true;
+        sway = {
+          laptopDisplay = null;
+          disp1 = "DVI-D-1";
+          disp2 = "HDMI-A-1";
+        };
+        waybar = {
+          hwmonPath = "/sys/class/hwmon/hwmon1/temp1_input";
+          thermalZone = null;
+        };
       };
       collections = {
         utilities.enable = true;

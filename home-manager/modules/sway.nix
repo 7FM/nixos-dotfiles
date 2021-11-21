@@ -1,8 +1,14 @@
 { config, pkgs, lib, ... }:
 
-let 
-  desktop = true;
-  laptopDisplay = null;
+let
+  cfg = config.custom.hm.modules;
+
+  laptopDisplay = cfg.sway.laptopDisplay;
+  disp1 = cfg.sway.disp1;
+  disp2 = if cfg.sway.disp2 == null then disp1 else cfg.sway.disp2;
+
+  hwmonPath = cfg.waybar.hwmonPath; # sys-fs path, i.e. "/sys/class/hwmon/hwmon0/temp1_input"
+  thermalZone = cfg.waybar.thermalZone; # Integer value
 
   #lockcmd = "swaylock -f -c 000000";
   lockcmd = "swaylock-fancy";
@@ -19,10 +25,63 @@ let
   # Waybar settings
   enableSystemdWaybar = false;
   waybarLaptopFeatures = laptopDisplay != null;
-  hwmonPath = null; # sys-fs path, i.e. "/sys/class/hwmon/hwmon0/temp1_input"
-  thermalZone = null; # Integer value
+  desktop = laptopDisplay == null;
 in {
+  options.custom.hm.modules = with lib; {
+    sway = {
+      laptopDisplay = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the name of the laptop display.
+          Or null in case the computer is no laptop.
+        '';
+      };
+      disp1 = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the name of the first display.
+        '';
+      };
+      disp2 = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies name of the second laptop display.
+          If only one display exists then the value of disp1 will be used.
+        '';
+      };
+    };
+
+    waybar = {
+      hwmonPath = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the sys-fs path to an hwmon.
+          This might be required if the default method can not determine the cpu temperature.
+        '';
+      };
+      thermalZone = mkOption {
+        type = types.nullOr types.ints.u8;
+        default = null;
+        description = ''
+          Thermal zone to use for the waybar cpu temperature measurements.
+        '';
+      };
+    };
+  };
+
   config = lib.mkIf enable {
+
+    assertions = [
+      {
+        assertion = config.custom.hm.modules.sway.disp1 != null;
+        message = "If the system is not headless, then at least one display must be defined!";
+      }
+    ];
+
     home.packages = with pkgs; [
       # needed for waybar customization
       font-awesome
@@ -40,9 +99,6 @@ in {
       config = let
         mod = "Mod4";
         mod2 = if (mod == "Mod4") then "Mod1" else "Mod4";
-
-        disp1 = "DVI-D-1";
-        disp2 = "HDMI-A-1";
 
         # Workspace labels
         workspaces = [
