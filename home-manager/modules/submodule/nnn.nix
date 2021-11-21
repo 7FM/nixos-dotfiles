@@ -38,7 +38,7 @@
     };
   };
   # Enable cd on exit
-  home.file.".config/nnn/quitcd.bash_zsh".source = ../../configs/nnn/quitcd.bash_zsh;
+  xdg.configFile."nnn/quitcd.bash_zsh".source = ../../configs/nnn/quitcd.bash_zsh;
   # initExtra and initExtraFirst are already in use... TODO find better solution!
   programs.zsh.initExtraBeforeCompInit = ''
     if [ -f "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/nnn/quitcd.bash_zsh" ]; then

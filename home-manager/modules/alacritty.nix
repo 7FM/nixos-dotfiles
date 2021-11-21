@@ -8,6 +8,6 @@ in {
       alacritty
     ];
 
-    home.file.".config/alacritty/alacritty.yml".source = ../configs/terminal/alacritty.yml;
+    xdg.configFile."alacritty/alacritty.yml".source = ../configs/terminal/alacritty.yml;
   };
 }

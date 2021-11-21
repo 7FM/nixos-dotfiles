@@ -179,7 +179,7 @@ in {
           # user environments (e.g. required for screen sharing and Pinentry prompts):
           { command = "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"; always = false; }
         ] ++ lib.optional desktop { command = "swaymsg focus output ${disp1}"; always = false; }
-          ++ lib.optional (laptopDisplay != null) { command = "~/.config/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; };
+          ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; };
 
         bars = [
           {
@@ -202,7 +202,7 @@ in {
         output = {
         # Does not work, dont know why
         #  "*" = {
-        #    bg = "~/.config/sway/backgrounds/cheatsheet.jpg fit";
+        #    bg = "${XDG_CONFIG_HOME:-$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit";
         #  };
         } // lib.mkIf desktop {
           #TODO these should'nt be hardcoded either!
@@ -251,7 +251,7 @@ in {
         bindswitch --reload --locked lid:on output ${laptopDisplay} disable
         bindswitch --reload --locked lid:off output ${laptopDisplay} enable
       '' + ''
-        output * bg ~/.config/sway/backgrounds/cheatsheet.jpg fit
+        output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit
       '';
     };
 
@@ -528,11 +528,11 @@ in {
     # Empty dummy file to create the folder needed to store screenshots
     home.file."screenshots/.keep".text = "";
 
-    home.file.".config/sway/scripts".source = ../configs/sway/scripts;
-    home.file.".config/sway/backgrounds".source = ../configs/sway/backgrounds;
-    home.file.".config/waybar/style.css".source = ../configs/waybar/style.css;
+    xdg.configFile."sway/scripts".source = ../configs/sway/scripts;
+    xdg.configFile."sway/backgrounds".source = ../configs/sway/backgrounds;
+    xdg.configFile."waybar/style.css".source = ../configs/waybar/style.css;
 
-    home.file.".config/wofi".source = ../configs/wofi;
-    home.file.".config/wlogout".source = ../configs/wlogout;
+    xdg.configFile."wofi".source = ../configs/wofi;
+    xdg.configFile."wlogout".source = ../configs/wlogout;
   };
 }

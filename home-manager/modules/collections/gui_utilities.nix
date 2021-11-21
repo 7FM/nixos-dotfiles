@@ -16,6 +16,6 @@ in {
     ];
 
     # Config for idasen
-    home.file.".config/idasen".source = ../../configs/secrets/idasen;
+    xdg.configFile."idasen".source = ../../configs/secrets/idasen;
   };
 }

@@ -28,7 +28,7 @@ in {
     '';
 
     # Config for htop
-    home.file.".config/htop/htoprc".source = ../../configs/htop/htoprc;
+    xdg.configFile."htop/htoprc".source = ../../configs/htop/htoprc;
 
   } (import ../submodule/nnn.nix { inherit config pkgs lib; })]);
 }

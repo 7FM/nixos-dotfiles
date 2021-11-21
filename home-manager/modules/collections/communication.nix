@@ -32,6 +32,6 @@ in {
       teamspeak_client
     ];
 
-    home.file.".config/discord/settings.json".source = ../../configs/discord/settings.json;
+    xdg.configFile."discord/settings.json".source = ../../configs/discord/settings.json;
   };
 }

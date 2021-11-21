@@ -4,9 +4,9 @@
 set -ueo pipefail
 
 prepare_hm() {
-  mkdir -p $HOME/.config
-  rm -rf $HOME/.config/nixpkgs
-  ln -s $(pwd)/home-manager $HOME/.config/nixpkgs
+  mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}
+  rm -rf ${XDG_CONFIG_HOME:-$HOME/.config}/nixpkgs
+  ln -s $(pwd)/home-manager ${XDG_CONFIG_HOME:-$HOME/.config}/nixpkgs
 }
 
 setup_hm() {
