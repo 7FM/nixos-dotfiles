@@ -5,6 +5,8 @@ let
 in {
 
   config = lib.mkIf enable {
+    # Enable bluetooth manager when bluetooth is enabled
+    services.blueman.enable = config.hardware.bluetooth.enable;
 
     services.xserver.displayManager.gdm.wayland = true;
 
