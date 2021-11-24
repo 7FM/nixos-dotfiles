@@ -41,9 +41,9 @@
     in {
 
       # Define systems
-      nixoslenovolaptop = mkSys "lenovo_laptop" "x86_64-linux";
+      nixos-lenovo_laptop = mkSys "lenovo_laptop" "x86_64-linux";
       nixos-desktop = mkSys "desktop" "x86_64-linux";
-      nixosvirtualbox = mkSys "virtualbox" "x86_64-linux";
+      nixos-virtualbox = mkSys "virtualbox" "x86_64-linux";
 
     };
   };
