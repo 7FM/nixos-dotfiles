@@ -18,6 +18,20 @@ in {
     "net.core.rmem_default" = 25 * 1024 * 1024;
   };
 
+  # add flakes feature
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+  # Add convenient wrapper
+  environment.systemPackages = [
+    (pkgs.writeShellScriptBin "nixFlakes" ''
+      exec ${pkgs.nixFlakes}/bin/nix --experimental-features "nix-command flakes" "$@"
+    '')
+  ];
+
   # Additional hardware settings
   #hardware.usbWwan.enable = true;
 
