@@ -13,7 +13,6 @@ in {
 
     home.packages = with pkgs; [
       # Some basic gui programs
-      thunderbird
       gimp
       keepassxc
       libreoffice
