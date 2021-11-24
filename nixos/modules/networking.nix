@@ -24,7 +24,7 @@ in {
 
     hostname = mkOption {
       type = types.str;
-      default = "nixos_" + config.custom.device;
+      default = "nixos-" + config.custom.device;
       description = ''
         Specifies the hostname of this system.
       '';
