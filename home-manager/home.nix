@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ deviceName, config, pkgs, ... }:
 
 {
   imports = [
-    ./common/devices.nix
+    (import ./common/devices.nix true deviceName)
     ./modules/hmConfig.nix
   ];
 

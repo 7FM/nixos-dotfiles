@@ -1,3 +1,4 @@
+deviceName:
 { config, pkgs, lib, ... }:
 
 # Window system settings:
@@ -6,7 +7,7 @@ let
 in {
 
   imports = [
-    ./common/devices.nix
+    (import ./common/devices.nix false deviceName)
     ./modules/systemConfig.nix
   ];
 

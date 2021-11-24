@@ -1,13 +1,15 @@
+hm: deviceName:
 { config, pkgs, lib, ... }:
 
 {
   imports = [
     # device specifics
-    ../devices/virtualbox.nix
+    # TODO is there a way to concat a string to a path?
+    (if hm then ../home-manager/devices/virtualbox.nix else ../nixos/devices/virtualbox.nix )
     ./settings/virtualbox.nix
-    ../devices/desktop.nix
+    (if hm then ../home-manager/devices/desktop.nix else ../nixos/devices/desktop.nix )
     ./settings/desktop.nix
-    ../devices/lenovo_laptop.nix
+    (if hm then ../home-manager/devices/lenovo_laptop.nix else ../nixos/devices/lenovo_laptop.nix )
     ./settings/lenovo_laptop.nix
   ];
 
@@ -46,9 +48,7 @@
   };
 
   config = {
-    # custom.device = "virtualbox";
-    # custom.device = "desktop";
-    # custom.device = "lenovo_laptop";
+    custom.device = deviceName;
 
     assertions = [
       {
