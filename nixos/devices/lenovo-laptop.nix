@@ -4,7 +4,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  enable = config.custom.device == "lenovo_laptop";
+  enable = config.custom.device == "lenovo-laptop";
 in {
   config = lib.mkIf enable (lib.mkMerge [{
     boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];

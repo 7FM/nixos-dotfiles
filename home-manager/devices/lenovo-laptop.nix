@@ -1,7 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  enable = config.custom.device == "lenovo_laptop";
+  enable = config.custom.device == "lenovo-laptop";
 in {
   config = lib.mkIf enable {
     custom.hm = {

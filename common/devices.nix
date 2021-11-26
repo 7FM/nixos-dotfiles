@@ -9,13 +9,13 @@ hm: deviceName:
     ./settings/virtualbox.nix
     (if hm then ../home-manager/devices/desktop.nix else ../nixos/devices/desktop.nix )
     ./settings/desktop.nix
-    (if hm then ../home-manager/devices/lenovo_laptop.nix else ../nixos/devices/lenovo_laptop.nix )
-    ./settings/lenovo_laptop.nix
+    (if hm then ../home-manager/devices/lenovo-laptop.nix else ../nixos/devices/lenovo-laptop.nix )
+    ./settings/lenovo-laptop.nix
   ];
 
   options.custom = with lib; {
     device = mkOption {
-      type = types.nullOr (types.enum [ "virtualbox" "lenovo_laptop" "desktop" ]);
+      type = types.nullOr (types.enum [ "virtualbox" "lenovo-laptop" "desktop" ]);
       default = null;
       description = ''
         Specifies the custom device configuration to use!
