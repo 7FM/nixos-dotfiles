@@ -14,11 +14,11 @@
 
         myPythonWithPackages = pkgs.python3.withPackages myPyPackages;
 
-      in pkgs.mkShell {
+      in pkgs.mkShellNoCC {
         nativeBuildInputs = with pkgs; [
           cmake
           ninja
-          clang
+          clang_12
 
           # Python env for the utility scripts
           myPythonWithPackages
