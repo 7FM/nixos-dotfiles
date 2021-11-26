@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  useClangd = false;
+
   vsExtensions = with pkgs.vscode-extensions; [
       # Nix language support
       bbenoist.nix
@@ -9,9 +11,8 @@ let
 
       # Live share
       ms-vsliveshare.vsliveshare
-
       # C++
-      ms-vscode.cpptools
+      (if useClangd then llvm-vs-code-extensions.vscode-clangd else ms-vscode.cpptools)
 
       # Python
       ms-python.python
@@ -183,6 +184,11 @@ let
   }) // {pname = "vscode";};
 in {
 
+  home.packages = with pkgs; lib.optionals useClangd [
+    # Clang tools with clangd
+    clang-tools
+  ];
+
   programs.vscode = {
     enable = true;
 
@@ -204,6 +210,7 @@ in {
       "editor.formatOnPaste" = false;
       "editor.formatOnType" = true;
       "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, ColumnLimit: 0, IndentCaseLabels: true, NamespaceIndentation: All}";
+      #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
       "todohighlight.keywords" = [
         "TODO"
         "FIXME"
