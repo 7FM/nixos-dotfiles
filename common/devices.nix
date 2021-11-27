@@ -22,6 +22,14 @@ hm: deviceName:
       '';
     };
 
+    useDummySecrets = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Use dummy secrets so that no git crypt encryption is required.
+      '';
+    };
+
     gui = mkOption {
       type = types.nullOr (types.enum [ "x11" "wayland" "headless" "hm-wayland" ]);
       default = null;
