@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  tools = import ../common/lib { inherit config pkgs lib; };
+
   runHeadless = config.custom.gui == "headless";
 
   cfg = config.custom.sshServer;
@@ -19,7 +21,7 @@ in {
     };
     ports = mkOption {
       type = types.either types.path (types.nonEmptyListOf types.string);
-      default = ../secrets/sshPorts.nix;
+      default = tools.getSecretPath ../. "sshPorts.nix";
       description = ''
         Specifies the ports on which the ssh server should listen!
       '';

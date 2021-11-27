@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  tools = import ../../common/lib { inherit config pkgs lib; };
+
   enable = config.custom.hm.collections.gui_utilities.enable;
 in {
   config = lib.mkIf enable {
@@ -16,6 +18,6 @@ in {
     ];
 
     # Config for idasen
-    xdg.configFile."idasen".source = ../../configs/secrets/idasen;
+    xdg.configFile."idasen".source = tools.getSecretPath ../../configs "idasen";
   };
 }
