@@ -1,0 +1,6 @@
+# See: https://idasen.readthedocs.io/en/latest/index.html#configuration
+mac_address: DE:AD:BE:EE:EE:EF
+# These are synthetic values and might not be impossible for the desk to reach, use on your own risk!
+positions:
+  sit: 0.42
+  stand: 1.337
