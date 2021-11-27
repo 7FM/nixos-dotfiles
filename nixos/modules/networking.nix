@@ -5,6 +5,8 @@ let
   hostname = cfg.hostname;
   wifiSupport = cfg.wifiSupport;
   withNetworkManager = cfg.withNetworkManager;
+
+  tools = import ../common/lib { inherit config pkgs lib; };
 in {
   options.custom.networking = with lib; {
     wifiSupport = mkOption {
@@ -48,7 +50,7 @@ in {
   # Endpoints to use with wpa_supplicant
   # WARNING: Be aware that keys will be written to the nix store in plaintext!
   #          When no netwokrs are set it will default to using a configuration file at /etc/wpa_supplicant.conf
-  networking.wireless.networks = import ../secrets/waps.nix;
+  networking.wireless.networks = tools.getSecret ../. "waps.nix";
 
   networking.networkmanager.enable = wifiSupport && withNetworkManager;
   # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
@@ -81,8 +83,8 @@ in {
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = import ../secrets/allowedTCPPorts.nix;
-  networking.firewall.allowedUDPPorts = import ../secrets/allowedUDPPorts.nix;
+  networking.firewall.allowedTCPPorts = tools.getSecret ../. "allowedTCPPorts.nix";
+  networking.firewall.allowedUDPPorts = tools.getSecret ../. "allowedUDPPorts.nix";
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 

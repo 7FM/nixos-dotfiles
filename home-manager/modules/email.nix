@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  tools = import ../common/lib { inherit config pkgs lib; };
+
   createPasswordLookupCmd = searchTerm: "secret-tool lookup email ${searchTerm}";
 
   offlineimapConf = emailAddr: shortTag: customHook: hasIMAP: {
@@ -38,6 +40,7 @@ in {
 
     # Email frontend
     # programs.alot.enable = true;
+
     # TODO might need: GDK_BACKEND=x11
     programs.astroid = {
       enable = true;
@@ -58,7 +61,7 @@ in {
           attachment_words = "attach,anbei,anhang,angehängt";
           save_draft_on_force_quit = true;
         };
-        startup.queries = import ../configs/secrets/email/startupQueries.nix;
+        startup.queries = tools.getSecret ../configs "email/startupQueries.nix";
       };
     };
     xdg.configFile."astroid/hooks".source = ../configs/astroid/hooks;
@@ -71,6 +74,6 @@ in {
     # Email sender
     programs.msmtp.enable = true;
 
-    accounts.email.accounts = import ../configs/secrets/email/emailAddresses.nix { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
+    accounts.email.accounts = tools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
   };
 }

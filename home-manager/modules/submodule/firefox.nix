@@ -1,7 +1,9 @@
 { useWayland ? true }:
 { config, pkgs, lib, ... }:
 
-{
+let
+  tools = import ../../common/lib { inherit config pkgs lib; };
+in {
   home.sessionVariables = lib.mkIf useWayland {
     MOZ_ENABLE_WAYLAND = 1;
   };
@@ -27,7 +29,7 @@
 
     profiles = {
       tm = {
-        bookmarks = import ../../configs/secrets/bookmarks.nix;
+        bookmarks = tools.getSecret ../../configs "bookmarks.nix";
 
         settings = {
           "browser.search.region" = "GB";

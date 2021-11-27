@@ -4,6 +4,8 @@ deviceName:
 # Window system settings:
 let
   runHeadless = config.custom.gui == "headless";
+
+  tools = import ./common/lib { inherit config pkgs lib; };
 in {
 
   imports = [
@@ -78,9 +80,9 @@ in {
       "scanner" # For scanners
       "lp" # For scanners
     ];
-    openssh.authorizedKeys.keys = import ./secrets/userAuthorizedSSHKeys.nix;
+    openssh.authorizedKeys.keys = tools.getSecret ./. "userAuthorizedSSHKeys.nix";
     # Set password hash, generated with 'mkpasswd -m sha-512 -s':
-    hashedPassword = import ./secrets/password.nix;
+    hashedPassword = tools.getSecret ./. "password.nix";
   };
 
   # This value determines the NixOS release from which the default
