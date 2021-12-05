@@ -14,7 +14,7 @@
         in with pkgs; [
           gtkwave
           gnumake
-          clang
+          #clang
           icestorm # ice40 tools
           trellis # ecp5 tools
           nextpnrWithGui
@@ -26,6 +26,7 @@
           }))
 
           (pkgs.callPackage ./verilator.nix { inherit verilatorVersion verilatorSha256; })
+          zlib # Needed for verilator fst exports
 
           # packages to build a stack project (here sv2v)
           # 1. git clone https://github.com/zachjs/sv2v && cd sv2v
