@@ -19,6 +19,9 @@
           cmake
           ninja
           clang_12
+          clang-tools # for clangd
+          verilator
+          yosys
 
           # Python env for the utility scripts
           myPythonWithPackages
