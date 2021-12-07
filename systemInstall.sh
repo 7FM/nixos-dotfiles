@@ -10,9 +10,6 @@ SWAP_PART="/dev/sda3"
 SYS_PART="/dev/sda2"
 # Then:
 
-nix-env -iA nixos.htop
-nix-env -iA nixos.git-crypt
-
 sudo swapon $SWAP_PART
 
 sudo cryptsetup luksFormat $SYS_PART
@@ -44,10 +41,10 @@ sudo mount -o subvol=log,compress=zstd,noatime /dev/mapper/luks /mnt/var/log/
 # Finally
 sudo nixos-generate-config --root /mnt
 
-sudo nano /mnt/etc/nixos/*.nix
+# Follow the instructions in the README section 'Adding a new device named <new-device>'
 
 # TODO append custom options to /mnt/etc/hardware.nix and further automate deploying on new devices!
 # When done modifying:
-# sudo nixos-install --no-root-passwd --root /mnt
+# sudo nixos-install --no-root-passwd --root /mnt --flake .#<new-device>
 # sudo reboot
 
