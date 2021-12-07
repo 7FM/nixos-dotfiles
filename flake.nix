@@ -20,7 +20,7 @@
 
   outputs = { self, nixpkgs, home-manager, nur, ...}: {
     nixosConfigurations = let
-      mkSys = deviceName: system: nixpkgs.lib.nixosSystem {
+      mkSys = forceNoSecrets: deviceName: system: nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
@@ -41,7 +41,7 @@
             ];
           }
 
-          (import ./nixos/configuration.nix deviceName)
+          (import ./nixos/configuration.nix forceNoSecrets deviceName)
 
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
@@ -57,9 +57,13 @@
     in {
 
       # Define systems
-      nixos-lenovo-laptop = mkSys "lenovo-laptop" "x86_64-linux";
-      nixos-desktop = mkSys "desktop" "x86_64-linux";
-      nixos-virtualbox = mkSys "virtualbox" "x86_64-linux";
+      nixos-lenovo-laptop = mkSys false "lenovo-laptop" "x86_64-linux";
+      nixos-lenovo-laptop-no-sec = mkSys true "lenovo-laptop" "x86_64-linux";
+
+      nixos-desktop = mkSys false "desktop" "x86_64-linux";
+      nixos-desktop-no-sec = mkSys true "desktop" "x86_64-linux";
+
+      nixos-virtualbox = mkSys true "virtualbox" "x86_64-linux";
 
     };
   };
