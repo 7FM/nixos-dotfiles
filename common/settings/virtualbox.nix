@@ -1,9 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
-let
-  enable = config.custom.device == "virtualbox";
-in {
-  config.custom = lib.mkIf enable {
+{
+  custom = {
     # System settings
     gpu = "generic";
     cpu = "generic";

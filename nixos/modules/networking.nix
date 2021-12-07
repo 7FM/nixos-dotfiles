@@ -1,3 +1,4 @@
+deviceName:
 { config, pkgs, lib, ... }:
 
 let
@@ -26,7 +27,7 @@ in {
 
     hostname = mkOption {
       type = types.str;
-      default = "nixos-" + config.custom.device;
+      default = "nixos-" + deviceName;
       description = ''
         Specifies the hostname of this system.
       '';

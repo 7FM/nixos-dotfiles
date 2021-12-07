@@ -12,7 +12,7 @@ in {
 
   imports = [
     (import ./common/devices.nix false deviceName)
-    ./modules/systemConfig.nix
+    (import ./modules/systemConfig.nix deviceName)
   ];
 
   # UDP performance fixes

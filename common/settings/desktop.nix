@@ -1,9 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
-let
-  enable = config.custom.device == "desktop";
-in {
-  config.custom = lib.mkIf enable {
+{
+  custom = {
     # System settings
     gpu = "amd";
     cpu = "amd";
