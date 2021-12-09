@@ -22,6 +22,7 @@ let
       redhat.java
       # Scala
       scala-lang.scala
+      scalameta.metals
     ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       #ms-vscode.cmake-tools
       {
