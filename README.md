@@ -1,5 +1,29 @@
 # Folder structure
-TBD
+TODO TBD
+
+| Folder | Function |
+--- | ---
+| . | TODO |
+| common | TODO |
+| common/lib | TODO |
+| common/settings | TODO |
+| home-manager | TODO |
+| home-manager/configs | TODO |
+| home-manager/configs/secrets | TODO |
+| home-manager/configs/example_secrets | TODO |
+| home-manager/devices | TODO |
+| home-manager/devices | TODO |
+| home-manager/modules | TODO |
+| home-manager/modules/collections | TODO |
+| home-manager/modules/submodule | TODO |
+| nixos | TODO |
+| nixos/devices | TODO |
+| nixos/modules | TODO |
+| nixos/secrets | TODO |
+| nixos/example_secrets | TODO |
+| misc | TODO |
+| misc/envs | TODO |
+| misc/scripts | TODO |
 
 # Adding a new device named <new-device>
 `<new-device>` will be used in the following as placeholder for your new device's name.
