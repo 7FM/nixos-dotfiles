@@ -49,7 +49,7 @@ in {
   # Apply specified settings!
   config = {
 
-    # Select internationalisation properties.
+    # Select internationalization properties.
     time.timeZone = timeZone;
     i18n.defaultLocale = defaultLocale;
     console = {

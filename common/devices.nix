@@ -4,24 +4,11 @@ hm: deviceName:
 {
   imports = [
     # device specifics
-    # TODO is there a way to concat a string to a path?
-    (if hm then ../home-manager/devices/virtualbox.nix else ../nixos/devices/virtualbox.nix )
-    ./settings/virtualbox.nix
-    (if hm then ../home-manager/devices/desktop.nix else ../nixos/devices/desktop.nix )
-    ./settings/desktop.nix
-    (if hm then ../home-manager/devices/lenovo-laptop.nix else ../nixos/devices/lenovo-laptop.nix )
-    ./settings/lenovo-laptop.nix
+    ((if hm then ../home-manager/devices else ../nixos/devices) + "/${deviceName}.nix")
+    (./settings + "/${deviceName}.nix")
   ];
 
   options.custom = with lib; {
-    device = mkOption {
-      type = types.nullOr (types.enum [ "virtualbox" "lenovo-laptop" "desktop" ]);
-      default = null;
-      description = ''
-        Specifies the custom device configuration to use!
-      '';
-    };
-
     useDummySecrets = mkOption {
       type = types.bool;
       default = true;
@@ -56,13 +43,7 @@ hm: deviceName:
   };
 
   config = {
-    custom.device = deviceName;
-
     assertions = [
-      {
-        assertion = config.custom.device != null;
-        message = "A predefined device configuration must be specified!";
-      }
       {
         assertion = config.custom.gui != null;
         message = "A user frontend must be specified!";

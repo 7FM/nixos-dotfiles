@@ -6,6 +6,7 @@ let
   laptopDisplay = cfg.sway.laptopDisplay;
   disp1 = cfg.sway.disp1;
   disp2 = if cfg.sway.disp2 == null then disp1 else cfg.sway.disp2;
+  usesVirtualbox = cfg.sway.virtualboxWorkaround;
 
   hwmonPath = cfg.waybar.hwmonPath; # sys-fs path, i.e. "/sys/class/hwmon/hwmon0/temp1_input"
   thermalZone = cfg.waybar.thermalZone; # Integer value
@@ -19,8 +20,6 @@ let
   enableSystemdSway = false;
   hmManageSway = config.custom.gui == "hm-wayland";
   enable = hmManageSway || (config.custom.gui == "wayland");
-
-  usesVirtualbox = config.custom.device == "virtualbox";
 
   # Waybar settings
   enableSystemdWaybar = false;
@@ -50,6 +49,13 @@ in {
         description = ''
           Specifies name of the second laptop display.
           If only one display exists then the value of disp1 will be used.
+        '';
+      };
+      virtualboxWorkaround = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Apply virtualbox specific workarounds for a correct operation.
         '';
       };
     };

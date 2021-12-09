@@ -1,4 +1,4 @@
-deviceName:
+forceNoSecrets: deviceName:
 { config, pkgs, lib, ... }:
 
 # Window system settings:
@@ -8,9 +8,11 @@ let
   tools = import ./common/lib { inherit config pkgs lib; };
 in {
 
+  custom.useDummySecrets = if forceNoSecrets then lib.mkForce true else lib.mkDefault true;
+
   imports = [
     (import ./common/devices.nix false deviceName)
-    ./modules/systemConfig.nix
+    (import ./modules/systemConfig.nix deviceName)
   ];
 
   # UDP performance fixes

@@ -1,9 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
-let
-  enable = config.custom.device == "lenovo-laptop";
-in {
-  config.custom = lib.mkIf enable {
+{
+  custom = {
     # System settings
     gpu = "intel";
     cpu = "intel";

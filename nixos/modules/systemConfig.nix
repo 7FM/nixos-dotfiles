@@ -1,3 +1,4 @@
+deviceName:
 { config, lib, ... }:
 
 with lib;
@@ -27,7 +28,7 @@ with lib;
     # Features
     ./optimize_storage_space.nix
     ./powermanagement.nix
-    ./networking.nix
+    (import ./networking.nix deviceName)
     ./bluetooth.nix
     ./virtualisation.nix
     ./adb.nix
