@@ -9,8 +9,8 @@
     in {
       devShell = pkgs.mkShell {
         nativeBuildInputs = let
-          verilatorVersion = "4.214";
-          verilatorSha256 = "sha256:07pl5q79glyapw4gjssaass0c75757aji8j1pl487z2c3s304gs8";
+          verilatorVersion = "4.216";
+          verilatorSha256 = "sha256-F2QPZPZp/A0k4YSMOHrtUjmrO7/Gd4GWXbwdMFxuFUo=";
         in with pkgs; [
           gtkwave
           gnumake
