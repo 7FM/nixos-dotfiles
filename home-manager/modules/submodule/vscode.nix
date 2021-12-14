@@ -247,7 +247,7 @@ in {
       "java.semanticHighlighting.enabled" = true;
       "java.requirements.JDK11Warning" = false;
       "java.configuration.checkProjectSettingsExclusions" = false;
-      "cSpell.language" = "en,en-US";
+      "cSpell.language" = "en,en-US,de,de-de";
       "cSpell.enableFiletypes" = [
         "bat"
         "bibtex"
