@@ -104,8 +104,8 @@ let
       {
         name = "vscode-mlir";
         publisher = "llvm-vs-code-extensions";
-        version = "0.0.2";
-        sha256 = "1sf9l4qhki2pnmbdc1py7qigpk36h1hn8ickiizhi0zznprjbaqr";
+        version = "0.0.3";
+        sha256 = "sha256-Y8ZAY8jjQD2xh1QAxTlftcPdKFK3c+Ru3MsYTJgLupo=";
       }
       #antyos.openscad
       {
@@ -132,8 +132,8 @@ let
       {
         name = "veriloghdl";
         publisher = "mshr-h";
-        version = "1.5.1";
-        sha256 = "16zpnzbp8sxv7xhkqpf2qgvrvr9a692yg0fdkmk86hq1lqa8cm7v";
+        version = "1.5.3";
+        sha256 = "sha256-4BXSG/YllhpXa0z7TqytKyqAKLJvSEsOLt1i6gA+WcE=";
       }
       #torn4dom4n.latex-support
       {
