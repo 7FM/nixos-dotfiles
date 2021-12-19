@@ -15,20 +15,15 @@ in with pkgs; [
   swayidle
   alacritty # gpu accelerated terminal emulator
   wofi # program launcher
-  brightnessctl
 
   #polkit_gnome # Service to bring up authentication popups
   myPolkitGnome
 
-  pavucontrol # GUI to control pulseaudio settings
   xorg.xlsclients # Helper program to show programs running using xwayland
   xorg.xhost # can be used to allow Xwayland applications to run as root, i.e. gparted
   clipman # Clipboard manager
   wl-clipboard
   swaybg # TODO is this explicitly needed?
-  wlogout # logout menu
-  networkmanagerapplet # NetworkManager Front-End
-  wpa_supplicant_gui # wpasupplicant Front-End
 
   wf-recorder # screen recording
   slurp # wayland region selector

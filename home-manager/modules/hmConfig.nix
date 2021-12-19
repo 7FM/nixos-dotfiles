@@ -8,6 +8,7 @@ in {
   imports = [
     ./xdg.nix
     ./sway.nix
+    ./waybar.nix
     ./alacritty.nix
     ./ssh.nix
     ./git.nix
