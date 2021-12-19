@@ -376,7 +376,7 @@ in {
             format-ethernet = " {ifname}: {ipaddr} <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
             format-linked = " {ifname} (No IP) <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
             format-disconnected = "⚠ Disconnected";
-            interval = 10;
+            interval = 2;
             on-click = "nm-connection-editor";
             on-click-right = "nm-connection-editor";
             tooltip = false;
