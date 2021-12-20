@@ -59,6 +59,7 @@ in {
         modules-left = [
           "sway/workspaces"
           "sway/mode"
+          "network"
         ];
         modules-center = [
           "tray"
@@ -67,7 +68,6 @@ in {
           "custom/spotify"
           "custom/media_firefox"
           "custom/mail"
-          "network"
           "temperature"
           "cpu"
           "memory"
