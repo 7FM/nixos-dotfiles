@@ -28,7 +28,8 @@ window#waybar {
 	padding: 0 2px;
 	margin: 0px;
 	/*background: transparent;*/
-	background: #000000;
+	/*background: #000000;*/
+	background: #131313;
 	color: #ff8700;
 	border: 1px solid #1b1d1e;
 	font-weight: bold;
