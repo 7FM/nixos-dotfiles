@@ -161,15 +161,15 @@ let
       {
         name = "vscode-java-dependency";
         publisher = "vscjava";
-        version = "0.18.8";
-        sha256 = "sha256-qySLS3cadYny06PMxP/lZYmFXSJC3Q4pTqDiaZJ7X/o=";
+        version = "0.18.9";
+        sha256 = "sha256-KzqiQo3Lys6LxtbakCIorm0AmxvN3kAyRJlM5R0556c=";
       }
       #vscjava.vscode-java-test
       {
         name = "vscode-java-test";
         publisher = "vscjava";
-        version = "0.33.0";
-        sha256 = "sha256-P0NiBNhTUZnOwvCKIvhgJJTHDari1lx7Yzp6CuHIOk8=";
+        version = "0.33.1";
+        sha256 = "sha256-lLx0mOYdxSXSjG8kBZxzF5nAVhhXyo/KQxGbu+B8KUk=";
       }
       #vscjava.vscode-maven
       {
