@@ -54,6 +54,7 @@ window#waybar {
 	color: #1b1d1e;
 }
 
+#custom-gpu, #bluetooth,
 #temperature, #custom-disk_home, #custom-disk_root, #clock,
 #battery, #cpu, #memory, #network, #pulseaudio,
 #custom-mail, #custom-logout, #backlight, #idle_inhibitor

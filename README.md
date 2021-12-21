@@ -80,6 +80,9 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.hm.modules.sway.virtualboxWorkaround`
     * `custom.hm.modules.waybar.hwmonPath`
     * `custom.hm.modules.waybar.thermalZone`
+    * `custom.hm.modules.waybar.gpu.tempCmd`
+    * `custom.hm.modules.waybar.gpu.mhzFreqCmd`
+    * `custom.hm.modules.waybar.gpu.usageCmd`
     * `custom.hm.collections.utilities.enable`
     * `custom.hm.collections.gui_utilities.enable`
     * `custom.hm.collections.communication.enable`

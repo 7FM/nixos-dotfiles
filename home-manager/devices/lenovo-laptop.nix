@@ -21,6 +21,11 @@
       waybar = {
         hwmonPath = null;
         thermalZone = null;
+        gpu = {
+          tempCmd = null;
+          mhzFreqCmd = "cat /sys/class/drm/card0/gt_cur_freq_mhz";
+          usageCmd = null;
+        };
       };
     };
     collections = {

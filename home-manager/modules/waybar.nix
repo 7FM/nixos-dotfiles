@@ -8,6 +8,8 @@ let
   hwmonPath = cfg.waybar.hwmonPath; # sys-fs path, i.e. "/sys/class/hwmon/hwmon0/temp1_input"
   thermalZone = cfg.waybar.thermalZone; # Integer value
 
+  gpuCfg = cfg.waybar.gpu;
+
   hmManageSway = config.custom.gui == "hm-wayland";
   enable = hmManageSway || (config.custom.gui == "wayland");
 
@@ -32,6 +34,33 @@ in {
           Thermal zone to use for the waybar cpu temperature measurements.
         '';
       };
+      gpu = {
+        tempCmd = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The command to use for the gpu temperature measurements.
+            I.e. "cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input"
+          '';
+        };
+        mhzFreqCmd = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The command to use to determine the gpu clock frequency in MHz.
+            I.e. "cat /sys/class/drm/card0/device/pp_dpm_sclk | egrep -o '[0-9]{0,4}Mhz \\W' | sed 's/Mhz \\*//'"
+            or   "cat /sys/class/drm/card0/gt_cur_freq_mhz"
+          '';
+        };
+        usageCmd = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The command to use to determine the gpu usage in percent.
+            I.e. "cat /sys/class/drm/card0/device/gpu_busy_percent"
+          '';
+        };
+      };
     };
   };
 
@@ -45,7 +74,9 @@ in {
       wlogout # logout menu
       networkmanagerapplet # NetworkManager Front-End
       wpa_supplicant_gui # wpasupplicant Front-End
-    ] ++ (lib.optionals waybarLaptopFeatures [ 
+
+      bc # needed for gpu clock speed calculation
+    ] ++ lib.optionals waybarLaptopFeatures [ 
       brightnessctl
     ]);
 
@@ -70,6 +101,7 @@ in {
           "custom/mail"
           "temperature"
           "cpu"
+          "custom/gpu"
           "memory"
           #"custom/disk_home"
           "custom/disk_root"
@@ -121,11 +153,18 @@ in {
             exec = "df -h --output=avail / | tail -1 | tr -d ' '";
             tooltip = false;
           };
-          "custom/logout"  = {
+          "custom/logout" = {
             format = "";
             on-click = "wlogout";
             on-click-right = "wlogout";
             tooltip = false;
+          };
+          "custom/gpu" = {
+            "exec" = "\${XDG_CONFIG_HOME:-\$HOME/.config}/waybar/scripts/custom_gpu.sh";
+            "return-type" = "json";
+            "format" = " {}";
+            "interval" = 5;
+            "tooltip" = "{tooltip}";
           };
           "temperature" = {
             critical-threshold = 80;
@@ -307,6 +346,22 @@ in {
     fonts.fontconfig.enable = true;
 
     xdg.configFile."waybar/style.css".source = ../configs/waybar/style.css;
+    #TODO handle null settings
+    xdg.configFile."waybar/scripts/custom_gpu.sh" = {
+      text = ''
+        #!/bin/sh
+
+        raw_clock=$(${gpuCfg.mhzFreqCmd})
+        clock=$(echo "scale=1;$raw_clock/1000" | bc | sed -e 's/^-\./-0./' -e 's/^\./0./')
+
+        raw_temp=$(${gpuCfg.tempCmd})
+        temperature=$(($raw_temp/1000))
+        busypercent=$(${gpuCfg.usageCmd})
+
+        echo '{"text": "'$clock'GHz |   '$temperature'°C | '$busypercent'%", "class": "custom-gpu", "tooltip": ""}'
+      '';
+      executable = true;
+    };
     xdg.configFile."wofi".source = ../configs/wofi;
     xdg.configFile."wlogout".source = ../configs/wlogout;
   };

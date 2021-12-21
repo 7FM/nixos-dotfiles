@@ -21,6 +21,11 @@
       waybar = {
         hwmonPath = "/sys/class/hwmon/hwmon1/temp1_input";
         thermalZone = null;
+        gpu = {
+          tempCmd = "cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input";
+          mhzFreqCmd = "cat /sys/class/drm/card0/device/pp_dpm_sclk | egrep -o '[0-9]{0,4}Mhz \\W' | sed 's/Mhz \\*//'";
+          usageCmd = "cat /sys/class/drm/card0/device/gpu_busy_percent";
+        };
       };
     };
     collections = {
