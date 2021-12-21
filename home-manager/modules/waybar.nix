@@ -70,6 +70,7 @@ in {
       # needed for waybar customization
       font-awesome
 
+      gnome.gnome-calendar
       pavucontrol # GUI to control pulseaudio settings
       wlogout # logout menu
       networkmanagerapplet # NetworkManager Front-End
@@ -271,6 +272,7 @@ in {
             timezone = "Europe/Berlin";
             format = "⏰ {:%H:%M}";
             tooltip-format = "{:%d-%m-%Y | %H:%M}";
+            on-click = "gnome-calendar";
           };
           "battery" = {
             states = {
