@@ -78,7 +78,10 @@ in {
       bc # needed for gpu clock speed calculation
     ] ++ lib.optionals waybarLaptopFeatures [ 
       brightnessctl
-    ]);
+    ] ++
+    lib.optionals config.custom.bluetooth [
+      blueberry
+    ];
 
     # Waybar configuration
     programs.waybar = {
@@ -90,6 +93,10 @@ in {
         modules-left = [
           "sway/workspaces"
           "sway/mode"
+        ] ++
+        lib.optionals config.custom.bluetooth [
+          "bluetooth"
+        ] ++ [
           "network"
         ];
         modules-center = [
@@ -195,6 +202,16 @@ in {
             format = "📩 {}";
             interval = 180;
             exec = "notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND NOT tag:spam AND tag:unread)'";
+          };
+          "bluetooth" = {
+              "interval" = 30;
+              "format" = "{icon}";
+              #"format-alt" = "{status}";
+              "format-icons" = {
+                  "enabled" = "";
+                  "disabled" = "";
+              };
+              "on-click" = "blueberry";
           };
           "network" = {
             family = "ipv4";
