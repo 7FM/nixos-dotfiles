@@ -79,9 +79,6 @@ in {
       bc # needed for gpu clock speed calculation
     ] ++ lib.optionals waybarLaptopFeatures [ 
       brightnessctl
-    ] ++
-    lib.optionals config.custom.bluetooth [
-      blueberry
     ];
 
     # Waybar configuration
@@ -212,7 +209,7 @@ in {
                   "enabled" = "";
                   "disabled" = "";
               };
-              "on-click" = "blueberry";
+              "on-click" = "blueman-manager";
           };
           "network" = {
             family = "ipv4";
