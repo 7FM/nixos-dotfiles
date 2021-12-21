@@ -40,6 +40,14 @@ hm: deviceName:
         Specifies gpu brand in use, to apply specific settings!
       '';
     };
+
+    bluetooth = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable Bluetooth Support!
+      '';
+    };
   };
 
   config = {

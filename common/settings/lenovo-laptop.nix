@@ -8,5 +8,6 @@
     # gui = "wayland";
     gui = "hm-wayland";
     useDummySecrets = false;
+    bluetooth = true;
   };
 }

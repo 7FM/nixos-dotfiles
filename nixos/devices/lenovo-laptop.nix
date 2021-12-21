@@ -71,7 +71,6 @@
 
   custom.useUEFI = true;
   custom.cpuFreqGovernor = "powersave";
-  custom.bluetooth = true;
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
   custom.networking = {

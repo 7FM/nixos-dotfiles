@@ -63,7 +63,6 @@
   }];
 
   custom.useUEFI = true;
-  custom.bluetooth = true;
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
   custom.networking = {

@@ -7,5 +7,6 @@
     cpu = "generic";
     gui = "wayland";
     useDummySecrets = true;
+    bluetooth = false;
   };
 }
