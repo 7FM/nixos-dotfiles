@@ -369,7 +369,6 @@ in {
     fonts.fontconfig.enable = true;
 
     xdg.configFile."waybar/style.css".source = ../configs/waybar/style.css;
-    #TODO handle null settings
     xdg.configFile."waybar/scripts/custom_gpu.sh" = {
       text = ''
         #!/bin/sh
