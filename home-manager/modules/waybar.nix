@@ -382,7 +382,7 @@ in {
         busypercent=$(${gpuCfg.usageCmd})
       '') + ''
         echo '{"text": "'' +
-        (lib.optionalString (gpuCfg.mhzFreqCmd != null) '''$clock'GHz'' + lib.optionalString (gpuCfg.tempCmd != null) " ") +
+        (lib.optionalString (gpuCfg.mhzFreqCmd != null) '''$clock'GHz'' + lib.optionalString (gpuCfg.tempCmd != null || gpuCfg.usageCmd != null) " ") +
         (lib.optionalString (gpuCfg.tempCmd != null) '' '$temperature'°C'' + lib.optionalString (gpuCfg.usageCmd != null) " ") +
         (lib.optionalString (gpuCfg.usageCmd != null) '''$busypercent'%'') +
         ''", "class": "custom-gpu", "tooltip": ""}'
