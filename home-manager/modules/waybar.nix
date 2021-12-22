@@ -9,6 +9,11 @@ let
   thermalZone = cfg.waybar.thermalZone; # Integer value
 
   gpuCfg = cfg.waybar.gpu;
+  # First we create a list of the setting values
+  # After that we remove the null elements and get the count of the remaining values
+  gpuCfgValueCount = builtins.length (builtins.filter (x: x != null) (builtins.attrValues gpuCfg));
+  # We enable gpu stats iff at least gpu stat command was given
+  enableGpuStats = gpuCfgValueCount > 0;
 
   hmManageSway = config.custom.gui == "hm-wayland";
   enable = hmManageSway || (config.custom.gui == "wayland");
@@ -106,18 +111,20 @@ in {
           "custom/mail"
           "temperature"
           "cpu"
+        ] ++ lib.optionals enableGpuStats [
           "custom/gpu"
+        ] ++ [
           "memory"
           #"custom/disk_home"
           "custom/disk_root"
-        ] ++ (lib.optionals waybarLaptopFeatures [ 
+        ] ++ lib.optionals waybarLaptopFeatures [ 
           "backlight" 
-        ]) ++ [
+        ] ++ [
           "pulseaudio#out"
           "pulseaudio#in"
-        ] ++ (lib.optionals waybarLaptopFeatures [ 
+        ] ++ lib.optionals waybarLaptopFeatures [ 
           "battery"
-        ]) ++ [
+        ] ++ [
           "idle_inhibitor"
           "clock"
           "custom/logout"
@@ -366,15 +373,20 @@ in {
     xdg.configFile."waybar/scripts/custom_gpu.sh" = {
       text = ''
         #!/bin/sh
-
+      '' + (lib.optionalString (gpuCfg.mhzFreqCmd != null) ''
         raw_clock=$(${gpuCfg.mhzFreqCmd})
         clock=$(echo "scale=1;$raw_clock/1000" | bc | sed -e 's/^-\./-0./' -e 's/^\./0./')
-
+      '') + (lib.optionalString (gpuCfg.tempCmd != null) ''
         raw_temp=$(${gpuCfg.tempCmd})
         temperature=$(($raw_temp/1000))
+      '') + (lib.optionalString (gpuCfg.usageCmd != null) ''
         busypercent=$(${gpuCfg.usageCmd})
-
-        echo '{"text": "'$clock'GHz |   '$temperature'°C | '$busypercent'%", "class": "custom-gpu", "tooltip": ""}'
+      '') + ''
+        echo '{"text": "'' +
+        (lib.optionalString (gpuCfg.mhzFreqCmd != null) '''$clock'GHz'' + lib.optionalString (gpuCfg.tempCmd != null) " ") +
+        (lib.optionalString (gpuCfg.tempCmd != null) '' '$temperature'°C'' + lib.optionalString (gpuCfg.usageCmd != null) " ") +
+        (lib.optionalString (gpuCfg.usageCmd != null) '''$busypercent'%'') +
+        ''", "class": "custom-gpu", "tooltip": ""}'
       '';
       executable = true;
     };
