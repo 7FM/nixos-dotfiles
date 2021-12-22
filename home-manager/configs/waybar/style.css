@@ -59,7 +59,7 @@ window#waybar {
 #battery, #cpu, #memory, #network, #pulseaudio,
 #custom-mail, #custom-logout, #backlight, #idle_inhibitor,
 #custom-spotify, #custom-media_firefox, #tray, #mode, #mpd {
-	padding: 0 3px;
+	padding: 0 2px;
 	margin: 0 2px;
 }
 
