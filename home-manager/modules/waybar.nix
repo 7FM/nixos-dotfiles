@@ -104,25 +104,23 @@ in {
         ];
         modules-center = [
           "tray"
-        ];
-        modules-right = [
           "custom/spotify"
           "custom/media_firefox"
+        ];
+        modules-right = [
           "custom/mail"
           "temperature"
           "cpu"
+          "memory"
         ] ++ lib.optionals enableGpuStats [
           "custom/gpu"
         ] ++ [
-          "memory"
           #"custom/disk_home"
           "custom/disk_root"
-        ] ++ lib.optionals waybarLaptopFeatures [ 
-          "backlight" 
-        ] ++ [
           "pulseaudio#out"
           "pulseaudio#in"
         ] ++ lib.optionals waybarLaptopFeatures [ 
+          "backlight"
           "battery"
         ] ++ [
           "idle_inhibitor"
