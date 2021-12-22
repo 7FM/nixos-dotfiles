@@ -164,7 +164,7 @@ in {
             tooltip = false;
           };
           "custom/logout" = {
-            format = "";
+            format = " ";
             on-click = "wlogout";
             on-click-right = "wlogout";
             tooltip = false;
