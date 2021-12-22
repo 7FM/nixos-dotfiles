@@ -57,7 +57,7 @@ window#waybar {
 #custom-gpu, #bluetooth,
 #temperature, #custom-disk_home, #custom-disk_root, #clock,
 #battery, #cpu, #memory, #network, #pulseaudio,
-#custom-mail, #custom-logout, #backlight, #idle_inhibitor
+#custom-mail, #custom-logout, #backlight, #idle_inhibitor,
 #custom-spotify, #custom-media_firefox, #tray, #mode, #mpd {
 	padding: 0 3px;
 	margin: 0 2px;
