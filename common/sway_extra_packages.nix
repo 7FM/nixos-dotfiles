@@ -11,7 +11,8 @@ in with pkgs; [
   qt5.qtwayland
 
   #swaylock
-  swaylock-fancy
+  #swaylock-fancy
+  swaylock-effects
   swayidle
   alacritty # gpu accelerated terminal emulator
   wofi # program launcher
