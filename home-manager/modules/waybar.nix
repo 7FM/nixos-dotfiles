@@ -156,12 +156,14 @@ in {
             interval = 180;
             exec = "df -h --output=avail $HOME | tail -1 | tr -d ' '";
             tooltip = false;
+            escape = true;
           };
           "custom/disk_root" = {
             format = "💽 {}";
             interval = 180;
             exec = "df -h --output=avail / | tail -1 | tr -d ' '";
             tooltip = false;
+            escape = true;
           };
           "custom/logout" = {
             format = " ";
@@ -175,6 +177,7 @@ in {
             "format" = " {}";
             "interval" = 5;
             "tooltip" = "{tooltip}";
+            escape = true;
           };
           "temperature" = {
             critical-threshold = 80;
@@ -205,6 +208,7 @@ in {
             format = "📩 {}";
             interval = 180;
             exec = "notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND NOT tag:spam AND tag:unread)'";
+            escape = true;
           };
           "bluetooth" = {
               "interval" = 30;
