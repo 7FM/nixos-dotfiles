@@ -296,7 +296,6 @@ in {
               "activated" = "";
               "deactivated" = "";
             };
-            on-click-right = "swaylock-fancy --daemonize";
           };
           "tray" = {
             # icon-size = 21;

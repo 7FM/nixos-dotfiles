@@ -9,7 +9,7 @@ let
   usesVirtualbox = cfg.sway.virtualboxWorkaround;
 
   #lockcmd = "swaylock -f -c 000000";
-  lockcmd = "swaylock-effects";
+  lockcmd = "swaylock";
   #disableDisplayCmd = "timeout 600 'swaymsg \"output * dpms off\"'";
   disableDisplayCmd = "";
   enableDisplayCmd = "resume 'swaymsg \"output * dpms on\"'";
@@ -250,7 +250,7 @@ in {
     # Empty dummy file to create the folder needed to store screenshots
     home.file."screenshots/.keep".text = "";
 
-    xdg.configFile."swaylock/config".source = ../configs/sway/config;
+    xdg.configFile."swaylock/config".source = ../configs/swaylock/config;
     xdg.configFile."sway/scripts".source = ../configs/sway/scripts;
     xdg.configFile."sway/backgrounds".source = ../configs/sway/backgrounds;
   };
