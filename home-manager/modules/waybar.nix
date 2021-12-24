@@ -226,7 +226,7 @@ in {
               "format" = "{icon}";
               #"format-alt" = "{status}";
               "format-icons" = {
-                  "enabled" = "";
+                  "enabled" = "<span color='#589df6'></span>";
                   "disabled" = "";
               };
               "on-click" = "blueman-manager";
@@ -287,7 +287,7 @@ in {
           "clock" = {
             interval = 60;
             timezone = "Europe/Berlin";
-            format = "⏰ {:%H:%M}";
+            format = " {:%H:%M  %e %b}";
             tooltip-format = "{:%d-%m-%Y | %H:%M}";
             on-click = "gnome-calendar";
           };
