@@ -31,6 +31,26 @@ let
     enable = true;
   };
 
+  generateMailDirSentFolders = emailAddresses: let
+    emailAccountNames = builtins.attrNames emailAddresses;
+    basePath = config.accounts.email.maildirBasePath;
+    emailAccountSentDirPaths = builtins.map (acc: let
+        accountSettings = builtins.getAttr acc config.accounts.email.accounts;
+        sentDirOffset = "/" + accountSettings.folders.sent + "/cur";
+      in basePath + ("/" + acc) + sentDirOffset
+    ) emailAccountNames;
+
+    keepFileName = "/.keep";
+    keepFileSettings = { text = ""; };
+    emailAccountSentDirKeepFilePaths = builtins.map (p: {
+      name = p + keepFileName;
+      value = keepFileSettings;
+    }) emailAccountSentDirPaths;
+
+    sentDirs = builtins.listToAttrs emailAccountSentDirKeepFilePaths;
+  in
+    sentDirs;
+
   enable = config.custom.hm.modules.email.enable;
 in {
   config = lib.mkIf enable {
@@ -75,5 +95,7 @@ in {
     programs.msmtp.enable = true;
 
     accounts.email.accounts = tools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
+
+    home.file = generateMailDirSentFolders config.accounts.email.accounts;
   };
 }
