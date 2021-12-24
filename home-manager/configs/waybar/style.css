@@ -1,123 +1,276 @@
+/* Based on: https://github.com/Pipshag/dotfiles_nord/blob/master/.config/waybar/style.css */
+
+/* COLORS */
+
+/* Nord */
+@define-color nord_bg #434C5E;
+@define-color nord_bg_blue #546484;
+@define-color nord_light #D8DEE9;
+@define-color nord_light_font @nord_light;
+@define-color nord_dark_font @nord_bg;
+@define-color bg #2E3440;
+/*@define-color bg #353C4A;*/
+/*@define-color dark @nord_dark_font;*/
+
+@define-color waybar_bg @bg;
+@define-color waybar_color @nord_light_font;
+
+@define-color warning #ebcb8b;
+@define-color warning_color @nord_dark_font;
+@define-color critical #BF616A;
+
+/* Module Colors: */
+
+/* Left */
+/*@define-color workspaces @bg;*/
+/*@define-color workspaces @nord_dark_font;*/
+/*@define-color workspacesfocused @nord_bg;*/
+@define-color workspacesfocused #4C566A;
+@define-color workspacesfocused_color @nord_light_font;
+
+@define-color scratchpad @nord_light;
+@define-color scratchpad_color @nord_dark_font;
+
+@define-color mode @nord_bg;
+@define-color mode_color @nord_light_font;
+
+@define-color bluetooth @nord_bg;
+
+@define-color network @nord_bg;
+@define-color network_color @nord_light_font;
+
+/* Center */
+@define-color tray @nord_bg;
+
+/* Right */
+@define-color temp @nord_bg;
+@define-color temp_color @nord_light_font;
+
+@define-color cpu @nord_bg;
+@define-color cpu_color @nord_light_font;
+@define-color cpu_color_crit @nord_dark_font;
+
+@define-color memory @nord_bg;
+@define-color memory_color @nord_light_font;
+
+@define-color audio @nord_bg_blue;
+@define-color audio_color @nord_light_font;
+
+@define-color backlight @nord_bg;
+@define-color backlight_color @nord_light_font;
+
+@define-color battery @nord_bg;
+@define-color battery_color @nord_light_font;
+
+@define-color clock @nord_bg_blue;
+@define-color clock_color @nord_light_font;
+@define-color date @nord_bg;
+@define-color time @nord_bg;
+
+@define-color idle @nord_bg;
+
+@define-color custom_bg @nord_bg;
+@define-color custom_color @nord_light_font;
+
+@define-color language @nord_bg_blue;
+@define-color language_color @nord_light_font;
+
+
 * {
 	border: none;
-	border-radius: 0;
+	border-radius: 2px;
 	font-family: "monospace";
 	font-size: 10px;
 	min-height: 0;
-	margin: 0px;
+    margin: 1px 0.2em 1px 0.2em;
 }
 
 window#waybar {
-	background: #000000;
-	/*background: rgba(0, 0, 0, 0.7);*/
-	color: gray;
-	color: #ffffff;
-}
-
-#window {
-	color: #e4e4e4;
+    background-color: @waybar_bg;
+    color: @waybar_color;
 	font-weight: bold;
-}
-
-#workspaces {
-	padding: 0px;
-	margin: 0px;
 }
 
 #workspaces button {
 	padding: 0 2px;
 	margin: 0px;
 	/*background: transparent;*/
-	/*background: #000000;*/
-	background: #131313;
+	/*background-color: #000000;*/
+	background-color: #131313;
 	color: #ff8700;
 	border: 1px solid #1b1d1e;
 	font-weight: bold;
 }
-#workspaces button:hover {
-	box-shadow: inherit;
-	text-shadow: inherit;
-}
 
+/* Workspaces stuff */
+
+#workspaces {
+ /*   color: @nord_light_font;
+    margin-right: 10px;*/
+}
+#workspaces button {
+    padding: 0;
+    opacity: 0.3;
+    background: none;
+    font-size: 1em;
+}
 #workspaces button.focused {
-	background: #00afd7;
-	color: #1b1d1e;
+    background-color: @workspacesfocused;
+    color: @workspacesfocused_color;
+    opacity: 1;
+    padding: 0 0.2em;
 }
-
 #workspaces button.urgent {
-	background: #af005f;
-	color: #1b1d1e;
+    border-color: #c9545d;
+    color: #c9545d;
+    opacity: 1;
 }
 
-#mode {
-	background: #af005f;
-	color: #1b1d1e;
+#window {
+    margin-right: 40px;
+    margin-left: 40px;
+    font-weight: normal;
 }
 
-#custom-gpu, #bluetooth,
-#temperature, #custom-disk_home, #custom-disk_root, #clock,
+/* Each module */
+#custom-gpu, #custom-disk_home, #custom-disk_root,
+#custom-mail, #custom-logout, #custom-spotify, 
+#custom-media_firefox,  
+#bluetooth, #temperature, #clock,
 #battery, #cpu, #memory, #network, #pulseaudio,
-#custom-mail, #custom-logout, #backlight, #idle_inhibitor,
-#custom-spotify, #custom-media_firefox, #tray, #mode, #mpd {
-	padding: 0 2px;
-	margin: 0 2px;
+#backlight, #idle_inhibitor, #tray, #mode, #mpd {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
 }
 
-#clock {
-}
-
+/* Each module that should blink */
+#mode,
+#memory,
+#temperature,
 #battery {
-}
-
-#battery icon {
-    color: red;
-}
-
-#battery.charging {
-}
-
-@keyframes blink {
-    to {
-        background-color: #af005f;
-    }
-}
-
-#battery.warning:not(.charging) {
-	background-color: #ff8700;
-	color: #1b1d1e;
-}
-#battery.critical:not(.charging) {
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
 
-#cpu {
+/* Each critical module */
+#memory.critical,
+#cpu.critical,
+#temperature.critical,
+#battery.critical {
+    color: @critical;
 }
 
-#memory {
+/* Each critical that should blink */
+#mode,
+#memory.critical,
+#temperature.critical,
+#battery.critical.discharging {
+    animation-name: blink-critical;
+    animation-duration: 2s;
 }
 
+
+/* Each warning */
+#network.disconnected,
+#memory.warning,
+#cpu.warning,
+#temperature.warning,
+#battery.warning {
+    background-color: @warning;
+    color: @warning_color;
+}
+
+/* Each warning that should blink */
+#battery.warning.discharging {
+    animation-name: blink-warning;
+    animation-duration: 3s;
+}
+
+#mode { /* Shown current Sway mode (resize etc.) */
+    background-color: @mode;
+    color: @mode_color;
+}
+#bluetooth {
+    background-color: @bluetooth;
+    /* font-size: 1.2em; */
+    font-weight: bold;
+    padding: 0 0.2em;
+}
+#custom-gpu, #custom-disk_home, #custom-disk_root,
+#custom-mail, #custom-logout, #custom-spotify {
+    background-color: @custom_bg;
+    color: @custom_color;
+    font-weight: bold;
+    padding: 0 0.2em;
+}
+#custom-scratchpad-indicator {
+    background-color: @scratchpad;
+    color: @scratchpad_color;
+    font-weight: bold;
+    padding: 0 0.2em;
+}
+#idle_inhibitor {
+    background-color: @idle;
+    /* font-size: 1.6em; */
+	/* TODO How can we get this icon larger without making its bounding box larger?*/
+    font-weight: bold;
+    padding: 0 0.2em;
+}
 #network {
+    background-color: @network;
+    color: @network_color;
 }
-
-#network.disconnected {
-    background: #f53c3c;
+#memory {
+    background-color: @memory;
+    color: @memory_color;
 }
-
-#pulseaudio {
+#cpu {
+    background-color: @cpu;
+    color: @cpu_color;
 }
-
-#pulseaudio.muted {
+#cpu.critical {
+    color: @cpu_color_crit;
 }
-
-#custom-spotify {
-    color: rgb(102, 220, 105);
+#language {
+    background-color: @language;
+    color: @language_color;
+    padding: 0 0.2em;
 }
-
+#temperature {
+    background-color: @temp;
+    color: @temp_color;
+}
+#temperature.critical {
+    background-color: @critical;
+}
+#battery {
+    background-color: @battery;
+    color: @battery_color;
+}
+#backlight {
+    background-color: @backlight;
+    color: @backlight_color;
+}
+#clock {
+    background-color: @clock;
+    color: @clock_color;
+}
+#clock.date {
+    background-color: @date;
+}
+#clock.time {
+    background-color: @time;
+}
+#pulseaudio.in, #pulseaudio.out {
+    background-color: @audio;
+    color: @audio_color;
+}
+#pulseaudio.out.muted, #pulseaudio.in.source-muted {
+    background-color: #D08770;
+    color: @audio_color;
+    /* No styles */
+}
 #tray {
+    background-color: @tray;
 }
-
