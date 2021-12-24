@@ -233,7 +233,6 @@ in {
           };
           "network" = {
             family = "ipv4";
-            # interface = "wlp2*"; # (Optional) To force the use of this interface
             format-wifi = "<span color='#589df6'></span> <span color='gray'>{essid}</span> <span color='#589df6'>{signalStrength}%</span> <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
             format-ethernet = " {ifname}: {ipaddr} <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
             format-linked = " {ifname} (No IP) <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
