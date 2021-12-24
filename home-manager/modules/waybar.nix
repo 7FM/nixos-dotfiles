@@ -298,7 +298,7 @@ in {
               "critical" = 10;
             };
             format = "{icon}{capacity:>3}%{time}";
-            format-time = " {H}h{M}min";
+            format-time = " {H}h{M}m";
             format-charging = "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
             format-plugged =  "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
             # format-good = "", # An empty format will hide the module
