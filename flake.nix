@@ -29,7 +29,12 @@
           #    environment.systemPackages = [ pkgs.nur.repos.mic92.hello-nur ];
           #  })
           {
-            nixpkgs.overlays = [ nur.overlay ]; 
+            nixpkgs.overlays = [
+              nur.overlay
+              (final: prev: {
+                myTools = import ./common/lib deviceName;
+              })
+            ]; 
 
             # Source: https://github.com/malob/nixpkgs/blob/master/flake.nix
             # Hack to support legacy worklows that use `<nixpkgs>` etc.

@@ -4,8 +4,7 @@ forceNoSecrets: deviceName:
 # Window system settings:
 let
   runHeadless = config.custom.gui == "headless";
-
-  tools = import ./common/lib { inherit config pkgs lib; };
+  myTools = pkgs.myTools { inherit config pkgs lib; };
 in {
 
   custom.useDummySecrets = if forceNoSecrets then lib.mkForce true else lib.mkDefault true;
@@ -120,9 +119,9 @@ in {
       "scanner" # For scanners
       "lp" # For scanners
     ];
-    openssh.authorizedKeys.keys = tools.getSecret ./. "userAuthorizedSSHKeys.nix";
+    openssh.authorizedKeys.keys = myTools.getSecret ./. "userAuthorizedSSHKeys.nix";
     # Set password hash, generated with 'mkpasswd -m sha-512 -s':
-    hashedPassword = tools.getSecret ./. "password.nix";
+    hashedPassword = myTools.getSecret ./. "password.nix";
   };
 
   # This value determines the NixOS release from which the default

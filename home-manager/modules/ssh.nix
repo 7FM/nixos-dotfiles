@@ -1,8 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  tools = import ../common/lib { inherit config pkgs lib; };
-
+  myTools = pkgs.myTools { inherit config pkgs lib; };
   enable = config.custom.hm.modules.ssh.enable;
 in {
   config = lib.mkIf enable {
@@ -13,7 +12,7 @@ in {
 
     programs.ssh = {
       enable = true;
-      matchBlocks = tools.getSecret ../configs "sshConfig.nix" { inherit config pkgs lib; };
+      matchBlocks = myTools.getSecret ../configs "sshConfig.nix" { inherit config pkgs lib; };
     };
   };
 }

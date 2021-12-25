@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  tools = import ../common/lib { inherit config pkgs lib; };
+  myTools = pkgs.myTools { inherit config pkgs lib; };
 
   createPasswordLookupCmd = searchTerm: "secret-tool lookup email ${searchTerm}";
 
@@ -81,7 +81,7 @@ in {
           attachment_words = "attach,anbei,anhang,angehängt";
           save_draft_on_force_quit = true;
         };
-        startup.queries = tools.getSecret ../configs "email/startupQueries.nix";
+        startup.queries = myTools.getSecret ../configs "email/startupQueries.nix";
       };
     };
     xdg.configFile."astroid/hooks".source = ../configs/astroid/hooks;
@@ -94,7 +94,7 @@ in {
     # Email sender
     programs.msmtp.enable = true;
 
-    accounts.email.accounts = tools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
+    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
 
     home.file = generateMailDirSentFolders config.accounts.email.accounts;
   };

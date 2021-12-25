@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  tools = import ../../common/lib { inherit config pkgs lib; };
+  myTools = pkgs.myTools { inherit config pkgs lib; };
 in {
   home.sessionVariables = lib.mkIf useWayland {
     MOZ_ENABLE_WAYLAND = 1;
@@ -29,7 +29,7 @@ in {
 
     profiles = {
       tm = {
-        bookmarks = tools.getSecret ../../configs "bookmarks.nix";
+        bookmarks = myTools.getSecret ../../configs "bookmarks.nix";
 
         settings = {
           "browser.search.region" = "GB";
