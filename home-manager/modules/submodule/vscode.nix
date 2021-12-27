@@ -79,8 +79,8 @@ let
       {
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
-        version = "2.0.1";
-        sha256 = "sha256-EJgkZwHSOe8ldMUe/kMZWnlwasNFdb2eoJzG385TqOI=";
+        version = "2.0.2";
+        sha256 = "sha256-As90ewLjreurX31J9PGtjJsfAzrXhkzqRHj+h/bmjRc=";
       }
 
       # PlatformIO
