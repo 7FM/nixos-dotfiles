@@ -81,7 +81,7 @@ in (lib.mkMerge [{
   };
   custom.security.usbguard = {
     enforceRules = true;
-    fixedRules = myTools.getSecretPath ../. "usbguard-rules.conf";
+    fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
   };
 
   networking.interfaces.enp0s31f6.useDHCP = true;
