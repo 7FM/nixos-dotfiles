@@ -69,6 +69,10 @@
     wifiSupport = true;
     withNetworkManager = true;
   };
+  custom.security.usbguard = {
+    enforceRules = true;
+    fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
+  };
 
   networking.interfaces.eno1.useDHCP = true;
   #networking.interfaces.enp11s0f3u3u4u4.useDHCP = true;
