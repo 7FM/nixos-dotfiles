@@ -3,7 +3,9 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
-(lib.mkMerge [{
+let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
+in (lib.mkMerge [{
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "acpi_call" ];
@@ -76,6 +78,10 @@
   custom.networking = {
     wifiSupport = true;
     withNetworkManager = true;
+  };
+  custom.security.usbguard = {
+    enforceRules = true;
+    fixedRules = myTools.getSecretPath ../. "usbguard-rules.conf";
   };
 
   networking.interfaces.enp0s31f6.useDHCP = true;
