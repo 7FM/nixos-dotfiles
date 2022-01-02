@@ -9,7 +9,7 @@ in {
       cura
       freecad
       openscad
-      kicad
+      # kicad
     ];
 
     # Cura base configuration: you will need to copy these folders to the current version
