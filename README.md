@@ -111,4 +111,4 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
 
 ## Waybar
 My config is a mashup of [Pipshag's config](https://github.com/Pipshag/dotfiles_nord) and [genofire's config](https://gist.github.com/genofire/07234e810fcd16f9077710d4303f9a9e) and looks as follows:
-TODO
+![](./doc/waybar.png)
