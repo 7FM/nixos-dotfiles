@@ -89,13 +89,6 @@ in {
   # Scanner Support
   hardware.sane.enable = !runHeadless;
 
-  # Enable sound.
-  sound.enable = !runHeadless;
-  hardware.pulseaudio = {
-    enable = !runHeadless;
-    support32Bit = !runHeadless;
-  };
-
   # Use zsh
   programs.zsh = {
     enable = true;
@@ -115,7 +108,7 @@ in {
     extraGroups = [ 
       "wheel" # Enable ‘sudo’ for the user.
       "networkmanager" # Allow changing the network settings
-      "video" # For sound settings
+      "audio" "video" # For sound settings
       "scanner" # For scanners
       "lp" # For scanners
     ];

@@ -26,6 +26,7 @@ with lib;
     ./security.nix
 
     # Features
+    ./audio.nix
     ./optimize_storage_space.nix
     ./powermanagement.nix
     (import ./networking.nix deviceName)
