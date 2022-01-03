@@ -67,6 +67,9 @@ in (lib.mkMerge [{
   custom.useUEFI = true;
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
+  custom.audio = {
+    backend = "pipewire";
+  };
   custom.networking = {
     wifiSupport = true;
     withNetworkManager = true;

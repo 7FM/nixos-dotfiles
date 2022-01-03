@@ -5,14 +5,28 @@ let
   runHeadless = config.custom.gui == "headless";
   myTools = pkgs.myTools { inherit config pkgs lib; };
 
-  backendUsePulseaudio = true;
-  backendUsePipewire = !backendUsePulseaudio;
+  cfg = config.custom.audio;
+
+  backendUsePulseaudio = cfg.backend == "pulseaudio";
+  backendUsePipewire = cfg.backend == "pipewire";
+  noBackend = cfg.backend == "none";
 in {
+  options.custom.audio = with lib; {
+
+    backend = mkOption {
+      type = types.enum [ "none" "pulseaudio" "pipewire" ];
+      default = "pulseaudio";
+      description = ''
+        Specifies the audio backend to use.
+      '';
+    };
+
+  };
 
   config = lib.mkIf (!runHeadless) {
     # Common sound settings
     # rtkit is optional but recommended
-    security.rtkit.enable = true;
+    security.rtkit.enable = !noBackend;
 
     # Enable sound via pulseaudio
     sound.enable = backendUsePulseaudio;

@@ -64,6 +64,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.useUEFI`
     * `custom.cpuFreqGovernor`
     * `custom.adb`
+    * `custom.audio.backend`
     * `custom.internationalization.timeZone`
     * `custom.internationalization.defaultLocale`
     * `custom.internationalization.keyboardLayout`
