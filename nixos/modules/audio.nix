@@ -15,7 +15,7 @@ in {
 
     backend = mkOption {
       type = types.enum [ "none" "pulseaudio" "pipewire" ];
-      default = "pulseaudio";
+      default = "pipewire";
       description = ''
         Specifies the audio backend to use.
       '';
