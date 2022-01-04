@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  useClangd = true;
+  useClangd = false;
 
   vsExtensions = with pkgs.vscode-extensions; [
       # Nix language support
