@@ -14,8 +14,8 @@
 
           #libsigrokVersion = "0.5.2";
           #libsigrokSha256 = "sha256-TTQfkLYiDT6MslHaz3JsQRZShWEiSPLFLRXfRZChzjw=";
-          libsigrokVersion = "122ec42a081be13849946eae48caf0ab8e1a33c4";
-          libsigrokSha256 = "sha256-/IAE81Gi7VR+B1i9/So/a9kXZmLHJkcIR6R8j54uyBw=";
+          libsigrokVersion = "9278c5142a0767cdd9bfed14cbb31d359d38aef2";
+          libsigrokSha256 = "sha256-Aa6UmmsWVnU3LlZjUF00enlZ5fDtIKipi/lppHESfrk=";
 
           #libsigrokdecodeVersion = "0.5.3";
           #libsigrokdecodeSha256 = "1h1zi1kpsgf6j2z8j8hjpv1q7n49i3fhqjn8i178rka3cym18265";
