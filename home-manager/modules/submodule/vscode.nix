@@ -35,8 +35,8 @@ let
       {
         name = "hexeditor";
         publisher = "ms-vscode";
-        version = "1.8.2";
-        sha256 = "106k40gfcgjqcflnmdrr777wn0sb5m6fv1smsh692znd9bndf02k";
+        version = "1.9.3";
+        sha256 = "sha256-DCPeYYwWc4oUMN7KFh/y5ouFI0szBpktcGwyIXodCQw=";
       }
       #ms-vscode.notepadplusplus-keybindings
       {
@@ -72,8 +72,8 @@ let
       {
         name = "code-spell-checker";
         publisher = "streetsidesoftware";
-        version = "2.0.14";
-        sha256 = "sha256-mwcssQvaztrnUuSoo8AWK3FXT4qKmPTRCGVYkAjgfXg=";
+        version = "2.1.4";
+        sha256 = "sha256-V8ug/EtDczjiofuL7HhpN1B+qbedpnvIlXnwiXJzD/g=";
       }
       #streetsidesoftware.code-spell-checker-german
       {
