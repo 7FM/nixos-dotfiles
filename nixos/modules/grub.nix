@@ -11,7 +11,7 @@ in {
   boot.loader.efi.canTouchEfiVariables = useUEFI;
   #boot.loader.grub.efiInstallAsRemovable = true;
   #boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.loader.systemd-boot.enable = useUEFI;
+  boot.loader.systemd-boot.enable = false;
 
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = if useUEFI then "nodev" else "/dev/sda"; # or "nodev" for efi only
