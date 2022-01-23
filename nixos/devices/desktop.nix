@@ -82,9 +82,9 @@ in (lib.mkMerge [{
   networking.interfaces.eno1.useDHCP = true;
   #networking.interfaces.enp7s0f3u3u4u4.useDHCP = true;
 
-  # networking.interfaces.wlp4s0.useDHCP = true;
-  # networking.wireless.interfaces = [
-  #   "wlp4s0"
-  # ];
+  networking.interfaces.wlp3s0.useDHCP = true;
+  networking.wireless.interfaces = [
+    "wlp3s0"
+  ];
 
 } (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })])
