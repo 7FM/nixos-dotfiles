@@ -11,7 +11,7 @@ in (lib.mkMerge [{
   boot.kernelModules = [ ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ 
-    rtl8812au
+    # rtl8812au # Currently marked as broken in linux 5.16
   ];
 
   boot.initrd.luks.devices."luks".device = "/dev/disk/by-uuid/b2a512fd-5112-41e0-8228-58149ca65618";
