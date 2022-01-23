@@ -55,7 +55,7 @@ let
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
-      gnome.libsecret # Needed for secret-tool
+      libsecret # Needed for secret-tool
     ];
 
     # Email frontend
