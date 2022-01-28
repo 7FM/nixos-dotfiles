@@ -35,8 +35,8 @@ let
       {
         name = "hexeditor";
         publisher = "ms-vscode";
-        version = "1.9.3";
-        sha256 = "sha256-DCPeYYwWc4oUMN7KFh/y5ouFI0szBpktcGwyIXodCQw=";
+        version = "1.9.4";
+        sha256 = "sha256-ZzmOECtWPBtgcxsjnd6lC+EWzJKTepB83GGRwnDUbjs=";
       }
       #ms-vscode.notepadplusplus-keybindings
       {
@@ -63,8 +63,8 @@ let
       {
         name = "vscodeintellicode";
         publisher = "visualstudioexptteam";
-        version = "1.2.15";
-        sha256 = "sha256-bcqJP7pmBYEreU6BoYzr9alnVjzwjDqeHhTq+etn7hI=";
+        version = "1.2.16";
+        sha256 = "sha256-rIzUyr5y+DxfXDxj23QbFo9TbWljl2GtsbzaaqJwGrk=";
       }
 
       # Spelling
@@ -154,29 +154,29 @@ let
       {
         name = "vscode-java-debug";
         publisher = "vscjava";
-        version = "0.37.0";
-        sha256 = "sha256-nQNiMZq+aayTeHAdg40BF7+6D8NbpFaTSmA1tdKVtwE=";
+        version = "0.38.0";
+        sha256 = "sha256-5QxKHa7fZH5MPkWrz5hCpP66VzICayxqE92jnPE7suQ=";
       }
       #vscjava.vscode-java-dependency
       {
         name = "vscode-java-dependency";
         publisher = "vscjava";
-        version = "0.18.9";
-        sha256 = "sha256-KzqiQo3Lys6LxtbakCIorm0AmxvN3kAyRJlM5R0556c=";
+        version = "0.19.0";
+        sha256 = "sha256-TOxDcqyjybilIt4+H3An5i+YcrjbOOLulMy+LDu296Q=";
       }
       #vscjava.vscode-java-test
       {
         name = "vscode-java-test";
         publisher = "vscjava";
-        version = "0.33.1";
-        sha256 = "sha256-lLx0mOYdxSXSjG8kBZxzF5nAVhhXyo/KQxGbu+B8KUk=";
+        version = "0.34.0";
+        sha256 = "sha256-7uscmiZNvwXZeDutsWmhkWe4IQ3VZx3Cna9xWM2wLhE=";
       }
       #vscjava.vscode-maven
       {
         name = "vscode-maven";
         publisher = "vscjava";
-        version = "0.34.2";
-        sha256 = "sha256-ScSXDQHMLSf8OvBz212+9UJGVt7Lxw79KvZkMtKE/wE=";
+        version = "0.35.0";
+        sha256 = "sha256-rJputnM6LtZ9+8H6Mjwh8OJSArSX2gSogtmLLoucffc=";
       }
     ]);
 
