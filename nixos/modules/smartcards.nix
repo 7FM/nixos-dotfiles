@@ -6,7 +6,10 @@ in {
   config = lib.mkIf enable {
     # Enable smartcard reader support
     services.pcscd.enable = true;
-    services.pcscd.plugins = [ pkgs.pcsc-cyberjack ];
+    services.pcscd.plugins = with pkgs; [
+      ccid
+      pcsc-cyberjack
+    ];
   };
 }
 
