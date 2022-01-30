@@ -33,6 +33,7 @@ with lib;
     ./bluetooth.nix
     ./virtualisation.nix
     ./adb.nix
+    ./smartcards.nix
 
     ./wayland.nix
     ./home-manager_wayland.nix
@@ -71,6 +72,14 @@ with lib;
       description = ''
         Specifies whether and how to add support for adb.
         "global" installs adb globally whereas "udevrules" only install the required udev rules and adb must be installed via i.e. homemanager.
+      '';
+    };
+
+    smartcards = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Specifies whether to enable smartcard support.
       '';
     };
   };

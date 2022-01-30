@@ -78,6 +78,7 @@ in (lib.mkMerge [{
   custom.audio = {
     backend = "pipewire";
   };
+  custom.smartcards = true;
   custom.networking = {
     wifiSupport = true;
     withNetworkManager = true;
