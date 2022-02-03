@@ -158,7 +158,21 @@ in {
           # user environments (e.g. required for screen sharing and Pinentry prompts):
           { command = "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"; always = false; }
         ] ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
-          ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; };
+          ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
+          ++ [
+          # start usually used programs
+          { command = "astroid"; always = false; }
+          { command = "mattermost-desktop"; always = false; }
+          { command = "keepassxc"; always = false; }
+          { command = "wpa_gui -t"; always = false; }
+          { command = "blueman-applet"; always = false; }
+        ];
+
+        assigns = {
+          "12:A2" = [ { app_id = "^astroid$"; } ];
+          "13:A3" = [ { class = "^Mattermost$"; } ];
+          "20:A10" = [ { app_id = "^org.keepassxc.KeePassXC$"; } ];
+        };
 
         bars = [
           {
