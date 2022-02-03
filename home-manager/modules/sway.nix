@@ -244,7 +244,9 @@ in {
         bindswitch --reload --locked lid:on output ${laptopDisplay} disable
         bindswitch --reload --locked lid:off output ${laptopDisplay} enable
       '' + ''
-        output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit
+        #output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit
+        # credits go to: https://www.youtube.com/watch?v=Lqz5ZtiCmYk
+        output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/die_shot.jpg fit
       '';
     };
 
