@@ -31,6 +31,13 @@ let
         version = "1.9.2";
         sha256 = "sha256-egikoFQCLEc8sy01KduqXrEbIZQKPK03CxijkR0wI4s=";
       }
+      #xaver.clang-format
+      # {
+      #   name = "clang-format";
+      #   publisher = "xaver";
+      #   version = "1.9.0";
+      #   sha256 = "sha256-q9DvkXbv+GTyeMVIyUQDK49Njsl9msbnOD1gyS4ljC8=";
+      # }
       #ms-vscode.hexeditor
       {
         name = "hexeditor";
@@ -72,15 +79,15 @@ let
       {
         name = "code-spell-checker";
         publisher = "streetsidesoftware";
-        version = "2.1.4";
-        sha256 = "sha256-V8ug/EtDczjiofuL7HhpN1B+qbedpnvIlXnwiXJzD/g=";
+        version = "2.1.5";
+        sha256 = "sha256-nIR3PtbtnSbAU0rS+qVtPsj++Dbfp/k86dWkx4xYcno=";
       }
       #streetsidesoftware.code-spell-checker-german
       {
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
-        version = "2.0.2";
-        sha256 = "sha256-As90ewLjreurX31J9PGtjJsfAzrXhkzqRHj+h/bmjRc=";
+        version = "2.0.3";
+        sha256 = "sha256-b5jAyOiFDKNeoz2JDXSYTOd3u3zIA7eNxacYLKWHJbA=";
       }
 
       # PlatformIO
@@ -202,14 +209,16 @@ in {
 
     userSettings = {
       "editor.suggestSelection" = "first";
+      # "editor.defaultFormatter" = "xaver.clang-format";
+      "editor.formatOnPaste" = false;
+      "editor.formatOnType" = true;
+      "editor.formatOnSave" = true;
       "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
       "vsintellicode.modelDownloadPath" = ".cache/vscode";
       "telemetry.enableTelemetry" = false;
       "telemetry.enableCrashReporter" = false;
       "telemetry.telemetryLevel" = "off";
       "C_Cpp.updateChannel" = "Insiders";
-      "editor.formatOnPaste" = false;
-      "editor.formatOnType" = true;
       "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, ContinuationIndentWidth: 4, TabWidth: 4, ColumnLimit: 0, IndentCaseLabels: true, NamespaceIndentation: All}";
       #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
       "todohighlight.keywords" = [
