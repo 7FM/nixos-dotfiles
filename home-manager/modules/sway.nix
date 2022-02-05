@@ -176,7 +176,7 @@ in {
           "2" = [ { app_id = "^astroid$"; } ];
           "3" = [ { class = "^Mattermost$"; } ];
           "10" = [ { app_id = "^org.keepassxc.KeePassXC$"; } ];
-        } ;
+        };
 
         bars = [
           {
