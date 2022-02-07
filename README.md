@@ -74,6 +74,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.internationalization.consoleFont`
     * `custom.security.usbguard.enforceRules`
     * `custom.security.usbguard.fixedRules`
+    * `custom.smartcards`
     * `custom.sshServer.enable`
     * `custom.sshServer.ports`
     * `custom.swapfile.enable`
