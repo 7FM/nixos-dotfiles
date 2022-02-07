@@ -67,6 +67,9 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.audio.backend`
     * `custom.internationalization.timeZone`
     * `custom.internationalization.defaultLocale`
+    * `custom.internationalization.defaultLcTime`
+    * `custom.internationalization.defaultLcPaper`
+    * `custom.internationalization.defaultLcMeasurement`
     * `custom.internationalization.keyboardLayout`
     * `custom.internationalization.consoleFont`
     * `custom.security.usbguard.enforceRules`

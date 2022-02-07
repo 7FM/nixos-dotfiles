@@ -7,6 +7,9 @@ let
 
   timeZone = cfg.timeZone;
   defaultLocale = cfg.defaultLocale;
+  defaultLcTime = cfg.defaultLcTime;
+  defaultLcPaper = cfg.defaultLcPaper;
+  defaultLcMeasurement = cfg.defaultLcMeasurement;
   keyboardLayout = cfg.keyboardLayout;
   consoleFont = cfg.consoleFont;
 
@@ -26,6 +29,30 @@ in {
       default = "en_US.UTF-8";
       description = ''
         Setting for the system language to use.
+      '';
+    };
+
+    defaultLcTime = mkOption {
+      type = types.str;
+      default = defaultLocale;
+      description = ''
+        Setting for the system time representation to use.
+      '';
+    };
+
+    defaultLcPaper = mkOption {
+      type = types.str;
+      default = defaultLocale;
+      description = ''
+        Setting for the system paper type (A4 vs. US letter) to use.
+      '';
+    };
+
+    defaultLcMeasurement = mkOption {
+      type = types.str;
+      default = defaultLocale;
+      description = ''
+        Setting for the system measurement system (metric vs. US units) to use.
       '';
     };
 
@@ -51,7 +78,14 @@ in {
 
     # Select internationalization properties.
     time.timeZone = timeZone;
-    i18n.defaultLocale = defaultLocale;
+    i18n = {
+      defaultLocale = defaultLocale;
+      extraLocaleSettings = {
+        LC_TIME = defaultLcTime;
+        LC_PAPER = defaultLcPaper;
+        LC_MEASUREMENT = defaultLcMeasurement;
+      };
+    };
     console = {
       font = consoleFont;
       keyMap = keyboardLayout;

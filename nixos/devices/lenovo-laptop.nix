@@ -87,6 +87,11 @@ in (lib.mkMerge [{
     enforceRules = true;
     fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
   };
+  custom.internationalization = {
+    defaultLcTime = "de_DE.UTF-8";
+    defaultLcPaper = "de_DE.UTF-8";
+    defaultLcMeasurement = "de_DE.UTF-8";
+  };
 
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.wlp4s0.useDHCP = true;
