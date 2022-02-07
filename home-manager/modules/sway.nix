@@ -170,12 +170,12 @@ in {
 
         assigns = lib.optionalAttrs (disp1 != disp2) {
           "12:A2" = [ { app_id = "^astroid$"; } ];
-          "13:A3" = [ { class = "^Mattermost$"; } ];
+          "19:A9" = [ { class = "^Mattermost$"; } ];
           "20:A10" = [ { app_id = "^org.keepassxc.KeePassXC$"; } ];
         } // lib.optionalAttrs (disp1 == disp2) {
           "2" = [ { app_id = "^astroid$"; } ];
-          "3" = [ { class = "^Mattermost$"; } ];
-          "10" = [ { app_id = "^org.keepassxc.KeePassXC$"; } ];
+          "9" = [ { class = "^Mattermost$"; } ];
+          "10" = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!Unlock Database - KeePassXC$)"; } ];
         };
 
         bars = [
