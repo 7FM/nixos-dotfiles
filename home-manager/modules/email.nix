@@ -81,6 +81,9 @@ in {
           attachment_words = "attach,anbei,anhang,angehängt";
           save_draft_on_force_quit = true;
         };
+        general.time = {
+            clock_format = "24h";
+        };
         startup.queries = myTools.getSecret ../configs "email/startupQueries.nix";
       };
     };
