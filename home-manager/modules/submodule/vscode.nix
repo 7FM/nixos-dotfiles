@@ -212,7 +212,7 @@ in {
       # "editor.defaultFormatter" = "xaver.clang-format";
       "editor.formatOnPaste" = false;
       "editor.formatOnType" = true;
-      "editor.formatOnSave" = true;
+      # "editor.formatOnSave" = true;
       "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
       "vsintellicode.modelDownloadPath" = ".cache/vscode";
       "telemetry.enableTelemetry" = false;
@@ -289,6 +289,8 @@ in {
       };
       "update.mode" = "none";
       "extensions.autoUpdate" = false;
+      "extensions.showRecommendationsOnlyOnDemand" = true;
+      "extensions.ignoreRecommendations" = true;
     };
 
   };
