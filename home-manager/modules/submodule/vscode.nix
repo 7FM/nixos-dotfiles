@@ -50,7 +50,7 @@ let
         name = "notepadplusplus-keybindings";
         publisher = "ms-vscode";
         version = "1.0.7";
-        sha256 = "148mz6jvlq7jycsyf8fxczbv90bmnj1gzb7p9mvfdprb38kf6bw8";
+        sha256 = "sha256-iC/jJhor3+Z2Tfes/4K0dYG012fdIec18/JguqX5FZE=";
       }
       #wayou.vscode-todo-highlight
       {
@@ -64,7 +64,7 @@ let
         name = "debug";
         publisher = "webfreak";
         version = "0.25.1";
-        sha256 = "1l01sv6kwh8dlv3kygkkd0z9m37hahflzd5bx1wwij5p61jg7np9";
+        sha256 = "sha256-6drzZDC3yMh56Ku0Tx1U8IyaPmhzPj/Hpg1BPs3WAdA=";
       }
       #visualstudioexptteam.vscodeintellicode
       {
@@ -105,7 +105,7 @@ let
         name = "llvm-tablegen";
         publisher = "jakob-erzar";
         version = "0.0.2";
-        sha256 = "12fdq1wv3459hz3w300x2w1dq5wphcsmh3dgf233qabr76vr1kav";
+        sha256 = "sha256-W82Qtzl5KTyGcK8NWDWDlxfcAhcdgMHHh6mQsXnAzYk=";
       }
       # llvm-vs-code-extensions.vscode-mlir
       {
@@ -119,21 +119,21 @@ let
         name = "openscad";
         publisher = "antyos";
         version = "1.1.1";
-        sha256 = "1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv";
+        sha256 = "sha256-W942+PBR2ZQROVSm24smLIlCRZTPUUsNHfPaIWXirKk=";
       }
       #bkromhout.vscode-tcl
       {
         name = "vscode-tcl";
         publisher = "bkromhout";
         version = "0.2.0";
-        sha256 = "1w38rrfii5cy9606pp6prif4jygwdwql6c2ik6rj26ym8wiffagl";
+        sha256 = "sha256-9CnnIkfVGyGzmVEwQzFv/HlJXMzX3GuASZ6VGF3OaPA=";
       }
       #eirikpre.systemverilog
       {
         name = "systemverilog";
         publisher = "eirikpre";
         version = "0.11.3";
-        sha256 = "12py0j61ja3sjx244870ddwq13xlm3hgwnlgsvqr21hr9sppah7z";
+        sha256 = "sha256-/0B1r04ZBpHx1o9a/uCotI+AeWvgIEJEl3ooGYwE/oo=";
       }
       #mshr-h.veriloghdl
       {
@@ -154,7 +154,7 @@ let
         name = "cmake";
         publisher = "twxs";
         version = "0.0.17";
-        sha256 = "11hzjd0gxkq37689rrr2aszxng5l9fwpgs9nnglq3zhfa1msyn08";
+        sha256 = "sha256-CFiva1AO/oHpszbpd7lLtDzbv1Yi55yQOQPP/kCTH4Y=";
       }
       # Java
       #vscjava.vscode-java-debug
