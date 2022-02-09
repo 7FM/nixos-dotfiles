@@ -70,8 +70,8 @@ let
       {
         name = "vscodeintellicode";
         publisher = "visualstudioexptteam";
-        version = "1.2.16";
-        sha256 = "sha256-rIzUyr5y+DxfXDxj23QbFo9TbWljl2GtsbzaaqJwGrk=";
+        version = "1.2.17";
+        sha256 = "sha256-4ixKPi3lFU3BIsmbWCrtJ5l3sUIOpzo4DTZvAZ1R6Ho=";
       }
 
       # Spelling
@@ -79,8 +79,8 @@ let
       {
         name = "code-spell-checker";
         publisher = "streetsidesoftware";
-        version = "2.1.5";
-        sha256 = "sha256-nIR3PtbtnSbAU0rS+qVtPsj++Dbfp/k86dWkx4xYcno=";
+        version = "2.1.6";
+        sha256 = "sha256-k1v9ewVEj9rOYJ9qv9SH5zugEtbi3/WsyArfAdXrzJc=";
       }
       #streetsidesoftware.code-spell-checker-german
       {
