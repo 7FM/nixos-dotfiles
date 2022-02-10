@@ -9,6 +9,7 @@ in {
     services.blueman.enable = config.hardware.bluetooth.enable;
 
     services.xserver.displayManager.gdm.wayland = true;
+    services.xserver.displayManager.extraSessionFilePackages = with pkgs; [sway];
 
     security.pam.services.swaylock = {};
     programs.dconf.enable = true;
