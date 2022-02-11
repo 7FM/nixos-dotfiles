@@ -5,7 +5,7 @@
   # Nix settings
   nix = {
     # Replaces duplicate files
-    autoOptimiseStore = true;
+    settings.auto-optimise-store = true;
     # Garbage collector
     gc = {
       automatic = true;
