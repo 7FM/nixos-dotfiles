@@ -6,7 +6,7 @@ let
   '';
 in symlinkJoin rec {
   inherit (vscode) name pname;
-#  name = vscode.name;
+
   paths = [
     wrapped
     vscode
