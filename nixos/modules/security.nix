@@ -40,6 +40,9 @@ in {
 
     services.usbguard.rules = fixedRules;
 
+    # Enable support to update device firmware!
+    services.fwupd.enable = true;
+
     # For headless:
     services.usbguard.package = if runHeadless then pkgs.usbguard-nox else pkgs.usbguard;
 
