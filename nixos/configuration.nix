@@ -10,7 +10,7 @@ in {
   custom.useDummySecrets = if forceNoSecrets then lib.mkForce true else lib.mkDefault true;
 
   imports = [
-    (import ./common/devices.nix false deviceName)
+    (import ../common/devices.nix false deviceName)
     (import ./modules/systemConfig.nix deviceName)
   ];
 

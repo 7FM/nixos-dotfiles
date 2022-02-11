@@ -52,7 +52,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
       **/secrets/**/<new-device>/** filter=git-crypt-<new-device> diff=git-crypt-<new-device>
       ```
 ### Create the following files:
-- **`common/settings/<new-device.nix>`** aka `nixos/common/settings/<new-device.nix>` aka `home-manager/common/settings/<new-device.nix>` for general device settings:
+- **`common/settings/<new-device.nix>`** for general device settings:
     * `custom.useDummySecrets`
     * `custom.gui`
     * `custom.cpu`

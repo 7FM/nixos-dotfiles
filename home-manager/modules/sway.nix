@@ -63,14 +63,14 @@ in {
       }
     ];
 
-    home.packages = lib.optionals hmManageSway (import ../common/sway_extra_packages.nix { inherit pkgs; });
+    home.packages = lib.optionals hmManageSway (import ../../common/sway_extra_packages.nix { inherit pkgs; });
 
     wayland.windowManager.sway = (lib.optionalAttrs (!hmManageSway) { package = null; } ) // {
       enable = true;
 
       wrapperFeatures.gtk = true;
       systemdIntegration = enableSystemdSway;
-      extraSessionCommands = import ../common/sway_extra_session_commands.nix;
+      extraSessionCommands = import ../../common/sway_extra_session_commands.nix;
 
       xwayland = hmManageSway;
 
