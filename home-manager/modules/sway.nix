@@ -238,6 +238,7 @@ in {
             { title = "^zoom$"; app_id = "$"; }
             { title = "^Settings$"; app_id = "$"; }
             { title = "^Polls$"; app_id = "$"; }
+            { title = "^as_toolbar$"; app_id = "$"; }
             { title = "^Select a window or an application that you want to share$"; app_id = "$"; }
           ];
         };
