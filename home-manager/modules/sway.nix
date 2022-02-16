@@ -10,8 +10,8 @@ let
 
   #lockcmd = "swaylock -f -c 000000";
   lockcmd = "swaylock";
-  #disableDisplayCmd = "timeout 600 'swaymsg \"output * dpms off\"'";
-  disableDisplayCmd = "";
+  disableDisplayCmd = "timeout 600 'swaymsg \"output * dpms off\"'";
+  #disableDisplayCmd = "";
   enableDisplayCmd = "resume 'swaymsg \"output * dpms on\"'";
 
   enableSystemdSway = false;
