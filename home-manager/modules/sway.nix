@@ -168,14 +168,18 @@ in {
           { command = "blueman-applet"; always = false; }
         ];
 
-        assigns = lib.optionalAttrs (disp1 != disp2) {
-          "12:A2" = [ { app_id = "^astroid$"; } ];
-          "19:A9" = [ { class = "^Mattermost$"; } ];
-          "20:A10" = [ { app_id = "^org.keepassxc.KeePassXC$"; } ];
+        assigns = let
+          astroidCond = [ { app_id = "^astroid$"; } ];
+          mattermostCond = [ { class = "^Mattermost$"; } ];
+          keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!Unlock Database - KeePassXC$)"; } ];
+        in lib.optionalAttrs (disp1 != disp2) {
+          "12:A2" = astroidCond;
+          "19:A9" = mattermostCond;
+          "20:A10" = keepassCond;
         } // lib.optionalAttrs (disp1 == disp2) {
-          "2" = [ { app_id = "^astroid$"; } ];
-          "9" = [ { class = "^Mattermost$"; } ];
-          "10" = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!Unlock Database - KeePassXC$)"; } ];
+          "2" = astroidCond;
+          "9" = mattermostCond;
+          "10" = keepassCond;
         };
 
         bars = [
