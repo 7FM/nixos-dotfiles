@@ -177,7 +177,7 @@ in {
           "19:A9" = mattermostCond;
           "20:A10" = keepassCond;
         } // lib.optionalAttrs (disp1 == disp2) {
-          "2" = astroidCond;
+          "8" = astroidCond;
           "9" = mattermostCond;
           "10" = keepassCond;
         };
