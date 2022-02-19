@@ -239,8 +239,7 @@ in {
             { title = "^Print$"; }
             { title = "^wpa_gui$"; }
             # File dialogs
-            { title = "Save"; app_id = "^xdg-desktop-portal-gtk$"; }
-            { title = "Open"; app_id = "^xdg-desktop-portal-gtk$"; }
+            { app_id = "^xdg-desktop-portal-gtk$"; }
             # Zoom fixes
             { title = "^zoom$"; app_id = "$"; }
             { title = "^Settings$"; app_id = "$"; }
