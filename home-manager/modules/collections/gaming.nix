@@ -9,6 +9,7 @@ in {
       steam
       steam-run
       lutris
+      heroic # linux native Epic Games Launcher alternative
       #wine
       winetricks
       wineWowPackages.full
