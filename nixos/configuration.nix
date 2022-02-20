@@ -74,9 +74,6 @@ in {
     '')
   ];
 
-  # Additional hardware settings
-  #hardware.usbWwan.enable = true;
-
   services.xserver.displayManager.autoLogin.enable = false;
 
   # Enable CUPS to print documents.

@@ -53,15 +53,12 @@ in {
   networking.wireless.networks = myTools.getSecret ../. "waps.nix";
 
   networking.networkmanager.enable = wifiSupport && withNetworkManager;
+  # WWAN FCC unlocking
+  networking.networkmanager.enableFccUnlock = wifiSupport && withNetworkManager;
   # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
   #       To do this you need to instruct NetworkManager to ignore those interfaces like:
   networking.networkmanager.unmanaged = [
     "*" "except:type:ethernet" "except:type:wwan" "except:type:gsm"
-  ];
-  # NetworkManager plugins
-  networking.networkmanager.packages = with pkgs; [
-    networkmanager_openvpn
-    networkmanager_openconnect
   ];
 
   # VPNs
