@@ -171,7 +171,7 @@ in {
         assigns = let
           astroidCond = [ { app_id = "^astroid$"; } ];
           mattermostCond = [ { class = "^Mattermost$"; } ];
-          keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!Unlock Database - KeePassXC$)"; } ];
+          keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!KeePassXC - Browser Access Request$)(?!Unlock Database - KeePassXC$)"; } ];
         in lib.optionalAttrs (disp1 != disp2) {
           "12:A2" = astroidCond;
           "19:A9" = mattermostCond;
@@ -240,6 +240,8 @@ in {
             { title = "^wpa_gui$"; }
             # File dialogs
             { app_id = "^xdg-desktop-portal-gtk$"; }
+            # Keepass browser access requests 
+            { app_id = "^org.keepassxc.KeePassXC$"; title = "^KeePassXC - Browser Access Request$"; }
             # Zoom fixes
             { title = "^zoom$"; app_id = "$"; }
             { title = "^Settings$"; app_id = "$"; }
