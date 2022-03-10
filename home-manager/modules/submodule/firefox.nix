@@ -63,6 +63,16 @@ in {
           "signon.autofillForms" = false;
           "signon.generation.enabled" = false;
           "signon.rememberSignons" = false;
+
+          # Notifications:
+          # Block notifications by default
+          #"permissions.default.desktop-notification" = "2";
+          # this is a master switch, you won't get any desktop notifications from sites
+          #"dom.webnotifications.enabled" = false;
+          # sites can still generate desktop notifications while you have a tab open to the site:
+          "dom.webnotifications.serviceworker.enabled" = false;
+          # disable BACKGROUND UPDATES
+          "dom.push.enabled" = false;
         };
       };
     };
