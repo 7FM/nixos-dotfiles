@@ -259,8 +259,8 @@ in {
             format-source-muted = "";
 
             format-icons = {
-              "headphones" = "";
-              "handsfree" = "";
+              "headphone" = "";
+              "hands-free" = "";
               "headset" = "";
               "phone" = "";
               "portable" = "";
