@@ -240,6 +240,8 @@ in {
             { title = "^wpa_gui$"; }
             # File dialogs
             { app_id = "^xdg-desktop-portal-gtk$"; }
+            # Astroid file dialog
+            { app_id = "^astroid$"; title = "^Save attachment to folder..$"; }
             # Keepass browser access requests 
             { app_id = "^org.keepassxc.KeePassXC$"; title = "^KeePassXC - Browser Access Request$"; }
             # Zoom fixes
