@@ -1,6 +1,10 @@
 import Part, math, Draft
 from FreeCAD import Base
 import FreeCAD as App
+__title__="Macro_RotateAndDuplicate"
+__author__ = "7FM"
+__url__     = "https://github.com/7FM"
+__version__ = "0.0.1"
 
 doc = App.ActiveDocument
 

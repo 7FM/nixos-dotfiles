@@ -1,0 +1,21 @@
+# Credits: https://forum.freecadweb.org/viewtopic.php?t=40385 in fixed
+import FreeCAD
+__title__="Macro_HideGeometryConstraints"
+__author__ = "aster94"
+__url__     = "https://github.com/aster94"
+__version__ = "0.0.1"
+__date__    = "26/10/2019"
+
+try:
+	sk = Gui.ActiveDocument.getInEdit().Object # instanciate sketch itself for future use
+	valid_constraints = ['Diameter', 'Radius', 'Angle', 'Distance']
+	constraints = list(sk.Constraints) # to be checked but I think '.Constraints' already returns a list
+
+	for cnt, constraint in enumerate(constraints):
+		if any([c in str(constraint) for c in valid_constraints]):
+			sk.setVirtualSpace(cnt, False) # Show
+		else:
+			sk.setVirtualSpace(cnt, True) # Hide
+		
+except Exception:
+    pass # instead of 'None'

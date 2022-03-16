@@ -2,13 +2,17 @@
 
 # Macro Begin: spreadsheet_alias_to_left.FCMacro +++++++++++++++++++++++++++++++
 import FreeCAD
+__title__="Macro_SpreadsheetAliasToTheLeft"
+__author__ = "7FM"
+__url__     = "https://github.com/7FM"
+__version__ = "0.0.1"
+
 doc = App.ActiveDocument
 ss = doc.Spreadsheet  # spreadsheet name is hardcoded for now
 
 print(ss)
 
 a = ord('B')
-
 
 print(a)
 
