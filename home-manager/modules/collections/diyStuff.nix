@@ -22,6 +22,7 @@ in {
     home.file.".FreeCAD/Macro/spreadsheet_alias_to_left.FCMacro".source = ../../configs/freecad/Macro/spreadsheet_alias_to_left.FCMacro;
     home.file.".FreeCAD/Macro/show_all_constraints.FCMacro".source = ../../configs/freecad/Macro/show_all_constraints.FCMacro;
     home.file.".FreeCAD/Macro/hide_all_constraints.FCMacro".source = ../../configs/freecad/Macro/hide_all_constraints.FCMacro;
+    home.file.".FreeCAD/Macro/hide_zero_constraints.FCMacro".source = ../../configs/freecad/Macro/hide_zero_constraints.FCMacro;
     home.file.".FreeCAD/Macro/hide_geometry_constraints.FCMacro".source = ../../configs/freecad/Macro/hide_geometry_constraints.FCMacro;
   };
 }
