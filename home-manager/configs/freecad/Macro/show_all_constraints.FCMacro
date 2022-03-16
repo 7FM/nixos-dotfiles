@@ -1,0 +1,17 @@
+# Credits: https://forum.freecadweb.org/viewtopic.php?t=40385 in fixed
+import FreeCAD
+__title__="Macro_ShowAllConstraints"
+__author__ = "aster94"
+__url__     = "https://github.com/aster94"
+__version__ = "0.0.1"
+__date__    = "26/10/2019"
+
+try:
+	sk = Gui.ActiveDocument.getInEdit().Object # instanciate sketch itself for future use
+	constraint_count = sk.ConstraintCount
+
+	for c in range(constraint_count):
+		sk.setVirtualSpace(c, False)
+
+except Exception:
+    pass
