@@ -63,6 +63,15 @@ in (lib.mkMerge [{
   systemd.services.ModemManager.wantedBy = [ "network.target" ];
   hardware.usbWwan.enable = true;
 
+  # Some applications
+  environment.systemPackages = with pkgs; [ 
+    # Also install a gui frontend for modemmanager
+    modem-manager-gui
+
+    # A somewhat useful touch-pen drawing application
+    xournalpp
+  ];
+
   # Fingerprint reader: add fingerprint with fprintd-enroll
   # services.fprintd.enable = true;
 
