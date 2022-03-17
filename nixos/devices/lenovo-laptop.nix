@@ -72,6 +72,18 @@ in (lib.mkMerge [{
     xournalpp
   ];
 
+  # Dummy systemd service, to apply battery settings
+  systemd.services.battery_settings = {
+    script = ''
+      echo 80 > /sys/class/power_supply/BAT0/charge_stop_threshold
+      echo 0 > /sys/class/power_supply/BAT0/charge_start_threshold
+    '';
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+    };
+  };
+
   # Fingerprint reader: add fingerprint with fprintd-enroll
   # services.fprintd.enable = true;
 
