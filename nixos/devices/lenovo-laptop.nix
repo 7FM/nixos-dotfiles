@@ -63,6 +63,27 @@ in (lib.mkMerge [{
   systemd.services.ModemManager.wantedBy = [ "network.target" ];
   hardware.usbWwan.enable = true;
 
+  # Some applications
+  environment.systemPackages = with pkgs; [ 
+    # Also install a gui frontend for modemmanager
+    modem-manager-gui
+
+    # A somewhat useful touch-pen drawing application
+    xournalpp
+  ];
+
+  # Dummy systemd service, to apply battery settings
+  systemd.services.battery_settings = {
+    script = ''
+      echo 80 > /sys/class/power_supply/BAT0/charge_stop_threshold
+      echo 0 > /sys/class/power_supply/BAT0/charge_start_threshold
+    '';
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+    };
+  };
+
   # Fingerprint reader: add fingerprint with fprintd-enroll
   # services.fprintd.enable = true;
 
