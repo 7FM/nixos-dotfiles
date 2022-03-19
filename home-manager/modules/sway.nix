@@ -244,6 +244,8 @@ in {
             { app_id = "^astroid$"; title = "^Save attachment to folder..$"; }
             # Keepass browser access requests 
             { app_id = "^org.keepassxc.KeePassXC$"; title = "^KeePassXC - Browser Access Request$"; }
+            # Cura dialogs
+            { app_id = "^com\/.https:\/\/ultimaker.python3$"; title = "^Multiply Selected Model$"; }
             # Zoom fixes
             { title = "^zoom$"; app_id = "$"; }
             { title = "^Settings$"; app_id = "$"; }
