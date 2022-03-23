@@ -11,8 +11,7 @@ in {
       nmap-graphical
       openconnect
       openvpn
-      #x2goclient # Segfaults on wayland...
-      (callPackage ../submodule/x2go-wayland-wrapper.nix {}) # This wrapper forces QT to use xwayland instead!
+      x2goclient
       idasen # Python API and CLI for the ikea IDÅSEN desk
     ];
 
