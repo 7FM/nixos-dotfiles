@@ -173,7 +173,7 @@ in {
           mattermostCond = [ { class = "^Mattermost$"; } ];
           keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!KeePassXC - Browser Access Request$)(?!Unlock Database - KeePassXC$)"; } ];
         in lib.optionalAttrs (disp1 != disp2) {
-          "12:A2" = astroidCond;
+          "18:A8" = astroidCond;
           "19:A9" = mattermostCond;
           "20:A10" = keepassCond;
         } // lib.optionalAttrs (disp1 == disp2) {
