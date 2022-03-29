@@ -19,7 +19,7 @@ let
   enable = hmManageSway || (config.custom.gui == "wayland");
 
   # Waybar settings
-  enableSystemdWaybar = false;
+  enableSystemdWaybar = config.wayland.windowManager.sway.enable && config.wayland.windowManager.sway.systemdIntegration;
   waybarLaptopFeatures = laptopDisplay != null;
 in {
   options.custom.hm.modules = with lib; {
@@ -89,7 +89,10 @@ in {
     # Waybar configuration
     programs.waybar = {
       enable = true;
-      systemd.enable = enableSystemdWaybar;
+      systemd = {
+        enable = enableSystemdWaybar;
+        target = "sway-session.target";
+      };
       package = (pkgs.waybar.override { withMediaPlayer = true; });
 
       settings = [{

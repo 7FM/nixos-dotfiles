@@ -10,11 +10,14 @@ let
 
   #lockcmd = "swaylock -f -c 000000";
   lockcmd = "swaylock";
-  disableDisplayCmd = "timeout 600 'swaymsg \"output * dpms off\"'";
-  #disableDisplayCmd = "";
-  enableDisplayCmd = "resume 'swaymsg \"output * dpms on\"'";
+  lockTimeout = 300;
+  disableDisplayTimeout = 600;
+  disableDisplayCmdRaw = "swaymsg \"output * dpms off\"";
+  disableDisplayCmd = "timeout ${disableDisplayTimeout} '${disableDisplayCmdRaw}'";
+  enableDisplayCmdRaw = "swaymsg \"output * dpms on\"";
+  enableDisplayCmd = "resume '${enableDisplayCmdRaw}'";
 
-  enableSystemdSway = false;
+  enableSystemdSway = true;
   hmManageSway = config.custom.gui == "hm-wayland";
   enable = hmManageSway || (config.custom.gui == "wayland");
   desktop = laptopDisplay == null;
@@ -148,18 +151,21 @@ in {
         }) // createWsKeybindings workspaces);
 
         startup = [
-          # Authentication agent
-          { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; }
           # Clipboard manager
           { command = "wl-paste -t text --watch clipman store"; always = false; }
-          # Swayidle
-          { command = "swayidle -w timeout 300 \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
           # Import the most important environment variables into the D-Bus and systemd
           # user environments (e.g. required for screen sharing and Pinentry prompts):
           { command = "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"; always = false; }
-        ] ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
-          ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
-          ++ [
+        ]
+        # Auto-focus the first display
+        ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
+        # Clamshell mode
+        ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
+        # Swayidle
+        ++ lib.optional (!enableSystemdSway) { command = "swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
+        # Authentication agent
+        ++ lib.optional (!enableSystemdSway) { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; }
+        ++ [
           # start usually used programs
           { command = "astroid"; always = false; }
           { command = "mattermost-desktop"; always = false; }
@@ -182,7 +188,7 @@ in {
           "10" = keepassCond;
         };
 
-        bars = [
+        bars = lib.optionals (!enableSystemdSway) [
           {
             command = "${pkgs.waybar}/bin/waybar";
           }
@@ -279,6 +285,22 @@ in {
       # If running from tty1 start sway
       [[ "$(tty)" == /dev/tty1 ]] && exec sway
     '';
+
+    services.swayidle = {
+      enable = enableSystemdSway;
+      events = [
+        { event = "before-sleep"; command = lockcmd; }
+      ];
+
+      timeouts = [
+        { timeout = 300; command = lockcmd; }
+        {
+          timeout = disableDisplayTimeout;
+          command = disableDisplayCmdRaw;
+          resumeCommand = enableDisplayCmdRaw;
+        }
+      ];
+    };
 
     # Empty dummy file to create the folder needed to store screenshots
     home.file."screenshots/.keep".text = "";

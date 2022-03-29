@@ -10,6 +10,12 @@ in {
 
     services.xserver.displayManager.gdm.wayland = true;
     services.xserver.displayManager.sessionPackages = with pkgs; [sway];
+    services.xserver.displayManager.defaultSession = "sway";
+    services.xserver.displayManager.sddm.enable = true;
+    security.pam.services.sddm.enableGnomeKeyring = true;
+    services.xserver = {
+      enable = true;
+    };
 
     security.pam.services.swaylock = {};
     programs.dconf.enable = true;
