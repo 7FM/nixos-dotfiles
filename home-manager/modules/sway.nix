@@ -281,16 +281,17 @@ in {
         p: {
           "name" = "${p.serviceName}";
           "value" = {
-            Unit = {
-              Requires = "graphical-session.target";
-              After = "graphical-session.target";
+            Unit = rec {
+              After = [ "graphical-session-pre.target" "graphical-session.target" ];
+              Requires = After;
+              #PartOf = [ "graphical-session.target" ];
             };
             Service = {
               Type = "oneshot";
               ExecStart = p.command;
               #Restart = "always";
             };
-            Install = { WantedBy = [ "multi-user.target" ]; };
+            Install = { WantedBy = [ "graphical-session.target" ]; };
             # script = p.command;
             # wantedBy = [ "multi-user.target" ];
             # wants = [ "graphical-session.target" ];
