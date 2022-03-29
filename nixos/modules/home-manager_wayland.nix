@@ -11,10 +11,20 @@ in {
     services.xserver.displayManager.gdm.wayland = true;
     services.xserver.displayManager.sessionPackages = with pkgs; [sway];
     services.xserver.displayManager.defaultSession = "sway";
+
+    # SDDM requirements
     services.xserver.displayManager.sddm.enable = true;
     security.pam.services.sddm.enableGnomeKeyring = true;
     services.xserver = {
       enable = true;
+      libinput = {
+        enable = true;
+        touchpad = {
+          tapping = true;
+          scrollMethod = "twofinger";
+          naturalScrolling = true;
+        };
+      };
     };
 
     security.pam.services.swaylock = {};
