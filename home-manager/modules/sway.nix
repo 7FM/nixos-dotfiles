@@ -8,6 +8,14 @@ let
   disp2 = if cfg.sway.disp2 == null then disp1 else cfg.sway.disp2;
   usesVirtualbox = cfg.sway.virtualboxWorkaround;
 
+  startupPrograms = [
+    rec { command = "astroid"; always = false; serviceName = command; }
+    rec { command = "mattermost-desktop"; always = false; serviceName = command; }
+    rec { command = "keepassxc"; always = false; serviceName = command; }
+    rec { command = "wpa_gui -t"; always = false; serviceName = "wpa_gui"; }
+    rec { command = "blueman-applet"; always = false; serviceName = command; }
+  ];
+
   #lockcmd = "swaylock -f -c 000000";
   lockcmd = "swaylock";
   lockTimeout = 300;
@@ -161,18 +169,13 @@ in {
         ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
         # Clamshell mode
         ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
-        # Swayidle
-        ++ lib.optional (!enableSystemdSway) { command = "swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
-        # Authentication agent
-        ++ lib.optional (!enableSystemdSway) { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; }
-        ++ [
+        ++ lib.optionals (!enableSystemdSway) ([
+          # Swayidle
+          { command = "swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
+          # Authentication agent
+          { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; }
           # start usually used programs
-          { command = "astroid"; always = false; }
-          { command = "mattermost-desktop"; always = false; }
-          { command = "keepassxc"; always = false; }
-          { command = "wpa_gui -t"; always = false; }
-          { command = "blueman-applet"; always = false; }
-        ];
+        ] ++ startupPrograms);
 
         assigns = let
           astroidCond = [ { app_id = "^astroid$"; } ];
@@ -273,6 +276,33 @@ in {
       '';
     };
 
+    systemd.user.services = let
+      createStartupServices = progs: builtins.listToAttrs (map (
+        p: {
+          "name" = "${p.serviceName}";
+          "value" = {
+            Unit = {
+              Requires = "graphical-session.target";
+              After = "graphical-session.target";
+            };
+            Service = {
+              Type = "oneshot";
+              ExecStart = p.command;
+              #Restart = "always";
+            };
+            Install = { WantedBy = [ "multi-user.target" ]; };
+            # script = p.command;
+            # wantedBy = [ "multi-user.target" ];
+            # wants = [ "graphical-session.target" ];
+            # after = [ "graphical-session.target" ];
+            # serviceConfig = {
+            #   Type = "oneshot";
+            # };
+          };
+        }
+      ) progs);
+    in lib.optionalAttrs enableSystemdSway (createStartupServices startupPrograms);
+
     # Notification daemon, Mako configuration
     programs.mako = {
       enable = true;
@@ -281,10 +311,10 @@ in {
     };
 
     # Autostart sway in zsh
-    programs.zsh.initExtra = ''
+    programs.zsh.initExtra = if (!enableSystemdSway) then ''
       # If running from tty1 start sway
       [[ "$(tty)" == /dev/tty1 ]] && exec sway
-    '';
+    '' else lib.mkOverride 1001 "";
 
     services.swayidle = {
       enable = enableSystemdSway;
