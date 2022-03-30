@@ -169,7 +169,7 @@ in {
         # Auto-focus the first display
         ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
         # Clamshell mode
-        ++ lib.optional (laptopDisplay != null) { command = "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
+        ++ lib.optional (laptopDisplay != null) { command = "\${XDG_CONFIG_HOME:-\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
         ++ lib.optionals (!enableSystemdSway) ([
           # Swayidle
           { command = "swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
