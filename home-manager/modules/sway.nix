@@ -9,12 +9,12 @@ let
   usesVirtualbox = cfg.sway.virtualboxWorkaround;
 
   startupPrograms = [
-    { command = "${pkgs.astroid}/bin/astroid"; always = false; serviceName = "startup-astroid"; }
+    { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
     { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop"; always = false; serviceName = "startup-mattermost"; }
     { command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc"; }
     { command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t"; always = false; serviceName = "startup-wpa_gui"; }
-    # TODO this one is not installed by homemanager, so how do we resolve the path???
-    { command = "blueman-applet"; always = false; serviceName = "startup-blueman-applet"; }
+    # this one is not installed by homemanager, but the path is identical as we use the same nixpkgs revision
+    { command = "${pkgs.blueman}/bin/blueman-applet"; always = false; serviceName = "startup-blueman-applet"; }
   ];
 
   #lockcmd = "swaylock -f -c 000000";
