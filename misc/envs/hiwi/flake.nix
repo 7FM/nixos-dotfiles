@@ -20,6 +20,7 @@
           ninja
           clang_12
           clang-tools # for clangd
+          gdb-multitarget
           verilator
           yosys
 

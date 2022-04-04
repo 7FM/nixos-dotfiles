@@ -29,6 +29,12 @@
         in with pkgs; [
           gtkwave
           gnumake
+          cmake
+          gdb-multitarget
+
+          pkg-config
+          libusb # needed for the usb driver examples
+
           #clang
           icestorm # ice40 tools
           trellis # ecp5 tools
