@@ -8,16 +8,33 @@ in {
     MOZ_ENABLE_WAYLAND = 1;
   };
 
+  home.packages = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
+
   programs.firefox = {
     enable = true;
     package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+      extraNativeMessagingHosts = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
       forceWayland = useWayland;
       extraPolicies = {
         ExtensionSettings = {};
       };
     };
 
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; let 
+      video-downloaderhelper = buildFirefoxXpiAddon rec {
+        pname = "video-downloadhelper";
+        version = "7.6.0";
+        addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
+        url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
+        sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
+        meta = with lib;
+        {
+          description = "The easy way to download and convert Web videos from hundreds of YouTube-like sites.";
+          license = licenses.unfree;
+          platforms = platforms.all;
+        };
+      };
+    in [
       https-everywhere
       darkreader
       keepassxc-browser
@@ -25,6 +42,7 @@ in {
       localcdn
       umatrix
       ublock-origin
+      video-downloaderhelper
     ];
 
     profiles = {
