@@ -312,6 +312,7 @@ in {
       defaultTimeout = 5000;
       extraConfig = ''
         on-button-middle=exec makoctl menu -n "$id" wofi -d -p 'Select action: '
+        on-notify=exec mpv ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message.oga
       '';
     };
 

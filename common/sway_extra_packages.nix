@@ -16,6 +16,7 @@ in with pkgs; [
   swayidle
   alacritty # gpu accelerated terminal emulator
   wofi # program launcher
+  mpv # to play notification sounds
 
   #polkit_gnome # Service to bring up authentication popups
   myPolkitGnome
