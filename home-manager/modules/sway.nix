@@ -310,6 +310,9 @@ in {
       enable = true;
       # default timeout in milliseconds
       defaultTimeout = 5000;
+      extraConfig = ''
+        on-button-middle=exec makoctl menu -n "$id" wofi -d -p 'Select action: '
+      '';
     };
 
     # Autostart sway in zsh
