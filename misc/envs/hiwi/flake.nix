@@ -18,6 +18,7 @@
         nativeBuildInputs = with pkgs; [
           cmake
           ninja
+          or-tools
           clang_12
           clang-tools # for clangd
           gdb-multitarget
