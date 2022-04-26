@@ -33,23 +33,33 @@ let
     enable = true;
   };
 
-  generateMailDirSentFolders = emailAddresses: let
+  generateMailDirFolders = emailAddresses: let
     emailAccountNames = builtins.attrNames emailAddresses;
     basePath = config.accounts.email.maildirBasePath;
-    emailAccountSentDirPaths = builtins.map (acc: let
-        accountSettings = builtins.getAttr acc config.accounts.email.accounts;
-        sentDirOffset = "/" + accountSettings.folders.sent + "/cur";
+    emailDirPathsGen = folder: builtins.map (acc: let
+        accountSettings = builtins.getAttr acc emailAddresses;
+        folderPath = builtins.getAttr folder accountSettings.folders;
+        sentDirOffset = "/" + folderPath + "/cur";
       in basePath + ("/" + acc) + sentDirOffset
     ) emailAccountNames;
+    emailAccountSentDirPaths = emailDirPathsGen "sent";
+    emailAccountDraftsDirPaths = emailDirPathsGen "drafts";
+    emailAccountInboxDirPaths = emailDirPathsGen "inbox";
+    emailAccountTrashDirPaths = emailDirPathsGen "trash";
 
     keepFileName = "/.keep";
     keepFileSettings = { text = ""; };
-    emailAccountSentDirKeepFilePaths = builtins.map (p: {
+    emailAccountKeepFilePathGen = x : builtins.map (p: {
       name = p + keepFileName;
       value = keepFileSettings;
-    }) emailAccountSentDirPaths;
+    }) x;
 
-    sentDirs = builtins.listToAttrs emailAccountSentDirKeepFilePaths;
+    keepFiles = emailAccountKeepFilePathGen emailAccountSentDirPaths ++
+                emailAccountKeepFilePathGen emailAccountDraftsDirPaths ++
+                emailAccountKeepFilePathGen emailAccountInboxDirPaths ++
+                emailAccountKeepFilePathGen emailAccountTrashDirPaths;
+
+    sentDirs = builtins.listToAttrs keepFiles;
   in
     sentDirs;
 
@@ -106,6 +116,6 @@ in {
 
     accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
 
-    home.file = generateMailDirSentFolders config.accounts.email.accounts;
+    home.file = generateMailDirFolders config.accounts.email.accounts;
   };
 }
