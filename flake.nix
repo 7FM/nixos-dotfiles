@@ -36,6 +36,16 @@
               # my custom tools
               (final: prev: {
                 myTools = import ./common/lib deviceName;
+
+                # patch astroid to fix: https://github.com/NixOS/nixpkgs/issues/168381 via https://github.com/astroidmail/astroid/pull/716
+                astroid = prev.astroid.overrideAttrs (old: {
+                  patches = (old.patches or []) ++ [
+                    (prev.fetchpatch {
+                      url = "https://patch-diff.githubusercontent.com/raw/astroidmail/astroid/pull/716.patch";
+                      sha256 = "sha256-hZHOg1wUR8Kpd6017fWzhMmG+/WQxSOCnsiyIvUcpbU=";
+                    })
+                  ];
+                });
               })
             ]; 
 
