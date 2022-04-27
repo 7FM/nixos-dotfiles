@@ -70,6 +70,7 @@ in (lib.mkMerge [{
 
     # A somewhat useful touch-pen drawing application
     xournalpp
+    rnote
   ];
 
   # Dummy systemd service, to apply battery settings
