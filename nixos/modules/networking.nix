@@ -64,7 +64,7 @@ in {
   # VPNs
   services.openvpn.servers = {
     #homeVPN = {
-    #  config = ''config /home/tm/vpns/homeVPN.conf''; # The content of the config file can be pasted here too!
+    #  config = ''config /home/tm/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
     #  autoStart = true;
     #  updateResolvConf = true;
     #};
