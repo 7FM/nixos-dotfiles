@@ -8,30 +8,46 @@ let
   enforce = cfg.enforceRules || fixedRules != null;
 in {
 
-  options.custom.security.usbguard = with lib; {
-    enforceRules = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enforces the usbguard rules and might make interactions impossible, if not properly configured.
-        Still, it is strongly recommended to enable this option.
-      '';
+  options.custom.security = with lib; {
+    gnupg = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the gnupg agent.
+        '';
+      };
     };
-    fixedRules = mkOption {
-      type = types.nullOr types.lines;
-      default = null;
-      description = ''
-        Running 'usbguard generate-policy' as root will generate
-        a config for your currently plugged in devices.
-        If you do not set this option, the USBGuard daemon will
-        load it's policy rule set from '/var/lib/usbguard/rules.conf'
-      '';
+    usbguard = {
+      enforceRules = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enforces the usbguard rules and might make interactions impossible, if not properly configured.
+          Still, it is strongly recommended to enable this option.
+        '';
+      };
+      fixedRules = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Running 'usbguard generate-policy' as root will generate
+          a config for your currently plugged in devices.
+          If you do not set this option, the USBGuard daemon will
+          load it's policy rule set from '/var/lib/usbguard/rules.conf'
+        '';
+      };
     };
   };
 
   config = {
     # Keyring
     services.gnome.gnome-keyring.enable = !runHeadless && (config.custom.gui != "x11");
+
+    # GnuPG
+    programs.gnupg.agent = {
+      enable = config.custom.security.gnupg.enable;
+    };
 
     # Security
     services.usbguard.enable = true;

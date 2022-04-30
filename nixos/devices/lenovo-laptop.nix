@@ -106,9 +106,12 @@ in (lib.mkMerge [{
     wifiSupport = true;
     withNetworkManager = true;
   };
-  custom.security.usbguard = {
-    enforceRules = true;
-    fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
+  custom.security = {
+    gnupg.enable = true;
+    usbguard = {
+      enforceRules = true;
+      fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
+    };
   };
   custom.internationalization = {
     defaultLcTime = "de_DE.UTF-8";
