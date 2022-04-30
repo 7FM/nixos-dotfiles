@@ -75,20 +75,17 @@
           }
         ] ++ customModules;
       };
-    in {
 
-      # TODO change mkSys to create a set with the correct lhs value: nixos-<deviceName>
+      mkSystems = sysDescs: builtins.listToAttrs (map (desc: { name = "nixos-" + desc.deviceName; value = (mkSys desc); }) sysDescs);
+    in mkSystems [
       # Define systems
-      nixos-lenovo-laptop = mkSys { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; };
-      #nixos-lenovo-laptop-no-sec = mkSys { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; forceNoSecrets = true; };
-      #nixos-lenovo-laptop = mkSys { deviceName = "lenovo-laptop"; };
-      nixos-lenovo-laptop-no-sec = mkSys { deviceName = "lenovo-laptop"; forceNoSecrets = true; };
+      { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; }
+      { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; forceNoSecrets = true; }
 
-      nixos-desktop = mkSys { deviceName = "desktop"; };
-      nixos-desktop-no-sec = mkSys { deviceName = "desktop"; forceNoSecrets = true; };
+      { deviceName = "desktop"; }
+      { deviceName = "desktop"; forceNoSecrets = true; }
 
-      nixos-virtualbox = mkSys { deviceName = "virtualbox"; forceNoSecrets = true; };
-
-    };
+      { deviceName = "virtualbox"; forceNoSecrets = true; }
+    ];
   };
 }
