@@ -63,11 +63,11 @@ in {
 
   # VPNs
   services.openvpn.servers = {
-    #homeVPN = {
-    #  config = ''config /home/tm/vpns/homeVPN.conf''; # The content of the config file can be pasted here too!
-    #  autoStart = true;
-    #  updateResolvConf = true;
-    #};
+    homeVPN = {
+      config = ''config /home/tm/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
+      autoStart = false;
+      updateResolvConf = true;
+    };
   };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
