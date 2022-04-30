@@ -2,6 +2,7 @@
   description = "System config flake";
 
   inputs = {
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     # nixpkgs.url = "nixpkgs/nixpkgs-unstable";
     nur = {
@@ -19,16 +20,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, ...}: {
+  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, ...}: {
     nixosConfigurations = let
-      mkSys = forceNoSecrets: deviceName: system: nixpkgs.lib.nixosSystem {
+      mkSys = {deviceName, system ? "x86_64-linux", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
-          # this adds a nur attribute set that can be used for example like this:
-          #  ({ pkgs, ... }: {
-          #    environment.systemPackages = [ pkgs.nur.repos.mic92.hello-nur ];
-          #  })
           {
             nixpkgs.overlays = [
               # NUR overlay
@@ -53,7 +50,7 @@
                   '';
                 });
               })
-            ]; 
+            ];
 
             # Source: https://github.com/malob/nixpkgs/blob/master/flake.nix
             # Hack to support legacy worklows that use `<nixpkgs>` etc.
@@ -76,18 +73,21 @@
               inherit deviceName;
             };
           }
-        ];
+        ] ++ customModules;
       };
     in {
 
+      # TODO change mkSys to create a set with the correct lhs value: nixos-<deviceName>
       # Define systems
-      nixos-lenovo-laptop = mkSys false "lenovo-laptop" "x86_64-linux";
-      nixos-lenovo-laptop-no-sec = mkSys true "lenovo-laptop" "x86_64-linux";
+      nixos-lenovo-laptop = mkSys { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; };
+      #nixos-lenovo-laptop-no-sec = mkSys { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; forceNoSecrets = true; };
+      #nixos-lenovo-laptop = mkSys { deviceName = "lenovo-laptop"; };
+      nixos-lenovo-laptop-no-sec = mkSys { deviceName = "lenovo-laptop"; forceNoSecrets = true; };
 
-      nixos-desktop = mkSys false "desktop" "x86_64-linux";
-      nixos-desktop-no-sec = mkSys true "desktop" "x86_64-linux";
+      nixos-desktop = mkSys { deviceName = "desktop"; };
+      nixos-desktop-no-sec = mkSys { deviceName = "desktop"; forceNoSecrets = true; };
 
-      nixos-virtualbox = mkSys true "virtualbox" "x86_64-linux";
+      nixos-virtualbox = mkSys { deviceName = "virtualbox"; forceNoSecrets = true; };
 
     };
   };
