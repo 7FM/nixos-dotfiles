@@ -7,6 +7,8 @@ let
   wifiSupport = cfg.wifiSupport;
   withNetworkManager = cfg.withNetworkManager;
   myTools = pkgs.myTools { inherit config pkgs lib; };
+  openvpnClient = cfg.openvpn.client.enable;
+  openvpnAutoConnect = cfg.openvpn.client.autoConnect;
 in {
   options.custom.networking = with lib; {
     wifiSupport = mkOption {
@@ -30,6 +32,23 @@ in {
       description = ''
         Specifies the hostname of this system.
       '';
+    };
+
+    openvpn.client = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Install openvpn and create a default config to connect to a home vpn.
+        '';
+      };
+      autoConnect = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Auto connect with the home vpn.
+        '';
+      };
     };
   };
 
@@ -62,10 +81,10 @@ in {
     ];
 
     # VPNs
-    services.openvpn.servers = {
+    services.openvpn.servers = lib.mkIf openvpnClient {
       homeVPN = {
         config = ''config /home/${userName}/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
-        autoStart = false;
+        autoStart = openvpnAutoConnect;
         updateResolvConf = true;
       };
     };

@@ -108,6 +108,10 @@ in (lib.mkMerge [{
   custom.networking = {
     wifiSupport = true;
     withNetworkManager = true;
+    openvpn.client = {
+      enable = true;
+      autoConnect = false;
+    };
   };
   custom.security = {
     gnupg.enable = true;

@@ -52,6 +52,10 @@ in {
   custom.networking = {
     wifiSupport = false;
     withNetworkManager = false;
+    openvpn.client = {
+      enable = false;
+      autoConnect = false;
+    };
   };
   custom.security = {
     gnupg.enable = false;

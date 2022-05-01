@@ -10,7 +10,6 @@ in {
       gparted
       nmap-graphical
       openconnect
-      openvpn
       x2goclient
       idasen # Python API and CLI for the ikea IDÅSEN desk
     ];

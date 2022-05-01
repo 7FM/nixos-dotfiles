@@ -85,6 +85,8 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.networking.hostname`
     * `custom.networking.wifiSupport`
     * `custom.networking.withNetworkManager`
+    * `custom.networking.openvpn.client.enable`
+    * `custom.networking.openvpn.client.autoConnect`
 - **`home-manager/devices/<new-device>.nix`** to enable predefined program sets and adjusting their options:
     * `custom.hm.modules.xdg.enable`
     * `custom.hm.modules.alacritty.enable`
