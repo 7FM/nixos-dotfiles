@@ -11,10 +11,8 @@ in {
       screen
       zip
       unzip
-      jmtpfs # For MTP connection with an android phone
       nfs-utils # Utilities to mount NFS shares
       #nmap
-      syncthing
       speedtest-cli
       usbutils
       pciutils
