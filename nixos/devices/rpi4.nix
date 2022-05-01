@@ -6,6 +6,23 @@
 let
   myTools = pkgs.myTools { inherit config pkgs lib; };
 in {
+  # File systems configuration for using the installer's partition layout
+  fileSystems = {
+    # Prior to 19.09, the boot partition was hosted on the smaller first partition
+    # Starting with 19.09, the /boot folder is on the main bigger partition.
+    # The following is to be used only with older images.
+    /*
+    "/boot" = {
+      device = "/dev/disk/by-label/NIXOS_BOOT";
+      fsType = "vfat";
+    };
+    */
+    "/" = {
+      device = "/dev/disk/by-label/NIXOS_SD";
+      fsType = "ext4";
+    };
+  };
+
   hardware.raspberry-pi."4" = {
     audio.enable = false;
     dwc2 = {
