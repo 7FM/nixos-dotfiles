@@ -34,62 +34,62 @@ in {
   };
 
   config = {
-  networking.hostName = hostname;
+    networking.hostName = hostname;
 
-  # Enables wireless support via wpa_supplicant.
-  networking.wireless.enable = true && wifiSupport;
-  # Allow changes with wpa_gui & wpa_cli
-  networking.wireless.userControlled.enable = true;
-  # Allow coexistence of declaratively & imeratively network configs!
-  networking.wireless.allowAuxiliaryImperativeNetworks = true;
+    # Enables wireless support via wpa_supplicant.
+    networking.wireless.enable = true && wifiSupport;
+    # Allow changes with wpa_gui & wpa_cli
+    networking.wireless.userControlled.enable = true;
+    # Allow coexistence of declaratively & imeratively network configs!
+    networking.wireless.allowAuxiliaryImperativeNetworks = true;
 
-  # Device specific wireless network adapters, should be listed in their corresponding conf file!
-  #networking.wireless.interfaces = [
-  #];
+    # Device specific wireless network adapters, should be listed in their corresponding conf file!
+    #networking.wireless.interfaces = [
+    #];
 
-  # Endpoints to use with wpa_supplicant
-  # WARNING: Be aware that keys will be written to the nix store in plaintext!
-  #          When no netwokrs are set it will default to using a configuration file at /etc/wpa_supplicant.conf
-  networking.wireless.networks = myTools.getSecret ../. "waps.nix";
+    # Endpoints to use with wpa_supplicant
+    # WARNING: Be aware that keys will be written to the nix store in plaintext!
+    #          When no netwokrs are set it will default to using a configuration file at /etc/wpa_supplicant.conf
+    networking.wireless.networks = myTools.getSecret ../. "waps.nix";
 
-  networking.networkmanager.enable = wifiSupport && withNetworkManager;
-  # WWAN FCC unlocking
-  networking.networkmanager.enableFccUnlock = wifiSupport && withNetworkManager;
-  # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
-  #       To do this you need to instruct NetworkManager to ignore those interfaces like:
-  networking.networkmanager.unmanaged = [
-    "*" "except:type:ethernet" "except:type:wwan" "except:type:gsm"
-  ];
+    networking.networkmanager.enable = wifiSupport && withNetworkManager;
+    # WWAN FCC unlocking
+    networking.networkmanager.enableFccUnlock = wifiSupport && withNetworkManager;
+    # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
+    #       To do this you need to instruct NetworkManager to ignore those interfaces like:
+    networking.networkmanager.unmanaged = [
+      "*" "except:type:ethernet" "except:type:wwan" "except:type:gsm"
+    ];
 
-  # VPNs
-  services.openvpn.servers = {
-    homeVPN = {
-      config = ''config /home/tm/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
-      autoStart = false;
-      updateResolvConf = true;
+    # VPNs
+    services.openvpn.servers = {
+      homeVPN = {
+        config = ''config /home/tm/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
+        autoStart = false;
+        updateResolvConf = true;
+      };
     };
-  };
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
+    # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+    # Per-interface useDHCP will be mandatory in the future, so this generated config
+    # replicates the default behaviour.
+    networking.useDHCP = false;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = myTools.getSecret ../. "allowedTCPPorts.nix";
-  networking.firewall.allowedUDPPorts = myTools.getSecret ../. "allowedUDPPorts.nix";
-  # Or disable the firewall altogether.
-  networking.firewall.enable = true;
+    # Open ports in the firewall.
+    networking.firewall.allowedTCPPorts = myTools.getSecret ../. "allowedTCPPorts.nix";
+    networking.firewall.allowedUDPPorts = myTools.getSecret ../. "allowedUDPPorts.nix";
+    # Or disable the firewall altogether.
+    networking.firewall.enable = true;
 
-  # network debugging
-  programs.wireshark.enable = true;
-  users.users.tm.extraGroups = lib.optional config.programs.wireshark.enable
-    "wireshark"
-  ;
+    # network debugging
+    programs.wireshark.enable = true;
+    users.users.tm.extraGroups = lib.optional config.programs.wireshark.enable
+      "wireshark"
+    ;
   };
 }
 
