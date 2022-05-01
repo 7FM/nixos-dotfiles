@@ -1,4 +1,4 @@
-forceNoSecrets: deviceName:
+forceNoSecrets: deviceName: userName:
 { config, pkgs, lib, ... }:
 
 # Window system settings:
@@ -11,7 +11,7 @@ in {
 
   imports = [
     (import ../common/devices.nix false deviceName)
-    (import ./modules/systemConfig.nix deviceName)
+    (import ./modules/systemConfig.nix deviceName userName)
   ];
 
   ## Enable BBR module
@@ -97,9 +97,9 @@ in {
   users.defaultUserShell = pkgs.zsh;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  services.xserver.displayManager.autoLogin.user = "tm";
+  services.xserver.displayManager.autoLogin.user = userName;
 
-  users.users.tm = {
+  users.users."${userName}" = {
     shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [ 

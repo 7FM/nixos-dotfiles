@@ -1,4 +1,4 @@
-deviceName:
+deviceName: userName:
 { config, lib, ... }:
 
 with lib;
@@ -22,17 +22,17 @@ with lib;
 
     # Shared settings
     ./grub.nix
-    ./ssh.nix
+    (import ./ssh.nix userName)
     ./security.nix
 
     # Features
     ./audio.nix
     ./optimize_storage_space.nix
     ./powermanagement.nix
-    (import ./networking.nix deviceName)
+    (import ./networking.nix deviceName userName)
     ./bluetooth.nix
-    ./virtualisation.nix
-    ./adb.nix
+    (import ./virtualisation.nix userName)
+    (import ./adb.nix userName)
     ./smartcards.nix
 
     ./wayland.nix

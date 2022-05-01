@@ -1,3 +1,4 @@
+userName:
 { config, pkgs, lib, ... }:
 
 let
@@ -51,7 +52,7 @@ in {
     services.openssh.ports = ports;
     services.openssh.permitRootLogin = "no";
     services.openssh.passwordAuthentication = false;
-    users.users."tm".openssh.authorizedKeys.keys = authorizedKeys;
+    users.users."${userName}".openssh.authorizedKeys.keys = authorizedKeys;
 
     # Start ssh agent to manage the ssh keys
     programs.ssh.startAgent = !runHeadless;

@@ -1,4 +1,4 @@
-{ deviceName, config, pkgs, ... }:
+{ deviceName, userName, config, pkgs, ... }:
 
 {
   imports = [
@@ -11,8 +11,8 @@
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "tm";
-  home.homeDirectory = "/home/tm";
+  home.username = userName;
+  home.homeDirectory = "/home/${userName}";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

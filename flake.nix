@@ -22,7 +22,7 @@
 
   outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, ...}: {
     nixosConfigurations = let
-      mkSys = {deviceName, system ? "x86_64-linux", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
+      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
@@ -62,15 +62,16 @@
             ];
           }
 
-          (import ./nixos/configuration.nix forceNoSecrets deviceName)
+          (import ./nixos/configuration.nix forceNoSecrets deviceName userName)
 
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.tm = import ./home-manager/home.nix;
+            home-manager.users."${userName}" = import ./home-manager/home.nix;
 
             home-manager.extraSpecialArgs = {
               inherit deviceName;
+              inherit userName;
             };
           }
         ] ++ customModules;

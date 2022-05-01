@@ -2,6 +2,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config.home.username;
   myTools = pkgs.myTools { inherit config pkgs lib; };
 in {
   home.sessionVariables = lib.mkIf useWayland {
@@ -46,7 +47,7 @@ in {
     ];
 
     profiles = {
-      tm = {
+      "${userName}" = {
         bookmarks = myTools.getSecret ../../configs "bookmarks.nix";
 
         settings = {

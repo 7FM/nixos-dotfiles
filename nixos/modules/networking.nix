@@ -1,4 +1,4 @@
-deviceName:
+deviceName: userName:
 { config, pkgs, lib, ... }:
 
 let
@@ -64,7 +64,7 @@ in {
     # VPNs
     services.openvpn.servers = {
       homeVPN = {
-        config = ''config /home/tm/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
+        config = ''config /home/${userName}/vpns/homeVPN.ovpn''; # The content of the config file can be pasted here too!
         autoStart = false;
         updateResolvConf = true;
       };
@@ -87,7 +87,7 @@ in {
 
     # network debugging
     programs.wireshark.enable = true;
-    users.users.tm.extraGroups = lib.optional config.programs.wireshark.enable
+    users.users."${userName}".extraGroups = lib.optional config.programs.wireshark.enable
       "wireshark"
     ;
   };

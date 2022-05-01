@@ -1,3 +1,4 @@
+userName:
 { config, pkgs, lib, ... }:
 
 let
@@ -7,7 +8,7 @@ in {
 
   config = lib.mkIf enable (lib.mkMerge [
     {
-      users.users.tm.extraGroups = ["adbusers"];
+      users.users."${userName}".extraGroups = ["adbusers"];
     }
     (lib.mkIf global {
       programs.adb.enable = true;

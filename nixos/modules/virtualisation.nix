@@ -1,3 +1,4 @@
+userName:
 { config, pkgs, lib, ... }:
 
 let
@@ -40,7 +41,7 @@ in {
     };
 
     # virtualisation specific groups
-    users.users.tm.extraGroups = [
+    users.users."${userName}".extraGroups = [
       "kvm"
       "lxd"
       "docker"
