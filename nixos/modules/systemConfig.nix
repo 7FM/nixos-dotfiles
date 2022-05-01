@@ -50,12 +50,21 @@ with lib;
       '';
     };
 
-    useUEFI = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = ''
-        Specifies if grub should be installed for an UEFI system.
-      '';
+    grub = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Use grub as boot loader.
+        '';
+      };
+      useUEFI = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = ''
+          Specifies if grub should be installed for an UEFI system.
+        '';
+      };
     };
 
     cpuFreqGovernor = mkOption {
@@ -89,7 +98,7 @@ with lib;
     # System sanity checks
     assertions = [
       {
-        assertion = config.custom.useUEFI != null;
+        assertion = !config.custom.grub.enable || config.custom.grub.useUEFI != null;
         message = "It must be specified whether grub is to be installed on an UEFI system!";
       }
     ];

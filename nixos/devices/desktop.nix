@@ -64,7 +64,10 @@ in (lib.mkMerge [{
     device = "/dev/disk/by-uuid/002b659d-f634-4cc4-8c97-9b3be20b9bfb";
   }];
 
-  custom.useUEFI = true;
+  custom.grub = {
+    enable = true;
+    useUEFI = true;
+  };
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
   custom.audio = {

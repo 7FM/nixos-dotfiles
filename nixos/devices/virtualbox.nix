@@ -33,7 +33,10 @@ in {
   # Remove fsck at startup which fails with VirtualBox
   boot.initrd.checkJournalingFS = false;
 
-  custom.useUEFI = false;
+  custom.grub = {
+    enable = true;
+    useUEFI = false;
+  };
   custom.swapfile = {
     enable = true;
     size = 1024;

@@ -94,7 +94,10 @@ in (lib.mkMerge [{
   services.tlp.enable = lib.mkDefault ((lib.versionOlder (lib.versions.majorMinor lib.version) "21.05")
                                       || !config.services.power-profiles-daemon.enable);
 
-  custom.useUEFI = true;
+  custom.grub = {
+    enable = true;
+    useUEFI = true;
+  };
   custom.cpuFreqGovernor = "powersave";
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
