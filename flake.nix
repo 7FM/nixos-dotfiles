@@ -76,14 +76,14 @@
         ] ++ customModules;
       };
 
-      mkSystems = sysDescs: builtins.listToAttrs (map (desc: { name = "nixos-" + desc.deviceName; value = (mkSys desc); }) sysDescs);
+      mkSystems = sysDescs: builtins.listToAttrs (map (desc: { name = "nixos-" + desc.deviceName + (desc.confNameSuffix or ""); value = (mkSys desc); }) sysDescs);
     in mkSystems [
       # Define systems
       { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; }
-      { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; forceNoSecrets = true; }
+      { deviceName = "lenovo-laptop"; confNameSuffix = "no-sec"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; forceNoSecrets = true; }
 
       { deviceName = "desktop"; }
-      { deviceName = "desktop"; forceNoSecrets = true; }
+      { deviceName = "desktop"; confNameSuffix = "no-sec"; forceNoSecrets = true; }
 
       { deviceName = "virtualbox"; forceNoSecrets = true; }
     ];
