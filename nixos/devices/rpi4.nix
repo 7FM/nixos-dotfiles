@@ -9,7 +9,7 @@ in {
   hardware.raspberry-pi."4" = {
     audio.enable = false;
     dwc2 = {
-      enalbe = false;
+      enable = false;
     };
     i2c0.enable = false;
     i2c1.enable = false;
