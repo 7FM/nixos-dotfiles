@@ -23,6 +23,8 @@ let
       # Scala
       scala-lang.scala
       scalameta.metals
+      # XML
+      dotjoshjohnson.xml
     ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       #ms-vscode.cmake-tools
       {
