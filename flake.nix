@@ -69,6 +69,12 @@
             home-manager.useUserPackages = true;
             home-manager.users."${userName}" = import ./home-manager/home.nix;
 
+            # Workaround for https://github.com/NixOS/nixpkgs/issues/169193
+            home-manager.users.root.programs.git = {
+              enable = true;
+              extraConfig.safe.directory = "/home/${userName}/nixos-dotfiles";
+            };
+
             home-manager.extraSpecialArgs = {
               inherit deviceName;
               inherit userName;
