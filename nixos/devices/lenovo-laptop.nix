@@ -67,6 +67,7 @@ in (lib.mkMerge [{
   environment.systemPackages = with pkgs; [ 
     # Also install a gui frontend for modemmanager
     modem-manager-gui
+    libqmi
 
     # A somewhat useful touch-pen drawing application
     xournalpp

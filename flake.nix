@@ -34,6 +34,20 @@
               (final: prev: {
                 myTools = import ./common/lib deviceName;
 
+                # patch to fix modem-manager-gui build
+                modem-manager-gui = prev.modem-manager-gui.overrideAttrs (old: {
+                  patches = (old.patches or []) ++ [
+                    (prev.fetchpatch {
+                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/master/debian/patches/fix-tray-icon.patch";
+                      sha256 = "sha256-9LjCEQl8YfraVlO1W7+Yy7egLAPu5YfnvGvCI3uGFh8=";
+                    })
+                    (prev.fetchpatch {
+                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/master/debian/patches/meson0.61.patch";
+                      sha256 = "sha256-B+tBPIz5RxOwZWYEWttqSKGw2Wbfk0mnBY0Zy0evvAQ=";
+                    })
+                  ];
+                });
+
                 # patch astroid to fix: https://github.com/NixOS/nixpkgs/issues/168381 via https://github.com/astroidmail/astroid/pull/716
                 astroid = prev.astroid.overrideAttrs (old: {
                   patches = (old.patches or []) ++ [
