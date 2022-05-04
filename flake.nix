@@ -38,11 +38,11 @@
                 modem-manager-gui = prev.modem-manager-gui.overrideAttrs (old: {
                   patches = (old.patches or []) ++ [
                     (prev.fetchpatch {
-                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/master/debian/patches/fix-tray-icon.patch";
+                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/7c3e67a1cf7788d7a4b86be12803870d79aa27f2/debian/patches/fix-tray-icon.patch";
                       sha256 = "sha256-9LjCEQl8YfraVlO1W7+Yy7egLAPu5YfnvGvCI3uGFh8=";
                     })
                     (prev.fetchpatch {
-                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/master/debian/patches/meson0.61.patch";
+                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/7c3e67a1cf7788d7a4b86be12803870d79aa27f2/debian/patches/meson0.61.patch";
                       sha256 = "sha256-B+tBPIz5RxOwZWYEWttqSKGw2Wbfk0mnBY0Zy0evvAQ=";
                     })
                   ];
