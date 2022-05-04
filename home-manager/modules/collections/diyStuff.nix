@@ -12,16 +12,6 @@ in {
       kicad
     ];
 
-    # Cura base configuration: you will need to copy these folders to the current version
-    # If we would simlink this directly to an version number then no changes are possible, which we want for slicing!
-    xdg.configFile."cura/baseSettings" = {
-      # TODO can we also run this when a new cura version is used?
-      source = ../../configs/cura/config;
-      onChange = ''
-        ${config.xdg.configHome}/cura/setup.sh ${pkgs.cura.version}
-      '';
-    };
-    xdg.dataFile."cura/baseSettings".source = ../../configs/cura/local;
     xdg = let 
       setupScript = ''
       #!/bin/sh
@@ -52,6 +42,17 @@ in {
         text = setupScript;
         executable = true;
       };
+
+      # Cura base configuration: you will need to copy these folders to the current version
+      # If we would simlink this directly to an version number then no changes are possible, which we want for slicing!
+      configFile."cura/baseSettings" = {
+        # TODO can we also run this when a new cura version is used?
+        source = ../../configs/cura/config;
+        onChange = ''
+          ${config.xdg.configHome}/cura/setup.sh ${pkgs.cura.version}
+        '';
+      };
+      dataFile."cura/baseSettings".source = ../../configs/cura/local;
     };
 
     # FreeCAD helper macros
