@@ -27,11 +27,13 @@ in {
       mkdir -p $curaVersion
       cp -r baseSettings/* $curaVersion/
       find $curaVersion -type f -exec chmod 644 {} \;
+      find $curaVersion -type d -exec chmod 755 {} \;
 
       cd ${config.xdg.dataHome}/cura
       mkdir -p $curaVersion
       cp -r baseSettings/* $curaVersion/
       find $curaVersion -type f -exec chmod 644 {} \;
+      find $curaVersion -type d -exec chmod 755 {} \;
       '';
     in {
       configFile."cura/setup.sh" = {
