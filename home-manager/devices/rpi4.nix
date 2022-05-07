@@ -8,6 +8,7 @@
       ssh.enable = false;
       git.enable = true;
       zsh.enable = true;
+      bash.enable = true;
       neovim.enable = true;
       gtk.enable = false;
       qt.enable = false;

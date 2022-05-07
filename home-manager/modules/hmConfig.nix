@@ -13,6 +13,7 @@ in {
     ./ssh.nix
     ./git.nix
     ./zsh.nix
+    ./bash.nix
     ./neovim.nix
     ./gtk.nix
     ./qt.nix
@@ -37,6 +38,7 @@ in {
       ssh.enable = mkEnableOption "the ssh module";
       git.enable = mkEnableOption "the git module";
       zsh.enable = mkEnableDefaultTrueOption "the zsh module";
+      bash.enable = mkEnableDefaultTrueOption "the bash module";
       neovim.enable = mkEnableDefaultTrueOption "the neovim module";
       gtk.enable = mkEnableOption "the gtk module";
       qt.enable = mkEnableOption "the qt module";
