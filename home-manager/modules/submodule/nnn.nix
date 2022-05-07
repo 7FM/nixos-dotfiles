@@ -1,6 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
+  home.packages = with pkgs; [
+    sxiv
+  ];
+
   # NNN: CLI file browser 
   programs.nnn = {
     enable = true;
@@ -44,8 +48,24 @@
     comment = "Terminal file manager";
     exec = "nnn %f";
     terminal = true;
+    noDisplay = true;
     icon = "nnn";
-    mimeType = [ "inode/directory" ];
+    mimeType = [
+      "inode/directory"
+      "application/octet-stream"
+      "multipart/x-zip"
+      "application/zip"
+      "application/zip-compressed"
+      "application/x-zip-compressed"
+      "application/x-gtar"
+      "application/x-tar"
+      "application/gzip"
+      "application/x-xz"
+      "application/x-7z-compressed"
+      "application/x-rar-compressed"
+      "application/x-bzip"
+      "application/x-bzip2"
+    ];
     categories = [" System" "FileTools" "FileManager" "ConsoleOnly"];
     # Keywords=File;Manager;Management;Explorer;Launcher
   };
@@ -56,6 +76,7 @@
     comment = "Terminal image viewer";
     exec = "sxiv %f";
     terminal = true;
+    noDisplay = true;
     icon = "sxiv";
     mimeType = [
       "image/bmp"
