@@ -55,6 +55,14 @@ in {
         '';
       };
       dataFile."cura/baseSettings".source = ../../configs/cura/local;
+
+      # Remove image mime types from cura
+      mimeApps.associations.removed = {
+        "image/bmp" = "com.ultimaker.cura.desktop";
+        "image/gif" = "com.ultimaker.cura.desktop";
+        "image/jpeg" = "com.ultimaker.cura.desktop";
+        "image/png" = "com.ultimaker.cura.desktop";
+      };
     };
 
     # FreeCAD helper macros
