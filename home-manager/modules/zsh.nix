@@ -41,6 +41,7 @@ in {
         "gc" = "git-crypt";
         # Common typos...
         "hotp" = "htop";
+        "naon" = "nano";
         "got" = "git";
         "exot" = "exit";
         "ös" = "ls";
