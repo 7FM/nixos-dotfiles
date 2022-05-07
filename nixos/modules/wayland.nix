@@ -11,12 +11,14 @@ in {
     services.xserver.displayManager.gdm.wayland = true;
     services.xserver.displayManager.sessionPackages = with pkgs; [sway];
     services.xserver.displayManager.defaultSession = "sway";
+    services.xserver.desktopManager.xterm.enable = false;
+
+    services.xserver.displayManager.gdm.enable = false;
 
     # SDDM requirements
     services.xserver.displayManager.sddm.enable = true;
-    security.pam.services.sddm.enableGnomeKeyring = true;
     services.xserver = {
-      enable = true;
+      enable = config.services.xserver.displayManager.sddm.enable || config.services.xserver.displayManager.gdm.enable;
       libinput = {
         enable = true;
         touchpad = {
@@ -26,6 +28,10 @@ in {
         };
       };
     };
+
+    # Ensure the keyrings are opened
+    security.pam.services.sddm.enableGnomeKeyring = config.services.xserver.displayManager.sddm.enable;
+    security.pam.services.gdm.enableGnomeKeyring = config.services.xserver.displayManager.gdm.enable;
 
     # Window system settings:
     # Wayland in the form of sway
