@@ -47,7 +47,7 @@ in {
         "ös" = "ls";
         "cd.." = "cd ..";
         # TERM variable is passed, so set it to a sane value before connecting
-        "ssh" = "TERM=xterm ssh";
+        "ssh" = "TERM=xterm-256color ssh";
       };
 
       history = {
