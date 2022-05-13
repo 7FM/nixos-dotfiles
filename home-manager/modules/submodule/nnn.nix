@@ -1,20 +1,40 @@
 { config, pkgs, lib, ... }:
 
-{
+let 
+  bookmarks = [
+    {
+      hotkey = "d";
+      path = "${config.home.homeDirectory}/docs";
+    }
+    { 
+      hotkey = "D";
+      path = "${config.home.homeDirectory}/Downloads";
+    }
+    {
+      hotkey = "s";
+      path = "${config.home.homeDirectory}/docs/Studium";
+    }
+    {
+      hotkey = "S";
+      path = "${config.home.homeDirectory}/screenshots";
+    }
+  ];
+
+  toGtkBookmarks = bList: map (b: b.path) bList;
+  toNNNBookmarks = bList: builtins.listToAttrs (map (b: { name = b.hotkey; value = b.path; }) bList);
+in {
   home.packages = with pkgs; [
     sxiv
   ];
+
+  gtk.gtk3.bookmarks = toGtkBookmarks bookmarks;
 
   # NNN: CLI file browser 
   programs.nnn = {
     enable = true;
     package = pkgs.nnn.override { withNerdIcons = true; };
 
-    bookmarks = {
-      d = "~/docs";
-      D = "~/Downloads";
-      s = "~/docs/Studium";
-    };
+    bookmarks = toNNNBookmarks bookmarks;
 
     # Extra packages that are used for i.e. plugins
     extraPackages = with pkgs; [
