@@ -2,21 +2,21 @@
 
 let 
   bookmarks = [
-    {
-      hotkey = "d";
-      path = "${config.home.homeDirectory}/docs";
-    }
     { 
       hotkey = "D";
       path = "${config.home.homeDirectory}/Downloads";
     }
     {
-      hotkey = "s";
-      path = "${config.home.homeDirectory}/docs/Studium";
-    }
-    {
       hotkey = "S";
       path = "${config.home.homeDirectory}/screenshots";
+    }
+    {
+      hotkey = "d";
+      path = "${config.home.homeDirectory}/docs";
+    }
+    {
+      hotkey = "s";
+      path = "${config.home.homeDirectory}/docs/Studium";
     }
   ];
 
