@@ -20,7 +20,7 @@ let
     }
   ];
 
-  toGtkBookmarks = bList: map (b: b.path) bList;
+  toGtkBookmarks = bList: map (b: "file://${b.path}") bList;
   toNNNBookmarks = bList: builtins.listToAttrs (map (b: { name = b.hotkey; value = b.path; }) bList);
 in {
   home.packages = with pkgs; [
