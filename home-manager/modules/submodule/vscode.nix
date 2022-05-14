@@ -2,6 +2,7 @@
 
 let
   useClangd = false;
+  usePlatformIO = true;
 
   vsExtensions = with pkgs.vscode-extensions; [
       # Nix language support
@@ -14,6 +15,8 @@ let
       # C++
       (if useClangd then llvm-vs-code-extensions.vscode-clangd else ms-vscode.cpptools)
 
+      # Rust
+      matklad.rust-analyzer
       # Python
       ms-python.python
       ms-python.vscode-pylance
@@ -25,14 +28,14 @@ let
       scalameta.metals
       # XML
       dotjoshjohnson.xml
-    ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace ([
       #ms-vscode.cmake-tools
-      {
-        name = "cmake-tools";
-        publisher = "ms-vscode";
-        version = "1.9.2";
-        sha256 = "sha256-egikoFQCLEc8sy01KduqXrEbIZQKPK03CxijkR0wI4s=";
-      }
+      #{
+      #  name = "cmake-tools";
+      #  publisher = "ms-vscode";
+      #  version = "1.9.2";
+      #  sha256 = "sha256-egikoFQCLEc8sy01KduqXrEbIZQKPK03CxijkR0wI4s=";
+      #}
       #xaver.clang-format
       # {
       #   name = "clang-format";
@@ -91,15 +94,6 @@ let
         version = "2.0.3";
         sha256 = "sha256-b5jAyOiFDKNeoz2JDXSYTOd3u3zIA7eNxacYLKWHJbA=";
       }
-
-      # PlatformIO
-      #platformio.platformio-ide
-      #{
-      #  name = "platformio-ide";
-      #  publisher = "platformio";
-      #  version = "2.3.2";
-      #  sha256 = "0z7cd6ya0mr10lwdbh47j8if3spwzz2scr8v06jfs0q4h8ybzgf4";
-      #}
 
       # Language support
       #jakob-erzar.llvm-tablegen
@@ -187,7 +181,17 @@ let
         version = "0.35.0";
         sha256 = "sha256-rJputnM6LtZ9+8H6Mjwh8OJSArSX2gSogtmLLoucffc=";
       }
-    ]);
+    ] ++ lib.optionals (!useClangd && usePlatformIO) [
+      # PlatformIO depends on ms-vscode.cpptools
+      #platformio.platformio-ide
+      {
+        name = "platformio-ide";
+        publisher = "platformio";
+        version = "2.4.3";
+        sha256 = "sha256-pPPukV0LZ/ZFp5Q+O7MhuCK5Px1FPy1ENzl21Ro7KFA=";
+      }
+
+    ]));
 
   vsCodeWithExtPkg = (pkgs.vscode-with-extensions.override {
     vscodeExtensions = vsExtensions;
