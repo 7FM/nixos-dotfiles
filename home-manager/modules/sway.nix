@@ -311,8 +311,8 @@ in {
       # default timeout in milliseconds
       defaultTimeout = 5000;
       extraConfig = ''
-        on-button-middle=exec makoctl menu -n "$id" wofi -d -p 'Select action: '
-        on-notify=exec mpv ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message.oga
+        on-button-middle=exec ${pkgs.mako}/bin/makoctl menu -n "$id" ${pkgs.wofi}/bin/wofi -d -p 'Select action: ' && ${pkgs.mako}/bin/makoctl dismiss -n $id
+        on-notify=exec ${pkgs.mpv}/bin/mpv ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message.oga
       '';
     };
 
