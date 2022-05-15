@@ -67,7 +67,6 @@ in (lib.mkMerge [{
   environment.systemPackages = with pkgs; [ 
     # Also install a gui frontend for modemmanager
     modem-manager-gui
-    libqmi
 
     # A somewhat useful touch-pen drawing application
     xournalpp
@@ -81,6 +80,18 @@ in (lib.mkMerge [{
       echo 0 > /sys/class/power_supply/BAT0/charge_start_threshold
     '';
     wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+    };
+  };
+
+  systemd.services.setup_wwan = {
+    path = with pkgs; [
+      libqmi
+    ];
+    script = builtins.readFile ../../misc/scripts/setup_wwan.sh;
+    before = [ "ModemManager.service" ];
+    wantedBy = [ "ModemManager.service" "network.target" ];
     serviceConfig = {
       Type = "oneshot";
     };
