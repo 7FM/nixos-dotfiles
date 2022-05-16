@@ -74,7 +74,6 @@ in {
     # Email frontend
     # programs.alot.enable = true;
 
-    # TODO might need: GDK_BACKEND=x11
     programs.astroid = {
       enable = true;
       pollScript = ''
@@ -117,5 +116,12 @@ in {
     accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
 
     home.file = generateMailDirFolders config.accounts.email.accounts;
+    xdg.configFile."notifymuch/notifymuch.cfg".text = ''
+      [notifymuch]
+      query = is:unread and not is:spam
+      mail_client =
+      recency_interval_hours = 12
+      hidden_tags = inbox unread attachment replied sent encrypted signed
+    '';
   };
 }
