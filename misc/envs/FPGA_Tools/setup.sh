@@ -35,8 +35,5 @@ cp "$SCRIPT_PATH/.envrc" "$TARGET_PATH"
 # Final setup stage
 cd "$TARGET_PATH"
 direnv allow
-git clone https://github.com/zachjs/sv2v
-cd sv2v && git apply ../sv2v.patch && cd ..
-direnv exec . sh -c 'cd sv2v && make'
 
 echo "Successfully setup FPGA_Tools!"
