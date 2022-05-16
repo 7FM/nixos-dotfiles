@@ -11,7 +11,7 @@ let
       notmuch new
       notmuch tag -inbox +sent from:${emailAddr}
       notmuch tag +${shortTag} to:${emailAddr}
-      notmuch tag -unread 'date:..30d' tag:unread
+      notmuch tag -unread 'date:1970..30d' tag:unread
       ${customHook}
       afew --tag --new
       notifymuch
