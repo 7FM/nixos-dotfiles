@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-{
+let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
+in {
 
   # Nix settings
   nix = {

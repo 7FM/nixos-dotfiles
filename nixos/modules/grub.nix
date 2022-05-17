@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
   cfg = config.custom.grub;
   enable = cfg.enable;
   useUEFI = cfg.useUEFI;

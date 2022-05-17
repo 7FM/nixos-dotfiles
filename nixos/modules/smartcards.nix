@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
   enable = config.custom.smartcards;
 in {
   config = lib.mkIf enable {

@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
   cfg = config.custom.swapfile;
 
   useSwapFile = cfg.enable;

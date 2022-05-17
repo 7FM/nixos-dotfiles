@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
   runHeadless = config.custom.gui == "headless";
 
   cfg = config.custom.security.usbguard;

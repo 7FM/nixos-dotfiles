@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  myTools = pkgs.myTools { inherit config pkgs lib; };
   governor = config.custom.cpuFreqGovernor;
 in {
 
