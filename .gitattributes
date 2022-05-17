@@ -4,3 +4,4 @@
 **/secrets/**/desktop/** filter=git-crypt-desktop diff=git-crypt-desktop
 **/secrets/**/lenovo-laptop/** filter=git-crypt-lenovo-laptop diff=git-crypt-lenovo-laptop
 **/secrets/**/virtualbox/** filter=git-crypt-virtualbox diff=git-crypt-virtualbox
+**/secrets/**/rpi4/** filter=git-crypt-rpi4 diff=git-crypt-rpi4
