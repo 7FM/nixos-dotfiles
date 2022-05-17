@@ -29,7 +29,7 @@ in {
     };
     authorizedKeys = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = myTools.getSecret ./. "userAuthorizedSSHKeys.nix";
       description = ''
         A list of verbatim OpenSSH public keys that should be added to the
         user's authorized keys. The keys are added to a file that the SSH
