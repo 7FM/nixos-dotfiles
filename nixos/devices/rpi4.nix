@@ -72,13 +72,41 @@ in {
 
   custom.sshServer = {
     enable = true;
-    authorizedKeys = [
-    ];
   };
 
   networking.interfaces.eth0.useDHCP = true;
-  networking.interfaces.wlan0.useDHCP = true;
-  networking.wireless.interfaces = [
-    "wlan0"
-  ];
+
+  # Create an AP
+  services.hostapd = {
+    enable = true;
+    ssid = myTools.getSecret ../. "apName.nix";
+    wpaPassphrase = myTools.getSecret ../. "apPassword.nix";
+    interface = "wlan0";
+  };
+  # Associate a dhcp server with this AP
+  services.dhcpd4 = {
+    enable = true;
+    interfaces = [ "wlan0" ];
+    extraConfig = ''
+      subnet 192.168.42.0 netmask 255.255.255.0 {
+        range 192.168.42.42 192.168.42.242;
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 192.168.42.255;
+        option routers 192.168.42.1;
+      }
+    '';
+  };
+
+  # Disable the dhcp client for our AP interface!
+  #networking.interfaces.wlan0.useDHCP = true;
+  #networking.wireless.interfaces = [
+  #  "wlan0"
+  #];
+  networking.interfaces.wlan0 = {
+    useDHCP = false;
+    ipv4.addresses = [{
+      address = "192.168.42.1";
+      prefixLength = 24;
+    }];
+  };
 }

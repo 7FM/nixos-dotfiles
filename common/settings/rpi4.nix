@@ -6,7 +6,7 @@
     gpu = "generic";
     cpu = "generic";
     gui = "headless";
-    useDummySecrets = true;
+    useDummySecrets = false;
     bluetooth = false;
   };
 }
