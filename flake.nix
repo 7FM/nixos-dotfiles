@@ -92,7 +92,7 @@
       { deviceName = "desktop"; }
       { deviceName = "desktop"; confNameSuffix = "no-sec"; forceNoSecrets = true; }
 
-      { deviceName = "rpi4"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; forceNoSecrets = true; }
+      { deviceName = "rpi4"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
 
       { deviceName = "virtualbox"; forceNoSecrets = true; }
     ];
