@@ -2,7 +2,6 @@ deviceName: userName:
 { config, pkgs, lib, ... }:
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
   cfg = config.custom.networking;
   hostname = cfg.hostname;
   wifiSupport = cfg.wifiSupport;
