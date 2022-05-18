@@ -34,6 +34,14 @@
               (final: prev: {
                 myTools = import ./common/lib deviceName;
 
+                # Fix SANE udev rules: https://github.com/NixOS/nixpkgs/issues/147217, more specifically: https://github.com/NixOS/nixpkgs/issues/147217#issuecomment-1063139365
+                sane-backends = prev.sane-backends.overrideAttrs (oldAttrs: rec {
+                  postInstall = builtins.replaceStrings
+                    ["./tools/sane-desc -m udev"]
+                    ["./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external"]
+                    oldAttrs.postInstall;
+                });
+
                 # patch zoom based on https://github.com/NixOS/nixpkgs/compare/master...tomjnixon:zoom_rebase and https://github.com/NixOS/nixpkgs/pull/166085
                 zoom-us = let 
                   libs = prev.lib.makeLibraryPath (with prev; [
