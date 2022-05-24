@@ -136,6 +136,15 @@
                     gappsWrapperArgs+=(--set WEBKIT_DISABLE_COMPOSITING_MODE 1)
                   '';
                 });
+
+                modem-manager-gui = prev.modem-manager-gui.overrideAttrs (old: {
+                  patches = (old.patches or []) ++ [
+                    (prev.fetchpatch {
+                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/commit/8ccffd6dd6b42625d09d5408f37f155d91411116.patch";
+                      sha256 = "sha256-q+B+Bcm3uitJ2IfkCiMo3reFV1C06ekmy1vXWC0oHnw=";
+                    })
+                  ];
+                });
               })
             ];
 
