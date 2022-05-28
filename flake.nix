@@ -42,85 +42,6 @@
                     oldAttrs.postInstall;
                 });
 
-                # patch zoom based on https://github.com/NixOS/nixpkgs/compare/master...tomjnixon:zoom_rebase and https://github.com/NixOS/nixpkgs/pull/166085
-                zoom-us = let 
-                  libs = prev.lib.makeLibraryPath (with prev; [
-                    # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
-                    alsa-lib
-                    atk
-                    at-spi2-atk
-                    at-spi2-core
-                    cairo
-                    cups
-                    dbus
-                    expat
-                    libdrm
-                    libGL
-                    fontconfig
-                    freetype
-                    gtk3
-                    gdk-pixbuf
-                    glib
-                    mesa
-                    nspr
-                    nss
-                    pango
-                    stdenv.cc.cc
-                    wayland
-                    xorg.libX11
-                    xorg.libxcb
-                    xorg.libXcomposite
-                    xorg.libXdamage
-                    xorg.libXext
-                    libxkbcommon
-                    xorg.libXrandr
-                    xorg.libXrender
-                    zlib
-                    xorg.libxshmfence
-                    xorg.xcbutilimage
-                    xorg.xcbutilkeysyms
-                    xorg.libXfixes
-                    xorg.libXtst
-                    udev
-                    zlib
-                    libpulseaudio
-                  ]);
-                in prev.zoom-us.overrideAttrs (old: rec {
-                  version = "5.10.4.2845";
-                  src = prev.fetchurl {
-                      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-                      sha256 = "9gspydrGaEjzAM0nK1u0XNm07HTupJ2wnPxCFWy+Nts=";
-                  };
-
-                  postFixup = prev.lib.optionalString prev.stdenv.isLinux ''
-                    # Desktop File
-                    substituteInPlace $out/share/applications/Zoom.desktop \
-                        --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
-                    for i in zopen zoom ZoomLauncher; do
-                      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
-                    done
-                    # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
-                    # IPC breaks if the executable name does not end in 'zoom'
-                    mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
-                    makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
-                      --prefix LD_LIBRARY_PATH ":" ${libs}
-                    rm $out/bin/zoom
-                    # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
-                    # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
-                    # Clear Qt paths to prevent tripping over "foreign" Qt resources.
-                    # Clear Qt screen scaling settings to prevent over-scaling.
-                    makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
-                      --chdir "$out/opt/zoom" \
-                      --unset QML2_IMPORT_PATH \
-                      --unset QT_PLUGIN_PATH \
-                      --unset QT_SCREEN_SCALE_FACTORS \
-                      --prefix PATH : ${prev.lib.makeBinPath (with prev; [ coreutils glib.dev pciutils procps util-linux ])} \
-                      --prefix LD_LIBRARY_PATH ":" ${libs}
-                    # Backwards compatiblity: we used to call it zoom-us
-                    ln -s $out/bin/{zoom,zoom-us}
-                  '';
-                });
-
                 # patch astroid to fix: https://github.com/NixOS/nixpkgs/issues/168381 via https://github.com/astroidmail/astroid/pull/716
                 astroid = prev.astroid.overrideAttrs (old: {
                   patches = (old.patches or []) ++ [
@@ -135,15 +56,6 @@
                     # 2.36. See #168645.
                     gappsWrapperArgs+=(--set WEBKIT_DISABLE_COMPOSITING_MODE 1)
                   '';
-                });
-
-                modem-manager-gui = prev.modem-manager-gui.overrideAttrs (old: {
-                  patches = (old.patches or []) ++ [
-                    (prev.fetchpatch {
-                      url = "https://salsa.debian.org/debian/modem-manager-gui/-/commit/8ccffd6dd6b42625d09d5408f37f155d91411116.patch";
-                      sha256 = "sha256-q+B+Bcm3uitJ2IfkCiMo3reFV1C06ekmy1vXWC0oHnw=";
-                    })
-                  ];
                 });
               })
             ];
