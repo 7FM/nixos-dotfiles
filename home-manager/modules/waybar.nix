@@ -225,16 +225,20 @@ in {
             escape = true;
           };
           "bluetooth" = {
-              "interval" = 30;
-              "format-on" = "<span color='#589df6'></span>";
-              "format-off" = "";
-              "format-connected" = "<span color='#589df6'></span> {device_alias}";
-            	"format-connected-battery" = "<span color='#589df6'></span> {device_alias} {device_battery_percentage}%";
-              "tooltip-format" = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
-              "tooltip-format-connected" = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
-              "tooltip-format-enumerate-connected" = "{device_alias}\t{device_address}";
-              "tooltip-format-enumerate-connected-battery" = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
-              "on-click" = "blueman-manager";
+              interval = 30;
+              format-on = "<span color='#589df6'></span>";
+              format-off = "";
+              format-connected = "<span color='#589df6'></span> {device_alias}";
+              # format-connected-battery = "<span color='#589df6'></span> {device_alias} {device_battery_percentage}%";
+              format-connected-battery = "<span color='#589df6'></span> {device_alias}{icon}";
+              tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+              tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+              tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+              tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+              # Bluetoth battery status icons from low to high
+              format-icons = ["" "" "" "" ""];
+              #format-icons = ["" "" "" "" ""];
+              on-click = "blueman-manager";
           };
           "network" = {
             family = "ipv4";
@@ -303,7 +307,8 @@ in {
             };
             format = "{icon}{capacity:>3}%{time}";
             format-time = " {H}h{M}m";
-            format-charging = "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
+            format-charging = "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
+            # format-charging = "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
             format-plugged =  "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
             # format-good = "", # An empty format will hide the module
             # format-full = "";
