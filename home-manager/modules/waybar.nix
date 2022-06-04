@@ -228,6 +228,7 @@ in {
               interval = 30;
               format-on = "<span color='#589df6'></span>";
               format-off = "";
+              format-disabled = "";
               format-connected = "<span color='#589df6'></span> {device_alias}";
               # format-connected-battery = "<span color='#589df6'></span> {device_alias} {device_battery_percentage}%";
               format-connected-battery = "<span color='#589df6'></span> {device_alias}{icon}";
