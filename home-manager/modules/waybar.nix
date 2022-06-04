@@ -226,12 +226,14 @@ in {
           };
           "bluetooth" = {
               "interval" = 30;
-              "format" = "{icon}";
-              #"format-alt" = "{status}";
-              "format-icons" = {
-                  "enabled" = "<span color='#589df6'></span>";
-                  "disabled" = "";
-              };
+              "format-on" = "<span color='#589df6'></span>";
+              "format-off" = "";
+              "format-connected" = "<span color='#589df6'></span> {device_alias}";
+            	"format-connected-battery" = "<span color='#589df6'></span> {device_alias} {device_battery_percentage}%";
+              "tooltip-format" = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+              "tooltip-format-connected" = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+              "tooltip-format-enumerate-connected" = "{device_alias}\t{device_address}";
+              "tooltip-format-enumerate-connected-battery" = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
               "on-click" = "blueman-manager";
           };
           "network" = {
