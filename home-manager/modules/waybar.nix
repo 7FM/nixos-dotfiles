@@ -156,14 +156,14 @@ in {
             format = "{}";
           };
           "custom/disk_home" = {
-            format = "🏠 {}";
+            format = "🏠{}";
             interval = 180;
             exec = "df -h --output=avail $HOME | tail -1 | tr -d ' '";
             tooltip = false;
             escape = true;
           };
           "custom/disk_root" = {
-            format = "💽 {}";
+            format = "💽{}";
             interval = 180;
             exec = "df -h --output=avail / | tail -1 | tr -d ' '";
             tooltip = false;
@@ -236,7 +236,7 @@ in {
               tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
               tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
               tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
-              # Bluetoth battery status icons from low to high
+              # Bluetooth battery status icons from low to high
               format-icons = ["" "" "" "" ""];
               #format-icons = ["" "" "" "" ""];
               on-click = "blueman-manager";
@@ -254,16 +254,15 @@ in {
           };
           "backlight" = {
             device = "intel_backlight";
-            # format = "{icon} {percent:>3}%";
             format = "{icon} {percent}%";
             format-icons = ["🔅" "🔆"];
           };
           "pulseaudio#out" = {
             # scroll-step = 1; # %, can be a float
-            format = "{icon} {volume:>3}%";
-            format-muted = "🔇   0%";
-            format-bluetooth = "{icon} {volume:>3}%";
-            format-bluetooth-muted = "🔇   0%";
+            format = "{icon}{volume:>3}%";
+            format-muted = "🔇  0%";
+            format-bluetooth = "{icon}{volume:>3}%";
+            format-bluetooth-muted = "🔇  0%";
 
             format-source = "";
             format-source-muted = "";
@@ -287,8 +286,8 @@ in {
             format-bluetooth = "{format_source}";
             format-bluetooth-muted = "{format_source}";
 
-            format-source = " {volume:>3}%";
-            format-source-muted = "   0%";
+            format-source = "{volume:>3}%";
+            format-source-muted = "  0%";
 
             on-click = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
             on-click-right = "pavucontrol";
@@ -296,7 +295,7 @@ in {
           "clock" = {
             interval = 60;
             timezone = "Europe/Berlin";
-            format = " {:%H:%M  %e %b}";
+            format = "{:%H:%M|%e %b}";
             tooltip-format = "{:%d-%m-%Y | %H:%M}";
             on-click = "gnome-calendar";
           };
@@ -308,9 +307,9 @@ in {
             };
             format = "{icon}{capacity:>3}%{time}";
             format-time = " {H}h{M}m";
-            format-charging = "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
-            # format-charging = "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
-            format-plugged =  "{icon} <span color='#e88939'></span>{capacity:>3}%{time}";
+            format-charging = "{icon}<span color='#e88939'></span>{capacity:>3}%{time}";
+            # format-charging = "{icon}<span color='#e88939'></span>{capacity:>3}%{time}";
+            format-plugged =  "{icon}<span color='#e88939'></span>{capacity:>3}%{time}";
             # format-good = "", # An empty format will hide the module
             # format-full = "";
             format-icons = ["" "" "" "" ""];
@@ -324,10 +323,10 @@ in {
           };
           "tray" = {
             # icon-size = 21;
-            spacing = 10;
+            spacing = 5;
           };
           "custom/spotify" = {
-            format = "{icon} {}";
+            format = "{icon}:{}";
             return-type = "json";
             max-length = 40;
             format-icons = {
@@ -343,7 +342,7 @@ in {
             on-click-right = "playerctl -p spotify next";
           };
           "custom/media_firefox" = {
-            format = "{icon} {}";
+            format = "{icon}:{}";
             return-type = "json";
             max-length = 40;
             format-icons = {
