@@ -201,6 +201,8 @@ in {
   home.packages = with pkgs; lib.optionals useClangd [
     # Clang tools with clangd
     clang-tools
+  ] ++ lib.optionals (!useClangd && usePlatformIO) [
+    platformio
   ];
 
   programs.vscode = {
