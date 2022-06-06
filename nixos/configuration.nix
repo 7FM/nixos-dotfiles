@@ -108,6 +108,7 @@ in {
       "audio" "video" # For sound settings
       "scanner" # For scanners
       "lp" # For scanners
+      "dialout" # for serial ports
     ];
     # Set password hash, generated with 'mkpasswd -m sha-512 -s':
     hashedPassword = myTools.getSecret ./. "password.nix";
