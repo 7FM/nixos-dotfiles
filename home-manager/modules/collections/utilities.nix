@@ -8,6 +8,7 @@ in {
       # Utilities
       wget
       htop
+      iotop
       screen
       zip
       unzip
