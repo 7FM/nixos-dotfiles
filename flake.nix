@@ -34,6 +34,7 @@
               (final: prev: {
                 myTools = import ./common/lib deviceName;
 
+                # TODO remove once this patch hits nixpkgs-unstable: https://nixpk.gs/pr-tracker.html?pr=176412
                 # Fix SANE udev rules: https://github.com/NixOS/nixpkgs/issues/147217, more specifically: https://github.com/NixOS/nixpkgs/issues/147217#issuecomment-1063139365
                 sane-backends = prev.sane-backends.overrideAttrs (oldAttrs: rec {
                   postInstall = builtins.replaceStrings
