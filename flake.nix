@@ -42,6 +42,17 @@
                     oldAttrs.postInstall;
                 });
 
+                # Update to waybar master # TODO remove this after the next release!
+                waybar = prev.waybar.overrideAttrs (oldAttrs: {
+                  src = prev.fetchFromGitHub {
+                    owner = "Alexays";
+                    repo = "Waybar";
+                    rev = "fb2ac8a7651a8a4222b063557e37bdf088506028";
+                    sha256 = "sha256-BD89Gzr8oXkTs0eNsqzEdFnzAR2YzPu1TOFuCFQyurA=";
+                  };
+                  mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+                });
+
                 # patch astroid to fix: https://github.com/NixOS/nixpkgs/issues/168381 via https://github.com/astroidmail/astroid/pull/716
                 astroid = prev.astroid.overrideAttrs (old: {
                   patches = (old.patches or []) ++ [
