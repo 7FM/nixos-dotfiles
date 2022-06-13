@@ -17,8 +17,9 @@ in {
     ;
 
     virtualisation = {
-      docker = {
+      docker.rootless = {
         enable = true;
+        setSocketVariable = true;
       };
 
       virtualbox = {
@@ -45,7 +46,6 @@ in {
     users.users."${userName}".extraGroups = [
       "kvm"
       "lxd"
-      "docker"
       "libvirtd"
       "vboxusers"
     ];
