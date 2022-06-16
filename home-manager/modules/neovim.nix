@@ -8,7 +8,10 @@ in {
       enable = true;
       vimAlias = true;
       viAlias = true;
-      extraConfig = "colorscheme gruvbox";
+      extraConfig = ''
+        colorscheme gruvbox
+        set number
+      '';
       plugins = with pkgs.vimPlugins; [
         gruvbox
         nerdtree
