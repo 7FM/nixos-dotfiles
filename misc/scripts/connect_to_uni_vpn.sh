@@ -20,7 +20,7 @@ stty echo
 printf "\n"
 
 echo "Trying to extract the VPN credentials from the KeepassXC DB"
-VPN_ENTRY=$(echo "$KP_PASSWORD" | keepassxc-cli locate "$KEEPASSDB_PATH" "$KEEPASSDB_SEARCHTERM" 2> /dev/null)
+VPN_ENTRY=$(echo "$KP_PASSWORD" | keepassxc-cli search "$KEEPASSDB_PATH" "$KEEPASSDB_SEARCHTERM" 2> /dev/null)
 VPN_DATA=$(echo "$KP_PASSWORD" | keepassxc-cli show "$KEEPASSDB_PATH" "$VPN_ENTRY" 2> /dev/null)
 VPN_PASSWORD=$(echo "$VPN_DATA" | grep Password | awk '{print $2}')
 VPN_USER=$(echo "$VPN_DATA" | grep UserName | awk '{print $2}')
