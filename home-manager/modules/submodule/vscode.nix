@@ -29,6 +29,9 @@ let
       # XML
       dotjoshjohnson.xml
     ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace ([
+      # RUN $ ./pkgs/applications/editors/vscode/extensions/update_installed_exts.sh > extensions.nix
+      # To update the extensions!
+
       #ms-vscode.cmake-tools
       #{
       #  name = "cmake-tools";
@@ -47,8 +50,8 @@ let
       {
         name = "hexeditor";
         publisher = "ms-vscode";
-        version = "1.9.4";
-        sha256 = "sha256-ZzmOECtWPBtgcxsjnd6lC+EWzJKTepB83GGRwnDUbjs=";
+        version = "1.9.7";
+        sha256 = "1hv0am6y4d4dggq8viw4f5x6mavah11dqrrxa15lwm2a5ias93xx";
       }
       #ms-vscode.notepadplusplus-keybindings
       {
@@ -68,15 +71,15 @@ let
       {
         name = "debug";
         publisher = "webfreak";
-        version = "0.25.1";
-        sha256 = "sha256-6drzZDC3yMh56Ku0Tx1U8IyaPmhzPj/Hpg1BPs3WAdA=";
+        version = "0.26.0";
+        sha256 = "0rsxnjcs4imd3kj01g2k92xv4vr48rs0zb6x9jcg7vr64yry0nk4";
       }
       #visualstudioexptteam.vscodeintellicode
       {
         name = "vscodeintellicode";
-        publisher = "visualstudioexptteam";
-        version = "1.2.17";
-        sha256 = "sha256-4ixKPi3lFU3BIsmbWCrtJ5l3sUIOpzo4DTZvAZ1R6Ho=";
+        publisher = "VisualStudioExptTeam";
+        version = "1.2.21";
+        sha256 = "17sk2zwl2qmcvyajvgvzx22hzxrv0bal5qs7jwih573f3q124dnv";
       }
 
       # Spelling
@@ -84,31 +87,24 @@ let
       {
         name = "code-spell-checker";
         publisher = "streetsidesoftware";
-        version = "2.1.6";
-        sha256 = "sha256-k1v9ewVEj9rOYJ9qv9SH5zugEtbi3/WsyArfAdXrzJc=";
+        version = "2.2.5";
+        sha256 = "0ayhlzh3b2mcdx6mdj00y4qxvv6mirfpnp8q5zvidm6sv3vwlcj0";
       }
       #streetsidesoftware.code-spell-checker-german
       {
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
-        version = "2.0.3";
-        sha256 = "sha256-b5jAyOiFDKNeoz2JDXSYTOd3u3zIA7eNxacYLKWHJbA=";
+        version = "2.0.4";
+        sha256 = "14m2kab12hjp4b81dz88vmg42czika8jp0c5qn5x4abmv0i0zika";
       }
 
       # Language support
-      #jakob-erzar.llvm-tablegen
-      {
-        name = "llvm-tablegen";
-        publisher = "jakob-erzar";
-        version = "0.0.2";
-        sha256 = "sha256-W82Qtzl5KTyGcK8NWDWDlxfcAhcdgMHHh6mQsXnAzYk=";
-      }
       # llvm-vs-code-extensions.vscode-mlir
       {
         name = "vscode-mlir";
         publisher = "llvm-vs-code-extensions";
-        version = "0.0.3";
-        sha256 = "sha256-Y8ZAY8jjQD2xh1QAxTlftcPdKFK3c+Ru3MsYTJgLupo=";
+        version = "0.0.9";
+        sha256 = "0cz4vwgyvb7714gvxzrh3k0dzrvvdzyzrypfn2ivqmcxsaclgl4y";
       }
       #antyos.openscad
       {
@@ -128,22 +124,22 @@ let
       {
         name = "systemverilog";
         publisher = "eirikpre";
-        version = "0.11.3";
-        sha256 = "sha256-/0B1r04ZBpHx1o9a/uCotI+AeWvgIEJEl3ooGYwE/oo=";
+        version = "0.13.2";
+        sha256 = "0cxklipfm9whwljyxdyzrw590lanhq7ikv0s4wi294y4vffbgmy2";
       }
       #mshr-h.veriloghdl
       {
         name = "veriloghdl";
         publisher = "mshr-h";
-        version = "1.5.3";
-        sha256 = "sha256-4BXSG/YllhpXa0z7TqytKyqAKLJvSEsOLt1i6gA+WcE=";
+        version = "1.5.4";
+        sha256 = "1i8qcfx5v4d30gkyy00a4d8l6ss828va6lp69h9i1ynrgqzl85av";
       }
       #torn4dom4n.latex-support
       {
         name = "latex-support";
         publisher = "torn4dom4n";
-        version = "3.10.0";
-        sha256 = "sha256-kPhe102Lwcz4yelfxSj+n+Dob9fwoyZPYsUIupOrw8w=";
+        version = "4.0.0";
+        sha256 = "1v1n8x8a13j8w1smmcr8vrblyxsr795zjb90cqs7shjl5q3l8ja7";
       }
       #twxs.cmake
       {
@@ -157,29 +153,29 @@ let
       {
         name = "vscode-java-debug";
         publisher = "vscjava";
-        version = "0.38.0";
-        sha256 = "sha256-5QxKHa7fZH5MPkWrz5hCpP66VzICayxqE92jnPE7suQ=";
+        version = "0.41.2022061304";
+        sha256 = "10jcnqd8z9jxz958ymvb40fcfgvlz8f7vc67q1f2yz0l4h5prgn5";
       }
       #vscjava.vscode-java-dependency
       {
         name = "vscode-java-dependency";
         publisher = "vscjava";
-        version = "0.19.0";
-        sha256 = "sha256-TOxDcqyjybilIt4+H3An5i+YcrjbOOLulMy+LDu296Q=";
+        version = "0.20.2022062500";
+        sha256 = "1cjm92pavmfvkls70aqv0xad0bi8qfxp9kpjxj8b3j8dprd2f4iq";
       }
       #vscjava.vscode-java-test
       {
         name = "vscode-java-test";
         publisher = "vscjava";
-        version = "0.34.0";
-        sha256 = "sha256-7uscmiZNvwXZeDutsWmhkWe4IQ3VZx3Cna9xWM2wLhE=";
+        version = "0.35.2022062402";
+        sha256 = "1n3a0qpjwd43mmadwvma5lys52qwq4ad9lxl7rfbjgkfimj1c30j";
       }
       #vscjava.vscode-maven
       {
         name = "vscode-maven";
         publisher = "vscjava";
-        version = "0.35.0";
-        sha256 = "sha256-rJputnM6LtZ9+8H6Mjwh8OJSArSX2gSogtmLLoucffc=";
+        version = "0.35.2022062203";
+        sha256 = "0aa9nnnfh7v9wdwkpcahml0vh201ig11h2grl3xlc2adm0xqz8hb";
       }
     ] ++ lib.optionals (!useClangd && usePlatformIO) [
       # PlatformIO depends on ms-vscode.cpptools
@@ -187,8 +183,8 @@ let
       {
         name = "platformio-ide";
         publisher = "platformio";
-        version = "2.4.3";
-        sha256 = "sha256-pPPukV0LZ/ZFp5Q+O7MhuCK5Px1FPy1ENzl21Ro7KFA=";
+        version = "2.5.0";
+        sha256 = "1vy97a35vbi0d5jb3f5v3zrbghs4pipia84rz83kkfljq7cjm7wh";
       }
 
     ]));
