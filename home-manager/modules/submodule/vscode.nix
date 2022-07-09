@@ -296,11 +296,11 @@ in {
       };
       "update.mode" = "none";
       "extensions.autoUpdate" = false;
-      "extensions.showRecommendationsOnlyOnDemand" = true;
       "extensions.ignoreRecommendations" = true;
       "platformio-ide.useBuiltinPIOCore" = false;
       "platformio-ide.activateOnlyOnPlatformIOProject" = true;
       "platformio-ide.disablePIOHomeStartup" = true;
+      "mlir.onSettingsChanged" = "restart";
     };
 
   };
