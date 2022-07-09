@@ -26,7 +26,7 @@ in {
         host = {
           enable = true;
           enableHardening = true;
-          enableExtensionPack = true;
+      #    enableExtensionPack = true;
           headless = isHeadless;
         };
       };
