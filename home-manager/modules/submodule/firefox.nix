@@ -26,7 +26,7 @@ in {
         pname = "video-downloadhelper";
         version = "7.6.0";
         addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-        url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
+        url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-${version}-fx.xpi";
         sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
         meta = with lib;
         {
