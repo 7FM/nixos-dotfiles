@@ -278,9 +278,9 @@ in {
             };
             on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
             on-click-right = "pavucontrol";
+            tooltip = false;
           };
           "pulseaudio#in" = {
-            # scroll-step = 1; # %, can be a float
             format = "{format_source}";
             format-muted = "{format_source}";
             format-bluetooth = "{format_source}";
@@ -291,6 +291,10 @@ in {
 
             on-click = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
             on-click-right = "pavucontrol";
+
+            on-scroll-up = "pactl set-source-volume @DEFAULT_SOURCE@ +1%";
+            on-scroll-down = "pactl set-source-volume @DEFAULT_SOURCE@ -1%";
+            tooltip = false;
           };
           "clock" = {
             interval = 60;
