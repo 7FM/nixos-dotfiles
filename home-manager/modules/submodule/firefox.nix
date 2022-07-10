@@ -58,6 +58,7 @@ in {
           "browser.bookmarks.restore_default_bookmarks" = false;
           "browser.contentblocking.category" = "strict";
           "browser.urlbar.placeholderName" = "DuckDuckGo";
+          "browser.urlbar.suggest.openpage" = false;
           "browser.startup.homepage" = "about:blank";
           "browser.newtabpage.enabled" = false;
           "browser.toolbars.bookmarks.visibility" = "always";
