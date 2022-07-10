@@ -240,6 +240,7 @@ in {
               format-icons = ["" "" "" "" ""];
               #format-icons = ["" "" "" "" ""];
               on-click = "blueman-manager";
+              on-click-right = "rfkill toggle bluetooth";
           };
           "network" = {
             family = "ipv4";
@@ -249,7 +250,7 @@ in {
             format-disconnected = "⚠ Disconnected";
             interval = 2;
             on-click = "nm-connection-editor";
-            on-click-right = "nm-connection-editor";
+            on-click-right = "rfkill toggle wlan";
             tooltip = false;
           };
           "backlight" = {
