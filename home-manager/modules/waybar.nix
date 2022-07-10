@@ -92,6 +92,7 @@ in {
         gnome.gnome-calendar
         pavucontrol # GUI to control pulseaudio settings
         wlogout # logout menu
+        systemd # loginctl, reboot, ...
         networkmanagerapplet # NetworkManager Front-End
         playerctl # playback control
         blueman # blueman-manager
