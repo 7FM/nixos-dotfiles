@@ -69,21 +69,43 @@ in {
     };
   };
 
-  config = lib.mkIf enable {
+  config = let
+    waybarPkg = (pkgs.waybar.override { withMediaPlayer = true; });
+  in lib.mkIf enable {
 
     home.packages = with pkgs; [
       # needed for waybar customization
       font-awesome
+    ];
 
-      gnome.gnome-calendar
-      pavucontrol # GUI to control pulseaudio settings
-      wlogout # logout menu
-      networkmanagerapplet # NetworkManager Front-End
-      wpa_supplicant_gui # wpasupplicant Front-End
+    systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];
+    systemd.user.services.waybar.Service.Environment = let
+      requiredPkgsList = with pkgs; [
+        #TODO maybe inline some package paths to reduce the attack surface?
+        coreutils-full # cat, df & stuff
+        util-linux # rfkill
+        alacritty
+        notmuch
+        htop
+        gnused # sed
+        sway # for swaymsg
+        gnome.gnome-calendar
+        pavucontrol # GUI to control pulseaudio settings
+        wlogout # logout menu
+        networkmanagerapplet # NetworkManager Front-End
+        playerctl # playback control
+        blueman # blueman-manager
+        pulseaudio # pactl
+        waybarPkg # waybar itself for waybar-mediaplayer.py
 
-      bc # needed for gpu clock speed calculation
-    ] ++ lib.optionals waybarLaptopFeatures [ 
-      brightnessctl
+        jq
+        bc # needed for gpu clock speed calculation
+      ] ++ lib.optionals waybarLaptopFeatures [ 
+        brightnessctl
+      ];
+    in lib.optionals enableSystemdWaybar [
+      # List all required packages here!
+      "PATH=${lib.makeBinPath requiredPkgsList}"
     ];
 
     # Waybar configuration
@@ -93,7 +115,7 @@ in {
         enable = enableSystemdWaybar;
         target = "sway-session.target";
       };
-      package = (pkgs.waybar.override { withMediaPlayer = true; });
+      package = waybarPkg;
 
       settings = [{
         modules-left = [
