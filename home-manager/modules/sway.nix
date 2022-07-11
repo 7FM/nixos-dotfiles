@@ -11,7 +11,9 @@ let
   startupPrograms = [
     { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
     { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop"; always = false; serviceName = "startup-mattermost"; }
+    # TODO the keepass systemd service seems pretty broken: theme does not load & changed window properties -> sway auto workspace assignment does not work
     { command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc"; }
+    # TODO probably some timing issue... it almost never starts in tray mode!
     { command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t"; always = false; serviceName = "startup-wpa_gui"; }
     # this one is not installed by homemanager, but the path is identical as we use the same nixpkgs revision
     { command = "${pkgs.blueman}/bin/blueman-applet"; always = false; serviceName = "startup-blueman-applet"; }
