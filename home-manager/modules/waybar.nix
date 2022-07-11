@@ -83,6 +83,7 @@ in {
       requiredPkgsList = with pkgs; [
         #TODO maybe inline some package paths to reduce the attack surface?
         coreutils-full # cat, df & stuff
+        gnugrep # egrep
         util-linux # rfkill
         alacritty
         notmuch
