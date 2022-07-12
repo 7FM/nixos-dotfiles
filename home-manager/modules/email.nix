@@ -88,12 +88,20 @@ in {
         notmuch
         python3Packages.notifymuch
         afew
+        # required for sending mails
+        msmtp
+        coreutils-full # sleep
+        netcat # nc
+        which
       ];
     in [
       # List all required packages here!
       "PATH=${lib.makeBinPath requiredPkgsList}"
       # non default notmuch config location needs to be advertised!
       "NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/default/config"
+      # env vars for the send mail queue
+      "MSMTP_QUEUE=${config.xdg.dataHome}/msmtp/queue"
+      "MSMTP_LOG=${config.xdg.dataHome}/msmtp/queue.log"
     ];
 
     programs.astroid = {
