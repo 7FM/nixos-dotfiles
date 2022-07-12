@@ -75,6 +75,8 @@ in {
 
     systemd.user.services.startup-astroid.Service.Environment = let
       requiredPkgsList = with pkgs; [
+        # required for other hooks
+        bash
         # required packages for the poll script:
         iputils # ping
         offlineimap
@@ -90,6 +92,8 @@ in {
     in [
       # List all required packages here!
       "PATH=${lib.makeBinPath requiredPkgsList}"
+      # non default notmuch config location needs to be advertised!
+      "NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/default/config"
     ];
 
     programs.astroid = {
