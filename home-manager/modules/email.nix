@@ -68,11 +68,29 @@ in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       libsecret # Needed for secret-tool
-      python3Packages.notifymuch
     ];
 
     # Email frontend
     # programs.alot.enable = true;
+
+    systemd.user.services.startup-astroid.Service.Environment = let
+      requiredPkgsList = with pkgs; [
+        # required packages for the poll script:
+        iputils # ping
+        offlineimap
+        libsecret # Needed for secret-tool
+        # required packages for the external editor:
+        alacritty
+        config.programs.neovim.finalPackage # TODO conditional if neovim is enabled
+        # postsync hook
+        notmuch
+        python3Packages.notifymuch
+        afew
+      ];
+    in [
+      # List all required packages here!
+      "PATH=${lib.makeBinPath requiredPkgsList}"
+    ];
 
     programs.astroid = {
       enable = true;

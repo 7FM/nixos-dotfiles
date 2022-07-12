@@ -294,7 +294,7 @@ in {
               #PartOf = [ "graphical-session.target" ];
             };
             Service = {
-              Type = "oneshot";
+              Type = "simple";
               ExecStart = p.command;
               #Restart = "always";
             };
