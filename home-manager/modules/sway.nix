@@ -289,23 +289,15 @@ in {
           "name" = "${p.serviceName}";
           "value" = {
             Unit = rec {
-              After = [ "graphical-session-pre.target" "graphical-session.target" ];
-              Requires = After;
-              #PartOf = [ "graphical-session.target" ];
+              Requires = [ "tray.target" ];
+              After = [ "graphical-session-pre.target" "tray.target" ];
+              PartOf = [ "graphical-session.target" ];
             };
             Service = {
               Type = "simple";
               ExecStart = p.command;
-              #Restart = "always";
             };
             Install = { WantedBy = [ "graphical-session.target" ]; };
-            # script = p.command;
-            # wantedBy = [ "multi-user.target" ];
-            # wants = [ "graphical-session.target" ];
-            # after = [ "graphical-session.target" ];
-            # serviceConfig = {
-            #   Type = "oneshot";
-            # };
           };
         }
       ) progs);
