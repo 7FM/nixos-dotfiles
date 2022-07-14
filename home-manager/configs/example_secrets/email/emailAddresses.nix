@@ -1,4 +1,4 @@
-{ createPasswordLookupCmd, offlineimapConf, notmuchConf, astroidConf, msmtpConf }:
+{ pkgs, createPasswordLookupCmd, offlineimapConf, notmuchConf, astroidConf, msmtpConf }:
 
 {
   # Take a look at https://nix-community.github.io/home-manager/options.html#opt-accounts.email.accounts

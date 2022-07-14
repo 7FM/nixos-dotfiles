@@ -45,7 +45,7 @@ in {
           default = null;
           description = ''
             The command to use for the gpu temperature measurements.
-            I.e. "cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input"
+            I.e. "$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input"
           '';
         };
         mhzFreqCmd = mkOption {
@@ -53,8 +53,8 @@ in {
           default = null;
           description = ''
             The command to use to determine the gpu clock frequency in MHz.
-            I.e. "cat /sys/class/drm/card0/device/pp_dpm_sclk | egrep -o '[0-9]{0,4}Mhz \\W' | sed 's/Mhz \\*//'"
-            or   "cat /sys/class/drm/card0/gt_cur_freq_mhz"
+            I.e. "$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/pp_dpm_sclk | $\{pkgs.gnugrep}/bin/egrep -o '[0-9]{0,4}Mhz \\W' | $\{pkgs.gnused}/bin/sed 's/Mhz \\*//'"
+            or   "\$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz"
           '';
         };
         usageCmd = mkOption {
@@ -62,7 +62,7 @@ in {
           default = null;
           description = ''
             The command to use to determine the gpu usage in percent.
-            I.e. "cat /sys/class/drm/card0/device/gpu_busy_percent"
+            I.e. "$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent"
           '';
         };
       };
@@ -81,27 +81,7 @@ in {
     systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];
     systemd.user.services.waybar.Service.Environment = let
       requiredPkgsList = with pkgs; [
-        #TODO maybe inline some package paths to reduce the attack surface?
-        coreutils-full # cat, df & stuff
-        gnugrep # egrep
-        util-linux # rfkill
-        alacritty
-        notmuch
-        htop
-        gnused # sed
-        sway # for swaymsg
-        gnome.gnome-calendar
-        pavucontrol # GUI to control pulseaudio settings
-        wlogout # logout menu
-        systemd # loginctl, reboot, ...
-        networkmanagerapplet # NetworkManager Front-End
-        playerctl # playback control
-        blueman # blueman-manager
-        pulseaudio # pactl
-        waybarPkg # waybar itself for waybar-mediaplayer.py
 
-        jq
-        bc # needed for gpu clock speed calculation
       ] ++ lib.optionals waybarLaptopFeatures [ 
         brightnessctl
       ];
@@ -182,21 +162,21 @@ in {
           "custom/disk_home" = {
             format = "🏠{}";
             interval = 180;
-            exec = "df -h --output=avail $HOME | tail -1 | tr -d ' '";
+            exec = "${pkgs.coreutils-full}/bin/df -h --output=avail $HOME | ${pkgs.coreutils-full}/bin/tail -1 | ${pkgs.coreutils-full}/bin/tr -d ' '";
             tooltip = false;
             escape = true;
           };
           "custom/disk_root" = {
             format = "💽{}";
             interval = 180;
-            exec = "df -h --output=avail / | tail -1 | tr -d ' '";
+            exec = "${pkgs.coreutils-full}/bin/df -h --output=avail / | ${pkgs.coreutils-full}/bin/tail -1 | ${pkgs.coreutils-full}/bin/tr -d ' '";
             tooltip = false;
             escape = true;
           };
           "custom/logout" = {
             format = "";
-            on-click = "wlogout";
-            on-click-right = "wlogout";
+            on-click = "${pkgs.wlogout}/bin/wlogout";
+            on-click-right = "${pkgs.wlogout}/bin/wlogout";
             tooltip = false;
           };
           "custom/gpu" = {
@@ -210,11 +190,11 @@ in {
           "custom/scratchpad-indicator" = {
               "interval" = 3;
               "return-type" = "json";
-              "exec" = "swaymsg -t get_tree | jq --unbuffered --compact-output '( select(.name == \"root\") | .nodes[] | select(.name == \"__i3\") | .nodes[] | select(.name == \"__i3_scratch\") | .focus) as $scratch_ids | [..  | (.nodes? + .floating_nodes?) // empty | .[] | select(.id |IN($scratch_ids[]))] as $scratch_nodes | { text: \"\\($scratch_nodes | length)\", tooltip: $scratch_nodes | map(\"\\(.app_id // .window_properties.class) (\\(.id)): \\(.name)\") | join(\"\\n\") }'";
+              "exec" = "${pkgs.sway}/bin/swaymsg -t get_tree | ${pkgs.jq}/bin/jq --unbuffered --compact-output '( select(.name == \"root\") | .nodes[] | select(.name == \"__i3\") | .nodes[] | select(.name == \"__i3_scratch\") | .focus) as $scratch_ids | [..  | (.nodes? + .floating_nodes?) // empty | .[] | select(.id |IN($scratch_ids[]))] as $scratch_nodes | { text: \"\\($scratch_nodes | length)\", tooltip: $scratch_nodes | map(\"\\(.app_id // .window_properties.class) (\\(.id)): \\(.name)\") | join(\"\\n\") }'";
               # "format" = "􏠜 {}";
               "format" = "{}";
-              "on-click" = "exec swaymsg 'scratchpad show'";
-              "on-click-right" = "exec swaymsg 'move scratchpad'";
+              "on-click" = "exec ${pkgs.sway}/bin/swaymsg 'scratchpad show'";
+              "on-click-right" = "exec ${pkgs.sway}/bin/swaymsg 'move scratchpad'";
               escape = true;
           };
           "temperature" = {
@@ -234,18 +214,18 @@ in {
           "cpu" = {
             format = "{usage:>3}%";
             tooltip = false;
-            on-click = "alacritty --command htop";
-            on-click-right = "alacritty --command htop";
+            on-click = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
+            on-click-right = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
           };
           "memory" = {
             format = " {used:0.1f}G";
-            on-click = "alacritty --command htop";
-            on-click-right = "alacritty --command htop";
+            on-click = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
+            on-click-right = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
           };
           "custom/mail" = {
             format = "📩 {}";
             interval = 180;
-            exec = "notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND NOT tag:spam AND tag:unread)'";
+            exec = "${pkgs.notmuch}/bin/notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND NOT tag:spam AND tag:unread)'";
             escape = true;
           };
           "bluetooth" = {
@@ -263,8 +243,8 @@ in {
               # Bluetooth battery status icons from low to high
               format-icons = ["" "" "" "" ""];
               #format-icons = ["" "" "" "" ""];
-              on-click = "blueman-manager";
-              on-click-right = "rfkill toggle bluetooth";
+              on-click = "${pkgs.blueman}/bin/blueman-manager";
+              on-click-right = "${pkgs.util-linux}/bin/rfkill toggle bluetooth";
           };
           "network" = {
             family = "ipv4";
@@ -273,8 +253,8 @@ in {
             format-linked = " {ifname} (No IP) <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
             format-disconnected = "⚠ Disconnected";
             interval = 2;
-            on-click = "nm-connection-editor";
-            on-click-right = "rfkill toggle wlan";
+            on-click = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
+            on-click-right = "${pkgs.util-linux}/bin/rfkill toggle wlan";
             tooltip = false;
           };
           "backlight" = {
@@ -301,8 +281,8 @@ in {
               "car" = "";
               "default" = ["🔈" "🔉" "🔊"];
             };
-            on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-            on-click-right = "pavucontrol";
+            on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+            on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
             tooltip = false;
           };
           "pulseaudio#in" = {
@@ -314,11 +294,11 @@ in {
             format-source = "{volume:>3}%";
             format-source-muted = "  0%";
 
-            on-click = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
-            on-click-right = "pavucontrol";
+            on-click = "${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+            on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
 
-            on-scroll-up = "pactl set-source-volume @DEFAULT_SOURCE@ +1%";
-            on-scroll-down = "pactl set-source-volume @DEFAULT_SOURCE@ -1%";
+            on-scroll-up = "${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ +1%";
+            on-scroll-down = "${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ -1%";
             tooltip = false;
           };
           "clock" = {
@@ -326,7 +306,7 @@ in {
             timezone = "Europe/Berlin";
             format = "{:%H:%M|%e %b}";
             tooltip-format = "{:%d-%m-%Y | %H:%M}";
-            on-click = "gnome-calendar";
+            on-click = "${pkgs.gnome.gnome-calendar}/bin/gnome-calendar";
           };
           "battery" = {
             states = {
@@ -365,10 +345,10 @@ in {
             };
             escape = true;
             # Filter player based on name
-            exec = "waybar-mediaplayer.py --player spotify 2> /dev/null"; # Script in resources folder
-            exec-if = "pgrep spotify";
-            on-click = "playerctl -p spotify play-pause";
-            on-click-right = "playerctl -p spotify next";
+            exec = "${waybarPkg}/bin/waybar-mediaplayer.py --player spotify 2> /dev/null"; # Script in resources folder
+            exec-if = "${pkgs.procps}/bin/pgrep spotify";
+            on-click = "${pkgs.playerctl}/bin/playerctl -p spotify play-pause";
+            on-click-right = "${pkgs.playerctl}/bin/playerctl -p spotify next";
           };
           "custom/media_firefox" = {
             format = "{icon}:{}";
@@ -381,10 +361,10 @@ in {
             };
             escape = true;
             # Filter player based on name
-            exec = "waybar-mediaplayer.py --player firefox 2> /dev/null"; # Script in resources folder
-            exec-if = "pgrep 'Web Content'";
-            on-click = "playerctl -p firefox play-pause";
-            on-click-right = "playerctl -p firefox next";
+            exec = "${waybarPkg}/bin/waybar-mediaplayer.py --player firefox 2> /dev/null"; # Script in resources folder
+            exec-if = "${pkgs.procps}/bin/pgrep 'Web Content'";
+            on-click = "${pkgs.playerctl}/bin/playerctl -p firefox play-pause";
+            on-click-right = "${pkgs.playerctl}/bin/playerctl -p firefox next";
           };
           "mpd" = {
             format = "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ";
@@ -425,7 +405,7 @@ in {
         #!/bin/sh
       '' + (lib.optionalString (gpuCfg.mhzFreqCmd != null) ''
         raw_clock=$(${gpuCfg.mhzFreqCmd})
-        clock=$(echo "scale=1;$raw_clock/1000" | bc | sed -e 's/^-\./-0./' -e 's/^\./0./')
+        clock=$(echo "scale=1;$raw_clock/1000" | ${pkgs.bc}/bin/bc | ${pkgs.gnused}/bin/sed -e 's/^-\./-0./' -e 's/^\./0./')
       '') + (lib.optionalString (gpuCfg.tempCmd != null) ''
         raw_temp=$(${gpuCfg.tempCmd})
         temperature=$(($raw_temp/1000))
@@ -441,6 +421,48 @@ in {
       executable = true;
     };
     xdg.configFile."wofi".source = ../configs/wofi;
-    xdg.configFile."wlogout".source = ../configs/wlogout;
+
+    xdg.configFile."wlogout/layout".text = let 
+      layout = [
+        {
+          "label" = "lock";
+          "action" = "${pkgs.swaylock-effects}/bin/swaylock";
+          "text" = "Lock";
+          "keybind" = "l";
+        }
+        {
+          "label" = "hibernate";
+          "action" = "${pkgs.systemd}/bin/systemctl hibernate";
+          "text" = "Hibernate";
+          "keybind" = "h";
+        }
+        {
+          "label" = "logout";
+          "action" = "${pkgs.systemd}/bin/loginctl terminate-user $USER";
+          "text" = "Logout";
+          "keybind" = "e";
+        }
+        {
+          "label" = "shutdown";
+          "action" = "${pkgs.systemd}/bin/systemctl poweroff";
+          "text" = "Shutdown";
+          "keybind" = "s";
+        }
+        {
+          "label" = "suspend";
+          "action" = "${pkgs.systemd}/bin/systemctl suspend";
+          "text" = "Suspend";
+          "keybind" = "u";
+        }
+        {
+          "label" = "reboot";
+          "action" = "${pkgs.systemd}/bin/systemctl reboot";
+          "text" = "Reboot";
+          "keybind" = "r";
+        }
+      ];
+
+      layoutToJSON = ll: builtins.concatStringsSep "\n" (builtins.map (l: builtins.toJSON l) ll);
+    in layoutToJSON layout;
   };
 }

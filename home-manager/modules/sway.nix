@@ -20,12 +20,12 @@ let
   ];
 
   #lockcmd = "swaylock -f -c 000000";
-  lockcmd = "swaylock";
+  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock";
   lockTimeout = 300;
   disableDisplayTimeout = 600;
-  disableDisplayCmdRaw = "swaymsg \"output * dpms off\"";
+  disableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * dpms off\"";
   disableDisplayCmd = "timeout ${disableDisplayTimeout} '${disableDisplayCmdRaw}'";
-  enableDisplayCmdRaw = "swaymsg \"output * dpms on\"";
+  enableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * dpms on\"";
   enableDisplayCmd = "resume '${enableDisplayCmdRaw}'";
 
   enableSystemdSway = true;

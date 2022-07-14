@@ -3,18 +3,18 @@
 let
   myTools = pkgs.myTools { inherit config pkgs lib; };
 
-  createPasswordLookupCmd = searchTerm: "secret-tool lookup email ${searchTerm}";
+  createPasswordLookupCmd = searchTerm: "${pkgs.libsecret}/bin/secret-tool lookup email ${searchTerm}";
 
   offlineimapConf = emailAddr: shortTag: customHook: hasIMAP: {
     enable = hasIMAP;
     postSyncHookCommand = ''
-      notmuch new
-      notmuch tag -inbox +sent from:${emailAddr}
-      notmuch tag +${shortTag} to:${emailAddr}
-      notmuch tag -unread 'date:1970..30d' tag:unread
+      ${pkgs.notmuch}/bin/notmuch new
+      ${pkgs.notmuch}/bin/notmuch tag -inbox +sent from:${emailAddr}
+      ${pkgs.notmuch}/bin/notmuch tag +${shortTag} to:${emailAddr}
+      ${pkgs.notmuch}/bin/notmuch tag -unread 'date:1970..30d' tag:unread
       ${customHook}
-      afew --tag --new
-      notifymuch
+      ${pkgs.afew}/bin/afew --tag --new
+      ${pkgs.python3Packages.notifymuch}/bin/notifymuch
     '';
   };
 
@@ -77,17 +77,6 @@ in {
       requiredPkgsList = with pkgs; [
         # required for other hooks
         bash
-        # required packages for the poll script:
-        iputils # ping
-        offlineimap
-        libsecret # Needed for secret-tool
-        # required packages for the external editor:
-        alacritty
-        config.programs.neovim.finalPackage # TODO conditional if neovim is enabled
-        # postsync hook
-        notmuch
-        python3Packages.notifymuch
-        afew
         # required for sending mails
         msmtp
         coreutils-full # sleep
@@ -108,14 +97,14 @@ in {
       enable = true;
       pollScript = ''
         # check if we have a connection
-        if ! ping -w 1 -W 1 -c 1 nixos.org; then
+        if ! ${pkgs.iputils}/bin/ping -w 1 -W 1 -c 1 nixos.org; then
             echo "there is no internet connection"
             exit
         fi
 
-        offlineimap
+        ${pkgs.offlineimap}/bin/offlineimap
       '';
-      externalEditor = "alacritty -e nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1";
+      externalEditor = "${pkgs.alacritty}/bin/alacritty -e ${config.programs.neovim.finalPackage}/bin/nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1";
       extraConfig = {
         # poll.interval = 0;
         poll.interval = 180;
@@ -129,8 +118,41 @@ in {
         startup.queries = myTools.getSecret ../configs "email/startupQueries.nix";
       };
     };
-    xdg.configFile."astroid/hooks".source = ../configs/astroid/hooks;
     xdg.configFile."astroid/keybindings".source = ../configs/astroid/keybindings;
+    xdg.configFile."astroid/hooks/toggle" = {
+      text = ''
+        #!/usr/bin/env bash
+        # Source: https://github.com/astroidmail/astroid/wiki/User-defined-keyboard-hooks#example-toggle-custom-tag-in-thread-index
+        # get a tag as first argument and thread id as second argument
+        #
+
+        if [[ $(${pkgs.notmuch}/bin/notmuch search thread:$2 and tag:$1) ]]; then # check if the thread matches the tag
+          echo "removing tag: $1 from thread:$2"                                  #
+          ${pkgs.notmuch}/bin/notmuch tag -$1 thread:$2                           # remove the tag
+        else
+          echo "adding tag: $1 to thread:$2"                                      #
+          ${pkgs.notmuch}/bin/notmuch tag +$1 thread:$2                           # add the tag
+        fi
+      '';
+      executable = true;
+    };
+    xdg.configFile."astroid/hooks/togglemail" = {
+      text = ''
+        #!/usr/bin/env bash
+        # Source: https://github.com/astroidmail/astroid/wiki/User-defined-keyboard-hooks#example-toggle-custom-tag-on-a-single-email-in-thread-view
+        # get a tag as first argument and message id as second argument
+        #
+
+        if [[ $(${pkgs.notmuch}/bin/notmuch search id:$2 and tag:$1) ]]; then # check if the message matches the tag
+          echo "removing tag: $1 from id:$2"                                  #
+          ${pkgs.notmuch}/bin/notmuch tag -$1 id:$2                           # remove the tag
+        else
+          echo "adding tag: $1 to id:$2"                                      #
+          ${pkgs.notmuch}/bin/notmuch tag +$1 id:$2                           # add the tag
+        fi
+      '';
+      executable = true;
+    };
 
     # Email indexer
     programs.notmuch.enable = true;
@@ -143,7 +165,7 @@ in {
     # Email sender
     programs.msmtp.enable = true;
 
-    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf; };
+    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf pkgs; };
 
     home.file = generateMailDirFolders config.accounts.email.accounts;
     xdg.configFile."notifymuch/notifymuch.cfg".text = ''
