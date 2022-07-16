@@ -79,7 +79,7 @@ in {
         bash
         # required for sending mails
         msmtp
-        coreutils-full # sleep
+        coreutils # sleep
         netcat # nc
         which
       ];

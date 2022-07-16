@@ -45,7 +45,7 @@ in {
           default = null;
           description = ''
             The command to use for the gpu temperature measurements.
-            I.e. "$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input"
+            I.e. "$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input"
           '';
         };
         mhzFreqCmd = mkOption {
@@ -53,8 +53,8 @@ in {
           default = null;
           description = ''
             The command to use to determine the gpu clock frequency in MHz.
-            I.e. "$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/pp_dpm_sclk | $\{pkgs.gnugrep}/bin/egrep -o '[0-9]{0,4}Mhz \\W' | $\{pkgs.gnused}/bin/sed 's/Mhz \\*//'"
-            or   "\$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz"
+            I.e. "$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/pp_dpm_sclk | $\{pkgs.gnugrep}/bin/egrep -o '[0-9]{0,4}Mhz \\W' | $\{pkgs.gnused}/bin/sed 's/Mhz \\*//'"
+            or   "\$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz"
           '';
         };
         usageCmd = mkOption {
@@ -62,7 +62,7 @@ in {
           default = null;
           description = ''
             The command to use to determine the gpu usage in percent.
-            I.e. "$\{pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent"
+            I.e. "$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent"
           '';
         };
       };
@@ -162,14 +162,14 @@ in {
           "custom/disk_home" = {
             format = "🏠{}";
             interval = 180;
-            exec = "${pkgs.coreutils-full}/bin/df -h --output=avail $HOME | ${pkgs.coreutils-full}/bin/tail -1 | ${pkgs.coreutils-full}/bin/tr -d ' '";
+            exec = "${pkgs.coreutils}/bin/df -h --output=avail $HOME | ${pkgs.coreutils}/bin/tail -1 | ${pkgs.coreutils}/bin/tr -d ' '";
             tooltip = false;
             escape = true;
           };
           "custom/disk_root" = {
             format = "💽{}";
             interval = 180;
-            exec = "${pkgs.coreutils-full}/bin/df -h --output=avail / | ${pkgs.coreutils-full}/bin/tail -1 | ${pkgs.coreutils-full}/bin/tr -d ' '";
+            exec = "${pkgs.coreutils}/bin/df -h --output=avail / | ${pkgs.coreutils}/bin/tail -1 | ${pkgs.coreutils}/bin/tr -d ' '";
             tooltip = false;
             escape = true;
           };

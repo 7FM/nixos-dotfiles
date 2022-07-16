@@ -24,7 +24,7 @@
         thermalZone = null;
         gpu = {
           tempCmd = null;
-          mhzFreqCmd = "${pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz";
+          mhzFreqCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz";
           usageCmd = null;
         };
       };

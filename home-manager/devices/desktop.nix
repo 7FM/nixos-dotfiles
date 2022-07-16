@@ -23,9 +23,9 @@
         hwmonPath = "/sys/class/hwmon/hwmon1/temp1_input";
         thermalZone = null;
         gpu = {
-          tempCmd = "${pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input";
-          mhzFreqCmd = "${pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/pp_dpm_sclk | ${pkgs.gnugrep}/bin/egrep -o '[0-9]{0,4}Mhz \\W' | ${pkgs.gnused}/bin/sed 's/Mhz \\*//'";
-          usageCmd = "${pkgs.coreutils-full}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent";
+          tempCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input";
+          mhzFreqCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/pp_dpm_sclk | ${pkgs.gnugrep}/bin/egrep -o '[0-9]{0,4}Mhz \\W' | ${pkgs.gnused}/bin/sed 's/Mhz \\*//'";
+          usageCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent";
         };
       };
     };
