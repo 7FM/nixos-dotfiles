@@ -11,10 +11,21 @@ let
   startupPrograms = [
     { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
     { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop"; always = false; serviceName = "startup-mattermost"; }
-    # TODO the keepass systemd service seems pretty broken: theme does not load & changed window properties -> sway auto workspace assignment does not work
-    { command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc"; }
+    {
+      command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc";
+      env = [
+        # Fix QT systemd integration See: https://github.com/nix-community/home-manager/issues/249
+        "PATH=${config.home.profileDirectory}/bin"
+      ];
+    }
     # TODO probably some timing issue... it almost never starts in tray mode!
-    { command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t"; always = false; serviceName = "startup-wpa_gui"; }
+    {
+      command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t"; always = false; serviceName = "startup-wpa_gui"; 
+      env = [
+        # Fix QT systemd integration See: https://github.com/nix-community/home-manager/issues/249
+        "PATH=${config.home.profileDirectory}/bin"
+      ];
+    }
     # this one is not installed by homemanager, but the path is identical as we use the same nixpkgs revision
     { command = "${pkgs.blueman}/bin/blueman-applet"; always = false; serviceName = "startup-blueman-applet"; }
   ];
@@ -167,6 +178,18 @@ in {
 
           # Ensure mako runs
           { command = "${pkgs.mako}/bin/mako"; }
+
+          # Set QT options
+          {
+            command = "dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
+            always = false;
+          }
+
+          # Expose the SSH-AGENT
+          {
+            command = "dbus-update-activation-environment --systemd SSH_AUTH_SOCK";
+            always = false;
+          }
         ]
         # Auto-focus the first display
         ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
@@ -296,7 +319,11 @@ in {
             Service = {
               Type = "simple";
               ExecStart = p.command;
-            };
+            } // (lib.optionalAttrs ((p.precommand or "") != "") {
+              ExecStartPre = p.precommand;
+            }) // (lib.optionalAttrs ((builtins.length (p.env or [])) != 0) {
+              Environment = p.env;
+            });
             Install = { WantedBy = [ "graphical-session.target" ]; };
           };
         }
