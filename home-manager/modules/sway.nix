@@ -296,7 +296,10 @@ in {
 
       };
 
-      extraConfig = lib.optionalString (laptopDisplay != null) ''
+      extraConfig = ''
+        # restarts some user services to make sure they have the correct environment variables
+        exec "systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr; systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr"
+      '' + lib.optionalString (laptopDisplay != null) ''
         bindswitch --reload --locked lid:on output ${laptopDisplay} disable
         bindswitch --reload --locked lid:off output ${laptopDisplay} enable
       '' + ''
