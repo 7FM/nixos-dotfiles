@@ -27,5 +27,11 @@ in {
   # Save some storage space by not including docs
   documentation.enable = false;
 
+  # journal settings
+  services.journald.extraConfig = ''
+    SystemMaxUse=50M
+    RuntimeMaxUse=10M
+  '';
+
 }
 
