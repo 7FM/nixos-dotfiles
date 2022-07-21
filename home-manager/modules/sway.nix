@@ -347,7 +347,7 @@ in {
     # Autostart sway in zsh
     programs.zsh.initExtra = if (!enableSystemdSway) then ''
       # If running from tty1 start sway
-      [[ "$(tty)" == /dev/tty1 ]] && exec sway
+      [[ "$(tty)" == /dev/tty1 ]] && exec systemd-cat --identifier=sway sway
     '' else lib.mkOverride 1001 "";
 
     services.swayidle = {
