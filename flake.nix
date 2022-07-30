@@ -64,12 +64,6 @@
                       sha256 = "sha256-hZHOg1wUR8Kpd6017fWzhMmG+/WQxSOCnsiyIvUcpbU=";
                     })
                   ];
-                  preFixup = (old.preFixup or "") + ''
-                    # On some systems (at least, Intel TGL iGPU), the email composer is
-                    # broken since Webkit enables accelerated rending by default in
-                    # 2.36. See #168645.
-                    gappsWrapperArgs+=(--set WEBKIT_DISABLE_COMPOSITING_MODE 1)
-                  '';
                 });
               })
             ];
