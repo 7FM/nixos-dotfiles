@@ -31,6 +31,8 @@ in {
         sh = "show";
         pl = "pull";
         ps = "push";
+        rb = "rebase";
+        r = "restore --staged";
       };
 
       delta = {
