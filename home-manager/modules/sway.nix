@@ -286,6 +286,7 @@ in {
             # Cura dialogs
             { app_id = "^com\/.https:\/\/ultimaker.python3$"; title = "^Multiply Selected Model$"; }
             # Zoom fixes
+            { title = "^.zoom$"; app_id = "$"; }
             { title = "^zoom$"; app_id = "$"; }
             { title = "^Settings$"; app_id = "$"; }
             { title = "^Polls$"; app_id = "$"; }
