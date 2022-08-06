@@ -223,7 +223,7 @@ in {
       "telemetry.enableCrashReporter" = false;
       "telemetry.telemetryLevel" = "off";
       "C_Cpp.updateChannel" = "Insiders";
-      "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All}";
+      "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All, AlwaysBreakTemplateDeclarations: Yes}";
       #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
       "todohighlight.keywords" = [
         "TODO"
