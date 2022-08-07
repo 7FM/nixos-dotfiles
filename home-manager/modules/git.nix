@@ -21,18 +21,18 @@ in {
 
       aliases = {
         a = "add";
-        c = "commit";
-        d = "diff";
-        s = "status";
         b = "branch";
+        c = "commit";
+        ch = "checkout";
+        d = "diff";
         l = "log";
         m = "merge";
-        ch = "checkout";
+        s = "status";
         sh = "show";
         pl = "pull";
         ps = "push";
-        rb = "rebase";
         r = "restore --staged";
+        rb = "rebase";
       };
 
       delta = {
