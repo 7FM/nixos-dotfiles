@@ -25,10 +25,13 @@ in {
         c = "commit";
         ch = "checkout";
         d = "diff";
+        dc = "diff --cached";
         l = "log";
         m = "merge";
         s = "status";
         sh = "show";
+        st = "stash";
+        sp = "stash pop";
         pl = "pull";
         ps = "push";
         r = "restore --staged";
