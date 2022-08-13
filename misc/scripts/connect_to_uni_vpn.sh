@@ -8,7 +8,7 @@ failed() {
 trap 'failed' ERR
 
 KEEPASSDB_PATH="/home/tm/KeyManager/keepass.kdbx"
-KEEPASSDB_SEARCHTERM="hrz"
+KEEPASSDB_SEARCHTERM="hrz-"
 UNI_VPN_URL="vpn.hrz.tu-darmstadt.de"
 UNI_VPN_GROUP="campus" # All traffic will be routed through the VPN
 #UNI_VPN_GROUP="extern" # Only uni targets will be routed through the VPN -> most traffic is unsecured!
