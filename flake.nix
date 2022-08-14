@@ -45,16 +45,6 @@
                   };
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
                 });
-
-                # TODO try to upstream the changes!
-                rnote = prev.rnote.overrideAttrs (oldAttrs: {
-                  patches = (oldAttrs.patches or []) ++ [
-                    (prev.fetchpatch {
-                      url = "https://github.com/7FM/rnote/commit/06663a6b668bcd69006903addd38d03ad808f1c3.patch";
-                      sha256 = "sha256-XA9VrBMxS4PvkDUyoIKyh/0U3mhVUv9/cv/GCITcb+k=";
-                    })
-                  ];
-                });
               })
             ];
 
