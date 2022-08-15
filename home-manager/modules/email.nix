@@ -135,6 +135,9 @@ in {
         general.time = {
             clock_format = "24h";
         };
+        mail.close_on_success = true;
+        attachment.external_open_cmd = "${pkgs.xdg-utils}/bin/xdg-open"; 
+        thread_view.open_external_link = "${pkgs.xdg-utils}/bin/xdg-open"; 
         startup.queries = myTools.getSecret ../configs "email/startupQueries.nix";
       };
     };
