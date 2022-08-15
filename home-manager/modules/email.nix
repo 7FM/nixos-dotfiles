@@ -103,12 +103,31 @@ in {
             exit
         fi
 
-        ${pkgs.offlineimap}/bin/offlineimap
+        ## do a full offlineimap sync once every hour, otherwise only quicksync
+        lastfull_f=${config.xdg.cacheHome}/astroid/offlineimap-last-full # storing state
+        if [ -f $lastfull_f ]; then
+          lastfull=$(${pkgs.coreutils}/bin/cat $lastfull_f)
+        else
+          lastfull=0
+        fi
+
+        delta=$((1 * 60 * 60)) # seconds between full sync
+        now=$(date +%s)
+        diff=$(($now - $lastfull))
+
+        if [ $diff -gt $delta ]; then
+          echo "full offlineimap sync.."
+          ${pkgs.offlineimap}/bin/offlineimap -o || exit 1
+          echo -n $now > $lastfull_f
+        else
+          echo "quick offlineimap sync.."
+          ${pkgs.offlineimap}/bin/offlineimap -o -q || exit 1
+        fi
       '';
       externalEditor = "${pkgs.alacritty}/bin/alacritty -e ${config.programs.neovim.finalPackage}/bin/nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1";
       extraConfig = {
         # poll.interval = 0;
-        poll.interval = 180;
+        poll.interval = 120;
         editor = {
           attachment_words = "attach,anbei,anhang,angehängt,angefügt";
           save_draft_on_force_quit = true;
