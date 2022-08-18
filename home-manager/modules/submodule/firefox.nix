@@ -44,6 +44,9 @@ in {
       umatrix
       ublock-origin
       video-downloaderhelper
+
+      grammarly
+      languagetool
     ];
 
     profiles = {
