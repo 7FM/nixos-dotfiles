@@ -45,6 +45,8 @@ let
       scalameta.metals
       # XML
       dotjoshjohnson.xml
+      # Languagetool integration
+      valentjn.vscode-ltex
   ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       marketplaceExtensions
     ++ lib.optionals (!useClangd && usePlatformIO) [
