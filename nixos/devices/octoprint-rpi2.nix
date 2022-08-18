@@ -23,22 +23,6 @@ in {
     };
   };
 
-  #TODO rework
-  hardware.raspberry-pi."2" = {
-    audio.enable = false;
-    dwc2 = {
-      enable = false;
-    };
-    i2c0.enable = false;
-    i2c1.enable = false;
-    poe-hat.enable = false;
-    pwm0.enable = false;
-    tc358743.enable = false;
-    fkms-3d = {
-      enable = false;
-    };
-  };
-
   custom.grub = {
     enable = false;
     #useUEFI = false;
