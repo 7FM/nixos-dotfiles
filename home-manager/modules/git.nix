@@ -17,6 +17,9 @@ in {
         pull = {
           rebase = false; # merge
         };
+        push = {
+          autoSetupRemote = true;
+        };
       };
 
       aliases = {
