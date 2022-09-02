@@ -111,7 +111,7 @@ in {
         run_current = 0.580;
         stealthchop_threshold = 999999;
       };
-    in {
+    in rec {
       # This file contains common pin mappings for the BIGTREETECH SKR E3
       # DIP. To use this config, the firmware should be compiled for the
       # STM32F103 with a "28KiB bootloader" and USB communication. Also,
@@ -141,7 +141,7 @@ in {
 
       stepper_y = (stepperSettings {
         step_pin = "PB13";
-        dir_pin = "!PB12";
+        dir_pin = "PB12";
         enable_pin = "!PB14";
       }) // {
         endstop_pin = "^PC0";
@@ -152,18 +152,17 @@ in {
 
       stepper_z = (stepperSettings {
         step_pin = "PB10";
-        dir_pin = "PB2";
+        dir_pin = "!PB2";
         enable_pin = "!PB11";
         rotation_distance = 8;
       }) // {
-        endstop_pin = "^PC15";
-        position_endstop = 0;
+        endstop_pin = "probe:z_virtual_endstop";
         position_max = 250;
       };
 
       extruder = (stepperSettings {
         step_pin = "PB0";
-        dir_pin = "!PC5";
+        dir_pin = "PC5";
         enable_pin = "!PB1";
         rotation_distance = 33.5;
       }) // {
@@ -173,9 +172,9 @@ in {
         sensor_type = "EPCOS 100K B57560G104F";
         sensor_pin = "PA0";
         control = "pid";
-        pid_Kp = 21.527;
-        pid_Ki = 1.063;
-        pid_Kd = 108.982;
+        pid_Kp = 22.74;
+        pid_Ki = 2.03;
+        pid_Kd = 63.81;
         min_temp = 0;
         max_temp = 250;
       };
@@ -196,11 +195,75 @@ in {
         pin = "PA8";
       };
 
-      # mcu = {
-      #   serial = "/dev/serial/by-id/usb-Klipper_Klipper_firmware_12345-if00";
+      bltouch = {
+        sensor_pin = "^PC15";
+        control_pin = "PA1";
+        # TODO first ensure that horizontal_move_z is large enough!
+        # stow_on_each_sample = false;
+        # probe_with_touch_mode = true;
+        x_offset = 48;
+        y_offset = -2;
+        z_offset = 2.98;
+      };
+
+      safe_z_home = {
+        home_xy_position = "${builtins.toString (stepper_x.position_max / 2 - bltouch.x_offset)}, ${builtins.toString (stepper_y.position_max / 2 - bltouch.y_offset)}";
+        speed = 50;
+        z_hop = 10;
+        z_hop_speed = 5;
+      };
+
+      # https://www.klipper3d.org/Bed_Mesh.html
+      bed_mesh = {
+        horizontal_move_z = 8;
+        mesh_min = "${builtins.toString (bltouch.x_offset)}, 10";
+        mesh_max = "${builtins.toString (stepper_x.position_max - 10)}, ${builtins.toString (stepper_y.position_max - 10)}";
+        probe_count = 5;
+      };
+
+      "gcode_macro G29" = {
+        gcode = [
+          ''{% if printer.toolhead.homed_axes != "xyz" %}''
+          "  G28"
+          "{% endif %}"
+          "BED_MESH_CALIBRATE"
+        ];
+      };
+
+      # filament runout sensor
+      "filament_switch_sensor my_sensor" = {
+        pause_on_runout = true;
+        runout_gcode = [
+          "PAUSE"
+        ];
+        insert_gcode = [
+          "RESUME"
+        ];
+        event_delay = 3.0;
+        pause_delay = 0.5;
+        switch_pin = "^PC2";
+      };
+
+      gcode_arcs = {};
+
+      # # resonance compensation
+      # # use the rpi as secundary MCU
+      # "mcu rpi".serial = "/tmp/klipper_host_mcu";
+      # # accerleration sensor at the bed is connected to the RPi
+      # "adxl345 bed" = {
+      #   cs_pin = "rpi:None";
+      # };
+      # # accerleration sensor at the hotend is connected to the MCU
+      # "adxl345 hotend" = {
+      #   cs_pin = "PB6";
+      # };
+      # resonance_tester = {
+      #   accel_chip_x = "adxl345 hotend";
+      #   accel_chip_y = "adxl345 bed";
+      #   probe_points = "${builtins.toString (stepper_x.position_max / 2)}, ${builtins.toString (stepper_y.position_max / 2)}, 20";
       # };
 
-      mcu.serial = "/dev/serial/by-id/usb-Klipper_Klipper_firmware_12345-if00";
+      mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f103xe_33FFDC054E43383414842043-if00";
 
       printer = {
         kinematics = "cartesian";
@@ -210,7 +273,6 @@ in {
         max_z_accel = 100;
       };
 
-      # TODO no idea how this can be realized with the current klipper service module!
       "static_digital_output usb_pullup_enable" = {
         pins = "!PC13";
       };
@@ -219,7 +281,6 @@ in {
       # TMC2208 configuration
       ########################################
 
-      # TODO compare current values with the ones set in Marlin!
       "tmc2208 stepper_x" = tmc2208Conf "PC10";
       "tmc2208 stepper_y" = tmc2208Conf "PC11";
       "tmc2208 stepper_z" = tmc2208Conf "PC12";
