@@ -75,7 +75,6 @@ in {
       webcamtab
       taborder
       simpleemergencystop
-      resource_monitor
       psucontrol
       printtimegenius
       navbartemp
