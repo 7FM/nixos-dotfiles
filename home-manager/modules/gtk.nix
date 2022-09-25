@@ -6,7 +6,7 @@ in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # Install compatible icon theme for Lutris, gtkwave, etc.
-      gnome3.adwaita-icon-theme
+      gnome.adwaita-icon-theme
     ];
 
     gtk = {

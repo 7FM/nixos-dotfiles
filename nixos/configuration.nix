@@ -62,7 +62,7 @@ in {
 
   # add flakes feature
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -70,7 +70,7 @@ in {
   # Add convenient wrapper
   environment.systemPackages = [
     (pkgs.writeShellScriptBin "nixFlakes" ''
-      exec ${pkgs.nixFlakes}/bin/nix --experimental-features "nix-command flakes" "$@"
+      exec ${pkgs.nixVersions.stable}/bin/nix --experimental-features "nix-command flakes" "$@"
     '')
   ];
 
