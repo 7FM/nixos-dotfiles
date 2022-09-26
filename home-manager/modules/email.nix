@@ -82,6 +82,7 @@ in {
         msmtp
         coreutils # sleep
         netcat # nc
+        unixtools.ping # ping needed for msmtp
         which
       ];
     in [
@@ -98,7 +99,7 @@ in {
       enable = true;
       pollScript = ''
         # check if we have a connection
-        if ! ${pkgs.iputils}/bin/ping -w 1 -W 1 -c 1 nixos.org; then
+        if ! ${pkgs.unixtools.ping}/bin/ping -w 1 -W 1 -c 1 nixos.org; then
             echo "there is no internet connection"
             exit
         fi
