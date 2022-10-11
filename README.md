@@ -88,16 +88,16 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.networking.openvpn.client.enable`
     * `custom.networking.openvpn.client.autoConnect`
 - **`home-manager/devices/<new-device>.nix`** to enable predefined program sets and adjusting their options:
-    * `custom.hm.modules.xdg.enable`
     * `custom.hm.modules.alacritty.enable`
-    * `custom.hm.modules.ssh.enable`
-    * `custom.hm.modules.git.enable`
-    * `custom.hm.modules.zsh.enable`
-    * `custom.hm.modules.neovim.enable`
-    * `custom.hm.modules.gtk.enable`
-    * `custom.hm.modules.qt.enable`
+    * `custom.hm.modules.bash.enable`
+    * `custom.hm.modules.easyeffects.enable`
     * `custom.hm.modules.email.enable`
+    * `custom.hm.modules.git.enable`
+    * `custom.hm.modules.gtk.enable`
+    * `custom.hm.modules.neovim.enable`
     * `custom.hm.modules.optimize_storage.enable`
+    * `custom.hm.modules.qt.enable`
+    * `custom.hm.modules.ssh.enable`
     * `custom.hm.modules.sway.laptopDisplay`
     * `custom.hm.modules.sway.disp1`
     * `custom.hm.modules.sway.disp2`
@@ -107,14 +107,16 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.hm.modules.waybar.gpu.tempCmd`
     * `custom.hm.modules.waybar.gpu.mhzFreqCmd`
     * `custom.hm.modules.waybar.gpu.usageCmd`
-    * `custom.hm.collections.utilities.enable`
-    * `custom.hm.collections.gui_utilities.enable`
+    * `custom.hm.modules.xdg.enable`
+    * `custom.hm.modules.zsh.enable`
     * `custom.hm.collections.communication.enable`
     * `custom.hm.collections.development.enable`
-    * `custom.hm.collections.office.enable`
-    * `custom.hm.collections.media.enable`
     * `custom.hm.collections.diyStuff.enable`
     * `custom.hm.collections.gaming.enable`
+    * `custom.hm.collections.gui_utilities.enable`
+    * `custom.hm.collections.media.enable`
+    * `custom.hm.collections.office.enable`
+    * `custom.hm.collections.utilities.enable`
 
 # Misc
 

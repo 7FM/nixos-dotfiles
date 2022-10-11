@@ -3,17 +3,16 @@
 {
   custom.hm = {
     modules = {
-      xdg.enable = true;
       alacritty.enable = true;
-      ssh.enable = true;
-      git.enable = true;
-      zsh.enable = true;
       bash.enable = true;
-      neovim.enable = true;
-      gtk.enable = true;
-      qt.enable = true;
+      easyeffects.enable = true;
       email.enable = true;
+      git.enable = true;
+      gtk.enable = true;
+      neovim.enable = true;
       optimize_storage.enable = true;
+      qt.enable = true;
+      ssh.enable = true;
       sway = {
         laptopDisplay = null;
         disp1 = "DVI-D-1";
@@ -28,16 +27,18 @@
           usageCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent";
         };
       };
+      xdg.enable = true;
+      zsh.enable = true;
     };
     collections = {
-      utilities.enable = true;
-      gui_utilities.enable = true;
       communication.enable = true;
       development.enable = true;
-      office.enable = true;
-      media.enable = true;
       diyStuff.enable = true;
       gaming.enable = true;
+      gui_utilities.enable = true;
+      media.enable = true;
+      office.enable = true;
+      utilities.enable = true;
     };
   };
 }

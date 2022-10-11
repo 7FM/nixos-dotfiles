@@ -6,55 +6,57 @@ let
   mkEnableDefaultTrueOption = name: mkEnableOption name // { default = true; };
 in {
   imports = [
-    ./xdg.nix
+    ./alacritty.nix
+    ./bash.nix
+    ./easyeffects.nix
+    ./email.nix
+    ./git.nix
+    ./gtk.nix
+    ./neovim.nix
+    ./optimize_storage_space.nix
+    ./qt.nix
+    ./ssh.nix
     ./sway.nix
     ./waybar.nix
-    ./alacritty.nix
-    ./ssh.nix
-    ./git.nix
+    ./xdg.nix
     ./zsh.nix
-    ./bash.nix
-    ./neovim.nix
-    ./gtk.nix
-    ./qt.nix
-    ./email.nix
-    ./optimize_storage_space.nix
 
-    ./collections/utilities.nix
-    ./collections/gui_utilities.nix
     ./collections/communication.nix
     ./collections/development.nix
-    ./collections/office.nix
-    ./collections/media.nix
     ./collections/diyStuff.nix
     ./collections/gaming.nix
+    ./collections/gui_utilities.nix
+    ./collections/media.nix
+    ./collections/office.nix
+    ./collections/utilities.nix
   ];
 
   options.custom.hm = {
 
     modules = {
-      xdg.enable = mkEnableDefaultTrueOption "the xdg module";
       alacritty.enable = mkEnableOption "the alacritty module";
-      ssh.enable = mkEnableOption "the ssh module";
-      git.enable = mkEnableOption "the git module";
-      zsh.enable = mkEnableDefaultTrueOption "the zsh module";
       bash.enable = mkEnableDefaultTrueOption "the bash module";
-      neovim.enable = mkEnableDefaultTrueOption "the neovim module";
-      gtk.enable = mkEnableOption "the gtk module";
-      qt.enable = mkEnableOption "the qt module";
       email.enable = mkEnableOption "the email module";
+      easyeffects.enable = mkEnableOption "the easyeffects module";
+      git.enable = mkEnableOption "the git module";
+      gtk.enable = mkEnableOption "the gtk module";
+      neovim.enable = mkEnableDefaultTrueOption "the neovim module";
       optimize_storage.enable = mkEnableOption "storage optimizations";
+      qt.enable = mkEnableOption "the qt module";
+      ssh.enable = mkEnableOption "the ssh module";
+      xdg.enable = mkEnableDefaultTrueOption "the xdg module";
+      zsh.enable = mkEnableDefaultTrueOption "the zsh module";
     };
 
     collections = {
-      utilities.enable = mkEnableDefaultTrueOption "the utilities collection";
-      gui_utilities.enable = mkEnableOption "the gui utilities collection";
       communication.enable = mkEnableOption "the communication collection";
       development.enable = mkEnableOption "the development collection";
-      office.enable = mkEnableOption "the office collection";
-      media.enable = mkEnableOption "the media collection";
       diyStuff.enable = mkEnableOption "the DIY stuff collection";
       gaming.enable = mkEnableOption "the gaming collection";
+      gui_utilities.enable = mkEnableOption "the gui utilities collection";
+      media.enable = mkEnableOption "the media collection";
+      office.enable = mkEnableOption "the office collection";
+      utilities.enable = mkEnableDefaultTrueOption "the utilities collection";
     };
 
   };

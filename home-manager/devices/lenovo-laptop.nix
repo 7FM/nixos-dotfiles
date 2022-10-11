@@ -3,17 +3,16 @@
 {
   custom.hm = {
     modules = {
-      xdg.enable = true;
       alacritty.enable = true;
-      ssh.enable = true;
-      git.enable = true;
-      zsh.enable = true;
       bash.enable = true;
-      neovim.enable = true;
-      gtk.enable = true;
-      qt.enable = true;
+      easyeffects.enable = true;
       email.enable = true;
+      git.enable = true;
+      gtk.enable = true;
+      neovim.enable = true;
       optimize_storage.enable = true;
+      qt.enable = true;
+      ssh.enable = true;
       sway = rec {
         laptopDisplay = "eDP-1";
         disp1 = laptopDisplay;
@@ -28,16 +27,18 @@
           usageCmd = null;
         };
       };
+      xdg.enable = true;
+      zsh.enable = true;
     };
     collections = {
-      utilities.enable = true;
-      gui_utilities.enable = true;
       communication.enable = true;
       development.enable = true;
-      office.enable = true;
-      media.enable = true;
       diyStuff.enable = false;
       gaming.enable = false;
+      gui_utilities.enable = true;
+      media.enable = true;
+      office.enable = true;
+      utilities.enable = true;
     };
   };
 }
