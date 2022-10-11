@@ -245,14 +245,14 @@ in {
 
       gcode_arcs = {};
 
-      # # resonance compensation
-      # # use the rpi as secundary MCU
+      # resonance compensation
+      # use the rpi as secondary MCU
       # "mcu rpi".serial = "/tmp/klipper_host_mcu";
-      # # accerleration sensor at the bed is connected to the RPi
+      # acceleration sensor at the bed is connected to the RPi
       # "adxl345 bed" = {
       #   cs_pin = "rpi:None";
       # };
-      # # accerleration sensor at the hotend is connected to the MCU
+      # acceleration sensor at the hotend is connected to the MCU
       # "adxl345 hotend" = {
       #   cs_pin = "PB6";
       # };
