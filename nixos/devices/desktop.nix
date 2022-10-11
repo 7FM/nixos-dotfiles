@@ -103,4 +103,10 @@ in (lib.mkMerge [{
     "wlp3s0"
   ];
 
+  services.udev = {
+    packages = with pkgs; [
+      platformio
+    ];
+  };
+
 } (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })])

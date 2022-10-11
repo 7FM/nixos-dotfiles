@@ -144,4 +144,11 @@ in (lib.mkMerge [{
     "wlp4s0"
   ];
   networking.interfaces.wwp0s20f0u6i12.useDHCP = true;
+
+  services.udev = {
+    packages = with pkgs; [
+      platformio
+    ];
+  };
+
 } (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })])
