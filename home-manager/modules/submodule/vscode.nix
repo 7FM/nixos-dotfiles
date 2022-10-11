@@ -55,8 +55,8 @@ let
       {
         name = "platformio-ide";
         publisher = "platformio";
-        version = "2.5.2";
-        sha256 = "sha256-4Ukoj+gjDnKtIuKaaeiTQJooTeQEzeRfxJOg6E72mi8=";
+        version = "2.5.4";
+        sha256 = "sha256-KbXlegQSLjMCVotR1mU/CDiaQMKLLSX+nnbRJgdFTz8=";
       }
   ]));
 

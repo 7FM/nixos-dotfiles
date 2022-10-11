@@ -2,8 +2,8 @@
   {
     name = "hexeditor";
     publisher = "ms-vscode";
-    version = "1.9.8";
-    sha256 = "063n4plhbjm6l5gip6j158n6hgydiccq1f8rc1pgsbfjn3d4612y";
+    version = "1.9.9";
+    sha256 = "0w7b9llgm6plzpkr5g8ikpyxdgfdjcd5v9xzhp6967j0xphisdbb";
   }
   {
     name = "notepadplusplus-keybindings";
@@ -26,26 +26,26 @@
   {
     name = "vscodeintellicode";
     publisher = "VisualStudioExptTeam";
-    version = "1.2.24";
-    sha256 = "17n30vwgdp6gcv2ycakh95ywfdxi5ip86lw915vslwjg274s9cay";
+    version = "1.2.28";
+    sha256 = "0c83y01rxcmmaz4zx94pi96pvjrjjzp16ms37xsaj82c53q0dis2";
   }
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "2.7.0";
-    sha256 = "188ma68i7m6ays1kdqknypndz79iqjvg2vqy6qgkfmwi9rha2vpm";
+    version = "2.10.1";
+    sha256 = "03cx684mn0nk47xpm46dly8g0lxars5h46vj41p8nhgsq9429rhm";
   }
   {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.0.5";
-    sha256 = "1j2ngyhqyh3k59h19zgg5nd40w78bfzkkqwbv7mh1jx0xhvd99bv";
+    version = "2.1.0";
+    sha256 = "1z0aqsvk8bw8nrkg8xhswhhfdmwxd5sziylp4zrf1aghbrbgp1gl";
   }
   {
     name = "vscode-mlir";
     publisher = "llvm-vs-code-extensions";
-    version = "0.0.10";
-    sha256 = "0ra1zihdc2v15v357m0qi6nlm11dp1kvyax0vn4l74ld9cjzdmaa";
+    version = "0.0.11";
+    sha256 = "1z5jlq2z1a4rhrm7rgbkwwz20skj4dgpfri73rhrpl8l5x3bfnxj";
   }
   {
     name = "openscad";
@@ -62,8 +62,8 @@
   {
     name = "systemverilog";
     publisher = "eirikpre";
-    version = "0.13.2";
-    sha256 = "0cxklipfm9whwljyxdyzrw590lanhq7ikv0s4wi294y4vffbgmy2";
+    version = "0.13.3";
+    sha256 = "1jcgk9q240vgh1cd3ghzg0csm6z82xz9x84pkdr0g0y130j8i3c9";
   }
   {
     name = "veriloghdl";
@@ -86,25 +86,25 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.44.2022090107";
-    sha256 = "16vzm803v6wwr1p8p4rf9xqhz5kz64ssbhakm9pw93nva9dv64i9";
+    version = "0.44.2022100903";
+    sha256 = "0pl60hyjbzh1yj3y8bn28j4bigyx70yfq4q3nh64pfq2ickn0v59";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.21.2022090100";
-    sha256 = "0vsiavi76pib47gwkp1n50d1c4ivqamz86fyliw9h12pn3i60wgr";
+    version = "0.21.2022091500";
+    sha256 = "0xkya3bjwz4p892327fhk6cnp457i9fljmj15pxbrav20ilb5za1";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.37.2022090202";
-    sha256 = "1yzlh6nl2cx8mp35z5bvipsmn8f35956n7s8sp8ij5vxdx50bigb";
+    version = "0.37.2022090902";
+    sha256 = "17i9jfwpjjxp81dg6nnviczzmr47pvz33zc4bwfvz69ckn6v74j4";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.38.2022082703";
-    sha256 = "0ls8l4jwd8f3z9szvgdcyf4vrzxgg2bdm9yvga3mlyg2saxiz38b";
+    version = "0.39.0";
+    sha256 = "1603s2s9abg1pqfakj43zp3dfl0y92pblra85wj2rccbzf3asba3";
   }
 ]
