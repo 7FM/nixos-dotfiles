@@ -113,9 +113,6 @@ in (lib.mkMerge [{
   custom.cpuFreqGovernor = "powersave";
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
-  custom.audio = {
-    backend = "pipewire";
-  };
   custom.smartcards = true;
   custom.networking = {
     wifiSupport = true;

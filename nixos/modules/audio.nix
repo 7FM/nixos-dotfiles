@@ -11,17 +11,6 @@ let
   backendUsePipewire = cfg.backend == "pipewire";
   noBackend = cfg.backend == "none";
 in {
-  options.custom.audio = with lib; {
-
-    backend = mkOption {
-      type = types.enum [ "none" "pulseaudio" "pipewire" ];
-      default = "pipewire";
-      description = ''
-        Specifies the audio backend to use.
-      '';
-    };
-
-  };
 
   config = lib.mkIf (!runHeadless) {
     # Common sound settings

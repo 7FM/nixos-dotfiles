@@ -41,9 +41,6 @@ in {
     enable = true;
     size = 1024;
   };
-  custom.audio = {
-    backend = "pipewire";
-  };
 
   networking.interfaces.enp0s3.useDHCP = true;
 }

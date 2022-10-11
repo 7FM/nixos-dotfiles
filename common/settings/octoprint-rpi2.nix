@@ -8,5 +8,6 @@
     gui = "headless";
     useDummySecrets = false;
     bluetooth = false;
+    audio.backend = "none";
   };
 }

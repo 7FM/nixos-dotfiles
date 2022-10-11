@@ -48,6 +48,14 @@ hm: deviceName:
         Enable Bluetooth Support!
       '';
     };
+
+    audio.backend = mkOption {
+      type = types.enum [ "none" "pulseaudio" "pipewire" ];
+      default = "pipewire";
+      description = ''
+        Specifies the audio backend to use.
+      '';
+    };
   };
 
   config = {

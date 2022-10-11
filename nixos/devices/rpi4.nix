@@ -45,9 +45,6 @@ in {
   custom.cpuFreqGovernor = "ondemand";
   custom.enableVirtualisation = false;
   custom.adb = "disabled";
-  custom.audio = {
-    backend = "none";
-  };
   custom.smartcards = false;
   custom.networking = {
     wifiSupport = false;

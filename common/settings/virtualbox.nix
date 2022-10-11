@@ -8,5 +8,6 @@
     gui = "wayland";
     useDummySecrets = true;
     bluetooth = false;
+    audio.backend = "pipewire";
   };
 }

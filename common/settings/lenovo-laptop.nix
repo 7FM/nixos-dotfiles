@@ -9,5 +9,6 @@
     gui = "hm-wayland";
     useDummySecrets = false;
     bluetooth = true;
+    audio.backend = "pipewire";
   };
 }
