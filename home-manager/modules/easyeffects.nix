@@ -10,8 +10,22 @@ in {
   config = lib.mkIf enable {
     services.easyeffects = {
       enable = true;
-      presets = ""; #TODO
+      # preset = "male-voice-noise-reduction"; #TODO not sure how that is supposed to work as there might be different profiles for in and outputs!
     };
+
+    # NOTE: Execute the following commands as setup:
+    # dconf write /com/github/wwmm/easyeffects/process-all-inputs true
+    # dconf write /com/github/wwmm/easyeffects/process-all-outputs false
+    # dconf write /com/github/wwmm/easyeffects/last-used-input-preset male-voice-noise-reduction
+
+    # TODO enable once/iff https://github.com/NixOS/nixpkgs/pull/189099 will be merged
+    # programs.dconf.profiles.user.databases = with lib.dconf; lib.singleton {
+    #   com.github.wwmm.easyeffects = {
+    #     process-all-inputs = true;
+    #     process-all-outputs = false;
+    #     last-used-input-preset = "male-voice-noise-reduction";
+    #   };
+    # };
 
     #TODO do we need a preset for outputs?
     xdg.configFile."easyeffects/input/male-voice-noise-reduction.json".text = ''
