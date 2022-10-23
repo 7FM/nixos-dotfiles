@@ -313,10 +313,16 @@ in {
             format-plugged =  "{icon}<span color='#e88939'></span>{capacity:>3}%{time}";
             # format-good = "", # An empty format will hide the module
             # format-full = "";
-            format-icons = ["" "" "" "" ""];
+            format-icons = [
+              "<span font='8.6' rise='-500'></span>"
+              "<span font='8.6' rise='-500'></span>"
+              "<span font='8.6' rise='-500'></span>"
+              "<span font='8.6' rise='-500'></span>"
+              "<span font='8.6' rise='-500'></span>"
+            ];
           };
           "idle_inhibitor" = {
-            format = "<span color='#589df6'>{icon}</span>";
+            format = "<span font='8' color='#589df6'>{icon}</span>";
             format-icons = {
               "activated" = "";
               "deactivated" = "";

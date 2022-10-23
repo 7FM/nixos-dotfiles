@@ -212,8 +212,6 @@ window#waybar {
 }
 #idle_inhibitor {
     background-color: @idle;
-    /* font-size: 1.6em; */
-	/* TODO How can we get this icon larger without making its bounding box larger?*/
     font-weight: bold;
     padding: 0 0.2em;
 }
