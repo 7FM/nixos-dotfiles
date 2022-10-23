@@ -26,8 +26,8 @@
   {
     name = "vscodeintellicode";
     publisher = "VisualStudioExptTeam";
-    version = "1.2.28";
-    sha256 = "0c83y01rxcmmaz4zx94pi96pvjrjjzp16ms37xsaj82c53q0dis2";
+    version = "1.2.29";
+    sha256 = "099vyn3c5x5vrcmvxa35452ic221iw1595grxq5khfl2p5vvwpss";
   }
   {
     name = "code-spell-checker";
@@ -86,14 +86,14 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.44.2022100903";
-    sha256 = "0pl60hyjbzh1yj3y8bn28j4bigyx70yfq4q3nh64pfq2ickn0v59";
+    version = "0.45.2022101323";
+    sha256 = "0lhkbpdpmykmy68d1sd3q4a23w0ms70yp24wfnbb2bm83dmzgm0a";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.21.2022091500";
-    sha256 = "0xkya3bjwz4p892327fhk6cnp457i9fljmj15pxbrav20ilb5za1";
+    version = "0.21.2022101300";
+    sha256 = "06kl990yq5xyqq4407q7wgb39wr1q5kjlc4m1gi4bjsfnxadx4l9";
   }
   {
     name = "vscode-java-test";
