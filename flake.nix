@@ -42,6 +42,13 @@
                     sha256 = "sha256-BD89Gzr8oXkTs0eNsqzEdFnzAR2YzPu1TOFuCFQyurA=";
                   };
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+                  # TODO remove once https://github.com/NixOS/nixpkgs/pull/197442 lands in nixpkgs-unstable
+                  propagatedBuildInputs = [
+                    prev.glib
+                    prev.playerctl
+                    # Use newest pygobject3 version! python38Packages.pygobject3 does no longer compile!
+                    prev.python3Packages.pygobject3
+                  ];
                 });
 
                 klipper = prev.stdenv.mkDerivation rec {
