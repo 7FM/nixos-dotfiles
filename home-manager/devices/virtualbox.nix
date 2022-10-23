@@ -3,7 +3,10 @@
 {
   custom.hm = {
     modules = {
-      alacritty.enable = true;
+      alacritty = {
+        enable = true;
+        virtualboxWorkaround = true;
+      };
       bash.enable = true;
       email.enable = true;
       easyeffects.enable = true;
@@ -17,7 +20,6 @@
         laptopDisplay = "";
         disp1 = laptopDisplay;
         disp2 = laptopDisplay;
-        virtualboxWorkaround = true;
       };
       waybar = {
         hwmonPath = null;

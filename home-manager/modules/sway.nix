@@ -6,7 +6,6 @@ let
   laptopDisplay = cfg.sway.laptopDisplay;
   disp1 = cfg.sway.disp1;
   disp2 = if cfg.sway.disp2 == null then disp1 else cfg.sway.disp2;
-  usesVirtualbox = cfg.sway.virtualboxWorkaround;
 
   startupPrograms = [
     { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
@@ -67,13 +66,6 @@ in {
         description = ''
           Specifies name of the second laptop display.
           If only one display exists then the value of disp1 will be used.
-        '';
-      };
-      virtualboxWorkaround = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Apply virtualbox specific workarounds for a correct operation.
         '';
       };
     };
@@ -149,7 +141,7 @@ in {
 
         menu = "wofi --show=drun --lines=5 --prompt=\"\"";
 
-        terminal = (if usesVirtualbox then "LIBGL_ALWAYS_SOFTWARE=1 " else "") + "alacritty";
+        terminal = "alacritty";
 
         modifier = mod;
 

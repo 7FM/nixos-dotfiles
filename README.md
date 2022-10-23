@@ -89,6 +89,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.networking.openvpn.client.autoConnect`
 - **`home-manager/devices/<new-device>.nix`** to enable predefined program sets and adjusting their options:
     * `custom.hm.modules.alacritty.enable`
+    * `custom.hm.modules.alacritty.virtualboxWorkaround`
     * `custom.hm.modules.bash.enable`
     * `custom.hm.modules.easyeffects.enable`
     * `custom.hm.modules.email.enable`
@@ -101,7 +102,6 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.hm.modules.sway.laptopDisplay`
     * `custom.hm.modules.sway.disp1`
     * `custom.hm.modules.sway.disp2`
-    * `custom.hm.modules.sway.virtualboxWorkaround`
     * `custom.hm.modules.waybar.hwmonPath`
     * `custom.hm.modules.waybar.thermalZone`
     * `custom.hm.modules.waybar.gpu.tempCmd`
