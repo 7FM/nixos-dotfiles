@@ -15,7 +15,7 @@ let
       ${pkgs.notmuch}/bin/notmuch tag -unread 'date:1970..30d' tag:unread
       ${customHook}
       ${pkgs.afew}/bin/afew --tag --new
-      ${pkgs.python3Packages.notifymuch}/bin/notifymuch
+      ${pkgs.notifymuch}/bin/notifymuch
     '';
   };
 
