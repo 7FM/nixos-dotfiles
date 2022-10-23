@@ -113,6 +113,7 @@ in {
         "FIXME"
       ];
       "todohighlight.include" = [
+        "**/*.nix"
         "**/*.tex"
         "**/*.js"
         "**/*.jsx"
