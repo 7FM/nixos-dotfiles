@@ -148,7 +148,7 @@ in {
   # initExtra and initExtraFirst are already in use... TODO find better solution!
   programs.zsh.initExtraBeforeCompInit = ''
     if [ -f "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/nnn/quitcd.bash_zsh" ]; then
-    source "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/nnn/quitcd.bash_zsh"
+      source "''\${XDG_CONFIG_HOME:-''\$HOME/.config}/nnn/quitcd.bash_zsh"
     fi
   '';
 }
