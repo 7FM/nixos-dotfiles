@@ -19,7 +19,7 @@
     };
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, ...}: {
+  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, ...}@inputs: {
     nixosConfigurations = let
       mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
@@ -102,13 +102,10 @@
               })
             ];
 
-            # Source: https://github.com/malob/nixpkgs/blob/master/flake.nix
+            # Source: https://github.com/NixOS/nix/issues/3803#issuecomment-1181667475
             # Hack to support legacy worklows that use `<nixpkgs>` etc.
             nix.nixPath = [
-              # TODO is there a way to avoid this hardcoding? This is very much inpure
-              # this assumes that the nixos-dotfiles repo is symlinked to /etc/nixos
-              # if NIX_PATH is still not set properly, then use 'nix-index -f /etc/nixos/nixpkgs.nix' 
-              "nixpkgs=/etc/nixos/nixpkgs.nix"
+              "nixpkgs=${inputs.nixpkgs}"
             ];
           }
 
