@@ -33,22 +33,9 @@
               (final: prev: {
                 myTools = import ./common/lib deviceName;
 
-                # Update to waybar master # TODO remove this after the next release!
+                # waybar: enable experimental features
                 waybar = prev.waybar.overrideAttrs (oldAttrs: {
-                  src = prev.fetchFromGitHub {
-                    owner = "Alexays";
-                    repo = "Waybar";
-                    rev = "fb2ac8a7651a8a4222b063557e37bdf088506028";
-                    sha256 = "sha256-BD89Gzr8oXkTs0eNsqzEdFnzAR2YzPu1TOFuCFQyurA=";
-                  };
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-                  # TODO remove once https://github.com/NixOS/nixpkgs/pull/197442 lands in nixpkgs-unstable
-                  propagatedBuildInputs = [
-                    prev.glib
-                    prev.playerctl
-                    # Use newest pygobject3 version! python38Packages.pygobject3 does no longer compile!
-                    prev.python3Packages.pygobject3
-                  ];
                 });
 
                 klipper = prev.stdenv.mkDerivation rec {
