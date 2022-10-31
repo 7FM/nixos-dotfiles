@@ -86,14 +86,14 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.45.2022101323";
-    sha256 = "0lhkbpdpmykmy68d1sd3q4a23w0ms70yp24wfnbb2bm83dmzgm0a";
+    version = "0.46.2022103114";
+    sha256 = "0rrf0arqm0h09bzj3xqljn40rbj3zjmla85ps6fabnw6ls4zwr0k";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.21.2022101300";
-    sha256 = "06kl990yq5xyqq4407q7wgb39wr1q5kjlc4m1gi4bjsfnxadx4l9";
+    version = "0.21.2022102500";
+    sha256 = "06fpgjk4dachj4w2lmgzrb507yryb1id4nazvfds1b32w29496lf";
   }
   {
     name = "vscode-java-test";
@@ -104,7 +104,7 @@
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.39.0";
-    sha256 = "1603s2s9abg1pqfakj43zp3dfl0y92pblra85wj2rccbzf3asba3";
+    version = "0.39.2022101303";
+    sha256 = "1grbr0xf19c0a3gx8053mya9v2yfgk27n1wxhdgasgx5vj8v4glh";
   }
 ]
