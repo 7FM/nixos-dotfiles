@@ -81,6 +81,7 @@ in {
     enable = !runHeadless;
     drivers = with pkgs; [
       cnijfilter2 # Canon Pixma Drivers
+      gutenprint
       epson-escpr # Epson Drivers
     ];
   };
