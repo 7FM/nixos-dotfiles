@@ -115,7 +115,6 @@ in {
         ] ++ lib.optionals enableGpuStats [
           "custom/gpu"
         ] ++ [
-          #"custom/disk_home"
           "custom/disk_root"
           "pulseaudio#out"
           "pulseaudio#in"
