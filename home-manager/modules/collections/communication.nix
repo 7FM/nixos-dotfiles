@@ -11,23 +11,25 @@ let
     '';
   });
 
-  # https://nixos.wiki/wiki/Discord
-  # Fix opening links with firefox
-  # 1. check required nss version: nix path-info $(which firefox) -r | grep nss-
-  # 2. find correct package: https://search.nixos.org/packages/?query=nss_
-  # 3. update nss package below
-  myDiscord = pkgs.discord;
-  #myDiscord = pkgs.discord.override {
-  #  nss = pkgs.nss_latest;
-  #};
+  wrappedMattermost = pkgs.writeShellScriptBin "mattermost-desktop" ''
+    exec ${pkgs.mattermost-desktop}/bin/mattermost-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland "$@"
+  '';
+  myMattermost = pkgs.symlinkJoin rec {
+    inherit (pkgs.mattermost-desktop) name pname;
+
+    paths = [
+      wrappedMattermost
+      pkgs.mattermost-desktop
+    ];
+  };
 
   enable = config.custom.hm.collections.communication.enable;
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # Communication
-      myDiscord
-      mattermost-desktop
+      discord
+      myMattermost
       myZoom
       teamspeak_client
     ];

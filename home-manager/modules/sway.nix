@@ -9,7 +9,7 @@ let
 
   startupPrograms = [
     { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
-    { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop"; always = false; serviceName = "startup-mattermost"; }
+    { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland"; always = false; serviceName = "startup-mattermost"; }
     {
       command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc";
       env = [
@@ -201,15 +201,16 @@ in {
 
         assigns = let
           astroidCond = [ { app_id = "^astroid$"; } ];
-          mattermostCond = [ { class = "^Mattermost$"; } ];
+          mattermostCond1 = [ { class = "^Mattermost$"; } ];
+          mattermostCond2 = [ { title = "^Mattermost Desktop App$"; } ];
           keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!KeePassXC - Browser Access Request$)(?!Unlock Database - KeePassXC$)"; } ];
         in lib.optionalAttrs (disp1 != disp2) {
           "18:A8" = astroidCond;
-          "19:A9" = mattermostCond;
+          "19:A9" = mattermostCond1 ++ mattermostCond2;
           "20:A10" = keepassCond;
         } // lib.optionalAttrs (disp1 == disp2) {
           "8" = astroidCond;
-          "9" = mattermostCond;
+          "9" = mattermostCond1 ++ mattermostCond2;
           "10" = keepassCond;
         };
 
