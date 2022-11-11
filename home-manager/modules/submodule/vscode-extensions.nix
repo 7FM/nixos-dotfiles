@@ -68,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.5.4";
-    sha256 = "1i8qcfx5v4d30gkyy00a4d8l6ss828va6lp69h9i1ynrgqzl85av";
+    version = "1.5.7";
+    sha256 = "00kqi07wvwd2y9r2jvdqsxf7nii5b6m4flws526z378yqp7jryb4";
   }
   {
     name = "latex-support";
@@ -92,8 +92,8 @@
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.21.2022110100";
-    sha256 = "1vsg0sk1p212dhsmscpqq8kwar904yhxni10imjdp0ra2fd0vnyb";
+    version = "0.21.2022110800";
+    sha256 = "12djbf4bpdlv53fc5pcrczna2bidg8jny2ywl5nvghq0ck65g5pq";
   }
   {
     name = "vscode-java-test";
@@ -111,12 +111,12 @@
     name = "octave";
     publisher = "toasty-technologies";
     version = "0.0.3";
-    sha256 = "sha256-tbqblaBX+wqgasfGLsFp49xYxXi5CF39YPYs0QyANt0=";
+    sha256 = "1p9nh06d2b7nc3yms25rg32mip73d70jxin7dah0myspl2arpfmm";
   }
   {
     name = "octave-formatter";
     publisher = "tusindfryd";
     version = "2.9.1";
-    sha256 = "sha256-X+uGmP5n/jMb/x92h/7I4458OLTjB7OJ5N04BgigDAQ=";
+    sha256 = "010cl040cf6xwj4v61z3nhw7r3p3r3z8fxhzzwdk7zk7zsc8dssz";
   }
 ]
