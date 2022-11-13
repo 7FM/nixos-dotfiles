@@ -296,7 +296,7 @@ in {
             interval = 60;
             timezone = "Europe/Berlin";
             format = "{:%H:%M|%e %b}";
-            tooltip-format = "{:%d-%m-%Y | %H:%M}";
+            tooltip-format = "{:%H:%M | %d-%m-%Y}";
             on-click = "${pkgs.gnome.gnome-calendar}/bin/gnome-calendar";
           };
           "battery" = {
