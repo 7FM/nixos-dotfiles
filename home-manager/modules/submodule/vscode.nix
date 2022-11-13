@@ -4,22 +4,7 @@ let
   useClangd = false;
   usePlatformIO = true;
 
-  marketplaceExtensions = [
-    #ms-vscode.cmake-tools
-    #{
-    #  name = "cmake-tools";
-    #  publisher = "ms-vscode";
-    #  version = "1.9.2";
-    #  sha256 = "sha256-egikoFQCLEc8sy01KduqXrEbIZQKPK03CxijkR0wI4s=";
-    #}
-    #xaver.clang-format
-    # {
-    #   name = "clang-format";
-    #   publisher = "xaver";
-    #   version = "1.9.0";
-    #   sha256 = "sha256-q9DvkXbv+GTyeMVIyUQDK49Njsl9msbnOD1gyS4ljC8=";
-    # }
-  ] ++ (import ./vscode-extensions.nix);
+  marketplaceExtensions = (import ./vscode-extensions.nix);
 
   vsExtensions = with pkgs.vscode-extensions; [
       # Nix language support
@@ -87,19 +72,12 @@ in {
   programs.vscode = {
     enable = true;
 
-#    package = pkgs.vscodium;
-#    package = pkgs.vscode-fhs;
-#    package = vsCodeWithExtPkg;
     package = pkgs.callPackage ./vscode-wayland-wrapper.nix { vscode = vsCodeWithExtPkg; };
-
-#    extensions = vsExtensions;
 
     userSettings = {
       "editor.suggestSelection" = "first";
-      # "editor.defaultFormatter" = "xaver.clang-format";
       "editor.formatOnPaste" = false;
       "editor.formatOnType" = true;
-      # "editor.formatOnSave" = true;
       "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
       "vsintellicode.modelDownloadPath" = ".cache/vscode";
       "telemetry.enableTelemetry" = false;
