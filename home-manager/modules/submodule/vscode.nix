@@ -119,8 +119,6 @@ in {
       "liveshare.codeLens" = false;
       "liveshare.diagnosticLogging" = true;
       "liveshare.diagnosticMode" = true;
-      "java.semanticHighlighting.enabled" = true;
-      "java.requirements.JDK11Warning" = false;
       "java.configuration.checkProjectSettingsExclusions" = false;
       "cSpell.language" = "en,en-US,de,de-de";
       "cSpell.enableFiletypes" = [
@@ -151,7 +149,6 @@ in {
           "*.ipynb" = "jupyter-notebook";
       };
       "workbench.colorTheme" = "Default Dark+";
-      "cmake.configureOnOpen" = false;
       "notebook.cellToolbarLocation" = {
         "default" = "right";
         "jupyter-notebook" = "left";
@@ -163,6 +160,11 @@ in {
       "platformio-ide.activateOnlyOnPlatformIOProject" = true;
       "platformio-ide.disablePIOHomeStartup" = true;
       "mlir.onSettingsChanged" = "restart";
+      "files.watcherExclude" = {
+        "**/.bloop" = true;
+        "**/.metals" = true;
+        "**/.ammonite" = true;
+      };
     };
 
   };
