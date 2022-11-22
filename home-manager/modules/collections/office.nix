@@ -1,16 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-#  useWayland = config.custom.gui == "wayland";
-  useWayland = true;
-
   enable = config.custom.hm.collections.office.enable;
 in {
   config = lib.mkIf enable (lib.mkMerge [{
-    # imports = [
-    #   (import ../firefox.nix { inherit useWayland; })
-    # ];
-
     home.packages = with pkgs; [
       # Some basic gui programs
       gimp
@@ -30,5 +23,5 @@ in {
       # For MTP connection with an android phone
       jmtpfs
     ];
-  } (import ../submodule/firefox.nix { inherit useWayland; } { inherit config pkgs lib; })]);
+  } (import ../submodule/firefox.nix { inherit config pkgs lib; })]);
 }

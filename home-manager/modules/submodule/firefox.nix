@@ -1,21 +1,15 @@
-{ useWayland ? true }:
 { config, pkgs, lib, ... }:
 
 let
   userName = config.home.username;
   myTools = pkgs.myTools { inherit config pkgs lib; };
 in {
-  home.sessionVariables = lib.mkIf useWayland {
-    MOZ_ENABLE_WAYLAND = 1;
-  };
-
   home.packages = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
 
   programs.firefox = {
     enable = true;
     package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
       extraNativeMessagingHosts = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
-      forceWayland = useWayland;
       extraPolicies = {
         ExtensionSettings = {};
       };
