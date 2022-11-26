@@ -8,7 +8,6 @@ in {
     home.packages = with pkgs; [
       # Utilities
       gparted
-      nmapsi4
       syncthing
       openconnect
       x2goclient

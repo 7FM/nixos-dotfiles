@@ -13,8 +13,8 @@ in {
       zip
       unzip
       nfs-utils # Utilities to mount NFS shares
-      #nmap
       speedtest-cli
+      arp-scan
       usbutils
       pciutils
       inetutils
