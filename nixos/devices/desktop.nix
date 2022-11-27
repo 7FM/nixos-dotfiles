@@ -95,7 +95,10 @@ in (lib.mkMerge [{
     defaultLcMeasurement = "de_DE.UTF-8";
   };
 
-  networking.interfaces.eno1.useDHCP = true;
+  networking.interfaces.eno1 = {
+    useDHCP = true;
+    wakeOnLan.enable = true;
+  };
   #networking.interfaces.enp7s0f3u3u4u4.useDHCP = true;
 
   networking.interfaces.wlp3s0.useDHCP = true;
