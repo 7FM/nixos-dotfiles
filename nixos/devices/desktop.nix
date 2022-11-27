@@ -79,6 +79,9 @@ in (lib.mkMerge [{
       autoConnect = false;
     };
   };
+  custom.sshServer = {
+   enable = true;
+  };
   custom.security = {
     gnupg.enable = true;
     usbguard = {
