@@ -38,6 +38,14 @@
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
                 });
 
+                # TODO remove once https://github.com/NixOS/nixpkgs/pull/203534 is merged
+                keepassxc = prev.keepassxc.overrideAttrs (oldAttrs: {
+                  postFixup = "";
+                  preFixup = ''
+                    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+                  '';
+                });
+
                 klipper = prev.stdenv.mkDerivation rec {
                   pname = "klipper";
                   version = "unstable-2022-03-14";
