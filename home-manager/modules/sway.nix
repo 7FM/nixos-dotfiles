@@ -27,6 +27,9 @@ let
     }
     # this one is not installed by homemanager, but the path is identical as we use the same nixpkgs revision
     { command = "${pkgs.blueman}/bin/blueman-applet"; always = false; serviceName = "startup-blueman-applet"; }
+
+    # Authentication agent
+    { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; serviceName = "polkit-gnome-authentication-agent"; }
   ];
 
   #lockcmd = "swaylock -f -c 000000";
@@ -194,8 +197,6 @@ in {
 
           # Swayidle
           { command = "swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
-          # Authentication agent
-          { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; }
           # start usually used programs
         ] ++ startupPrograms);
 

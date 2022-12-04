@@ -45,6 +45,9 @@ in {
     # Keyring
     services.gnome.gnome-keyring.enable = !runHeadless && (config.custom.gui != "x11");
 
+    # Polkit
+    security.polkit.enable = true;
+
     # GnuPG
     programs.gnupg.agent = {
       enable = config.custom.security.gnupg.enable;
