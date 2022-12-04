@@ -68,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.5.11";
-    sha256 = "0myr4i8sfdda5zd682qxly41860jhkfjv93jg095mnb4yy1gw8lv";
+    version = "1.5.12";
+    sha256 = "1495j36c0glmnb65211dbjxlcszz5nmi5j1nnikc1fc1ch7pgdhg";
   }
   {
     name = "latex-support";
@@ -104,8 +104,8 @@
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.40.2022112903";
-    sha256 = "0rdvmm5c6ny7wa1myi4n8ciz0x60iv6jc6zvd7gj42wqrynbb09n";
+    version = "0.40.2022120203";
+    sha256 = "063b0k74zy62qg6mh2bms15jiydysv58mds8p82nw3iajm6ppm5i";
   }
   {
     name = "octave";
