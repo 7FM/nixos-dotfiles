@@ -30,6 +30,9 @@ let
 
     # Authentication agent
     { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; serviceName = "polkit-gnome-authentication-agent"; }
+  ] ++ lib.optionals (!desktop) [
+    # Battery level monitor
+    { command = "${pkgs.swaynag-battery}/bin/swaynag-battery"; always = false; serviceName = "swaynag-battery"; }
   ];
 
   #lockcmd = "swaylock -f -c 000000";
