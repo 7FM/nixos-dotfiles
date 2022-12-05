@@ -174,8 +174,6 @@ in {
           # Clipboard manager
           { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store"; always = false; }
 
-          # Ensure mako runs for notifications
-          # { command = "${pkgs.mako}/bin/mako"; }
           # Ensure sway notification center runs
           { command = "${pkgs.swaynotificationcenter}/bin/swaync"; }
 
@@ -332,17 +330,6 @@ in {
         }
       ) progs);
     in lib.optionalAttrs enableSystemdSway (createStartupServices startupPrograms);
-
-    # Notification daemon, Mako configuration
-    # programs.mako = {
-    #   enable = true;
-    #   # default timeout in milliseconds
-    #   defaultTimeout = 5000;
-    #   extraConfig = ''
-    #     on-button-middle=exec ${pkgs.mako}/bin/makoctl menu -n "$id" ${pkgs.wofi}/bin/wofi -d -p 'Select action: ' && ${pkgs.mako}/bin/makoctl dismiss -n $id
-    #     on-notify=exec ${pkgs.mpv}/bin/mpv ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message.oga
-    #   '';
-    # };
 
     # Autostart sway in zsh
     programs.zsh.initExtra = if (!enableSystemdSway) then ''
