@@ -74,6 +74,10 @@ in {
 
     package = pkgs.callPackage ./vscode-wayland-wrapper.nix { vscode = vsCodeWithExtPkg; };
 
+    enableUpdateCheck = false;
+    mutableExtensionsDir = false;
+    enableExtensionUpdateCheck = false;
+
     userSettings = {
       "editor.suggestSelection" = "first";
       "editor.formatOnPaste" = false;
@@ -153,7 +157,6 @@ in {
         "default" = "right";
         "jupyter-notebook" = "left";
       };
-      "update.mode" = "none";
       "extensions.autoUpdate" = false;
       "extensions.ignoreRecommendations" = true;
       "platformio-ide.useBuiltinPIOCore" = false;
