@@ -32,7 +32,13 @@ let
     { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; serviceName = "polkit-gnome-authentication-agent"; }
   ] ++ lib.optionals (!desktop) [
     # Battery level monitor
-    { command = "${pkgs.swaynag-battery}/bin/swaynag-battery"; always = false; serviceName = "swaynag-battery"; }
+    { 
+      command = "${pkgs.swaynag-battery}/bin/swaynag-battery"; 
+      always = false; serviceName = "swaynag-battery";
+      env = [
+        "PATH=${pkgs.sway}/bin"
+      ]; 
+    }
   ];
 
   #lockcmd = "swaylock -f -c 000000";
@@ -176,7 +182,7 @@ in {
           { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store"; always = false; }
 
           # Ensure sway notification center runs
-          { command = "${pkgs.swaynotificationcenter}/bin/swaync"; }
+          { command = "${pkgs.swaynotificationcenter}/bin/swaync"; always = false;}
 
           # Set QT options
           {
