@@ -76,8 +76,6 @@ in {
     home.packages = with pkgs; [
       # needed for waybar customization
       font-awesome
-    ] ++ lib.optionals waybarLaptopFeatures [ 
-        brightnessctl
     ];
 
     systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];

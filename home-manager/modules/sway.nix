@@ -153,9 +153,9 @@ in {
 
         keybindings = lib.mkOptionDefault ({
           # Volume control
-          "XF86AudioRaiseVolume" = "exec \"pactl set-sink-volume @DEFAULT_SINK@ +1%\"";
-          "XF86AudioLowerVolume" = "exec \"pactl set-sink-volume @DEFAULT_SINK@ -1%\"";
-          "XF86AudioMute" = "exec \"pactl set-sink-mute @DEFAULT_SINK@ toggle\"";
+          "XF86AudioRaiseVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +1%\"";
+          "XF86AudioLowerVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -1%\"";
+          "XF86AudioMute" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle\"";
           # Lock hotkey
           "${mod}+${mod2}+l" = "exec ${lockcmd}";
           # Screenshots
@@ -164,8 +164,8 @@ in {
           "${mod}+Print" = "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
         } // (lib.optionalAttrs (!desktop) {
           # Brightness control
-          "XF86MonBrightnessDown" = "exec \"brightnessctl set 2%-\"";
-          "XF86MonBrightnessUp" = "exec \"brightnessctl set +2%\"";
+          "XF86MonBrightnessDown" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set 2%-\"";
+          "XF86MonBrightnessUp" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set +2%\"";
         }) // createWsKeybindings workspaces);
 
         startup = [

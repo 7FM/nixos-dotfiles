@@ -33,7 +33,5 @@ in {
       # If you want to use JACK applications, uncomment this
       #jack.enable = backendUsePipewire;
     };
-    # Install the pulseaudio package to still have access to pactl
-    environment.systemPackages = with pkgs; lib.optionals backendUsePipewire [ pulseaudio ];
   };
 }
