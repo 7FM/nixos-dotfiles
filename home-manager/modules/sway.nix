@@ -142,7 +142,7 @@ in {
           style = "";
         };
 
-        menu = "wofi --show=drun --lines=5 --prompt=\"\"";
+        menu = "${pkgs.wofi}/bin/wofi --show=drun --lines=5 --prompt=\"\"";
 
         terminal = "alacritty";
 
@@ -169,34 +169,34 @@ in {
 
         startup = [
           # Clipboard manager
-          { command = "wl-paste -t text --watch clipman store"; always = false; }
+          { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store"; always = false; }
 
-          # Ensure mako runs
+          # Ensure mako runs for notifications
           { command = "${pkgs.mako}/bin/mako"; }
 
           # Set QT options
           {
-            command = "dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
+            command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
             always = false;
           }
 
           # Expose the SSH-AGENT
           {
-            command = "dbus-update-activation-environment --systemd SSH_AUTH_SOCK";
+            command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd SSH_AUTH_SOCK";
             always = false;
           }
         ]
         # Auto-focus the first display
-        ++ lib.optional (disp1 != null) { command = "swaymsg focus output ${disp1}"; always = false; }
+        ++ lib.optional (disp1 != null) { command = "${pkgs.sway}/bin/swaymsg focus output ${disp1}"; always = false; }
         # Clamshell mode
         ++ lib.optional (laptopDisplay != null) { command = "\${XDG_CONFIG_HOME:-\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; }
         ++ lib.optionals (!enableSystemdSway) ([
           # Import the most important environment variables into the D-Bus and systemd
           # user environments (e.g. required for screen sharing and Pinentry prompts):
-          { command = "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"; always = false; }
+          { command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"; always = false; }
 
           # Swayidle
-          { command = "swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
+          { command = "${pkgs.swayidle}/bin/swayidle -w timeout ${lockTimeout} \"${lockcmd}\" ${disableDisplayCmd} ${enableDisplayCmd} before-sleep \"${lockcmd}\""; always = false; }
           # start usually used programs
         ] ++ startupPrograms);
 
@@ -352,7 +352,7 @@ in {
       ];
 
       timeouts = [
-        { timeout = 300; command = lockcmd; }
+        { timeout = lockTimeout; command = lockcmd; }
         {
           timeout = disableDisplayTimeout;
           command = disableDisplayCmdRaw;
