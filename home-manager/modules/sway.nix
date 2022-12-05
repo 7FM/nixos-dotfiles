@@ -162,6 +162,8 @@ in {
           "Print" = "exec ${pkgs.grim}/bin/grim ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
           # Take a screenshot of a selected region
           "${mod}+Print" = "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
+          # Toggle the notification control center
+          "${mod}+Shift+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
         } // (lib.optionalAttrs (!desktop) {
           # Brightness control
           "XF86MonBrightnessDown" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set 2%-\"";
@@ -173,7 +175,9 @@ in {
           { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store"; always = false; }
 
           # Ensure mako runs for notifications
-          { command = "${pkgs.mako}/bin/mako"; }
+          # { command = "${pkgs.mako}/bin/mako"; }
+          # Ensure sway notification center runs
+          { command = "${pkgs.swaynotificationcenter}/bin/swaync"; }
 
           # Set QT options
           {
@@ -330,15 +334,15 @@ in {
     in lib.optionalAttrs enableSystemdSway (createStartupServices startupPrograms);
 
     # Notification daemon, Mako configuration
-    programs.mako = {
-      enable = true;
-      # default timeout in milliseconds
-      defaultTimeout = 5000;
-      extraConfig = ''
-        on-button-middle=exec ${pkgs.mako}/bin/makoctl menu -n "$id" ${pkgs.wofi}/bin/wofi -d -p 'Select action: ' && ${pkgs.mako}/bin/makoctl dismiss -n $id
-        on-notify=exec ${pkgs.mpv}/bin/mpv ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message.oga
-      '';
-    };
+    # programs.mako = {
+    #   enable = true;
+    #   # default timeout in milliseconds
+    #   defaultTimeout = 5000;
+    #   extraConfig = ''
+    #     on-button-middle=exec ${pkgs.mako}/bin/makoctl menu -n "$id" ${pkgs.wofi}/bin/wofi -d -p 'Select action: ' && ${pkgs.mako}/bin/makoctl dismiss -n $id
+    #     on-notify=exec ${pkgs.mpv}/bin/mpv ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message.oga
+    #   '';
+    # };
 
     # Autostart sway in zsh
     programs.zsh.initExtra = if (!enableSystemdSway) then ''

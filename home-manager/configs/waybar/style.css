@@ -140,6 +140,7 @@ tooltip label {
 #custom-disk_home,
 #custom-disk_root,
 #custom-mail,
+#custom-notification,
 #custom-logout,
 #custom-spotify,
 #custom-media_firefox,
@@ -220,11 +221,16 @@ tooltip label {
 #custom-disk_home,
 #custom-disk_root,
 #custom-mail,
+#custom-notification,
 #custom-logout,
 #custom-spotify {
     background-color: @custom_bg;
     color: @custom_color;
     padding: 0 0.2em;
+}
+
+#custom-notification {
+    font-family: "NotoSansMono Nerd Font";
 }
 
 #custom-scratchpad-indicator {

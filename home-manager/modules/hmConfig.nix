@@ -17,6 +17,7 @@ in {
     ./qt.nix
     ./ssh.nix
     ./sway.nix
+    ./swaync.nix
     ./waybar.nix
     ./xdg.nix
     ./zsh.nix

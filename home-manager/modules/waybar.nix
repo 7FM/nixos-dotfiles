@@ -106,6 +106,7 @@ in {
           "custom/media_firefox"
         ];
         modules-right = [
+          "custom/notification"
           "custom/mail"
           "temperature"
           "cpu"
@@ -210,6 +211,21 @@ in {
             format = " {used:0.1f}G";
             on-click = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
             on-click-right = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
+          };
+          "custom/notification" = {
+            "tooltip" = false;
+            "format" = "{icon}";
+            "format-icons" = {
+              "notification" = "<span foreground='red'><sup></sup></span>";
+              "none" = "";
+              "dnd-notification" = "<span foreground='red'><sup></sup></span>";
+              "dnd-none" = "";
+            };
+            "return-type" = "json";
+            "exec" = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
+            "on-click" = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+            "on-click-right" = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
+            "escape" = true;
           };
           "custom/mail" = {
             format = "📩 {}";
