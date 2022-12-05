@@ -159,12 +159,10 @@ in {
           # Lock hotkey
           "${mod}+${mod2}+l" = "exec ${lockcmd}";
           # Screenshots
-          "Print" = "exec grim ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
+          "Print" = "exec ${pkgs.grim}/bin/grim ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
           # Take a screenshot of a selected region
-          "${mod}+Print" = "exec grim -g \"$(slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
-
-          # workspace definitions:
-        } // (lib.optionalAttrs (laptopDisplay != null) {
+          "${mod}+Print" = "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
+        } // (lib.optionalAttrs (!desktop) {
           # Brightness control
           "XF86MonBrightnessDown" = "exec \"brightnessctl set 2%-\"";
           "XF86MonBrightnessUp" = "exec \"brightnessctl set +2%\"";

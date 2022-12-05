@@ -9,8 +9,8 @@ with pkgs; [
   xorg.xhost # can be used to allow Xwayland applications to run as root, i.e. gparted
   wl-clipboard
 
+  #TODO remove misc/scripts and embed them directly into PATH, then remove these dependencies!
   wf-recorder # screen recording
   slurp # wayland region selector
-  grim # wayland cli screenshot tool
   jq # json parser, needed for sway screensharing script
 ]
