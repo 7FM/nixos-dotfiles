@@ -15,6 +15,7 @@ in {
     ./neovim.nix
     ./optimize_storage_space.nix
     ./qt.nix
+    ./scripts.nix
     ./ssh.nix
     ./sway.nix
     ./swaync.nix
