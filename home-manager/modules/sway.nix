@@ -156,6 +156,7 @@ in {
           "XF86AudioRaiseVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +1%\"";
           "XF86AudioLowerVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -1%\"";
           "XF86AudioMute" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle\"";
+          "XF86AudioMicMute" = "exec \"${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle\"";
           # Lock hotkey
           "${mod}+${mod2}+l" = "exec ${lockcmd}";
           # Screenshots
