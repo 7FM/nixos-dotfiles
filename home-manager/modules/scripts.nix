@@ -54,7 +54,6 @@ let
       keepassxc
       gawk
       gnugrep
-      sudo
     ];
     text = ''
       set -ueo pipefail
@@ -84,7 +83,6 @@ let
       VPN_USER=$(echo "$VPN_DATA" | grep UserName | awk '{print $2}')
 
       echo "USER: $VPN_USER"
-
       echo "Connecting to the VPN"
       echo "$VPN_PASSWORD" | sudo openconnect -u "$VPN_USER" --authgroup="$UNI_VPN_GROUP" --passwd-on-stdin --non-inter "$UNI_VPN_URL"
     '';
