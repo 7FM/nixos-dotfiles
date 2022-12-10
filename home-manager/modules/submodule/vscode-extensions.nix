@@ -32,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "2.11.1";
-    sha256 = "0m59v9lg1nk19hkpsyb4lq72hqhcvbqi7mf9414vghka3bxrx953";
+    version = "2.12.0";
+    sha256 = "1d8qxkz03pia9g8vqn07fp8m5c1ag3hg1bmb33fjn24xam0p85qf";
   }
   {
     name = "code-spell-checker-german";
@@ -104,8 +104,8 @@
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.40.2022120203";
-    sha256 = "063b0k74zy62qg6mh2bms15jiydysv58mds8p82nw3iajm6ppm5i";
+    version = "0.40.2022120603";
+    sha256 = "04w28m89za0ay4lx2y1rm33slyh41n9nfhbi5cvb859nbhn62qxi";
   }
   {
     name = "octave";
