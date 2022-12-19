@@ -72,7 +72,7 @@ in {
   programs.vscode = {
     enable = true;
 
-    package = pkgs.callPackage ./vscode-wayland-wrapper.nix { vscode = vsCodeWithExtPkg; };
+    package = vsCodeWithExtPkg;
 
     enableUpdateCheck = false;
     mutableExtensionsDir = false;

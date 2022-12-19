@@ -11,4 +11,6 @@
     # Fix message: [wlr] [libseat] [libseat/backend/seatd.c:70] Could not connect to socket /run/seatd.sock: no such file or directory
     export LIBSEAT_BACKEND="logind"
     export MOZ_DBUS_REMOTE="1"
+    # enable wayland for OZONE applications
+    export NIXOS_OZONE_WL="1"
 ''
