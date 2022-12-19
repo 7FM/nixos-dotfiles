@@ -92,20 +92,20 @@
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.21.2022111900";
-    sha256 = "1k5wk27s0lk2ywc6ajvraldhr1d48i0l2fj7jlaayds41zhyj73l";
+    version = "0.21.2022121501";
+    sha256 = "17b411b5cv8fp4crxy8pacfdsifl3q262clw11d0g0sass4wnhby";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.37.2022090902";
-    sha256 = "17i9jfwpjjxp81dg6nnviczzmr47pvz33zc4bwfvz69ckn6v74j4";
+    version = "0.37.2022121501";
+    sha256 = "1njh0qn56v1v08xbi5zw0pgm6a68pd3xp7vpiimcq812g88si3af";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.40.2022121203";
-    sha256 = "1ilycsc6i0dyydirdwmglq90l81cxn9pi977vhy8g16w5f7f62l0";
+    version = "0.40.2022121603";
+    sha256 = "0p5j4l2h0qprmas50mx5qp6svl4j7vxmrim5nkmcynpp39q6n6d9";
   }
   {
     name = "octave";
