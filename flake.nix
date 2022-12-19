@@ -38,6 +38,11 @@
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
                 });
 
+                # fix vscode TODO remove once https://github.com/NixOS/nixpkgs/pull/206695 is merged
+                vscode = prev.vscode.overrideAttrs (oldAttrs: {
+                  runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
+                });
+
                 klipper = prev.stdenv.mkDerivation rec {
                   pname = "klipper";
                   version = "unstable-2022-03-14";
