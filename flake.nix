@@ -42,6 +42,10 @@
                 vscode = prev.vscode.overrideAttrs (oldAttrs: {
                   runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
                 });
+                # fix mattermost in wayland mode
+                mattermost-desktop = prev.mattermost-desktop.overrideAttrs (oldAttrs: {
+                  runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
+                });
 
                 klipper = prev.stdenv.mkDerivation rec {
                   pname = "klipper";
