@@ -38,10 +38,6 @@
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
                 });
 
-                # fix vscode TODO remove once https://github.com/NixOS/nixpkgs/pull/206695 is merged
-                vscode = prev.vscode.overrideAttrs (oldAttrs: {
-                  runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
-                });
                 # fix mattermost in wayland mode
                 mattermost-desktop = prev.mattermost-desktop.overrideAttrs (oldAttrs: {
                   runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
