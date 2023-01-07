@@ -30,7 +30,6 @@ in {
         };
       };
     in [
-      https-everywhere
       darkreader
       keepassxc-browser
       ghostery
@@ -68,6 +67,8 @@ in {
           "distribution.searchplugins.defaultLocale" = "en-GB";
           "general.useragent.locale" = "en-GB";
 
+          "dom.security.https_only_mode" = true;
+          "dom.security.https_only_mode_ever_enabled" = true;
           "privacy.donottrackheader.enabled" = true;
           "privacy.trackingprotection.enabled" = true;
           "privacy.trackingprotection.socialtracking.enabled" = true;
