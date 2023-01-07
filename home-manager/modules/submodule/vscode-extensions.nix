@@ -26,8 +26,8 @@
   {
     name = "vscodeintellicode";
     publisher = "VisualStudioExptTeam";
-    version = "1.2.29";
-    sha256 = "099vyn3c5x5vrcmvxa35452ic221iw1595grxq5khfl2p5vvwpss";
+    version = "1.2.30";
+    sha256 = "0lg298047vmy31fnkczgpw78k3yxzpiip0ln1wixy70hdpwsfqbz";
   }
   {
     name = "code-spell-checker";
@@ -38,8 +38,8 @@
   {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.1.0";
-    sha256 = "1z0aqsvk8bw8nrkg8xhswhhfdmwxd5sziylp4zrf1aghbrbgp1gl";
+    version = "2.1.1";
+    sha256 = "15gjmvw1jssb810x22f4a4x3baanr1qyj4sjphp6rp8gfbzp46h2";
   }
   {
     name = "vscode-mlir";
@@ -68,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.9.0";
-    sha256 = "03hmrap8mlflngpd7vnkhgv00334yarm20xxz849h0r1whlcv47y";
+    version = "1.10.0";
+    sha256 = "1ldjllliwpyax1yg20p6bmfq534i1myz6i8alh2mk8v877afaxir";
   }
   {
     name = "latex-support";
