@@ -43,7 +43,7 @@
                   patches = (oldAttrs.patches or []) ++ [
                      (prev.fetchpatch {
                       url = "https://github.com/jirutka/swaylock-effects/pull/20.patch";
-                      sha256 = "sha256-anYmxPOGcgCfd8EXDP2yWkzoU5M/12yG9pnC/mJzFYM=";
+                      sha256 = "sha256-een8e4UQewElTVL+4u3sKvhmrRbcb3kq22JFrcR5Dqw=";
                      }) 
                   ];
                 });
