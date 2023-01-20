@@ -4,6 +4,7 @@ deviceName: userName:
 let
   cfg = config.custom.networking;
   hostname = cfg.hostname;
+  nfsSupport = cfg.nfsSupport;
   wifiSupport = cfg.wifiSupport;
   withNetworkManager = cfg.withNetworkManager;
   myTools = pkgs.myTools { inherit config pkgs lib; };
@@ -11,6 +12,13 @@ let
   openvpnAutoConnect = cfg.openvpn.client.autoConnect;
 in {
   options.custom.networking = with lib; {
+    nfsSupport = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to add support to mount NFS.
+      '';
+    };
     wifiSupport = mkOption {
       type = types.bool;
       default = false;
@@ -54,6 +62,9 @@ in {
 
   config = {
     networking.hostName = hostname;
+
+    services.rpcbind.enable = lib.mkDefault nfsSupport;
+    boot.supportedFilesystems = lib.optionals nfsSupport [ "nfs" ];
 
     # Enables wireless support via wpa_supplicant.
     networking.wireless.enable = true && wifiSupport;

@@ -83,6 +83,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.swapfile.size`
     * `custom.swapfile.path`
     * `custom.networking.hostname`
+    * `custom.networking.nfsSupport`
     * `custom.networking.wifiSupport`
     * `custom.networking.withNetworkManager`
     * `custom.networking.openvpn.client.enable`

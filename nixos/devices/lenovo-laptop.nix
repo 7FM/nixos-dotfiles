@@ -115,6 +115,7 @@ in (lib.mkMerge [{
   custom.adb = "udevrules";
   custom.smartcards = true;
   custom.networking = {
+    nfsSupport = true;
     wifiSupport = true;
     withNetworkManager = true;
     openvpn.client = {

@@ -47,6 +47,7 @@ in {
   custom.adb = "disabled";
   custom.smartcards = false;
   custom.networking = {
+    nfsSupport = false;
     wifiSupport = false;
     withNetworkManager = false;
     openvpn.client = {
