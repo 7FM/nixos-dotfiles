@@ -50,8 +50,8 @@ in {
     # Enable the OpenSSH daemon.
     services.openssh.enable = enable || runHeadless;
     services.openssh.ports = ports;
-    services.openssh.permitRootLogin = "no";
-    services.openssh.passwordAuthentication = false;
+    services.openssh.settings.PermitRootLogin = "no";
+    services.openssh.settings.PasswordAuthentication = false;
     users.users."${userName}".openssh.authorizedKeys.keys = authorizedKeys;
 
     # Start ssh agent to manage the ssh keys
