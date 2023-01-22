@@ -17,9 +17,14 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
+
+    nix-matlab = {
+      url = "gitlab:doronbehar/nix-matlab";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, ...}@inputs: {
+  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, nix-matlab, ...}@inputs: {
     nixosConfigurations = let
       mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
@@ -27,6 +32,8 @@
         modules = [
           {
             nixpkgs.overlays = [
+              # Matlab overlay
+              nix-matlab.overlay
               # NUR overlay
               nur.overlay
               # my custom tools
