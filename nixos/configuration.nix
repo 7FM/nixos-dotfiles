@@ -67,12 +67,6 @@ in {
       experimental-features = nix-command flakes
     '';
   };
-  # Add convenient wrapper
-  environment.systemPackages = [
-    (pkgs.writeShellScriptBin "nixFlakes" ''
-      exec ${pkgs.nixVersions.stable}/bin/nix --experimental-features "nix-command flakes" "$@"
-    '')
-  ];
 
   services.xserver.displayManager.autoLogin.enable = false;
 
