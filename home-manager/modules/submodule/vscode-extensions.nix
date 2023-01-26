@@ -2,8 +2,8 @@
   {
     name = "hexeditor";
     publisher = "ms-vscode";
-    version = "1.9.10";
-    sha256 = "041f3bg9hx2ikqs57jw7z3q8vrhf9x9j8cwxz8p495dplcgigjcq";
+    version = "1.9.11";
+    sha256 = "0annfim67kmc0fxd8ap00z5sv7hwwp5q2rlxm0n1099znk7pqm63";
   }
   {
     name = "notepadplusplus-keybindings";
@@ -32,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "2.14.0";
-    sha256 = "0473vlyni3kz09xbw1bk0zzz685lyi9n3qvyga6ajnk60g9i1xqf";
+    version = "2.15.0";
+    sha256 = "1475x5w0wzf3j41z8mwzr9f2l2b0if6822ciqmvfyfv79pzhxxv1";
   }
   {
     name = "code-spell-checker-german";
