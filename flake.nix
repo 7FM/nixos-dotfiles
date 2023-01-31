@@ -45,16 +45,6 @@
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
                 });
 
-                # TODO remove once merged and nixpkgs was updated!
-                swaylock-effects = prev.swaylock-effects.overrideAttrs (oldAttrs: {
-                  patches = (oldAttrs.patches or []) ++ [
-                     (prev.fetchpatch {
-                      url = "https://github.com/jirutka/swaylock-effects/pull/20.patch";
-                      sha256 = "sha256-een8e4UQewElTVL+4u3sKvhmrRbcb3kq22JFrcR5Dqw=";
-                     }) 
-                  ];
-                });
-
                 # fix mattermost in wayland mode
                 mattermost-desktop = prev.mattermost-desktop.overrideAttrs (oldAttrs: {
                   runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
