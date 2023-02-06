@@ -115,6 +115,7 @@ in {
         "**/*.hpp"
       ];
       "files.eol" = "\n";
+      "git.openRepositoryInParentFolders" = "always";
       "liveshare.featureSet" = "stable";
       "liveshare.anonymousGuestApproval" = "reject";
       "liveshare.guestApprovalRequired" = true;
