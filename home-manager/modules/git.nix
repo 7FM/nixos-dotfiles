@@ -26,6 +26,7 @@ in {
         a = "add";
         b = "branch";
         c = "commit";
+        ca = "commit --amend";
         ch = "checkout";
         d = "diff";
         dc = "diff --cached";
