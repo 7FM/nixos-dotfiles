@@ -20,10 +20,10 @@ in {
         extensions = with pkgs.nur.repos.rycee.firefox-addons; let 
           video-downloaderhelper = buildFirefoxXpiAddon rec {
             pname = "video-downloadhelper";
-            version = "7.6.0";
+            version = "7.6.6";
             addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-            url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-${version}-fx.xpi";
-            sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
+            url = "https://addons.mozilla.org/firefox/downloads/file/4040817/video_downloadhelper-${version}.xpi";
+            sha256 = "sha256-RgtkNIpmFsh73q2F9iJqbyLez8WzNFjZV3d3t2JDjIo=";
             meta = with lib;
             {
               description = "The easy way to download and convert Web videos from hundreds of YouTube-like sites.";
