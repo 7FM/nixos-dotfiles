@@ -19,7 +19,7 @@
         disp2 = "HDMI-A-1";
       };
       waybar = {
-        hwmonPath = "/sys/class/hwmon/hwmon1/temp1_input";
+        hwmonPath = "/sys/class/hwmon/hwmon1/temp3_input";
         thermalZone = null;
         gpu = {
           tempCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input";
