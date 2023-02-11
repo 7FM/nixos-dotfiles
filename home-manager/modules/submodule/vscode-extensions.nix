@@ -38,8 +38,8 @@
   {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.1.1";
-    sha256 = "15gjmvw1jssb810x22f4a4x3baanr1qyj4sjphp6rp8gfbzp46h2";
+    version = "2.1.2";
+    sha256 = "1l6s8jvhz4j9rczrbc25yfjss0ads66g6xrv4h1rwqaldp9c6a3i";
   }
   {
     name = "vscode-mlir";
