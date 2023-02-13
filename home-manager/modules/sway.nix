@@ -49,9 +49,9 @@ let
   lockcmd = "${pkgs.swaylock-effects}/bin/swaylock";
   lockTimeout = 300;
   disableDisplayTimeout = 600;
-  disableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * dpms off\"";
+  disableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * power off\"";
   disableDisplayCmd = "timeout ${disableDisplayTimeout} '${disableDisplayCmdRaw}'";
-  enableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * dpms on\"";
+  enableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * power on\"";
   enableDisplayCmd = "resume '${enableDisplayCmdRaw}'";
 
   enableSystemdSway = true;
