@@ -281,6 +281,8 @@ in {
             { app_id = "^nm-connection-editor$"; }
             { title = "^Print$"; }
             { title = "^wpa_gui$"; }
+            # Firefox sharing indicator
+            { app_id = "^firefox$"; title = "^Firefox — Sharing Indicator$"; }
             # File dialogs
             { app_id = "^xdg-desktop-portal-gtk$"; }
             # Astroid file dialog
