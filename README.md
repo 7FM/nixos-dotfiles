@@ -102,7 +102,12 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
     * `custom.hm.modules.ssh.enable`
     * `custom.hm.modules.sway.laptopDisplay`
     * `custom.hm.modules.sway.disp1`
+    * `custom.hm.modules.sway.disp1_pos`
+    * `custom.hm.modules.sway.disp1_res`
     * `custom.hm.modules.sway.disp2`
+    * `custom.hm.modules.sway.disp2_pos`
+    * `custom.hm.modules.sway.disp2_res`
+    * `custom.hm.modules.sway.extraConfig`
     * `custom.hm.modules.waybar.hwmonPath`
     * `custom.hm.modules.waybar.thermalZone`
     * `custom.hm.modules.waybar.gpu.tempCmd`

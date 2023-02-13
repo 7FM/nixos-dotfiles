@@ -5,7 +5,11 @@ let
 
   laptopDisplay = cfg.sway.laptopDisplay;
   disp1 = cfg.sway.disp1;
+  disp1_res = cfg.sway.disp1_res;
+  disp1_pos = cfg.sway.disp1_pos;
   disp2 = if cfg.sway.disp2 == null then disp1 else cfg.sway.disp2;
+  disp2_res = cfg.sway.disp2_res;
+  disp2_pos = cfg.sway.disp2_pos;
 
   startupPrograms = [
     { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
@@ -72,12 +76,47 @@ in {
           Specifies the name of the first display.
         '';
       };
+      disp1_res = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the resolution of the first display.
+        '';
+      };
+      disp1_pos = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the position of the first display.
+        '';
+      };
       disp2 = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Specifies name of the second laptop display.
+          Specifies name of the second display.
           If only one display exists then the value of disp1 will be used.
+        '';
+      };
+      disp2_res = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the resolution of the second display.
+        '';
+      };
+      disp2_pos = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specifies the position of the second display.
+        '';
+      };
+      extraConfig = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Specify additional config entries that are device specific.
         '';
       };
     };
@@ -243,22 +282,22 @@ in {
         };
 
         # Output settings
-        output = {
+        output = let 
+          createDispCfg = disp: res: pos: {
+            "${disp}" = lib.mkIf (res != null) {
+              "res" = res;
+            } // lib.mkIf (pos != null) {
+              "pos" = pos;
+            };
+          };
+          disp1_cfg = createDispCfg disp1 disp1_res disp1_pos;
+          disp2_cfg = createDispCfg disp2 disp2_res disp2_pos;
+        in {
         # Does not work, dont know why
         #  "*" = {
         #    bg = "${XDG_CONFIG_HOME:-$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit";
         #  };
-        } // lib.mkIf desktop {
-          #TODO these should'nt be hardcoded either!
-          "${disp1}" = {
-            res = "1920x1080@144Hz";
-            pos = "0,0";
-          };
-          "${disp2}" = {
-            res = "1920x1080";
-            pos = "1920,0";
-          };
-        };
+        } // (disp2_cfg // disp1_cfg);
 
         # Default assign workspaces to outputs
         workspaceAutoBackAndForth = true;
@@ -313,7 +352,7 @@ in {
         #output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit
         # credits for the image go to: https://www.youtube.com/watch?v=Lqz5ZtiCmYk
         output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/die_shot.jpg fit
-      '';
+      '' + lib.optionalString (cfg.sway.extraConfig != null) cfg.sway.extraConfig;
     };
 
     systemd.user.services = let

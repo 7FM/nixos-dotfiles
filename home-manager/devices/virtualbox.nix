@@ -19,7 +19,12 @@
       sway = rec {
         laptopDisplay = "";
         disp1 = laptopDisplay;
+        disp1_pos = null;
+        disp1_res = null;
         disp2 = laptopDisplay;
+        disp2_pos = null;
+        disp2_res = null;
+        extraConfig = null;
       };
       waybar = {
         hwmonPath = null;

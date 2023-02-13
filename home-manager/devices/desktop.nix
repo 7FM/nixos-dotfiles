@@ -16,7 +16,15 @@
       sway = {
         laptopDisplay = null;
         disp1 = "DVI-D-1";
+        disp1_pos = "0,0";
+        disp1_res = "1920x1080@144Hz";
         disp2 = "HDMI-A-1";
+        disp2_pos = "1920,0";
+        disp2_res = "1920x1080";
+        extraConfig = ''
+          output "Toshiba America Info Systems Inc Toshiba-H2C 0x00008800" disable
+          output "HDMI-A-2" pos 0 1080
+        '';
       };
       waybar = {
         hwmonPath = "/sys/class/hwmon/hwmon1/temp3_input";
