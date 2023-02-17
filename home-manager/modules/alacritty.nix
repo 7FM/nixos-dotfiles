@@ -1,6 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 let
-  cfg = config.custom.hm.modules.alacritty;
+  cfg = osConfig.custom.hm.modules.alacritty;
 
   enable = cfg.enable;
   usesVirtualbox = cfg.virtualboxWorkaround;
@@ -21,18 +21,6 @@ let
 
   package = if usesVirtualbox then vbox_fix else pkgs.alacritty;
 in {
-  options.custom.hm.modules = with lib; {
-    alacritty = {
-      virtualboxWorkaround = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Apply virtualbox specific workarounds for a correct operation.
-        '';
-      };
-    };
-  };
-
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       package

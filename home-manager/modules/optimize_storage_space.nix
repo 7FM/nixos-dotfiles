@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  enable = config.custom.hm.modules.optimize_storage.enable;
+  enable = osConfig.custom.hm.modules.optimize_storage.enable;
 in {
   config = lib.mkIf enable {
     programs.man.enable = false;

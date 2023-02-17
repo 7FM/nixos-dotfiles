@@ -3,7 +3,7 @@
 with lib;
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
   cfg = config.custom.internationalization;
 
   timeZone = cfg.timeZone;

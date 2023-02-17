@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
   enable = true; #TODO create option?
@@ -154,11 +154,11 @@ let
     run_with_tcp_port
     run_with_udp_port
     wait_for_process
-  ] ++ lib.optionals ((config.custom.gui == "hm-wayland") || (config.custom.gui == "wayland")) [
+  ] ++ lib.optionals ((osConfig.custom.gui == "hm-wayland") || (osConfig.custom.gui == "wayland")) [
     sway-screenshare
-  ] ++ lib.optionals config.custom.hm.modules.ssh.enable [
+  ] ++ lib.optionals osConfig.custom.hm.modules.ssh.enable [
     esa_gitlab_shuttle
-  ] ++ lib.optionals config.custom.hm.collections.office.enable [
+  ] ++ lib.optionals osConfig.custom.hm.collections.office.enable [
     uni_vpn
   ];
 in {

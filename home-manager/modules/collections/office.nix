@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  enable = config.custom.hm.collections.office.enable;
+  enable = osConfig.custom.hm.collections.office.enable;
 in {
   config = lib.mkIf enable (lib.mkMerge [{
     home.packages = with pkgs; [
@@ -23,5 +23,5 @@ in {
       # For MTP connection with an android phone
       jmtpfs
     ];
-  } (import ../submodule/firefox.nix { inherit config pkgs lib; })]);
+  } (import ../submodule/firefox.nix { inherit config pkgs lib osConfig; })]);
 }

@@ -7,7 +7,7 @@ let
   nfsSupport = cfg.nfsSupport;
   wifiSupport = cfg.wifiSupport;
   withNetworkManager = cfg.withNetworkManager;
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
   openvpnClient = cfg.openvpn.client.enable;
   openvpnAutoConnect = cfg.openvpn.client.autoConnect;
 in {

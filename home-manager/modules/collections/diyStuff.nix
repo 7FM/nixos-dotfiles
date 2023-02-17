@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  enable = config.custom.hm.collections.diyStuff.enable;
+  enable = osConfig.custom.hm.collections.diyStuff.enable;
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [

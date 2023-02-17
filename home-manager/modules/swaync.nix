@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  hmManageSway = config.custom.gui == "hm-wayland";
-  enable = hmManageSway || (config.custom.gui == "wayland");
+  hmManageSway = osConfig.custom.gui == "hm-wayland";
+  enable = hmManageSway || (osConfig.custom.gui == "wayland");
 in {
   config = lib.mkIf enable {
 

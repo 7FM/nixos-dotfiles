@@ -2,7 +2,7 @@ userName:
 { config, pkgs, lib, ... }:
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
   isAmdCpu = config.custom.cpu == "amd";
   isIntelCpu = config.custom.cpu == "intel";
   isHeadless = config.custom.gui == "headless";

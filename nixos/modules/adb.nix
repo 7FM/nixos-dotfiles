@@ -2,7 +2,7 @@ userName:
 { config, pkgs, lib, ... }:
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.adb != "disabled";
   global = config.custom.adb == "global";
 in {

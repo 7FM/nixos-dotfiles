@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.cpu == "generic";
 in {
 

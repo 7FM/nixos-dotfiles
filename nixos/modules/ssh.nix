@@ -8,7 +8,7 @@ let
   enable = cfg.enable;
   _ports = cfg.ports;
   ports = if lib.types.path.check _ports then (import _ports) else _ports;
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
   authorizedKeys = cfg.authorizedKeys;
 in {
   options.custom.sshServer = with lib; {

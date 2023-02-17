@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  enable = config.custom.hm.collections.utilities.enable;
+  enable = osConfig.custom.hm.collections.utilities.enable;
 in {
   config = lib.mkIf enable (lib.mkMerge [{
     home.packages = with pkgs; [

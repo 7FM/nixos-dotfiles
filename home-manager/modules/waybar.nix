@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  cfg = config.custom.hm.modules;
+  cfg = osConfig.custom.hm.modules;
 
   laptopDisplay = cfg.sway.laptopDisplay;
 
@@ -15,60 +15,13 @@ let
   # We enable gpu stats iff at least gpu stat command was given
   enableGpuStats = gpuCfgValueCount > 0;
 
-  hmManageSway = config.custom.gui == "hm-wayland";
-  enable = hmManageSway || (config.custom.gui == "wayland");
+  hmManageSway = osConfig.custom.gui == "hm-wayland";
+  enable = hmManageSway || (osConfig.custom.gui == "wayland");
 
   # Waybar settings
   enableSystemdWaybar = config.wayland.windowManager.sway.enable && config.wayland.windowManager.sway.systemdIntegration;
   waybarLaptopFeatures = laptopDisplay != null;
 in {
-  options.custom.hm.modules = with lib; {
-    waybar = {
-      hwmonPath = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the sys-fs path to an hwmon.
-          This might be required if the default method can not determine the cpu temperature.
-        '';
-      };
-      thermalZone = mkOption {
-        type = types.nullOr types.ints.u8;
-        default = null;
-        description = ''
-          Thermal zone to use for the waybar cpu temperature measurements.
-        '';
-      };
-      gpu = {
-        tempCmd = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The command to use for the gpu temperature measurements.
-            I.e. "$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input"
-          '';
-        };
-        mhzFreqCmd = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The command to use to determine the gpu clock frequency in MHz.
-            I.e. "$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/pp_dpm_sclk | $\{pkgs.gnugrep}/bin/egrep -o '[0-9]{0,4}Mhz \\W' | $\{pkgs.gnused}/bin/sed 's/Mhz \\*//'"
-            or   "\$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz"
-          '';
-        };
-        usageCmd = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The command to use to determine the gpu usage in percent.
-            I.e. "$\{pkgs.coreutils}/bin/cat /sys/class/drm/card0/device/gpu_busy_percent"
-          '';
-        };
-      };
-    };
-  };
-
   config = let
     waybarPkg = (pkgs.waybar.override { withMediaPlayer = true; });
   in lib.mkIf enable {
@@ -95,7 +48,7 @@ in {
           "custom/scratchpad-indicator"
           "sway/mode"
         ] ++
-        lib.optionals config.custom.bluetooth [
+        lib.optionals osConfig.custom.bluetooth [
           "bluetooth"
         ] ++ [
           "network"

@@ -2,7 +2,6 @@
 
 {
   imports = [
-    (import ../common/devices.nix true deviceName)
     ./modules/hmConfig.nix
   ];
 

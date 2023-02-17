@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
-  enable = config.custom.hm.modules.ssh.enable;
+  myTools = pkgs.myTools { inherit osConfig; };
+  enable = osConfig.custom.hm.modules.ssh.enable;
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [

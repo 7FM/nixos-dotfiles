@@ -1,9 +1,9 @@
 deviceName:
-{ config, lib, pkgs, ... }:
+{ osConfig }:
 
 rec {
   getSecretPath = let
-    dummySecrets = config.custom.useDummySecrets;
+    dummySecrets = osConfig.custom.useDummySecrets;
     secretsFolder = if dummySecrets then "/example_secrets" else "/secrets";
   in basePath: offsetPath: let
     secretsBase = basePath + secretsFolder;
@@ -18,9 +18,7 @@ rec {
   in
     secretPath;
 
-  getSecret = let
-    dummySecrets = config.custom.useDummySecrets;
-  in basePath: offsetPath:
+  getSecret = basePath: offsetPath:
     import (
       getSecretPath basePath offsetPath
     );

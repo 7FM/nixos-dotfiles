@@ -3,7 +3,7 @@
 # Window system settings:
 let
   runHeadless = config.custom.gui == "headless";
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
 
   cfg = config.custom.audio;
 

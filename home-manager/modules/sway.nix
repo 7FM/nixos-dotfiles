@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  cfg = config.custom.hm.modules;
+  cfg = osConfig.custom.hm.modules;
 
   laptopDisplay = cfg.sway.laptopDisplay;
   disp1 = cfg.sway.disp1;
@@ -55,78 +55,15 @@ let
   enableDisplayCmd = "resume '${enableDisplayCmdRaw}'";
 
   enableSystemdSway = true;
-  hmManageSway = config.custom.gui == "hm-wayland";
-  enable = hmManageSway || (config.custom.gui == "wayland");
+  hmManageSway = osConfig.custom.gui == "hm-wayland";
+  enable = hmManageSway || (osConfig.custom.gui == "wayland");
   desktop = laptopDisplay == null;
 in {
-  options.custom.hm.modules = with lib; {
-    sway = {
-      laptopDisplay = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the name of the laptop display.
-          Or null in case the computer is no laptop.
-        '';
-      };
-      disp1 = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the name of the first display.
-        '';
-      };
-      disp1_res = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the resolution of the first display.
-        '';
-      };
-      disp1_pos = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the position of the first display.
-        '';
-      };
-      disp2 = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies name of the second display.
-          If only one display exists then the value of disp1 will be used.
-        '';
-      };
-      disp2_res = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the resolution of the second display.
-        '';
-      };
-      disp2_pos = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specifies the position of the second display.
-        '';
-      };
-      extraConfig = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Specify additional config entries that are device specific.
-        '';
-      };
-    };
-  };
-
   config = lib.mkIf enable {
 
     assertions = [
       {
-        assertion = config.custom.hm.modules.sway.disp1 != null;
+        assertion = osConfig.custom.hm.modules.sway.disp1 != null;
         message = "If the system is not headless, then at least one display must be defined!";
       }
     ];

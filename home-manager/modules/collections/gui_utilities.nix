@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  myTools = pkgs.myTools { inherit config pkgs lib; };
-  enable = config.custom.hm.collections.gui_utilities.enable;
+  myTools = pkgs.myTools { inherit osConfig; };
+  enable = osConfig.custom.hm.collections.gui_utilities.enable;
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [

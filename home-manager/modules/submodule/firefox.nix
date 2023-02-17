@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
   userName = config.home.username;
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { inherit osConfig; };
 in {
   home.packages = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
 

@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  enable = config.custom.hm.modules.bash.enable;
+  enable = osConfig.custom.hm.modules.bash.enable;
 in {
   config = lib.mkIf enable {
     # ensure proper HM integration

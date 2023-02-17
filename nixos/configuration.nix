@@ -4,13 +4,13 @@ forceNoSecrets: deviceName: userName:
 # Window system settings:
 let
   runHeadless = config.custom.gui == "headless";
-  myTools = pkgs.myTools { inherit config pkgs lib; };
+  myTools = pkgs.myTools { osConfig = config; };
 in {
 
   custom.useDummySecrets = if forceNoSecrets then lib.mkForce true else lib.mkDefault true;
 
   imports = [
-    (import ../common/devices.nix false deviceName)
+    (import ../common/devices.nix deviceName)
     (import ./modules/systemConfig.nix deviceName userName)
   ];
 

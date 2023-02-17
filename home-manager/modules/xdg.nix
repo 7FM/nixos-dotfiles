@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig,... }:
 
 let
-  enable = config.custom.hm.modules.xdg.enable;
+  enable = osConfig.custom.hm.modules.xdg.enable;
 in {
   config = lib.mkIf enable {
     xdg = {

@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
-  enable = config.custom.hm.modules.git.enable;
+  enable = osConfig.custom.hm.modules.git.enable;
 in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
