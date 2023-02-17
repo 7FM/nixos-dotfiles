@@ -2,7 +2,31 @@
 
 {
   imports = [
-    ./modules/hmConfig.nix
+    ./modules/alacritty.nix
+    ./modules/bash.nix
+    ./modules/easyeffects.nix
+    ./modules/email.nix
+    ./modules/git.nix
+    ./modules/gtk.nix
+    ./modules/neovim.nix
+    ./modules/optimize_storage_space.nix
+    ./modules/qt.nix
+    ./modules/scripts.nix
+    ./modules/ssh.nix
+    ./modules/sway.nix
+    ./modules/swaync.nix
+    ./modules/waybar.nix
+    ./modules/xdg.nix
+    ./modules/zsh.nix
+
+    ./modules/collections/communication.nix
+    ./modules/collections/development.nix
+    ./modules/collections/diyStuff.nix
+    ./modules/collections/gaming.nix
+    ./modules/collections/gui_utilities.nix
+    ./modules/collections/media.nix
+    ./modules/collections/office.nix
+    ./modules/collections/utilities.nix
   ];
 
   # Let Home Manager install and manage itself.
