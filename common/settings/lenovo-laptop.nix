@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
@@ -208,4 +208,6 @@ in lib.mkMerge [
     ];
   };
 
-}]
+}
+(import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
+]

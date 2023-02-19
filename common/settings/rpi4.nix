@@ -143,4 +143,6 @@ in lib.mkMerge [
       prefixLength = 24;
     }];
   };
-}]
+}
+(import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
+]

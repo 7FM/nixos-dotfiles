@@ -97,4 +97,6 @@ in lib.mkMerge [
   };
 
   networking.interfaces.enp0s3.useDHCP = true;
-}]
+}
+(import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
+]

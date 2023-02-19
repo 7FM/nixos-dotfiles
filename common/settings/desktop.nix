@@ -172,4 +172,6 @@ in lib.mkMerge [
       platformio
     ];
   };
-}]
+}
+(import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
+]

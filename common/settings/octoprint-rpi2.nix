@@ -333,4 +333,6 @@ in lib.mkMerge [
     };
   };
 
-}]
+}
+(import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
+]
