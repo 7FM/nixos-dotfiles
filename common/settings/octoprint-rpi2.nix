@@ -80,7 +80,7 @@ in lib.mkMerge [
     gnupg.enable = false;
     usbguard = {
       enforceRules = false;
-      #fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
+      #fixedRules = myTools.getSecret ../../nixos "usbguard-rules.nix";
     };
   };
   custom.internationalization = {

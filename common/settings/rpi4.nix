@@ -95,7 +95,7 @@ in lib.mkMerge [
     gnupg.enable = false;
     usbguard = {
       enforceRules = false;
-      #fixedRules = myTools.getSecret ../. "usbguard-rules.nix";
+      #fixedRules = myTools.getSecret ../../nixos "usbguard-rules.nix";
     };
   };
   custom.internationalization = {
@@ -113,8 +113,8 @@ in lib.mkMerge [
   # Create an AP
   services.hostapd = {
     enable = true;
-    ssid = myTools.getSecret ../. "apName.nix";
-    wpaPassphrase = myTools.getSecret ../. "apPassword.nix";
+    ssid = myTools.getSecret ../../nixos "apName.nix";
+    wpaPassphrase = myTools.getSecret ../../nixos "apPassword.nix";
     interface = "wlan0";
   };
   # Associate a dhcp server with this AP
