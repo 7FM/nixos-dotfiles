@@ -7,6 +7,9 @@ set -ueo pipefail
 nix flake update
 # update the vscode extensions
 vscodeExtensionUpdater
+# update nix profile installed packages
+nix profile upgrade '.*'
+
 # commit updates
 git add flake.lock
 git commit -m "update flake inputs"
