@@ -32,14 +32,14 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "2.20.0";
-    sha256 = "0y54nfk7xzirwavg15v019pml6qbmlvgbiadmrl8j9ccqla0w2jl";
+    version = "2.20.4";
+    sha256 = "07z1yy7kzhl6w0xyi589b7ivbpy29nbx46258nm7rjn4jdfwmr8q";
   }
   {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.2.0";
-    sha256 = "08zkz8sfkg9k5gvgp7ncz7rcfs00gns569skkgkn1j85wjlc3yxz";
+    version = "2.2.1";
+    sha256 = "0sx8v3gxfdi1gqs48kw154p35mc2hijjjn3vgsb2lra0y56s8k0p";
   }
   {
     name = "vscode-mlir";
@@ -68,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.11.1";
-    sha256 = "0hqshjkriv5ln72fizgdwjm070ifgv8izs9d16ln5rnlip91gadm";
+    version = "1.11.3";
+    sha256 = "03njahwp0awh6dhrcr6wbicpg3vnf7nal6sbnm21qyz84ycs8ljc";
   }
   {
     name = "latex-support";
@@ -86,26 +86,26 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.49.2023022723";
-    sha256 = "07z14s65ajxax92yxh6i9kd071xf2i51p3mslcn12g9m14nvgq8d";
+    version = "0.49.2023032407";
+    sha256 = "0p57q47bylrrpg75zd6q5q2qh8f8w88d52rc7l3xzdzbrl27l4k7";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.21.2023030900";
-    sha256 = "09jgkd9x1ymvdip150fgh048nz044rnzg14dbb48b267fxcc9xds";
+    version = "0.21.2023032800";
+    sha256 = "08209225ryi9gzfggnc2gx9n8js1rz147ymcgwz1mfcs0abqhwdw";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.38.2023030203";
-    sha256 = "1paya269aypzs13cbvy9ns3mwkvp4vmjhg6yn6lw1iq1p4gqvaxc";
+    version = "0.38.2023032402";
+    sha256 = "1sqmk0n895ap6vpyr067i5ichz3pqrj3f38k863dcf5fx31sqqp1";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.40.2023031403";
-    sha256 = "0xsh3w20qgm1nsqdzv3hjpijlnpzhxw79n7hpp0a3jrxazfd7pq3";
+    version = "0.41.2023032803";
+    sha256 = "0dr015ni3cs0vhh6rvpvnc0vsggz0973z8pck0j6ks40yac020v5";
   }
   {
     name = "octave";
