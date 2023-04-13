@@ -107,7 +107,7 @@ in lib.mkMerge [
     ];
 
   # high-resolution display
-  hardware.video.hidpi.enable = lib.mkDefault true;
+  #TODO adjust fonts
 
   hardware.trackpoint.enable = true;
   hardware.trackpoint.emulateWheel = config.hardware.trackpoint.enable;
