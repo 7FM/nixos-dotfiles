@@ -133,26 +133,33 @@ in lib.mkMerge [
   ];
 
   # Dummy systemd service, to apply battery settings
+  systemd.paths.battery_settings = {
+    wantedBy = [ "multi-user.target" ];
+    pathConfig.DirectoryNotEmpty = "/sys/class/power_supply/BAT0";
+  };
   systemd.services.battery_settings = {
     script = ''
       echo 80 > /sys/class/power_supply/BAT0/charge_stop_threshold
       echo 0 > /sys/class/power_supply/BAT0/charge_start_threshold
     '';
-    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
+      RemainAfterExit = true;
     };
   };
 
-  systemd.services.setup_wwan = {
-    path = with pkgs; [
-      libqmi
-    ];
-    script = builtins.readFile ../../misc/scripts/setup_wwan.sh;
-    before = [ "ModemManager.service" ];
+  systemd.paths.setup_wwan = {
     wantedBy = [ "ModemManager.service" "network.target" ];
+    pathConfig.PathExists = "/dev/cdc-wdm0";
+  };
+  systemd.services.setup_wwan = {
+    script = ''
+      ${pkgs.libqmi}/bin/qmicli -p -d /dev/cdc-wdm0 --device-open-mbim --dms-set-fcc-authentication
+    '';
+    before = [ "ModemManager.service" ];
     serviceConfig = {
       Type = "oneshot";
+      RemainAfterExit = true;
     };
   };
 
