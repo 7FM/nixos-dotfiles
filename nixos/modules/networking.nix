@@ -90,6 +90,9 @@ in {
     networking.networkmanager.unmanaged = [
       "*" "except:type:ethernet" "except:type:wwan" "except:type:gsm"
     ];
+    # nixos-rebuild fails somtimes... See: https://github.com/NixOS/nixpkgs/issues/180175
+    systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+    systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
     # VPNs
     services.openvpn.servers = lib.mkIf openvpnClient {
