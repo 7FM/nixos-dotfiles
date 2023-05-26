@@ -40,6 +40,10 @@
               (final: prev: {
                 myTools = import ./common/lib deviceName;
 
+                tor-browser-bundle-bin = prev.tor-browser-bundle-bin.override {
+                  useHardenedMalloc = false;
+                };
+
                 # waybar: enable experimental features
                 waybar = prev.waybar.overrideAttrs (oldAttrs: {
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
