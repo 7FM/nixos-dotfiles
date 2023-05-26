@@ -3,8 +3,8 @@
 
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    #nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
+    #nixpkgs.url = "nixpkgs/nixpkgs-unstable";
     nur = {
       url = "github:nix-community/NUR";
     };
