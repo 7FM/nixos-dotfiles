@@ -74,7 +74,7 @@ in {
       enable = true;
 
       wrapperFeatures.gtk = true;
-      systemdIntegration = enableSystemdSway;
+      systemd.enable = enableSystemdSway;
       extraSessionCommands = import ../../common/sway_extra_session_commands.nix;
 
       xwayland = hmManageSway;

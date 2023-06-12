@@ -19,7 +19,7 @@ let
   enable = hmManageSway || (osConfig.custom.gui == "wayland");
 
   # Waybar settings
-  enableSystemdWaybar = config.wayland.windowManager.sway.enable && config.wayland.windowManager.sway.systemdIntegration;
+  enableSystemdWaybar = config.wayland.windowManager.sway.enable && config.wayland.windowManager.sway.systemd.enable;
   waybarLaptopFeatures = laptopDisplay != null;
 in {
   config = let
