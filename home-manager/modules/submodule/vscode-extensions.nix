@@ -32,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "2.20.4";
-    sha256 = "07z1yy7kzhl6w0xyi589b7ivbpy29nbx46258nm7rjn4jdfwmr8q";
+    version = "2.20.5";
+    sha256 = "1krs4qr5gcbprlsd6x1323srxs28a74wv6hqcmzz6j52970fc7r1";
   }
   {
     name = "code-spell-checker-german";
@@ -68,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.11.5";
-    sha256 = "0mczh6xwcjf59fpasb4wj2wkc6ldp1swhvpgwi22lcn746ijykwp";
+    version = "1.11.10";
+    sha256 = "17gla14xlsd63mmwq74dh2nm3q3ybfp9anp59k47dmz3yz24g1mb";
   }
   {
     name = "latex-support";
