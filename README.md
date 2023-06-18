@@ -81,6 +81,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
         * `custom.swapfile.enable`
         * `custom.swapfile.size`
         * `custom.swapfile.path`
+        * `custom.nano_conf.enable`
         * `custom.networking.hostname`
         * `custom.networking.nfsSupport`
         * `custom.networking.wifiSupport`

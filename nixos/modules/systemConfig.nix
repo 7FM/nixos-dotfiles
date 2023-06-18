@@ -27,6 +27,7 @@ with lib;
 
     # Features
     ./audio.nix
+    ./nano.nix
     ./optimize_storage_space.nix
     ./powermanagement.nix
     (import ./networking.nix deviceName userName)
@@ -89,6 +90,14 @@ with lib;
       default = false;
       description = ''
         Specifies whether to enable smartcard support.
+      '';
+    };
+
+    nano_conf.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Specifies whether to add a nano global default config.
       '';
     };
   };

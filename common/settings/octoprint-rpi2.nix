@@ -67,6 +67,7 @@ in lib.mkMerge [
   custom.enableVirtualisation = false;
   custom.adb = "disabled";
   custom.smartcards = false;
+  custom.nano_conf.enable = true;
   custom.networking = {
     nfsSupport = false;
     wifiSupport = false;

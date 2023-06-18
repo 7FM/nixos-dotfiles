@@ -96,6 +96,7 @@ in lib.mkMerge [
     size = 1024;
   };
 
+  custom.nano_conf.enable = true;
   networking.interfaces.enp0s3.useDHCP = true;
 }
 (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })

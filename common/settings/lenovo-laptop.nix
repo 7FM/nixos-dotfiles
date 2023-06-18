@@ -180,6 +180,7 @@ in lib.mkMerge [
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
   custom.smartcards = true;
+  custom.nano_conf.enable = true;
   custom.networking = {
     nfsSupport = true;
     wifiSupport = true;
