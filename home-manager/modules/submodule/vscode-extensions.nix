@@ -68,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.11.10";
-    sha256 = "17gla14xlsd63mmwq74dh2nm3q3ybfp9anp59k47dmz3yz24g1mb";
+    version = "1.11.11";
+    sha256 = "0jpi791b5ka1jsks32k9fi9qdga08xjf257is9y3vav4a1cp2ck3";
   }
   {
     name = "latex-support";
