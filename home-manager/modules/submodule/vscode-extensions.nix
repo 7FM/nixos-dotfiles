@@ -86,8 +86,8 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.51.2023062607";
-    sha256 = "1yighhiklfar6d89mf742w68s3ar1b4s1gf754cwwcw48f8xq2mb";
+    version = "0.52.2023063003";
+    sha256 = "07kf7wmssxwf4id927jk198q6paq8icylszshwrbx5ygdhjv0k53";
   }
   {
     name = "vscode-java-dependency";
