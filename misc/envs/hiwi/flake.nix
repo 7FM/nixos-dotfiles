@@ -5,57 +5,79 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
     in {
-      devShell = let
+      devShell = with pkgs; let
+        myPython = let
+          packageOverrides = self: super: {
+           cocotb = super.cocotb.overridePythonAttrs (oldAttrs: rec {
+             version = "1.8.0";
+             src = fetchFromGitHub {
+               owner = "cocotb";
+               repo = "cocotb";
+               rev = "refs/tags/v${version}";
+               hash = "sha256-k3VizQ9iyDawfDCeE3Zup/KkyD54tFBLdQvRKsbKDLY=";
+             };
+             doCheck = false;
+           });
+          };
+        in pkgs.python3.override {inherit packageOverrides; };
+
         myPyPackages = python-packages: with python-packages; [
-         cocotb
-         psutil
-         numpy
-         pyyaml
-         pytest
-         autopep8 # autoformatter
+          find-libpython
+          cocotb
+          psutil
+          numpy
+          pyyaml
+          pytest
+          autopep8 # autoformatter
         ];
 
-        myPythonWithPackages = pkgs.python3.withPackages myPyPackages;
+        myPythonWithPackages = myPython.withPackages myPyPackages;
 
-      in pkgs.mkShellNoCC {
-        nativeBuildInputs = with pkgs; [
+        my_gurobi = (gurobi.overrideAttrs (oldAttrs: rec {
+          version = "10.0.2";
+          sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
+          src = fetchurl {
+            url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
+            sha256 = "sha256-A9osYUlPX4AJgnC6RZ11Z9uLC/BYhN29injlsosAjck=";
+          };
+        }));
+
+      # TODO use stdEnv?
+      in mkShellNoCC {
+        shellHook = ''
+          export GUROBI_HOME="${my_gurobi}/"
+          export GRB_LICENSE_FILE="/home/tm/hiwi/longnail/gurobi.lic"
+        '';
+
+        nativeBuildInputs = [
           gcc
           cmake
           ninja
-          or-tools
           clang_12
           clang-tools # for clangd
           gdb
           verilog
-          (verilator.overrideAttrs (oldAttrs: rec { 
-            version = "4.106";
-            src = fetchFromGitHub {
-              owner = "verilator";
-              repo = "verilator";
-              rev = "v" + version;
-              sha256 = "sha256-XoAz5fbX1olOt31UbBuQsyG+sdKUlHaKi+VeLv8c4Xk=";
-            };
-
-            patches = [
-              (fetchpatch {
-                url = "https://github.com/verilator/verilator/pull/2747.patch";
-                sha256 = "sha256-QdflAa8B7JR6WHCuohdX4KgB/lSwtDojJvRn7j8RVQo=";
-              })
-            ];
-
-            doCheck = false;
-          }))
+          verilator
           yosys
           gtkwave
           zlib # Needed for verilator fst exports
 
           jq # Needed for open dot helper script
 
+          # commercial ILP solver
+          my_gurobi
+
+          graphviz # convert dot graphs to an image
+
           # Python env for the utility scripts & cocotb
           myPythonWithPackages
         ];
-        buildInputs = [ ];
       };
     });}
