@@ -25,12 +25,23 @@
              };
              doCheck = false;
            });
+           cocotb-bus = super.cocotb-bus.overridePythonAttrs (oldAttrs: rec {
+             version = "0.1.1";
+             # Fetching from github does not work with this older version because cocotb-bus._version will be created by setuptools_scm right before being uploaded to Pypi
+             src = fetchPypi {
+               pname = oldAttrs.pname;
+               inherit version;
+               sha256 = "cc9b0bb00c95061a67f650caf96e3a294bb74ef437124dea456dd9e2a9431854";
+             };
+             doCheck = false;
+           });
           };
         in pkgs.python3.override {inherit packageOverrides; };
 
         myPyPackages = python-packages: with python-packages; [
           find-libpython
           cocotb
+          cocotb-bus
           psutil
           numpy
           pyyaml
@@ -78,6 +89,17 @@
 
           # Python env for the utility scripts & cocotb
           myPythonWithPackages
+
+
+          # Core simulation dependencies
+          maven
+          sbt
+          texinfo
+          bison
+          flex
+          gperf
+          gradle_7 # treenail
         ];
+        hardeningDisable = [ "all" ];
       };
     });}
