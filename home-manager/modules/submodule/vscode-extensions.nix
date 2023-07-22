@@ -92,8 +92,8 @@
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.23.2023060200";
-    sha256 = "1i1jfy6q20p5bsrm4lxjn60v4lv6v9j8f82mvddx7rxk7l92zvhk";
+    version = "0.23.2023072200";
+    sha256 = "0l0syvckqr4pyfycng7wyw3wdrxzq887ic7252ya2ya9qvyyp4y6";
   }
   {
     name = "vscode-java-test";
@@ -104,8 +104,8 @@
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.41.2023042103";
-    sha256 = "0yagy5v2g7gmcl3b0v4vzxi6jq4casx5pwkz6099nplnc7v489nh";
+    version = "0.41.2023072203";
+    sha256 = "1wzggqsndh37rrpa29i27kirkf51g9jd9i7fv39zvzf4krcvm852";
   }
   {
     name = "octave";
