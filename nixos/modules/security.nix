@@ -54,17 +54,16 @@ in {
     };
 
     # Security
-    services.usbguard.enable = true;
-
-    services.usbguard.implicitPolicyTarget = if enforce then "block" else "allow";
-
-    services.usbguard.rules = fixedRules;
+    services.usbguard = {
+      enable = true;
+      # For headless:
+      package = if runHeadless then pkgs.usbguard-nox else pkgs.usbguard;
+      implicitPolicyTarget = if enforce then "block" else "allow";
+      rules = fixedRules;
+    };
 
     # Enable support to update device firmware!
     services.fwupd.enable = true;
-
-    # For headless:
-    services.usbguard.package = if runHeadless then pkgs.usbguard-nox else pkgs.usbguard;
 
     # Allow unfree software :(
     nixpkgs.config.allowUnfree = true;
