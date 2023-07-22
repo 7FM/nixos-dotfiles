@@ -56,7 +56,7 @@ in {
     # Security
     services.usbguard.enable = true;
 
-    services.usbguard.implictPolicyTarget = if enforce then "block" else "allow";
+    services.usbguard.implicitPolicyTarget = if enforce then "block" else "allow";
 
     services.usbguard.rules = fixedRules;
 
