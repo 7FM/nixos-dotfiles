@@ -99,6 +99,7 @@
           flex
           gperf
           gradle_7 # treenail
+          jre
         ];
         hardeningDisable = [ "all" ];
       };
