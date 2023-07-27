@@ -13,6 +13,9 @@ in {
 
     # use vlc by default for the following mime types
     xdg.mimeApps.defaultApplications = {
+      "image/svg+xml" = [ "firefox.desktop" "sxiv.desktop" "gimp.desktop" ];
+      "image/png" = [ "sxiv.desktop" "gimp.desktop" ];
+      "image/jpeg" = [ "sxiv.desktop" "gimp.desktop" ];
       "application/ogg" = [ "vlc.desktop" ];
       "application/x-ogg" = [ "vlc.desktop" ];
       "audio/ogg" = [ "vlc.desktop" ];

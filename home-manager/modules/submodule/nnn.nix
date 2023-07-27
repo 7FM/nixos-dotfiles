@@ -90,56 +90,13 @@ in {
     # Keywords=File;Manager;Management;Explorer;Launcher
   };
 
-  xdg.desktopEntries.sxiv = {
-    type ="Application";
-    name = "sxiv";
-    comment = "Terminal image viewer";
-    exec = "sxiv %f";
-    terminal = true;
-    noDisplay = true;
-    icon = "sxiv";
-    mimeType = [
-      "image/bmp"
-      "image/g3fax"
-      "image/gif"
-      "image/x-fits"
-      "image/x-pcx"
-      "image/x-portable-anymap"
-      "image/x-portable-bitmap"
-      "image/x-portable-graymap"
-      "image/x-portable-pixmap"
-      "image/x-psd"
-      "image/x-sgi"
-      "image/x-tga"
-      "image/x-xbitmap"
-      "image/x-xwindowdump"
-      "image/x-xcf"
-      "image/x-compressed-xcf"
-      "image/x-sun-raster"
-      "image/tiff"
-      "image/jpeg"
-      "image/x-psp"
-      "image/png"
-      "image/x-icon"
-      "image/x-xpixmap"
-      "image/x-exr"
-      "image/webp"
-      "image/x-webp"
-      "image/heif"
-      "image/heic"
-      "image/avif"
-      "image/svg+xml"
-      "image/x-wmf"
-      "image/jp2"
-      "image/x-xcursor"
-      "image/openraster"
-    ];
-    categories = [" System" "FileTools" "FileManager" "ConsoleOnly"];
-    # Keywords=File;Manager;Management;Explorer;Launcher
-  };
-
-  xdg.mimeApps.defaultApplications = {
-    "inode/directory" = [ "nnn.desktop" ];
+  xdg.mimeApps = {
+    associations.added = {
+      "image/svg+xml" = "sxiv.desktop";
+    };
+    defaultApplications = {
+      "inode/directory" = [ "nnn.desktop" ];
+    };
   };
 
   # Enable cd on exit

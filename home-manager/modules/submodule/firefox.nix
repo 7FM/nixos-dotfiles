@@ -97,18 +97,23 @@ in {
   };
 
   # use firefox by default for the following mime types
-  xdg.mimeApps.defaultApplications = {
-    "x-scheme-handler/http" = [ "firefox.desktop" ];
-    "x-scheme-handler/https" = [ "firefox.desktop" ];
-    "x-scheme-handler/chrome" = [ "firefox.desktop" ];
-    "text/html" = [ "firefox.desktop" ];
-    "application/x-extension-htm" = [ "firefox.desktop" ];
-    "application/x-extension-html" = [ "firefox.desktop" ];
-    "application/x-extension-shtml" = [ "firefox.desktop" ];
-    "application/xhtml+xml" = [ "firefox.desktop" ];
-    "application/x-extension-xhtml" = [ "firefox.desktop" ];
-    "application/x-extension-xht" = [ "firefox.desktop" ];
-    "application/pdf" = [ "firefox.desktop" ];
+  xdg.mimeApps = {
+    associations.added = {
+      "image/svg+xml" = "firefox.desktop";
+    };
+    defaultApplications = {
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "x-scheme-handler/chrome" = [ "firefox.desktop" ];
+      "text/html" = [ "firefox.desktop" ];
+      "application/x-extension-htm" = [ "firefox.desktop" ];
+      "application/x-extension-html" = [ "firefox.desktop" ];
+      "application/x-extension-shtml" = [ "firefox.desktop" ];
+      "application/xhtml+xml" = [ "firefox.desktop" ];
+      "application/x-extension-xhtml" = [ "firefox.desktop" ];
+      "application/x-extension-xht" = [ "firefox.desktop" ];
+      "application/pdf" = [ "firefox.desktop" ];
+    };
   };
 
 }
