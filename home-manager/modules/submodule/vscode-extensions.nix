@@ -2,8 +2,8 @@
   {
     name = "hexeditor";
     publisher = "ms-vscode";
-    version = "1.9.11";
-    sha256 = "0annfim67kmc0fxd8ap00z5sv7hwwp5q2rlxm0n1099znk7pqm63";
+    version = "1.9.12";
+    sha256 = "0m8g3bd9gk0n3wcqy5w3kjz0sr06q0i88m7z8fkx52x9nla75lkf";
   }
   {
     name = "notepadplusplus-keybindings";
@@ -50,8 +50,8 @@
   {
     name = "openscad";
     publisher = "antyos";
-    version = "1.1.1";
-    sha256 = "1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv";
+    version = "1.2.1";
+    sha256 = "1rnqq03krabsmsjq3434xlv7ywkywmlj0jwmmw2j5x07s631zvpz";
   }
   {
     name = "vscode-tcl";
@@ -86,8 +86,8 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.52.2023063003";
-    sha256 = "07kf7wmssxwf4id927jk198q6paq8icylszshwrbx5ygdhjv0k53";
+    version = "0.53.0";
+    sha256 = "00yga7xn4lsw582djq6av76kn7l5sn0kk1k9b3xcw9mvbbxmh7rj";
   }
   {
     name = "vscode-java-dependency";
@@ -104,8 +104,8 @@
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.41.2023072203";
-    sha256 = "1wzggqsndh37rrpa29i27kirkf51g9jd9i7fv39zvzf4krcvm852";
+    version = "0.42.2023080103";
+    sha256 = "14hga1aa1b92b5l3i4l8i9cacwd4bhws7d5panpkg2zawdjaw648";
   }
   {
     name = "octave";
