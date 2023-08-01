@@ -37,9 +37,7 @@ in {
     security.pam.services.swaylock = {};
     programs.dconf.enable = true;
 
-    # TODO check if this fixes the broken layout for sway on HM
-    # Else try installing the same default fonts manually in HM
-    fonts.enableDefaultFonts = true;
+    fonts.enableDefaultPackages = true;
 
     # Enable support for screen sharing
     services.pipewire.enable = true;

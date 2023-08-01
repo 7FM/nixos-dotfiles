@@ -120,7 +120,7 @@ in lib.mkMerge [
 
   # Autostart WWAN service
   systemd.services.ModemManager.wantedBy = [ "network.target" ];
-  hardware.usbWwan.enable = true;
+  hardware.usb-modeswitch.enable = true;
 
   # Some applications
   environment.systemPackages = with pkgs; [ 
