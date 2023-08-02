@@ -78,7 +78,7 @@ in {
     # Emergency mode requires root -> not usable anyway
     systemd.enableEmergencyMode = false;
 
-    warnings = if (config.services.usbguard.implictPolicyTarget != "block") then [
+    warnings = if (config.services.usbguard.implicitPolicyTarget != "block") then [
       ''
         The fallback policy of usbguard should be set to block! Else no additional security is gained!
         HOWEVER, ensure that usbguard is setup with a policy before setting the fallback to block,
