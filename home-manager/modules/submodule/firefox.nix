@@ -61,6 +61,7 @@ in {
 
           "pdfjs.defaultZoomValue" = "page-fit";
 
+          "extensions.update.autoUpdateDefault" = false;
           "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
           "doh-rollout.doneFirstRun" =  true;
           "doh-rollout.home-region" = "GB";
