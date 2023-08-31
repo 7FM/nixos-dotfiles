@@ -3,6 +3,12 @@
 let
   enable = true; #TODO create option?
 
+  myTools = pkgs.myTools { inherit osConfig; };
+  identity = myTools.getSecret ../configs "git/identity.nix";
+  realName = identity.realName;
+  realMail = identity.realMail;
+  falseMail = identity.falseMail;
+
   sway-screenshare = pkgs.writeShellApplication {
     name = "sway-screenshare";
     runtimeInputs = with pkgs; [
@@ -148,7 +154,43 @@ let
       PID=$1
       tail --pid="$PID" -f /dev/null
     '';
-   };
+  };
+
+  git_fix_author = pkgs.writeShellApplication {
+    name = "git_fix_author";
+    runtimeInputs = with pkgs; [
+      git
+    ];
+    text = ''
+      git filter-branch --env-filter '
+      WRONG_EMAIL="${falseMail}"
+      NEW_NAME="${realName}"
+      NEW_EMAIL="${realMail}"
+
+      if [ "$GIT_COMMITTER_EMAIL" = "$WRONG_EMAIL" ]
+      then
+          export GIT_COMMITTER_NAME="$NEW_NAME"
+          export GIT_COMMITTER_EMAIL="$NEW_EMAIL"
+      fi
+      if [ "$GIT_AUTHOR_EMAIL" = "$WRONG_EMAIL" ]
+      then
+          export GIT_AUTHOR_NAME="$NEW_NAME"
+          export GIT_AUTHOR_EMAIL="$NEW_EMAIL"
+      fi
+      ' "$@" --tag-name-filter cat -- --branches --tags
+    '';
+  };
+
+  git_set_author = pkgs.writeShellApplication {
+    name = "git_set_author";
+    runtimeInputs = with pkgs; [
+      git
+    ];
+    text = ''
+      git config user.name "${realName}"
+      git config user.email "${realMail}"
+    '';
+  };
 
   scripts = [
     run_with_tcp_port
@@ -160,6 +202,9 @@ let
     esa_gitlab_shuttle
   ] ++ lib.optionals osConfig.custom.hm.collections.office.enable [
     uni_vpn
+  ] ++ lib.optionals osConfig.custom.hm.modules.git.enable [
+    git_set_author
+    git_fix_author
   ];
 in {
   config = lib.mkIf enable {
