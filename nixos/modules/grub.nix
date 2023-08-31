@@ -7,13 +7,19 @@ let
   useUEFI = cfg.useUEFI;
 in lib.mkIf enable {
   # Use the GRUB boot loader.
-  boot.loader.grub.enable = true;
+  boot.loader.grub = {
+    enable = true;
+    memtest86.enable = true;
+  };
 
   boot.loader.grub.efiSupport = useUEFI;
   boot.loader.efi.canTouchEfiVariables = useUEFI;
   #boot.loader.grub.efiInstallAsRemovable = true;
   #boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.loader.systemd-boot.enable = false;
+  boot.loader.systemd-boot = {
+    enable = false;
+    memtest86.enable = true;
+  };
 
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = if useUEFI then "nodev" else "/dev/sda"; # or "nodev" for efi only
