@@ -45,6 +45,6 @@ sudo nixos-generate-config --root /mnt
 
 # TODO append custom options to /mnt/etc/hardware.nix and further automate deploying on new devices!
 # When done modifying:
-# sudo nixos-install --no-root-passwd --root /mnt --flake .#<new-device>
+# sudo nixos-install --no-root-passwd --root /mnt --flake .#nixos-<new-device>
 # sudo reboot
 
