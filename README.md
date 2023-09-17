@@ -95,6 +95,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
         * `custom.hm.modules.easyeffects.enable`
         * `custom.hm.modules.email.enable`
         * `custom.hm.modules.git.enable`
+        * `custom.hm.modules.git.scripts.enable`
         * `custom.hm.modules.gtk.enable`
         * `custom.hm.modules.neovim.enable`
         * `custom.hm.modules.optimize_storage.enable`

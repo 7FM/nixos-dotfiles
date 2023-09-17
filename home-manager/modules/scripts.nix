@@ -202,7 +202,7 @@ let
     esa_gitlab_shuttle
   ] ++ lib.optionals osConfig.custom.hm.collections.office.enable [
     uni_vpn
-  ] ++ lib.optionals osConfig.custom.hm.modules.git.enable [
+  ] ++ lib.optionals (osConfig.custom.hm.modules.git.enable && osConfig.custom.hm.modules.git.identity_scripts.enable) [
     git_set_author
     git_fix_author
   ];

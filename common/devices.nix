@@ -75,7 +75,10 @@ deviceName:
         bash.enable = mkEnableDefaultTrueOption "the bash module";
         email.enable = mkEnableOption "the email module";
         easyeffects.enable = mkEnableOption "the easyeffects module";
-        git.enable = mkEnableOption "the git module";
+        git = {
+          enable = mkEnableOption "the git module";
+          identity_scripts.enable = mkEnableOption "the git author set/fix scripts";
+        };
         gtk.enable = mkEnableOption "the gtk module";
         neovim.enable = mkEnableDefaultTrueOption "the neovim module";
         optimize_storage.enable = mkEnableOption "storage optimizations";

@@ -20,7 +20,10 @@ in lib.mkMerge [
         bash.enable = true;
         easyeffects.enable = true;
         email.enable = true;
-        git.enable = true;
+        git = {
+          enable = true;
+          identity_scripts.enable = true;
+        };
         gtk.enable = true;
         neovim.enable = true;
         optimize_storage.enable = true;
