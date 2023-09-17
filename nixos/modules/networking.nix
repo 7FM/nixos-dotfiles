@@ -112,11 +112,15 @@ in {
     # networking.proxy.default = "http://user:password@proxy:port/";
     # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-    # Open ports in the firewall.
-    networking.firewall.allowedTCPPorts = myTools.getSecret ../. "allowedTCPPorts.nix";
-    networking.firewall.allowedUDPPorts = myTools.getSecret ../. "allowedUDPPorts.nix";
-    # Or disable the firewall altogether.
-    networking.firewall.enable = true;
+    networking.firewall = let 
+      portDefSet = (myTools.getSecret ../. "usedPorts.nix") myTools;
+    in {
+      # Open ports in the firewall.
+      allowedTCPPorts = myTools.getAllExposedTCPports portDefSet;
+      allowedUDPPorts = myTools.getAllExposedUDPports portDefSet;
+      # Or disable the firewall altogether.
+      enable = true;
+    };
 
     # network debugging
     programs.wireshark.enable = true;

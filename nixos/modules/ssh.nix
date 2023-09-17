@@ -22,7 +22,7 @@ in {
     };
     ports = mkOption {
       type = types.either types.path (types.nonEmptyListOf types.string);
-      default = myTools.getSecretPath ../. "sshPorts.nix";
+      default = myTools.collectPorts (((myTools.getSecretPath ../. "usedPorts.nix") myTools) // {ssh = [];}).ssh;
       description = ''
         Specifies the ports on which the ssh server should listen!
       '';
