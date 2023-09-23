@@ -32,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "3.0.0";
-    sha256 = "1j6img1g9pb36sa1shdn8mx6rnis872xfr85xwzyjhdh4ajwn39i";
+    version = "3.0.1";
+    sha256 = "0i76gf7zr0j4dr02zmxwfphk6yy8rvlj9rzq3k8pvnlfzkmh9ri9";
   }
   {
     name = "code-spell-checker-german";
@@ -98,8 +98,8 @@
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.39.2023090502";
-    sha256 = "15ckrkxfkydkizr7m8cys8yi0l9dzj6pcg8pp1y3m28fpgscmhnr";
+    version = "0.39.2023092208";
+    sha256 = "12raljsf6nwqvxss3h3jsnavc07fksyp6brvk33ch6zqd5hc0smm";
   }
   {
     name = "vscode-maven";
