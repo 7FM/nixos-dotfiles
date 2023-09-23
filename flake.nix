@@ -40,6 +40,16 @@
               (final: prev: {
                 myTools = import ./common/lib deviceName;
 
+                astroid = prev.astroid.overrideAttrs (oldAttrs: {
+                  patches = oldAttrs.patches ++ [
+                    (prev.fetchpatch {
+                      name = "fix-message-view.patch";
+                      url = "https://github.com/ibuclaw/astroid/commit/6b7e302ae2d183cc6a9ffbfdf8e5a2f9477e8b89.patch";
+                      hash = "sha256-YPXIwle/mNymLm4Wuzq77Z3+/rKlw8B6Txe4NtWGq0c=";
+                    })
+                  ];
+                });
+
                 # waybar: enable experimental features
                 waybar = prev.waybar.overrideAttrs (oldAttrs: {
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
