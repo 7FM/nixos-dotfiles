@@ -166,6 +166,11 @@ in lib.mkMerge [
     };
   };
 
+  networking.networkmanager.fccUnlockScripts = let id = "1199:9079"; in [{
+      inherit id;
+      path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
+  }];
+
   # Fingerprint reader: add fingerprint with fprintd-enroll
   # services.fprintd.enable = true;
 
