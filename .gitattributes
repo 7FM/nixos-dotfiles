@@ -6,3 +6,4 @@
 **/secrets/**/virtualbox/** filter=git-crypt-virtualbox diff=git-crypt-virtualbox
 **/secrets/**/rpi4/** filter=git-crypt-rpi4 diff=git-crypt-rpi4
 **/secrets/**/octoprint-rpi2/** filter=git-crypt-octoprint-rpi2 diff=git-crypt-octoprint-rpi2
+**/secrets/**/tmserver/** filter=git-crypt-tmserver diff=git-crypt-tmserver
