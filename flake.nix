@@ -57,7 +57,7 @@
 
                 # fix mattermost in wayland mode
                 mattermost-desktop = prev.mattermost-desktop.overrideAttrs (oldAttrs: {
-                  runtimeDependencies = oldAttrs.runtimeDependencies ++ [ prev.wayland ];
+                  runtimeDependencies = (oldAttrs.runtimeDependencies or []) ++ [ prev.wayland ];
                 });
 
                 klipper = prev.stdenv.mkDerivation rec {
