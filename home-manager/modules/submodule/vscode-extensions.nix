@@ -50,8 +50,8 @@
   {
     name = "openscad";
     publisher = "antyos";
-    version = "1.2.1";
-    sha256 = "1rnqq03krabsmsjq3434xlv7ywkywmlj0jwmmw2j5x07s631zvpz";
+    version = "1.2.2";
+    sha256 = "09vikj3afqxwp1hyi6v6h993qr3qmh8f9x1pnkc8ga30hdb0hb2y";
   }
   {
     name = "vscode-tcl";
@@ -86,26 +86,26 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.54.2023082803";
-    sha256 = "1n0zdqmpi1ak0mkfydh1d15n6m5h63gi552a648bvrcyqk3gkh09";
+    version = "0.54.2023092623";
+    sha256 = "1c2rr5hrsx00jqmjz1jfppbqbkd0276hl2wl71wj9sfjr3052f6x";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.23.2023080400";
-    sha256 = "0sz0xjmxl5hww3fcrgzcskpf6w697rk2nd07jpkx0w1dqyiyrmxn";
+    version = "0.23.2023100802";
+    sha256 = "0anw2hypwc974gs8h5kwfq54323r6aa29j85p6p7k7y539pq0b6n";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.39.2023092208";
-    sha256 = "12raljsf6nwqvxss3h3jsnavc07fksyp6brvk33ch6zqd5hc0smm";
+    version = "0.40.2023101002";
+    sha256 = "0dlp2cfhxy0h0kh83g5qz1m9c4djssm83s64g75zd363hkcqjgs0";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.42.2023080103";
-    sha256 = "14hga1aa1b92b5l3i4l8i9cacwd4bhws7d5panpkg2zawdjaw648";
+    version = "0.42.2023092603";
+    sha256 = "0l7wkypx1d87822p3c7x9zz2z120087s64n6wcgabcksvz0632vk";
   }
   {
     name = "octave";
