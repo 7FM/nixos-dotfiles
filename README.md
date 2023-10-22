@@ -20,9 +20,6 @@ TODO TBD
 | nixos/secrets | TODO |
 | nixos/secrets/**/<device-name> | TODO |
 | nixos/example_secrets | TODO |
-| misc | TODO |
-| misc/envs | TODO |
-| misc/scripts | TODO |
 
 # Adding a new device named <new-device>
 **`<new-device>`** will be used in the following as placeholder for your new device's name.
