@@ -76,6 +76,10 @@ in lib.mkMerge [
     { device = "/dev/disk/by-uuid/6fb73a7c-c0e4-44da-a042-2b3d4fea6e9b";
       fsType = "ext4";
     };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/9165-2C9F";
+      fsType = "vfat";
+    };
 
   # Setup keyfile
   boot.initrd.secrets = {
