@@ -138,6 +138,7 @@
       # Define systems
       { deviceName = "lenovo-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; }
       { deviceName = "lenovo-laptop"; confNameSuffix = "no-sec"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga ]; forceNoSecrets = true; }
+      { deviceName = "work-laptop"; customModules = [ nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen ]; }
 
       { deviceName = "desktop"; }
       { deviceName = "desktop"; confNameSuffix = "no-sec"; forceNoSecrets = true; }
