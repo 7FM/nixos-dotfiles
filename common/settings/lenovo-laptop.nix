@@ -31,6 +31,7 @@ in lib.mkMerge [
         ssh.enable = true;
         sway = rec {
           laptopDisplay = "eDP-1";
+          touchpad = "2:7:SynPS/2_Synaptics_TouchPad";
           disp1 = laptopDisplay;
           disp1_pos = null;
           disp1_res = null;

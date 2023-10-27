@@ -10,6 +10,7 @@ let
   disp2 = if cfg.sway.disp2 == null then disp1 else cfg.sway.disp2;
   disp2_res = cfg.sway.disp2_res;
   disp2_pos = cfg.sway.disp2_pos;
+  touchpad = cfg.sway.touchpad;
 
   startupPrograms = [
     { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
@@ -208,9 +209,8 @@ in {
         ];
 
         # Input settings
-        input = {
-          # TODO this should'nt be hardcoded!
-          "2:7:SynPS/2_Synaptics_TouchPad" = {
+        input = (lib.optionalAttrs touchpad != null) {
+          "${touchpad}" = {
             "dwt" = "enabled";
             "tap" = "enabled";
             "natural_scroll" = "enabled";
