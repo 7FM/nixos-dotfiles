@@ -187,7 +187,6 @@ in lib.mkMerge [
     defaultLcMeasurement = "de_DE.UTF-8";
   };
 
-  networking.interfaces.enp0s20f0u2u4.useDHCP = true;
   networking.interfaces.wlp0s20f3.useDHCP = true;
   networking.wireless.interfaces = [
     "wlp0s20f3"
