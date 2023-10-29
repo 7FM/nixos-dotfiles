@@ -209,7 +209,7 @@ in {
         ];
 
         # Input settings
-        input = (lib.optionalAttrs touchpad != null) {
+        input = lib.optionalAttrs (touchpad != null) {
           "${touchpad}" = {
             "dwt" = "enabled";
             "tap" = "enabled";

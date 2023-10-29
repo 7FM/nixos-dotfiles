@@ -97,7 +97,7 @@ deviceName:
             '';
           };
           touchpad = mkOption {
-            type = type.nullOr types.str;
+            type = types.nullOr types.str;
             default = null;
             description = ''
               Specifies the id of the laptop's touchpad.
