@@ -219,6 +219,7 @@ in {
             device = "intel_backlight";
             format = "{icon} {percent}%";
             format-icons = ["🔅" "🔆"];
+            tooltip = false;
           };
           "pulseaudio#out" = {
             # scroll-step = 1; # %, can be a float
@@ -239,6 +240,7 @@ in {
               "car" = "";
               "default" = ["🔈" "🔉" "🔊"];
             };
+            ignored-sinks = [ "Easy Effects Sink" ];
             on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
             on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
             tooltip = false;
