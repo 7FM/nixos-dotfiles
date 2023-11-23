@@ -38,8 +38,8 @@
   {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.2.1";
-    sha256 = "0sx8v3gxfdi1gqs48kw154p35mc2hijjjn3vgsb2lra0y56s8k0p";
+    version = "2.3.0";
+    sha256 = "0f40mfxycxy822vhs8akiyhzknhgyjps17hmkqb7ms77qajvf2dc";
   }
   {
     name = "vscode-mlir";
@@ -86,8 +86,8 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.54.2023092623";
-    sha256 = "1c2rr5hrsx00jqmjz1jfppbqbkd0276hl2wl71wj9sfjr3052f6x";
+    version = "0.55.0";
+    sha256 = "1y1cc2if9drv297f0k8qhqmss9gmbkqvwcynq1ajdqwj5ldsh0ll";
   }
   {
     name = "vscode-java-dependency";
@@ -104,8 +104,8 @@
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.42.2023092603";
-    sha256 = "0l7wkypx1d87822p3c7x9zz2z120087s64n6wcgabcksvz0632vk";
+    version = "0.43.0";
+    sha256 = "07bm7q13364zzbfbh6s5p5ll7labn41wdmj5b4dhp03y0fxhk9yi";
   }
   {
     name = "octave";
