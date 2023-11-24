@@ -56,8 +56,6 @@ in {
     # Security
     services.usbguard = {
       enable = true;
-      # For headless:
-      package = if runHeadless then pkgs.usbguard-nox else pkgs.usbguard;
       implicitPolicyTarget = if enforce then "block" else "allow";
       rules = fixedRules;
     };
