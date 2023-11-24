@@ -133,8 +133,8 @@ in lib.mkMerge [
   custom.security = {
     gnupg.enable = false;
     usbguard = {
-      enforceRules = false;
-      #fixedRules = myTools.getSecret ../../nixos "usbguard-rules.nix";
+      enforceRules = true;
+      fixedRules = myTools.getSecret ../../nixos "usbguard-rules.nix";
     };
   };
   custom.internationalization = {
