@@ -34,7 +34,6 @@ let
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
   seafileInternalPort = myTools.extractPort myPorts.seafile "seafileInternal";
-  seahubInternalPort = myTools.extractPort myPorts.seafile "seahubInternal";
   jenkinsInternalPort = myTools.extractPort myPorts.jenkins "internal";
   syncthingHttpPort = myTools.extractPort myPorts.syncthing "";
 in lib.mkMerge [
@@ -322,12 +321,20 @@ in lib.mkMerge [
 
       seafile = (defaultConf ''
       '') // {
+        extraConfig = ''
+          proxy_set_header   X-Forwarded-For $remote_addr;
+        '';
         listen = createListenEntries seafilePort;
         locations = defaultLocations // {
           "/" = {
-            proxyPass = "http://localhost:${toString seahubInternalPort}";
+            recommendedProxySettings = false;
+            proxyPass = "http://unix:/run/seahub/gunicorn.sock";
             extraConfig = ''
               proxy_set_header   X-Forwarded-Host $server_name;
+              proxy_set_header   Host $host:$server_port;
+              proxy_set_header   X-Real-IP $remote_addr;
+              proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header   X-Forwarded-Proto $scheme;
               proxy_connect_timeout  3600s;
               proxy_read_timeout  3600s;
               proxy_send_timeout  3600s;
@@ -340,10 +347,12 @@ in lib.mkMerge [
             '';
           };
           "/seafhttp" = {
+            recommendedProxySettings = false;
             proxyPass = "http://localhost:${toString config.services.seafile.seafileSettings.fileserver.port}";
             extraConfig = ''
               rewrite ^/seafhttp(.*)$ $1 break;
 
+              proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
               proxy_connect_timeout  3600s;
               proxy_read_timeout  3600s;
               proxy_send_timeout  3600s;
@@ -353,11 +362,6 @@ in lib.mkMerge [
               client_body_temp_path ${seafileTmpPath};
               # access_log      /var/log/nginx/seafhttp.access.log;
               # error_log       /var/log/nginx/seafhttp.error.log;
-            '';
-          };
-          "/media" = {
-            extraConfig = ''
-              root ${pkgs.seahub}/seahub;
             '';
           };
         };
@@ -394,12 +398,17 @@ in lib.mkMerge [
 
     seafileSettings = {
       fileserver.port = seafileInternalPort;
+      general.enable_syslog = true;
     };
     # TODO there is currently no seafdav support in nixos :'(
     # [WEBDAV]
     # enabled = true
     # port = 4242
     # share_name = /
+
+    # seahubExtraConf = ''
+    #   DEBUG = True
+    # '';
   };
 
   # Git server:
