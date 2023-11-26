@@ -109,11 +109,13 @@ let
       open-port() {
         local port=$1
         iptables -I INPUT -p ${prot} --dport "$port" -j ACCEPT
+        ip6tables -I INPUT -p ${prot} --dport "$port" -j ACCEPT
       }
 
       close-port() {
         local port=''\${1:-0}
         iptables -D INPUT -p ${prot} --dport "$port" -j ACCEPT
+        ip6tables -D INPUT -p ${prot} --dport "$port" -j ACCEPT
       }
 
 
