@@ -114,6 +114,20 @@ in {
         "**/*.h"
         "**/*.hpp"
       ];
+      "todohighlight.exclude" = [
+        "**/.direnv/**"
+        "**/node_modules/**"
+        "**/bower_components/**"
+        "**/dist/**"
+        "**/build/**"
+        "**/.direnv/**"
+        "**/.vscode/**"
+        "**/.github/**"
+        "**/_output/**"
+        "**/*.min.*"
+        "**/*.map"
+        "**/.next/**"
+      ];
       "files.eol" = "\n";
       "git.openRepositoryInParentFolders" = "always";
       "liveshare.featureSet" = "stable";
