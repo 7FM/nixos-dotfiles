@@ -188,6 +188,71 @@ in lib.mkMerge [
 
 
   # Server configuration
+  systemd.timers."force-hdd-to-sleep" = {
+    wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "30m";
+        OnUnitActiveSec = "30m";
+        Unit = "force-hdd-to-sleep.service";
+      };
+  };
+
+  systemd.services."force-hdd-to-sleep" = {
+    script = ''
+      # This script looks for recent disk access, and if nothing has changed, puts /dev/"drive" into spindown mode.
+      # This should be used only if the hdparm power management function is not working.
+      # Call this script with cron or manually as desired
+      #
+      #
+      #
+      # Change which drive this script looks at by changing the drive variable below:
+      # Currently it will apply the force standby to all drives available
+      drives=`${pkgs.util-linux}/bin/lsblk`
+      #
+      #
+
+      ${pkgs.coreutils}/bin/echo "$drives" | ${pkgs.gnugrep}/bin/grep part | ${pkgs.gnugrep}/bin/grep -oP "sd[a-z]" | ${pkgs.coreutils}/bin/uniq | while read drive ; do
+
+          # Each drive has its own log file to store the latest drive access time from a previous script call
+          filename="/tmp/diskaccess-''${drive}.txt"
+          sleep_filename="/tmp/diskaccess-''${drive}_sleep.txt"
+          stat_new=`${pkgs.coreutils}/bin/cat /sys/block/"$drive"/stat | ${pkgs.coreutils}/bin/tr -dc "[:digit:]"`
+
+          # Check if the log file exists
+          if [ -f "$filename" ]; then
+              # Get the latest access time
+              stat_old=`${pkgs.coreutils}/bin/cat "$filename" | ${pkgs.coreutils}/bin/tr -dc "[:digit:]"`
+
+              # Check if the drive was accessed
+              if [ "$stat_old" = "$stat_new" ]; then
+                  # Drive was not used since last call
+                  # Lets send a standby command
+                  # But only once, else this might trigger some useless hdd spin ups!
+                  if [ ! -f "$sleep_filename" ]; then
+                      ${pkgs.hdparm}/bin/hdparm -y /dev/"$drive" > /dev/null 2>&1
+                      # Create the sleep file to indicate that the drive was already set to sleep!
+                      ${pkgs.coreutils}/bin/touch "$sleep_filename"
+                  fi
+              else
+                  # Drive was used since last time the script got executed
+                  # Update the last access time
+                  ${pkgs.coreutils}/bin/echo "$stat_new" > "$filename"
+                  # Drive is no longer in sleep mode, ensure to delete this state file it!
+                  ${pkgs.coreutils}/bin/rm -f "$sleep_filename"
+              fi
+          else
+              # File does not exist so lets create it
+              ${pkgs.coreutils}/bin/echo "$stat_new" > "$filename"
+              # Drive is no longer in sleep mode, ensure to delete this state file it!
+              ${pkgs.coreutils}/bin/rm -f "$sleep_filename"
+          fi
+      done
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+  };
 
   #TODO hard drive & mount configuration!
 
