@@ -269,16 +269,23 @@ in lib.mkMerge [
   systemd.services."acme-${letsEncryptHost}" = let
     port = 80;
   in {
-    # Automatically open the firewall port
-    preStart = ''
-        ${pkgs.iptables}/bin/iptables -I INPUT -p tcp --dport ${toString port} -j ACCEPT || true
-        ${pkgs.iptables}/bin/ip6tables -I INPUT -p tcp --dport ${toString port} -j ACCEPT || true
-    '';
-    # Automatically close the firewall port again!
-    postStop = ''
-        ${pkgs.iptables}/bin/iptables -D INPUT -p tcp --dport ${toString port} -j ACCEPT || true
-        ${pkgs.iptables}/bin/ip6tables -D INPUT -p tco --dport ${toString port} -j ACCEPT || true
-    '';
+    # TODO preStart and postStop were replaced by explicit ExecStartPre and ExecStopPort to run this as root user
+    # preStart = ''
+    # postStop = ''
+    serviceConfig = {
+      # Automatically open the firewall port
+      # Prefixed with a '+' to run as root!
+      ExecStartPre = "+" (pkgs.writeShellScript "acme-${letsEncryptHost}-pre-start" ''
+          ${pkgs.iptables}/bin/iptables -I INPUT -p tcp --dport ${toString port} -j ACCEPT || true
+          ${pkgs.iptables}/bin/ip6tables -I INPUT -p tcp --dport ${toString port} -j ACCEPT || true
+      '');
+      # Automatically close the firewall port again!
+      # Prefixed with a '+' to run as root!
+      ExecStopPost = "+" (pkgs.writeShellScript "acme-${letsEncryptHost}-post-stop" ''
+          ${pkgs.iptables}/bin/iptables -D INPUT -p tcp --dport ${toString port} -j ACCEPT || true
+          ${pkgs.iptables}/bin/ip6tables -D INPUT -p tcp --dport ${toString port} -j ACCEPT || true
+      '');
+    };
   };
 
   # Nginx Proxy
