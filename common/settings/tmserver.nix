@@ -530,7 +530,9 @@ in lib.mkMerge [
     enable = true;
     systemService = true;
     openDefaultPorts = true;
-    guiAddress = "127.0.0.1:${toString syncthingHttpPort}";
+    # guiAddress = "127.0.0.1:${toString syncthingHttpPort}";
+    # TODO create HTTPS proxy
+    guiAddress = "0.0.0.0:${toString syncthingHttpPort}";
     #TODO we could hardcode which devices & folders are allowed
   };
 
