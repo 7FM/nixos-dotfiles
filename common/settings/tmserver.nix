@@ -266,6 +266,20 @@ in lib.mkMerge [
     acceptTerms = true;
     defaults.email = letsEncryptEmail;
   };
+  systemd.services."acme-${letsEncryptHost}" = let
+    port = 80;
+  in {
+    # Automatically open the firewall port
+    preStart = ''
+        ${pkgs.iptables}/bin/iptables -I INPUT -p tcp --dport ${port} -j ACCEPT || true
+        ${pkgs.iptables}/bin/ip6tables -I INPUT -p tcp --dport ${port} -j ACCEPT || true
+    '';
+    # Automatically close the firewall port again!
+    postStop = ''
+        ${pkgs.iptables}/bin/iptables -D INPUT -p tcp --dport ${port} -j ACCEPT || true
+        ${pkgs.iptables}/bin/ip6tables -D INPUT -p tco --dport ${port} -j ACCEPT || true
+    '';
+  };
 
   # Nginx Proxy
   services.nginx = {
