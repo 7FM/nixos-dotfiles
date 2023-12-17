@@ -271,13 +271,13 @@ in lib.mkMerge [
   in {
     # Automatically open the firewall port
     preStart = ''
-        ${pkgs.iptables}/bin/iptables -I INPUT -p tcp --dport ${port} -j ACCEPT || true
-        ${pkgs.iptables}/bin/ip6tables -I INPUT -p tcp --dport ${port} -j ACCEPT || true
+        ${pkgs.iptables}/bin/iptables -I INPUT -p tcp --dport ${toString port} -j ACCEPT || true
+        ${pkgs.iptables}/bin/ip6tables -I INPUT -p tcp --dport ${toString port} -j ACCEPT || true
     '';
     # Automatically close the firewall port again!
     postStop = ''
-        ${pkgs.iptables}/bin/iptables -D INPUT -p tcp --dport ${port} -j ACCEPT || true
-        ${pkgs.iptables}/bin/ip6tables -D INPUT -p tco --dport ${port} -j ACCEPT || true
+        ${pkgs.iptables}/bin/iptables -D INPUT -p tcp --dport ${toString port} -j ACCEPT || true
+        ${pkgs.iptables}/bin/ip6tables -D INPUT -p tco --dport ${toString port} -j ACCEPT || true
     '';
   };
 
