@@ -310,29 +310,29 @@ in lib.mkMerge [
         };
       };
 
-      jenkins = (defaultConf ''
-        #pass through headers from Jenkins which are considered invalid by Nginx server.
-        ignore_invalid_headers off;
-        ## Only allow these request methods ##
-        if ($request_method !~ ^(GET|HEAD|POST)$ ) {
-            return 403;
-        }
-        ## Do not accept DELETE, SEARCH and other methods ##
-      '') // {
-        listen = createListenEntries jenkinsPort;
-        locations = defaultLocations // {
-          "/" = {
-            proxyPass = "http://localhost:${toString config.services.jenkins.port}/";
-            extraConfig = ''
-              proxy_max_temp_file_size 0;
-              proxy_connect_timeout      90s;
-              proxy_send_timeout         90s;
-              proxy_read_timeout         90s;
-              proxy_redirect default;
-            '';
-          };
-        };
-      };
+      #jenkins = (defaultConf ''
+      #  #pass through headers from Jenkins which are considered invalid by Nginx server.
+      #  ignore_invalid_headers off;
+      #  ## Only allow these request methods ##
+      #  if ($request_method !~ ^(GET|HEAD|POST)$ ) {
+      #      return 403;
+      #  }
+      #  ## Do not accept DELETE, SEARCH and other methods ##
+      #'') // {
+      #  listen = createListenEntries jenkinsPort;
+      #  locations = defaultLocations // {
+      #    "/" = {
+      #      proxyPass = "http://localhost:${toString config.services.jenkins.port}/";
+      #      extraConfig = ''
+      #        proxy_max_temp_file_size 0;
+      #        proxy_connect_timeout      90s;
+      #        proxy_send_timeout         90s;
+      #        proxy_read_timeout         90s;
+      #        proxy_redirect default;
+      #      '';
+      #    };
+      #  };
+      #};
 
       gitea = (defaultConf ''
         ## Only allow these request methods ##
@@ -502,7 +502,7 @@ in lib.mkMerge [
 
   # Jenkins server:
   services.jenkins = {
-    enable = true;
+    enable = false;
     port = jenkinsInternalPort;
     listenAddress = "localhost";
     extraJavaOptions = [
