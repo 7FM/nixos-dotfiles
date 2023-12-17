@@ -94,6 +94,44 @@ in lib.mkMerge [
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
     };
+
+    "/var/lib/nfs_data" = {
+      device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
+      fsType = "btrfs";
+      options = [ "subvol=nfs" "noatime" ];
+    };
+    "/var/lib/backup" = {
+      device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
+      fsType = "btrfs";
+      options = [ "subvol=backups" "noatime" ];
+    };
+
+    "${config.services.gitea.stateDir}" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "subvol=repositories" "noatime" ];
+    };
+    "/var/www/html" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "subvol=html" "noatime" ];
+    };
+    "${radicaleMntPoint}" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "subvol=radicale" "noatime" ];
+    };
+
+    "/var/lib/seafile" = {
+      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
+      fsType = "btrfs";
+      options = [ "subvol=seafile" "noatime" ];
+    };
+    "${seafileTmpPath}" = {
+      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
+      fsType = "btrfs";
+      options = [ "subvol=nginx_temp_path" "noatime" ];
+    };
   };
 
   hardware.raspberry-pi."4" = {
