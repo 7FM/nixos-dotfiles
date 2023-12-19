@@ -466,8 +466,6 @@ in lib.mkMerge [
 
               client_max_body_size 0;
               client_body_temp_path ${seafileTmpPath};
-              # access_log      /var/log/nginx/seahub.access.log;
-              # error_log       /var/log/nginx/seahub.error.log;
             '';
           };
           "/seafhttp" = {
@@ -484,8 +482,6 @@ in lib.mkMerge [
               send_timeout  3600s;
               client_max_body_size 0;
               client_body_temp_path ${seafileTmpPath};
-              # access_log      /var/log/nginx/seafhttp.access.log;
-              # error_log       /var/log/nginx/seafhttp.error.log;
             '';
           };
         };
