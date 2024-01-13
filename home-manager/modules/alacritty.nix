@@ -26,6 +26,6 @@ in {
       package
     ];
 
-    xdg.configFile."alacritty/alacritty.yml".source = ../configs/terminal/alacritty.yml;
+    xdg.configFile."alacritty/alacritty.toml".source = ../configs/terminal/alacritty.toml;
   };
 }
