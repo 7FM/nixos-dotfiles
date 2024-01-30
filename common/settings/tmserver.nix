@@ -698,8 +698,8 @@ in lib.mkMerge [
         RestrictSUIDSGID = true;
         MemoryDenyWriteExecute = true;
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        # RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
+        # We need AF_NETLINK to obtain the ipv6 address
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_UNIX" "AF_INET" "AF_INET6" ];
       };
 
     # Hardcoded due to DynamicUser
@@ -708,9 +708,8 @@ in lib.mkMerge [
   in {
     serviceConfig = securityOptions // {
       Type = "oneshot";
-      #TODO unpriviledged
-      # User = "update_ddns";
-      # Group = "update_ddns";
+      User = "updateddns";
+      Group = "updateddns";
       DynamicUser = true;
       StateDirectory = "update_ddns";
       RuntimeDirectory = "update_ddns";
@@ -744,8 +743,8 @@ __IP=''${ipv6Prefix%/??}
 
 VERBOSE=0		# default mode is log to console, but easily changed with parameter
 
-DATFILE="dat.file"		# save stdout data of WGet and other external programs called
-ERRFILE="err.file"		# save stderr output of WGet and other external programs called
+DATFILE="/tmp/dat.file"		# save stdout data of WGet and other external programs called
+ERRFILE="/tmp/err.file"		# save stderr output of WGet and other external programs called
 ${pkgs.coreutils}/bin/rm -f "$DATFILE"
 ${pkgs.coreutils}/bin/rm -f "$ERRFILE"
 
