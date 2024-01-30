@@ -36,6 +36,9 @@ let
   seafileInternalPort = myTools.extractPort myPorts.seafile "seafileInternal";
   jenkinsInternalPort = myTools.extractPort myPorts.jenkins "internal";
   syncthingHttpPort = myTools.extractPort myPorts.syncthing "";
+
+  backup_mnt = "/var/lib/backup";
+  btrfs_roots_mnt = "/var/lib/btrfs_roots";
 in lib.mkMerge [
 {
   custom = {
@@ -100,12 +103,17 @@ in lib.mkMerge [
       fsType = "btrfs";
       options = [ "subvol=nfs" "noatime" ];
     };
-    "/var/lib/backup" = {
+    "${backup_mnt}" = {
       device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
       fsType = "btrfs";
       options = [ "subvol=backups" "noatime" ];
     };
 
+    "${btrfs_roots_mnt}/misc_ssd" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "noatime" ];
+    };
     "${config.services.gitea.stateDir}" = {
       device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
       fsType = "btrfs";
@@ -122,6 +130,11 @@ in lib.mkMerge [
       options = [ "subvol=radicale" "noatime" ];
     };
 
+    "${btrfs_roots_mnt}/cloud_ssd" = {
+      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
+      fsType = "btrfs";
+      options = [ "noatime" ];
+    };
     "/var/lib/seafile" = {
       device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
       fsType = "btrfs";
@@ -256,7 +269,51 @@ in lib.mkMerge [
 
   # Backups
   services.btrbk = {
-    #TODO backup configuration
+    instances.btrbk = {
+      stream_buffer = "512m";
+      snapshot_dir = "_btrbk_snap";
+      btrfs_commit_delete = "after";
+      snapshot_preserve_min = "2d";
+      snapshot_preserve = "7d";
+      target_preserve_min = "no";
+      target_preserve = "14d 10w *m";
+      archive_preserve_min = "latest";
+      archive_preserve = "12m 10y";
+
+      volume = {
+        # Backup to external disk
+        "${btrfs_roots_mnt}/cloud_ssd" = {
+          # no action if external disk is not attached
+          snapshot_create = "ondemand";
+
+          subvolume.seafile = {
+            # target send-receive      /var/lib/backup/seafile_snaps
+            target = "${backup_mnt}/seafile_snaps";
+          }
+        };
+
+        # Backup to external disk
+        "${btrfs_roots_mnt}/misc_ssd" = {
+          # no action if external disk is not attached
+          snapshot_create = "ondemand";
+
+          subvolume = {
+            # target send-receive      /var/lib/backup/radicale_snaps
+            radicale.target = "${backup_mnt}/radicale_snaps";
+            # target send-receive      /var/lib/backup/jenkins_snaps
+            jenkins.target = "${backup_mnt}/jenkins_snaps";
+            # target send-receive      /var/lib/backup/html_snaps
+            html.target = "${backup_mnt}/html_snaps";
+            # target send-receive      /var/lib/backup/repo_snaps
+            repositories.target = "${backup_mnt}/repo_snaps";
+          };
+        }
+      };
+    };
+
+    extraPackages = with pkgs; [
+      mbuffer # required for stream_buffer
+    ];
   };
 
   # Server certificate: Let's Encrypt!
