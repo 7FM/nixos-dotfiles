@@ -1015,7 +1015,7 @@ ${pkgs.coreutils}/bin/rm -f "$DATFILE"
 ${pkgs.coreutils}/bin/rm -f "$ERRFILE"
 
 router_pwd=$(${pkgs.coreutils}/bin/cat ${update_ddns_root}/router_pwd)
-${myPythonWithPackages} ${update_router_forwards} "$router_pwd" "$__IP"
+${myPythonWithPackages}/bin/python ${update_router_forwards} "$router_pwd" "$__IP"
     '';
   };
 }
