@@ -269,10 +269,10 @@ in lib.mkMerge [
 
   # Backups
   services.btrbk = {
-    instances.btrbk = {
+    instances.btrbk.settings = {
       stream_buffer = "512m";
       snapshot_dir = "_btrbk_snap";
-      btrfs_commit_delete = "after";
+      btrfs_commit_delete = "yes";
       snapshot_preserve_min = "2d";
       snapshot_preserve = "7d";
       target_preserve_min = "no";
