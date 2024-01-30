@@ -698,7 +698,7 @@ in lib.mkMerge [
         RestrictSUIDSGID = true;
         MemoryDenyWriteExecute = true;
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_INET" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
         # RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
       };
 
