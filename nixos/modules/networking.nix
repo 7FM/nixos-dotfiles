@@ -114,8 +114,8 @@ in {
       portDefSet = (myTools.getSecret ../. "usedPorts.nix") myTools;
     in {
       # Open ports in the firewall.
-      allowedTCPPorts = myTools.getAllExposedTCPports portDefSet;
-      allowedUDPPorts = myTools.getAllExposedUDPports portDefSet;
+      allowedTCPPorts = myTools.getAllLocallyExposedTCPports portDefSet;
+      allowedUDPPorts = myTools.getAllLocallyExposedUDPports portDefSet;
       # Or disable the firewall altogether.
       enable = true;
     };
