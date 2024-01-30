@@ -739,7 +739,7 @@ retry_count=0
 USE_CURL=0
 
 # Extract the ipv6 address
-ipv6Prefix=$(ip -6 addr show dev eth0 | ${pkgs.gnugrep}/bin/grep -v 'mngtmpaddr' | ${pkgs.gnugrep}/bin/grep -v 'deprecated' | ${pkgs.gnused}/bin/sed -n 's|^.*inet6 \([^ ]*/64\).*global.*$|\1|p')
+ipv6Prefix=$(${pkgs.iproute2}/bin/ip -6 addr show dev eth0 | ${pkgs.gnugrep}/bin/grep -v 'mngtmpaddr' | ${pkgs.gnugrep}/bin/grep -v 'deprecated' | ${pkgs.gnused}/bin/sed -n 's|^.*inet6 \([^ ]*/64\).*global.*$|\1|p')
 __IP=''${ipv6Prefix%/??}
 
 VERBOSE=0		# default mode is log to console, but easily changed with parameter
