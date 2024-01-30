@@ -289,7 +289,7 @@ in lib.mkMerge [
           subvolume.seafile = {
             # target send-receive      /var/lib/backup/seafile_snaps
             target = "${backup_mnt}/seafile_snaps";
-          }
+          };
         };
 
         # Backup to external disk
@@ -307,7 +307,7 @@ in lib.mkMerge [
             # target send-receive      /var/lib/backup/repo_snaps
             repositories.target = "${backup_mnt}/repo_snaps";
           };
-        }
+        };
       };
     };
 
