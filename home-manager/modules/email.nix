@@ -9,9 +9,8 @@ let
     enable = hasIMAP;
     postSyncHookCommand = ''
       ${pkgs.notmuch}/bin/notmuch new
-      ${pkgs.notmuch}/bin/notmuch tag +${shortTag} tag:inbox
-      ${pkgs.notmuch}/bin/notmuch tag +${shortTag} to:${emailAddr}
-      ${pkgs.notmuch}/bin/notmuch tag -inbox +sent +${shortTag} from:${emailAddr}
+      ${pkgs.notmuch}/bin/notmuch tag +${shortTag} tag:inbox and to:${emailAddr} or from:${emailAddr} and tag:inbox
+      ${pkgs.notmuch}/bin/notmuch tag -inbox +sent from:${emailAddr}
       ${pkgs.notmuch}/bin/notmuch tag -unread 'date:1970..30d' tag:unread
       ${customHook}
       ${pkgs.afew}/bin/afew --tag --new
