@@ -141,7 +141,11 @@ in {
         startup.queries = myTools.getSecret ../configs "email/startupQueries.nix";
       };
     };
-    xdg.configFile."astroid/keybindings".source = ../configs/astroid/keybindings;
+    xdg.configFile."astroid/keybindings".text = ''
+      # toggle unread tag (this command is its own inverse)
+      thread_index.run(hooks::toggle unread %1, hooks::toggle unread %1)=C-r
+      thread_view.run(hooks::togglemail unread %2, hooks::togglemail unread %2)=C-r
+    '';
     xdg.configFile."astroid/hooks/toggle" = {
       text = ''
         #!/usr/bin/env bash
