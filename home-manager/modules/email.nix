@@ -192,7 +192,7 @@ in {
     # Email sender
     programs.msmtp.enable = true;
 
-    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf pkgs; };
+    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit lib createPasswordLookupCmd offlineimapConf notmuchConf astroidConf msmtpConf pkgs; };
 
     home.file = generateMailDirFolders config.accounts.email.accounts;
     xdg.configFile."notifymuch/notifymuch.cfg".text = ''
