@@ -24,6 +24,7 @@ with lib;
     ./grub.nix
     (import ./ssh.nix userName)
     ./security.nix
+    ./nix.nix
 
     # Features
     ./audio.nix
