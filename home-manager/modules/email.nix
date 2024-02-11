@@ -5,12 +5,15 @@ let
 
   createPasswordLookupCmd = searchTerm: "${pkgs.libsecret}/bin/secret-tool lookup email ${searchTerm}";
 
-  offlineimapConf = emailAddr: shortTag: customHook: hasIMAP: {
+  offlineimapConf = receiveOnly: emailAddr: shortTag: customHook: hasIMAP: {
     enable = hasIMAP;
-    postSyncHookCommand = ''
+    postSyncHookCommand = let
+      tag_condition = "${pkgs.notmuch}/bin/notmuch tag +${shortTag} tag:inbox and to:${emailAddr}${if receiveOnly then "" else " or from:${emailAddr} and tag:inbox"}";
+      send_condition = if receiveOnly then "" else "${pkgs.notmuch}/bin/notmuch tag -inbox +sent from:${emailAddr}";
+    in ''
       ${pkgs.notmuch}/bin/notmuch new
-      ${pkgs.notmuch}/bin/notmuch tag +${shortTag} tag:inbox and to:${emailAddr} or from:${emailAddr} and tag:inbox
-      ${pkgs.notmuch}/bin/notmuch tag -inbox +sent from:${emailAddr}
+      ${tag_condition}
+      ${send_condition}
       ${pkgs.notmuch}/bin/notmuch tag -unread 'date:1970..30d' tag:unread
       ${customHook}
       ${pkgs.afew}/bin/afew --tag --new

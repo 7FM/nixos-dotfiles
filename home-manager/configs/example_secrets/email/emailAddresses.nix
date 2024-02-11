@@ -33,7 +33,7 @@
     };
     notmuch.enable = true;
     # Parameters: emailAddr: shortTag: customHook: hasIMAP:
-    offlineimap = offlineimapConf address "my_mail" "" (imap != null);
+    offlineimap = offlineimapConf false address "my_mail" "" (imap != null);
     # Parameters: emailAddr:
     astroid = astroidConf address;
     # Parameters: emailAddr: hasSMTP:
