@@ -98,8 +98,8 @@ in {
     };
 
     # Configure keymap in X11
-    services.xserver.layout = keyboardLayout;
-    services.xserver.xkbVariant = "";
+    services.xserver.xkb.layout = keyboardLayout;
+    services.xserver.xkb.variant = "";
     # services.xserver.xkbOptions = "eurosign:e";
 
   };
