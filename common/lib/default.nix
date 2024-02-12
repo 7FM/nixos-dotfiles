@@ -81,7 +81,7 @@ rec {
 
         # I am aware that this is somewhat redundant but that way we can add checks for duplicate port assignments!
         non_globally_exposed_ports = builtins.map (x: toString x.port)
-          (builtins.filter (x: (defaultPortDef // x).hidden || !(defaultPortDef // x).expose_to_internet) filteredPortDefList);
+          (builtins.filter (x: !(defaultPortDef // x).expose_to_internet) filteredPortDefList);
         ports = builtins.map (x: x.port) filteredPortDefList;
         portSize = builtins.length ports;
         uniquePortSize = builtins.length (builtins.attrNames (builtins.groupBy (x: toString x) ports));
