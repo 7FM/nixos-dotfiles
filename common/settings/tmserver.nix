@@ -322,7 +322,7 @@ in lib.mkMerge [
     defaults.email = letsEncryptEmail;
   };
   systemd.services."acme-${letsEncryptHost}" = let
-    port = 80;
+    port = myTools.extractPort myPorts.letsEncryptCertRenewal "";
   in {
     # NOTE: preStart and postStop were replaced by explicit ExecStartPre and ExecStopPort to run this as root user
     # preStart = ''
