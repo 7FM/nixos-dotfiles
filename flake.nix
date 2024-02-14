@@ -22,9 +22,14 @@
       url = "gitlab:doronbehar/nix-matlab";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    drynomore = {
+      url = "github:7FM/DryNoMore";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, nix-matlab, ...}@inputs: {
+  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, nix-matlab, drynomore, ...}@inputs: {
     nixosConfigurations = let
       mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
@@ -39,6 +44,8 @@
               # my custom tools
               (final: prev: {
                 myTools = import ./common/lib deviceName;
+
+                drynomore = drynomore.packages."${system}".default;
 
                 astroid = prev.astroid.overrideAttrs (oldAttrs: {
                   patches = oldAttrs.patches ++ [

@@ -681,8 +681,40 @@ in lib.mkMerge [
     autoStart = true;
   };
 
-  # TODO DryNoMore
-
+  # DryNoMore Service
+  systemd.services."drynomore" = let 
+      securityOptions = {
+        ProtectHome = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
+      };
+  in {
+    serviceConfig = securityOptions // {
+      Type = "simple";
+      User = "drynomore";
+      Group = "drynomore";
+      DynamicUser = true;
+      StateDirectory = "drynomore";
+      RuntimeDirectory = "drynomore";
+      LogsDirectory = "drynomore";
+      ConfigurationDirectory = "drynomore";
+    };
+    script = "${pkgs.drynomore}/bin/drynomore-telegram-bot";
+  };
 
   # Scripted DDNS & Router firewall updates
   systemd.timers."update-ddns" = {
