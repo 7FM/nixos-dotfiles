@@ -204,15 +204,17 @@ in lib.mkMerge [
 
   networking.interfaces.eth0.useDHCP = true;
 
+  # TODO script + timer to fetch github and update the system!
+  # TODO this might be of interest: https://nixos.wiki/wiki/Automatic_system_upgrades
 
   # Server configuration
   systemd.timers."force-hdd-to-sleep" = {
     wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = "30m";
-        OnUnitActiveSec = "30m";
-        Unit = "force-hdd-to-sleep.service";
-      };
+    timerConfig = {
+      OnBootSec = "30m";
+      OnUnitActiveSec = "30m";
+      Unit = "force-hdd-to-sleep.service";
+    };
   };
 
   systemd.services."force-hdd-to-sleep" = {
@@ -719,6 +721,7 @@ in lib.mkMerge [
       ConfigurationDirectory = "drynomore";
     };
     script = "${pkgs.drynomore}/bin/drynomore-telegram-bot";
+    wantedBy = [ "multi-user.target" ];
   };
   systemd.services."tmdbot" = let
       securityOptions = {
@@ -753,16 +756,17 @@ in lib.mkMerge [
       ConfigurationDirectory = "tmdbot";
     };
     script = "${pkgs.tmdbot}/bin/tmdbot";
+    wantedBy = [ "multi-user.target" ];
   };
 
   # Scripted DDNS & Router firewall updates
   systemd.timers."update-ddns" = {
     wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = "30m";
-        OnUnitActiveSec = "30m";
-        Unit = "update-ddns.service";
-      };
+    timerConfig = {
+      OnBootSec = "30m";
+      OnUnitActiveSec = "30m";
+      Unit = "update-ddns.service";
+    };
   };
 
   systemd.services."update-ddns" = let
