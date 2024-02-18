@@ -715,6 +715,40 @@ in lib.mkMerge [
     };
     script = "${pkgs.drynomore}/bin/drynomore-telegram-bot";
   };
+  systemd.services."tmdbot" = let
+      securityOptions = {
+        ProtectHome = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = [ ];
+        # RestrictAddressFamilies = [ "AF_INET" ];
+      };
+  in {
+    serviceConfig = securityOptions // {
+      Type = "simple";
+      User = "tmdbot";
+      Group = "tmdbot";
+      DynamicUser = true;
+      StateDirectory = "tmdbot";
+      RuntimeDirectory = "tmdbot";
+      LogsDirectory = "tmdbot";
+      ConfigurationDirectory = "tmdbot";
+    };
+    script = "${pkgs.tmdbot}/bin/tmdbot";
+  };
 
   # Scripted DDNS & Router firewall updates
   systemd.timers."update-ddns" = {

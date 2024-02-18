@@ -27,9 +27,15 @@
       url = "github:7FM/DryNoMore";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    tmdbot = {
+      url = "github:7FM/TMDBot";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "drynomore/flake-utils";
+    };
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, nix-matlab, drynomore, ...}@inputs: {
+  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, nix-matlab, drynomore, tmdbot, ...}@inputs: {
     nixosConfigurations = let
       mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
@@ -46,6 +52,7 @@
                 myTools = import ./common/lib deviceName;
 
                 drynomore = drynomore.packages."${system}".default;
+                tmdbot = tmdbot.packages."${system}".default;
 
                 astroid = prev.astroid.overrideAttrs (oldAttrs: {
                   patches = oldAttrs.patches ++ [

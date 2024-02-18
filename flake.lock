@@ -166,7 +166,8 @@
         "nix-matlab": "nix-matlab",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nur": "nur"
+        "nur": "nur",
+        "tmdbot": "tmdbot"
       }
     },
     "systems": {
@@ -181,6 +182,30 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tmdbot": {
+      "inputs": {
+        "flake-utils": [
+          "drynomore",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1708196786,
+        "narHash": "sha256-kz/3wdM/QQ4z4II6Y48k+FyZJ5B3epdT6ujCgrlBacY=",
+        "owner": "7FM",
+        "repo": "TMDBot",
+        "rev": "54ffb7d9367a515b7d74b8680ff5e6c9e17ee095",
+        "type": "github"
+      },
+      "original": {
+        "owner": "7FM",
+        "repo": "TMDBot",
         "type": "github"
       }
     }
