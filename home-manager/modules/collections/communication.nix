@@ -31,7 +31,7 @@ in {
       discord
       myMattermost
       myZoom
-      teamspeak_client
+      #teamspeak_client
     ];
 
     xdg.configFile."discord/settings.json".source = ../../configs/discord/settings.json;
