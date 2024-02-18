@@ -196,11 +196,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1708288476,
-        "narHash": "sha256-azP7Lwdne+/3A0X7ukgxUULI5ZoIGastKBsagX8RgMM=",
+        "lastModified": 1708293410,
+        "narHash": "sha256-71+gC26I51FaU62UQT0pa36Nv4XeMmJrj0tB2HpuYqA=",
         "owner": "7FM",
         "repo": "TMDBot",
-        "rev": "97365969d005458f0d09ee7f6c4322eddf71da8d",
+        "rev": "c1739191a157b841d569431b31aeb98548d2131b",
         "type": "github"
       },
       "original": {

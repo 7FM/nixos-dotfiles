@@ -720,7 +720,7 @@ in lib.mkMerge [
       LogsDirectory = "drynomore";
       ConfigurationDirectory = "drynomore";
     };
-    script = "${pkgs.drynomore}/bin/drynomore-telegram-bot";
+    script = "${pkgs.drynomore}/bin/drynomore-telegram-bot /var/lib/drynomore/config.yaml";
     wantedBy = [ "multi-user.target" ];
   };
   systemd.services."tmdbot" = let
@@ -755,7 +755,7 @@ in lib.mkMerge [
       LogsDirectory = "tmdbot";
       ConfigurationDirectory = "tmdbot";
     };
-    script = "${pkgs.tmdbot}/bin/tmdbot";
+    script = "${pkgs.tmdbot}/bin/tmdbot /var/lib/tmdbot/settings.yaml /var/lib/tmdbot/user_data.yaml";
     wantedBy = [ "multi-user.target" ];
   };
 
