@@ -18,6 +18,7 @@ in lib.mkMerge [
       modules = {
         alacritty.enable = true;
         bash.enable = true;
+        calendar.enable = true;
         easyeffects.enable = true;
         email.enable = true;
         git = {

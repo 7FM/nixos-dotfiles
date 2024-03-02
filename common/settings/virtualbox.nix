@@ -22,6 +22,7 @@ in lib.mkMerge [
           virtualboxWorkaround = true;
         };
         bash.enable = true;
+        calendar.enable = true;
         email.enable = true;
         easyeffects.enable = true;
         git = {

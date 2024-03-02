@@ -89,6 +89,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
         * `custom.hm.modules.alacritty.enable`
         * `custom.hm.modules.alacritty.virtualboxWorkaround`
         * `custom.hm.modules.bash.enable`
+        * `custom.hm.modules.calendar.enable`
         * `custom.hm.modules.easyeffects.enable`
         * `custom.hm.modules.email.enable`
         * `custom.hm.modules.git.enable`

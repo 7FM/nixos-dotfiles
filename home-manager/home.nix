@@ -4,6 +4,7 @@
   imports = [
     ./modules/alacritty.nix
     ./modules/bash.nix
+    ./modules/calendar.nix
     ./modules/easyeffects.nix
     ./modules/email.nix
     ./modules/git.nix

@@ -73,6 +73,7 @@ deviceName:
         };
 
         bash.enable = mkEnableDefaultTrueOption "the bash module";
+        calendar.enable = mkEnableOption "the calendar module";
         email.enable = mkEnableOption "the email module";
         easyeffects.enable = mkEnableOption "the easyeffects module";
         git = {
