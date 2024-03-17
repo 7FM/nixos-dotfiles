@@ -13,7 +13,6 @@ let
     # type = "calendar"; # Single calendars
   };
 
-  # TODO create service to periodically sync calendar!
   # calendar sync program config
   vdirsyncer = {
     enable = true;
@@ -34,6 +33,10 @@ in {
     ];
 
     programs.vdirsyncer.enable = true;
+    services.vdirsyncer = {
+      enable = true;
+      frequency = "*:0/15";
+    };
     programs.khal = {
       enable = true;
     };
