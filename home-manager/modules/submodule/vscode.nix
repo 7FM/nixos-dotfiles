@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  useClangd = false;
+  useClangd = true;
   usePlatformIO = true;
 
   marketplaceExtensions = (import ./vscode-extensions.nix);
@@ -14,6 +14,8 @@ let
 
       # Live share
       ms-vsliveshare.vsliveshare
+      # Remote server
+      ms-vscode-remote.remote-ssh
       # C++
       (if useClangd then llvm-vs-code-extensions.vscode-clangd else ms-vscode.cpptools)
 
