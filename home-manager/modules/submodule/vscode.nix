@@ -18,6 +18,8 @@ let
       ms-vscode-remote.remote-ssh
       # C++
       (if useClangd then llvm-vs-code-extensions.vscode-clangd else ms-vscode.cpptools)
+      # LLDB support
+      vadimcn.vscode-lldb
 
       # Rust
       matklad.rust-analyzer

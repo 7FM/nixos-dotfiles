@@ -18,12 +18,6 @@
     sha256 = "1sg4zbr1jgj9adsj3rik5flcn6cbr4k2pzxi446rfzbzvcqns189";
   }
   {
-    name = "debug";
-    publisher = "webfreak";
-    version = "0.27.0";
-    sha256 = "0z72kls30miqg2rmdlz7knvjx6ywnip9vnxk562p4xg5qm8kkyd7";
-  }
-  {
     name = "vscodeintellicode";
     publisher = "VisualStudioExptTeam";
     version = "1.3.0";
