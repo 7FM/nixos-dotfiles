@@ -187,6 +187,7 @@ in {
         "**/.metals" = true;
         "**/.ammonite" = true;
       };
+      "remote.SSH.lockfilesInTmp" = true;
     };
 
   };
