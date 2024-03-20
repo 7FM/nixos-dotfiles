@@ -101,16 +101,4 @@
     version = "0.44.2024013105";
     sha256 = "0fpfr1g6dfrrrdc4i8q19xzx5rqd0irpsba2qhipx08kjr3z57iv";
   }
-  {
-    name = "octave";
-    publisher = "toasty-technologies";
-    version = "0.0.3";
-    sha256 = "1p9nh06d2b7nc3yms25rg32mip73d70jxin7dah0myspl2arpfmm";
-  }
-  {
-    name = "octave-formatter";
-    publisher = "tusindfryd";
-    version = "2.9.1";
-    sha256 = "010cl040cf6xwj4v61z3nhw7r3p3r3z8fxhzzwdk7zk7zsc8dssz";
-  }
 ]
