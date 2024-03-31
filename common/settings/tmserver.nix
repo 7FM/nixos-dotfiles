@@ -39,6 +39,43 @@ let
 
   backup_mnt = "/var/lib/backup";
   btrfs_roots_mnt = "/var/lib/btrfs_roots";
+
+  # OpenVPN config
+  vpn-dev = "tun0";
+  openvpnCipher = "AES-256-GCM";
+  openvpn_server_ip = "10.8.0.1";
+  openvpn_client_ip = "10.8.0.2";
+  commonConf = ip1: ip2: ''
+      ifconfig ${ip1} ${ip2}
+      port ${toString openvpnServerPort}
+
+      cipher ${openvpnCipher}
+      auth-nocache
+
+      comp-lzo
+      keepalive 10 60
+      persist-key
+      persist-tun
+  '';
+  openvpn_client_key = "/root/openvpn-shared-secret.key";
+  openvpn_server_conf = ''
+      dev ${vpn-dev}
+      proto udp
+      ${commonConf openvpn_server_ip openvpn_client_ip}
+      secret ${openvpn_client_key}
+      ping-timer-rem
+  '';
+  openvpn_client_conf = ''
+      dev tun
+      remote "${letsEncryptHost}"
+      ${commonConf openvpn_client_ip openvpn_server_ip}
+
+      redirect-gateway def1
+      resolv-retry infinite
+      nobind
+      secret [inline]
+  '';
+  openvpn_client_etc_path = "openvpn/nixos-client.ovpn";
 in lib.mkMerge [
 {
   custom = {
@@ -682,12 +719,30 @@ in lib.mkMerge [
   };
 
   # VPN server
+  networking.nat = {
+    enable = true;
+    externalInterface = "eth0";
+    internalInterfaces  = [ vpn-dev ];
+  };
+  networking.firewall.trustedInterfaces = [ vpn-dev ];
   services.openvpn.servers.server = {
-    #TODO change path
-    # config = ''config /home/${userName}/vpns/server.ovpn'';
-    config = ''config /home/tm/vpns/server.ovpn'';
+    config = openvpn_server_conf;
     autoStart = true;
   };
+  environment.etc."${openvpn_client_etc_path}" = {
+    text = openvpn_client_conf;
+    mode = "600";
+  };
+  # Append the shared secret to the client config!
+  system.activationScripts.openvpn-addkey = ''
+    f="/etc/${openvpn_client_etc_path}"
+    if ! grep -q '<secret>' $f; then
+      echo "appending secret key"
+      echo "<secret>" >> $f
+      cat ${openvpn_client_key} >> $f
+      echo "</secret>" >> $f
+    fi
+  '';
 
   # DryNoMore Service
   systemd.services."drynomore" = let 
