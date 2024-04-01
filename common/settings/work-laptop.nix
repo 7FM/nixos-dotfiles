@@ -43,10 +43,10 @@ in lib.mkMerge [
         };
         waybar = {
           hwmonPath = null;
-          thermalZone = null;
+          thermalZone = 2;
           gpu = {
             tempCmd = null;
-            mhzFreqCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz";
+            mhzFreqCmd = "${pkgs.coreutils}/bin/cat /sys/class/drm/card1/gt_cur_freq_mhz";
             usageCmd = null;
           };
         };
