@@ -12,6 +12,9 @@ let
       # Nix env selector
       arrterian.nix-env-selector
 
+      # PDF Viewer
+      tomoki1207.pdf
+
       # Live share
       ms-vsliveshare.vsliveshare
       # Remote server
