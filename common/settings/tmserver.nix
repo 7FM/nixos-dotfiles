@@ -7,7 +7,6 @@ let
   mySeafileSecrets = (myTools.getSecret ../../nixos "seafile.nix");
   myLetsEncryptSecrets = (myTools.getSecret ../../nixos "letsencrypt.nix");
   myRadicaleSecrets = (myTools.getSecret ../../nixos "radicale.nix");
-  myNFSSecrets = (myTools.getSecret ../../nixos "nfs.nix");
   myMiscSecrets = (myTools.getSecret ../../nixos "misc.nix");
 
   letsEncryptHost = myLetsEncryptSecrets.letsEncryptHost;
@@ -19,7 +18,6 @@ let
   radicaleMntPoint = myMiscSecrets.radicaleMntPoint;
   downloadRoot = myMiscSecrets.downloadRoot;
   giteaAppName = myMiscSecrets.giteaAppName;
-  nfsExports = myNFSSecrets.nfsExports;
 
   # Exposed ports
   radicalePort = myTools.extractPort myPorts.radicale "";
@@ -29,7 +27,6 @@ let
   seafilePort = myTools.extractPort myPorts.seafile "proxy";
   jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
-  nfsMountdPort = myTools.extractPort myPorts.nfs "mountd";
   nfsPortmapperPort = myTools.extractPort myPorts.nfs "portmapper";
   nfsNfsdPort = myTools.extractPort myPorts.nfs "nfsd";
   openvpnServerPort = myTools.extractPort myPorts.openvpn_server "";
@@ -715,13 +712,6 @@ in lib.mkMerge [
     # plugins = TODO use jenkinsPlugins2nix
   };
 
-  # NFS server
-  services.nfs.server = {
-    enable = true;
-    nproc = 4;
-    mountdPort = nfsMountdPort;
-    exports = nfsExports;
-  };
   services.jellyfin = {
     enable = true;
   };
