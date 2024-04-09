@@ -44,7 +44,8 @@ let
 
   # OpenVPN config
   vpn-dev = "tun0";
-  openvpnCipher = "AES-256-GCM";
+  # openvpnCipher = "AES-256-GCM";
+  openvpnCipher = "AES-256-CBC"; # GCM is not possible in non TLS mode!
   openvpn_server_ip = "10.8.0.1";
   openvpn_client_ip = "10.8.0.2";
   commonConf = ip1: ip2: ''
@@ -63,6 +64,7 @@ let
   openvpn_server_conf = ''
       dev ${vpn-dev}
       proto udp
+      proto udp6
       ${commonConf openvpn_server_ip openvpn_client_ip}
       secret ${openvpn_client_key}
       ping-timer-rem
