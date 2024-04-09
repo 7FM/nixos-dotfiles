@@ -27,6 +27,8 @@ let
   jenkinsPort =  myTools.extractPort myPorts.jenkins "proxy";
   giteaPort = myTools.extractPort myPorts.gitea "proxy";
   seafilePort = myTools.extractPort myPorts.seafile "proxy";
+  jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
+  jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
   nfsMountdPort = myTools.extractPort myPorts.nfs "mountd";
   nfsPortmapperPort = myTools.extractPort myPorts.nfs "portmapper";
   nfsNfsdPort = myTools.extractPort myPorts.nfs "nfsd";
@@ -587,8 +589,22 @@ in lib.mkMerge [
         };
       };
 
+      jellyfin = (defaultConf "") // {
+        listen = createListenEntries jellyfinPort;
+        locations = defaultLocations // {
+          "/" = {
+            proxyPass = "http://localhost:${toString jellyfinInternalHttpPort}";
+            extraConfig = ''
+              proxy_pass_request_headers on;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection $http_connection;
 
-
+              # Disable buffering when the nginx proxy gets very resource heavy upon streaming
+              proxy_buffering off;
+            '';
+          };
+        };
+      };
     };
   };
 
@@ -704,6 +720,12 @@ in lib.mkMerge [
     mountdPort = nfsMountdPort;
     exports = nfsExports;
   };
+  services.jellyfin = {
+    enable = true;
+  };
+  # services.jellyseerr = {
+  #   enable = true;
+  # };
 
   #TODO pihole?
   
