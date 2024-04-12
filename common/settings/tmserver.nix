@@ -322,7 +322,7 @@ in lib.mkMerge [
       snapshot_preserve_min = "2d";
       snapshot_preserve = "7d";
       target_preserve_min = "no";
-      target_preserve = "14d 10w *m";
+      target_preserve = "14d 4w 3m";
       archive_preserve_min = "latest";
       archive_preserve = "12m 10y";
 
@@ -347,9 +347,9 @@ in lib.mkMerge [
             # target send-receive      /var/lib/backup/radicale_snaps
             radicale.target = "${backup_mnt}/radicale_snaps";
             # target send-receive      /var/lib/backup/jenkins_snaps
-            jenkins.target = "${backup_mnt}/jenkins_snaps";
+            # jenkins.target = "${backup_mnt}/jenkins_snaps";
             # target send-receive      /var/lib/backup/html_snaps
-            html.target = "${backup_mnt}/html_snaps";
+            # html.target = "${backup_mnt}/html_snaps";
             # target send-receive      /var/lib/backup/repo_snaps
             repositories.target = "${backup_mnt}/repo_snaps";
           };
