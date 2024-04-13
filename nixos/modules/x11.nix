@@ -25,7 +25,7 @@ in {
     # Display Manager: provides graphical login
     # NOTE: lightdm & sddm only supports X11
     #services.xserver.displayManager.lightdm.enable = true;
-    #services.xserver.displayManager.sddm.enable = true;
+    #services.displayManager.sddm.enable = true;
     #services.xserver.displayManager.gdm.enable = true;
     services.xserver.displayManager.gdm.wayland = false;
 

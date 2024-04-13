@@ -10,16 +10,16 @@ in {
     services.blueman.enable = config.hardware.bluetooth.enable;
 
     services.xserver.displayManager.gdm.wayland = true;
-    services.xserver.displayManager.sessionPackages = with pkgs; [sway];
-    services.xserver.displayManager.defaultSession = "sway";
+    services.displayManager.sessionPackages = with pkgs; [sway];
+    services.displayManager.defaultSession = "sway";
     services.xserver.desktopManager.xterm.enable = false;
 
     services.xserver.displayManager.gdm.enable = false;
 
     # SDDM requirements
-    services.xserver.displayManager.sddm.enable = true;
+    services.displayManager.sddm.enable = true;
     services.xserver = {
-      enable = config.services.xserver.displayManager.sddm.enable || config.services.xserver.displayManager.gdm.enable;
+      enable = config.services.displayManager.sddm.enable || config.services.xserver.displayManager.gdm.enable;
       libinput = {
         enable = true;
         touchpad = {
@@ -31,7 +31,7 @@ in {
     };
 
     # Ensure the keyrings are opened
-    security.pam.services.sddm.enableGnomeKeyring = config.services.xserver.displayManager.sddm.enable;
+    security.pam.services.sddm.enableGnomeKeyring = config.services.displayManager.sddm.enable;
     security.pam.services.gdm.enableGnomeKeyring = config.services.xserver.displayManager.gdm.enable;
 
     # Window system settings:

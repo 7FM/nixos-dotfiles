@@ -68,8 +68,6 @@ in {
     '';
   };
 
-  services.xserver.displayManager.autoLogin.enable = false;
-
   # Enable CUPS to print documents.
   services.printing = {
     enable = !runHeadless;
@@ -93,7 +91,10 @@ in {
   users.defaultUserShell = pkgs.zsh;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  services.xserver.displayManager.autoLogin.user = userName;
+  services.displayManager.autoLogin = {
+    enable = false;
+    user = userName;
+  };
 
   users.users."${userName}" = {
     shell = pkgs.zsh;
