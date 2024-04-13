@@ -80,8 +80,8 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.57.0";
-    sha256 = "1rx5m0nlv6yjn2s2m892569jw8bb15brcqjzb4n9g8a9n1rlpcqf";
+    version = "0.57.2024041008";
+    sha256 = "1mx9lchp5c9p4lqa17awn50myjawxnp8smi4316klyqlfrypmmkv";
   }
   {
     name = "vscode-java-dependency";
@@ -92,8 +92,8 @@
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.40.2024032505";
-    sha256 = "1pj82qb1wa23mylm8q7bqf7fsgl11jr8gqczbpdhdcsdkq1m4kr4";
+    version = "0.41.0";
+    sha256 = "1glivm9jxshvkwdmdc71a7xm691ms9p6wgiznx8x4xb0vjqmzv21";
   }
   {
     name = "vscode-maven";
