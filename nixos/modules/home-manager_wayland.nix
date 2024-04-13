@@ -54,6 +54,11 @@ in {
         "gtk"
       ];
     };
+
+    # Allow programs within sway to request real-time priorities
+    security.pam.loginLimits = [
+      { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
+    ];
   };
 
 }
