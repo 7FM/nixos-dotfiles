@@ -17,16 +17,16 @@ in {
     services.xserver.displayManager.gdm.enable = false;
 
     # SDDM requirements
-    services.displayManager.sddm.enable = true;
-    services.xserver = {
-      enable = config.services.displayManager.sddm.enable || config.services.xserver.displayManager.gdm.enable;
-      libinput = {
-        enable = true;
-        touchpad = {
-          tapping = true;
-          scrollMethod = "twofinger";
-          naturalScrolling = true;
-        };
+    services.displayManager.sddm = rec {
+      enable = true;
+      wayland.enable = enable;
+    };
+    services.libinput = {
+      enable = true;
+      touchpad = {
+        tapping = true;
+        scrollMethod = "twofinger";
+        naturalScrolling = true;
       };
     };
 

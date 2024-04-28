@@ -286,9 +286,9 @@ in {
         bindswitch --reload --locked lid:on output ${laptopDisplay} disable
         bindswitch --reload --locked lid:off output ${laptopDisplay} enable
       '' + ''
-        #output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit
+        # output * bg ${../configs/sway/backgrounds/cheatsheet.jpg} fit
         # credits for the image go to: https://www.youtube.com/watch?v=Lqz5ZtiCmYk
-        output * bg ''\${XDG_CONFIG_HOME:-''\$HOME/.config}/sway/backgrounds/die_shot.jpg fit
+        output * bg ${../configs/sway/backgrounds/die_shot.jpg} fit
       '' + lib.optionalString (cfg.sway.extraConfig != null) cfg.sway.extraConfig;
     };
 
@@ -343,6 +343,5 @@ in {
 
     xdg.configFile."swaylock/config".source = ../configs/swaylock/config;
     xdg.configFile."sway/scripts".source = ../configs/sway/scripts;
-    xdg.configFile."sway/backgrounds".source = ../configs/sway/backgrounds;
   };
 }

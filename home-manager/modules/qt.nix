@@ -6,7 +6,7 @@ in {
   config = lib.mkIf enable {
     qt = {
       enable = true;
-      platformTheme = "gnome";
+      platformTheme.name = "adwaita";
       style = {
         name = "adwaita-dark";
         package = pkgs.adwaita-qt;
