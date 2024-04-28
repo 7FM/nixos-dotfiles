@@ -2,8 +2,8 @@
   {
     name = "hexeditor";
     publisher = "ms-vscode";
-    version = "1.9.14";
-    sha256 = "0fncakv8v8p1rhka5dvh87kc0vsfaxg1s48blwhv7r6fyw70b9jm";
+    version = "1.10.0";
+    sha256 = "0mlibryaxfilsl61asm9yxz3jz1jpvp8q3r9w0mg4mpa1ajjqd8h";
   }
   {
     name = "notepadplusplus-keybindings";
@@ -62,8 +62,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.13.5";
-    sha256 = "11rsikiq68dwcd53llf1bgfdabb7wafxnkb0nn81jqm9yhglv0pk";
+    version = "1.14.1";
+    sha256 = "0md0bwm5pm0dfbyxv4l6a8yk9iwp5ifgcwc54qfs54iny3fkf02w";
   }
   {
     name = "latex-support";
@@ -86,14 +86,14 @@
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.23.2024032505";
-    sha256 = "11iydf6cgl5pxyjm88c2likb8r5b6yva0fq5lsfpsaqdvhcnkgf4";
+    version = "0.23.2024041907";
+    sha256 = "0p9cby8zbz01phr5d28drswm9rv95w07pcfk0ah6r49kzqmdv5j4";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.41.0";
-    sha256 = "1glivm9jxshvkwdmdc71a7xm691ms9p6wgiznx8x4xb0vjqmzv21";
+    version = "0.41.2024042308";
+    sha256 = "0idny9zyk06mr4l2f6r2l17xpjkkqa5948l70gf8wl6bgrj91k0d";
   }
   {
     name = "vscode-maven";
