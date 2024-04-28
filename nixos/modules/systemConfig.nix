@@ -77,6 +77,14 @@ with lib;
       '';
     };
 
+    laptopPowerSaving = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable the tlp service for advanced laptop power-saving options.
+      '';
+    };
+
     adb = mkOption {
       type = types.enum [ "disabled" "global" "udevrules" ];
       default = "disabled";

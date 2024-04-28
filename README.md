@@ -60,6 +60,7 @@ Also ensure that it does not include underscores (`_`) as this seems to produce 
         * `custom.grub.enable`
         * `custom.grub.useUEFI`
         * `custom.cpuFreqGovernor`
+        * `custom.laptopPowerSaving`
         * `custom.adb`
         * `custom.audio.backend`
         * `custom.internationalization.timeZone`

@@ -68,6 +68,7 @@ in lib.mkMerge [
     #useUEFI = false;
   };
   custom.cpuFreqGovernor = "ondemand";
+  custom.laptopPowerSaving = false;
   custom.enableVirtualisation = false;
   custom.adb = "disabled";
   custom.smartcards = false;

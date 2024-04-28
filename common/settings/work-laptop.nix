@@ -115,22 +115,6 @@ in lib.mkMerge [
     modem-manager-gui
   ];
 
-  # Dummy systemd service, to apply battery settings
-  systemd.paths.battery_settings = {
-    wantedBy = [ "multi-user.target" ];
-    pathConfig.DirectoryNotEmpty = "/sys/class/power_supply/BAT0";
-  };
-  systemd.services.battery_settings = {
-    script = ''
-      echo 80 > /sys/class/power_supply/BAT0/charge_stop_threshold
-      echo 0 > /sys/class/power_supply/BAT0/charge_start_threshold
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-  };
-
   # systemd.paths.setup_wwan = {
   #   wantedBy = [ "ModemManager.service" "network.target" ];
   #   pathConfig.PathExists = "/dev/cdc-wdm0";
@@ -151,17 +135,12 @@ in lib.mkMerge [
   #     path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
   # }];
 
-  # Gnome 40 introduced a new way of managing power, without tlp.
-  # However, these 2 services clash when enabled simultaneously.
-  # https://github.com/NixOS/nixos-hardware/issues/260
-  services.tlp.enable = lib.mkDefault ((lib.versionOlder (lib.versions.majorMinor lib.version) "21.05")
-                                      || !config.services.power-profiles-daemon.enable);
-
   custom.grub = {
     enable = true;
     useUEFI = true;
   };
   custom.cpuFreqGovernor = "powersave";
+  custom.laptopPowerSaving = true;
   custom.enableVirtualisation = true;
   custom.adb = "udevrules";
   custom.smartcards = true;
