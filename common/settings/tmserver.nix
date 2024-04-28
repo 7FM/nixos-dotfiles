@@ -789,6 +789,8 @@ in lib.mkMerge [
       RuntimeDirectory = "drynomore";
       LogsDirectory = "drynomore";
       ConfigurationDirectory = "drynomore";
+      Restart = "on-failure";
+      RestartSec = "5s";
     };
     script = "${pkgs.drynomore}/bin/drynomore-telegram-bot /var/lib/drynomore/config.yaml";
     wantedBy = [ "multi-user.target" ];
@@ -824,6 +826,8 @@ in lib.mkMerge [
       RuntimeDirectory = "tmdbot";
       LogsDirectory = "tmdbot";
       ConfigurationDirectory = "tmdbot";
+      Restart = "on-failure";
+      RestartSec = "5s";
     };
     script = "${pkgs.tmdbot}/bin/tmdbot /var/lib/tmdbot/settings.yaml /var/lib/tmdbot/user_data.yaml";
     wantedBy = [ "multi-user.target" ];
