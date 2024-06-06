@@ -172,11 +172,17 @@ in lib.mkMerge [
     "wlp0s20f3"
   ];
   networking.interfaces.wwan0.useDHCP = true;
+  #networking.interfaces.enp7s0f3u3u4u4.useDHCP = true;
 
   services.udev = {
     packages = with pkgs; [
       platformio
     ];
+
+    # Add udev rule for the DSView Plus
+    extraRules = ''
+      SUBSYSTEM=="usb", ATTRS{idVendor}=="2a0e", MODE="0666"
+    '';
   };
 
 }
