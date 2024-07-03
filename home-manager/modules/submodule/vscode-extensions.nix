@@ -26,8 +26,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "3.0.1";
-    sha256 = "0i76gf7zr0j4dr02zmxwfphk6yy8rvlj9rzq3k8pvnlfzkmh9ri9";
+    version = "4.0.3";
+    sha256 = "0y48rrfyk74bxmrhrip8zppq3992kis8ldpq0wgmp92i1rpv0h88";
   }
   {
     name = "code-spell-checker-german";
@@ -80,20 +80,20 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.57.2024041008";
-    sha256 = "1mx9lchp5c9p4lqa17awn50myjawxnp8smi4316klyqlfrypmmkv";
+    version = "0.58.0";
+    sha256 = "0lsbhhb31j9aykd6m9psbkyk8wcyi062rqrsp9zpbdyfm6cmnbmi";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.23.2024042600";
-    sha256 = "11jml2jckpxc14inpg7s7inc2pmhxb1bcgvddzlqyrqvrxmxqhmc";
+    version = "0.23.2024062807";
+    sha256 = "1zg5jf8rrrwibcigibllis5l378hzpiwy7pabkh6bq033089f4l9";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.41.2024042308";
-    sha256 = "0idny9zyk06mr4l2f6r2l17xpjkkqa5948l70gf8wl6bgrj91k0d";
+    version = "0.41.2024061208";
+    sha256 = "0m5pi5h5dgr5j01acggqgr8ll6prdmbcdaglvh7lx2q2gq5r0ld2";
   }
   {
     name = "vscode-maven";
