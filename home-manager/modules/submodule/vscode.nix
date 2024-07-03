@@ -25,7 +25,7 @@ let
       vadimcn.vscode-lldb
 
       # Rust
-      matklad.rust-analyzer
+      rust-lang.rust-analyzer
       # Python
       ms-python.python
       ms-python.vscode-pylance
