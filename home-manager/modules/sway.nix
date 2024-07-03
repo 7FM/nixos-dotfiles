@@ -59,6 +59,9 @@ let
   hmManageSway = osConfig.custom.gui == "hm-wayland";
   enable = hmManageSway || (osConfig.custom.gui == "wayland");
   desktop = laptopDisplay == null;
+
+  mod = "Mod4";
+  mod2 = if (mod == "Mod4") then "Mod1" else "Mod4";
 in {
   config = lib.mkIf enable {
 
@@ -81,9 +84,6 @@ in {
       xwayland = hmManageSway;
 
       config = let
-        mod = "Mod4";
-        mod2 = if (mod == "Mod4") then "Mod1" else "Mod4";
-
         # Workspace labels
         workspaces = [
           rec { name = "1"; modifier = name; output = disp1; }
@@ -280,6 +280,34 @@ in {
       };
 
       extraConfig = ''
+        bindsym ${mod}+ctrl+1 [workspace="^1$"] move workspace to output current; workspace number 1
+        bindsym ${mod}+ctrl+2 [workspace="^2$"] move workspace to output current; workspace number 2
+        bindsym ${mod}+ctrl+3 [workspace="^3$"] move workspace to output current; workspace number 3
+        bindsym ${mod}+ctrl+4 [workspace="^4$"] move workspace to output current; workspace number 4
+        bindsym ${mod}+ctrl+5 [workspace="^5$"] move workspace to output current; workspace number 5
+        bindsym ${mod}+ctrl+6 [workspace="^6$"] move workspace to output current; workspace number 6
+        bindsym ${mod}+ctrl+7 [workspace="^7$"] move workspace to output current; workspace number 7
+        bindsym ${mod}+ctrl+8 [workspace="^8$"] move workspace to output current; workspace number 8
+        bindsym ${mod}+ctrl+9 [workspace="^9$"] move workspace to output current; workspace number 9
+        bindsym ${mod}+ctrl+0 [workspace="^10$"] move workspace to output current; workspace number 10
+
+        mode "present" {
+            # command starts mirroring
+            bindsym m mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present mirror
+            # these commands modify an already running mirroring window
+            bindsym o mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present set-output
+            bindsym r mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present set-region
+            bindsym Shift+r mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present unset-region
+            bindsym s mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present set-scaling
+            bindsym f mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present toggle-freeze
+            bindsym c mode "default"; exec ${pkgs.wl-mirror}/bin/wl-present custom
+
+            # return to default mode
+            bindsym Return mode "default"
+            bindsym Escape mode "default"
+        }
+        bindsym ${mod}+p mode "present"
+
         # restarts some user services to make sure they have the correct environment variables
         exec "systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr; systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr"
       '' + lib.optionalString (laptopDisplay != null) ''
