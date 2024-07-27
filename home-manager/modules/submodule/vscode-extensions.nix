@@ -18,6 +18,12 @@
     sha256 = "1sg4zbr1jgj9adsj3rik5flcn6cbr4k2pzxi446rfzbzvcqns189";
   }
   {
+    name = "debug";
+    publisher = "webfreak";
+    version = "0.27.0";
+    sha256 = "0z72kls30miqg2rmdlz7knvjx6ywnip9vnxk562p4xg5qm8kkyd7";
+  }
+  {
     name = "vscodeintellicode";
     publisher = "VisualStudioExptTeam";
     version = "1.3.1";
@@ -26,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "4.0.3";
-    sha256 = "0y48rrfyk74bxmrhrip8zppq3992kis8ldpq0wgmp92i1rpv0h88";
+    version = "4.0.4";
+    sha256 = "0r2b1byjjg92lhfk6qnsrwf23mygshrq40z14bxpxa4gid623car";
   }
   {
     name = "code-spell-checker-german";
@@ -62,8 +68,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.14.1";
-    sha256 = "0md0bwm5pm0dfbyxv4l6a8yk9iwp5ifgcwc54qfs54iny3fkf02w";
+    version = "1.14.2";
+    sha256 = "0lw1gd21z4bghfp0yqyaykis8q8iwyxw437i1ya4gnqk63lwdqqj";
   }
   {
     name = "latex-support";
@@ -80,25 +86,37 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.58.0";
-    sha256 = "0lsbhhb31j9aykd6m9psbkyk8wcyi062rqrsp9zpbdyfm6cmnbmi";
+    version = "0.58.2024071907";
+    sha256 = "1010q9mzy9flpyfllg1h9kkvs599bx9xs2n0acdaprlm053pmk55";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.23.2024062807";
-    sha256 = "1zg5jf8rrrwibcigibllis5l378hzpiwy7pabkh6bq033089f4l9";
+    version = "0.24.0";
+    sha256 = "0q56ybbmdm40vyj7sab9q4bsnmvr0rzf22d9a6hxq3jc9240rwh4";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.41.2024061208";
-    sha256 = "0m5pi5h5dgr5j01acggqgr8ll6prdmbcdaglvh7lx2q2gq5r0ld2";
+    version = "0.41.2024070902";
+    sha256 = "0ip4a1m7qzacz4pjsd922p9vy1w8vrlb4mdzlwyr2fr1l5c712md";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
     version = "0.44.2024013105";
     sha256 = "0fpfr1g6dfrrrdc4i8q19xzx5rqd0irpsba2qhipx08kjr3z57iv";
+  }
+  {
+    name = "octave";
+    publisher = "toasty-technologies";
+    version = "0.0.3";
+    sha256 = "1p9nh06d2b7nc3yms25rg32mip73d70jxin7dah0myspl2arpfmm";
+  }
+  {
+    name = "octave-formatter";
+    publisher = "tusindfryd";
+    version = "2.9.1";
+    sha256 = "010cl040cf6xwj4v61z3nhw7r3p3r3z8fxhzzwdk7zk7zsc8dssz";
   }
 ]
