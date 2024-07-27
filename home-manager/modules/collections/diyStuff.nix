@@ -6,7 +6,32 @@ in {
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # 3D Printing & DIY stuff
-      cura
+      # Cura does not build: https://github.com/NixOS/nixpkgs/issues/325896
+      #cura
+      (let cura5 = appimageTools.wrapType2 rec {
+        name = "cura5";
+        version = "5.7.2";
+        src = let
+          tagName = "${version}-RC2";
+        in fetchurl {
+          url = "https://github.com/Ultimaker/Cura/releases/download/${tagName}/UltiMaker-Cura-${version}-linux-X64.AppImage";
+          hash = "sha256-XlTcCmIqcfTg8fxM2KDik66qjIKktWet+94lFIJWopY=";
+        };
+        extraPkgs = pkgs: with pkgs; [ ];
+      }; in writeScriptBin "cura" ''
+        #! ${pkgs.bash}/bin/bash
+        # AppImage version of Cura loses current working directory and treats all paths relateive to $HOME.
+        # So we convert each of the files passed as argument to an absolute path.
+        # This fixes use cases like `cd /path/to/my/files; cura mymodel.stl anothermodel.stl`.
+        args=()
+        for a in "$@"; do
+          if [ -e "$a" ]; then
+            a="$(realpath "$a")"
+          fi
+          args+=("$a")
+        done
+        exec "${cura5}/bin/cura5" "''${args[@]}"
+      '')
       freecad
       openscad
       kicad
