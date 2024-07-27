@@ -202,7 +202,16 @@ in lib.mkMerge [
   services.udev = {
     packages = with pkgs; [
       platformio
+      libsigrok
     ];
+    extraRules = ''
+      # Tolino Page 2 in Fastboot mode
+      SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="0d02", MODE="0666", GROUP="plugdev"
+      # Tolino Page 2 in ADB mode
+      SUBSYSTEM=="usb", ATTR{idVendor}=="1f85", ATTR{idProduct}=="6052", MODE="0666", GROUP="plugdev"
+      # Tolino Page 2 in TWRP recovery mode
+      SUBSYSTEM=="usb", ATTR{idVendor}=="1f85", ATTR{idProduct}=="6056", MODE="0666", GROUP="plugdev"
+    '';
   };
 
 }
