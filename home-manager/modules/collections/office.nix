@@ -19,7 +19,7 @@ in {
       # printer utils
       system-config-printer
       # scanner utils
-      gnome.simple-scan
+      simple-scan
       # For MTP connection with an android phone
       jmtpfs
     ];
