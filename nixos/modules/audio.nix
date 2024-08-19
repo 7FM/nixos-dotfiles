@@ -18,7 +18,6 @@ in {
     security.rtkit.enable = !noBackend;
 
     # Enable sound via pulseaudio
-    sound.enable = backendUsePulseaudio;
     hardware.pulseaudio = {
       enable = backendUsePulseaudio;
       support32Bit = backendUsePulseaudio;

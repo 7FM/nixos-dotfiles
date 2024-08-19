@@ -633,7 +633,13 @@ in lib.mkMerge [
     };
 
     seafileSettings = {
-      fileserver.port = seafileInternalPort;
+      fileserver = {
+        port = seafileInternalPort;
+
+        # Set maximum download directory size
+        # Default is 100M.
+        max_download_dir_size = 4096;
+      };
       general.enable_syslog = true;
     };
     # TODO there is currently no seafdav support in nixos :'(
