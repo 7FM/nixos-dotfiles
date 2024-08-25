@@ -13,6 +13,7 @@ in {
     programs.ssh = {
       enable = true;
       matchBlocks = myTools.getSecret ../configs "sshConfig.nix" { inherit config pkgs lib; };
+      serverAliveInterval = 60;
     };
   };
 }
