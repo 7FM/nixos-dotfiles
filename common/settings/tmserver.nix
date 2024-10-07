@@ -168,6 +168,21 @@ in lib.mkMerge [
       fsType = "btrfs";
       options = [ "subvol=radicale" "noatime" ];
     };
+    "/var/lib/syncthing" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "subvol=syncthing" "noatime" ];
+    };
+    "/var/lib/mysql" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "subvol=mysql" "noatime" ];
+    };
+    "/var/lib/jellyfin" = {
+      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
+      fsType = "btrfs";
+      options = [ "subvol=jellyfin" "noatime" ];
+    };
 
     "${btrfs_roots_mnt}/cloud_ssd" = {
       device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
@@ -345,14 +360,13 @@ in lib.mkMerge [
           snapshot_create = "ondemand";
 
           subvolume = {
-            # target send-receive      /var/lib/backup/radicale_snaps
             radicale.target = "${backup_mnt}/radicale_snaps";
-            # target send-receive      /var/lib/backup/jenkins_snaps
             # jenkins.target = "${backup_mnt}/jenkins_snaps";
-            # target send-receive      /var/lib/backup/html_snaps
             # html.target = "${backup_mnt}/html_snaps";
-            # target send-receive      /var/lib/backup/repo_snaps
             repositories.target = "${backup_mnt}/repo_snaps";
+            syncthing.target = "${backup_mnt}/syncthing_snaps";
+            mysql.target = "${backup_mnt}/mysql_snaps";
+            jellyfin.target = "${backup_mnt}/jellyfin_snaps";
           };
         };
       };
