@@ -12,7 +12,7 @@ in {
     boot.initrd.kernelModules = [ "i915" ];
 
     hardware.graphics.extraPackages = with pkgs; [
-      vaapiIntel
+      #vaapiIntel # already part of nixos-hardware, but differently configured
       vaapiVdpau
       libvdpau-va-gl
       intel-media-driver
