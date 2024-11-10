@@ -6,7 +6,7 @@
   nix.registry = {
     nixpkgs.to = {
       type = "path";
-      path = pkgs.path;
+      path = lib.mkDefault pkgs.path;
     };
   };
 

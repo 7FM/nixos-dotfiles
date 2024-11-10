@@ -48,7 +48,7 @@ in {
 
   config = {
     # Enable the OpenSSH daemon.
-    services.openssh.enable = enable || runHeadless;
+    services.openssh.enable = lib.mkForce (enable || runHeadless);
     services.openssh.ports = ports;
     services.openssh.settings.PermitRootLogin = "no";
     services.openssh.settings.PasswordAuthentication = false;
