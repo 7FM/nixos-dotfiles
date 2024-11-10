@@ -187,6 +187,8 @@ in lib.mkMerge [
       SUBSYSTEM=="usb", ATTR{idVendor}=="1f85", ATTR{idProduct}=="6052", MODE="0666", GROUP="plugdev"
       # Tolino Page 2 in TWRP recovery mode
       SUBSYSTEM=="usb", ATTR{idVendor}=="1f85", ATTR{idProduct}=="6056", MODE="0666", GROUP="plugdev"
+      # Add udev rule for the Wii Bluetooth module
+      SUBSYSTEM=="usb", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0305", TAG+="uaccess"
     '';
   };
 
