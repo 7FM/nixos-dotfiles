@@ -118,6 +118,12 @@
       { deviceName = "octoprint-rpi2"; system = "armv7-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-2 ]; }
 
       { deviceName = "virtualbox"; forceNoSecrets = true; }
+
+      { deviceName = "iso-image"; forceNoSecrets = true; customModules = [
+        ({ pkgs, modulesPath, ... }: {
+          imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
+        })
+      ]; }
     ];
   };
 }
