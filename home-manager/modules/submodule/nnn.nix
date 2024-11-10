@@ -23,10 +23,6 @@ let
   toGtkBookmarks = bList: map (b: "file://${b.path}") bList;
   toNNNBookmarks = bList: builtins.listToAttrs (map (b: { name = b.hotkey; value = b.path; }) bList);
 in {
-  home.packages = with pkgs; [
-    sxiv
-  ];
-
   gtk.gtk3.bookmarks = toGtkBookmarks bookmarks;
 
   # NNN: CLI file browser 
@@ -38,7 +34,7 @@ in {
 
     # Extra packages that are used for i.e. plugins
     extraPackages = with pkgs; [
-      sxiv # Image viewer
+      nsxiv # Image viewer
       moc # CLI audio player
       unixtools.xxd # hexeditor
     ];
@@ -92,7 +88,7 @@ in {
 
   xdg.mimeApps = {
     associations.added = {
-      "image/svg+xml" = "sxiv.desktop";
+      "image/svg+xml" = "nsxiv.desktop";
     };
     defaultApplications = {
       "inode/directory" = [ "nnn.desktop" ];
