@@ -10,7 +10,7 @@ in {
       #cura
       #nur.repos.xeals.cura5 #TODO waiting for update & https://github.com/xeals/nur-packages/pull/76
       (let cura5 = appimageTools.wrapType2 rec {
-        name = "cura5";
+        pname = "cura5";
         version = "5.7.2";
         src = let
           tagName = "${version}-RC2";
