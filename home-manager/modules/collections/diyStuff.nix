@@ -11,12 +11,12 @@ in {
       #nur.repos.xeals.cura5 #TODO waiting for update & https://github.com/xeals/nur-packages/pull/76
       (let cura5 = appimageTools.wrapType2 rec {
         pname = "cura5";
-        version = "5.7.2";
+        version = "5.9.0";
         src = let
-          tagName = "${version}-RC2";
+          tagName = "${version}";
         in fetchurl {
           url = "https://github.com/Ultimaker/Cura/releases/download/${tagName}/UltiMaker-Cura-${version}-linux-X64.AppImage";
-          hash = "sha256-XlTcCmIqcfTg8fxM2KDik66qjIKktWet+94lFIJWopY=";
+          hash = "sha256-STtVeM4Zs+PVSRO3cI0LxnjRDhOxSlttZF+2RIXnAp4=";
         };
         extraPkgs = pkgs: with pkgs; [ ];
       }; in writeScriptBin "cura" ''
