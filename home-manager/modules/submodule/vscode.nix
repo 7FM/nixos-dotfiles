@@ -86,6 +86,7 @@ in {
     enableExtensionUpdateCheck = false;
 
     userSettings = {
+      "update.showReleaseNotes" = false;
       "editor.suggestSelection" = "first";
       "editor.formatOnPaste" = false;
       "editor.formatOnType" = true;
