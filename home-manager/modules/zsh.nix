@@ -4,13 +4,12 @@ let
   enable = osConfig.custom.hm.modules.zsh.enable;
 in {
   config = lib.mkIf enable {
-    home.packages = with pkgs; [
-      # needed for powerlevel10k
-      (nerdfonts.override { fonts = [ "Meslo" ]; })
-    ];
-
     # This enables discovering fonts that where installed with home.packages
     fonts.fontconfig.enable = true;
+    home.packages = [
+      # needed for powerlevel10k
+      pkgs.nerd-fonts.meslo-lg
+    ];
 
     programs.nix-index = {
       enable = true;
