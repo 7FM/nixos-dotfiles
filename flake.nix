@@ -47,7 +47,8 @@
               # Matlab overlay
               nix-matlab.overlay
               # NUR overlay
-              nur.overlay
+              nur.overlays.default
+              #nur.modules.nixos.default
               # my custom tools
               (final: prev: {
                 myTools = import ./common/lib deviceName;
