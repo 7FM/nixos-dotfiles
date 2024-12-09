@@ -95,6 +95,7 @@
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup"; # Avoid activation failures due to .htoprc changes
             home-manager.users."${userName}" = import ./home-manager/home.nix;
 
             home-manager.extraSpecialArgs = {
