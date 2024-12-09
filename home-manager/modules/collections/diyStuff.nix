@@ -90,6 +90,7 @@ in {
         "image/gif" = "com.ultimaker.cura.desktop";
         "image/jpeg" = "com.ultimaker.cura.desktop";
         "image/png" = "com.ultimaker.cura.desktop";
+      };
 
       # SuperSlicer settings/profiles
       configFile."SuperSlicer/filament".source = ../../configs/SuperSlicer/filament;
