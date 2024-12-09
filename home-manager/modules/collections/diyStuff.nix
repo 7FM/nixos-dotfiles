@@ -8,6 +8,7 @@ in {
       # 3D Printing & DIY stuff
       # Cura does not build: https://github.com/NixOS/nixpkgs/issues/325896
       #cura
+      #nur.repos.xeals.cura5 #TODO waiting for update & https://github.com/xeals/nur-packages/pull/76
       (let cura5 = appimageTools.wrapType2 rec {
         name = "cura5";
         version = "5.7.2";
@@ -30,14 +31,16 @@ in {
           fi
           args+=("$a")
         done
-        exec "${cura5}/bin/cura5" "''${args[@]}"
+        QT_QPA_PLATFORM=xcb exec "${cura5}/bin/cura5" "''${args[@]}"
       '')
+      # TODO waiting for: https://nixpk.gs/pr-tracker.html?pr=362194
+      #super-slicer-latest
       freecad
       openscad
       kicad
     ];
 
-    xdg = let 
+    xdg = let
       setupScript = ''
       #!/bin/sh
 
@@ -87,7 +90,11 @@ in {
         "image/gif" = "com.ultimaker.cura.desktop";
         "image/jpeg" = "com.ultimaker.cura.desktop";
         "image/png" = "com.ultimaker.cura.desktop";
-      };
+
+      # SuperSlicer settings/profiles
+      configFile."SuperSlicer/filament".source = ../../configs/SuperSlicer/filament;
+      configFile."SuperSlicer/print".source = ../../configs/SuperSlicer/print;
+      configFile."SuperSlicer/printer".source = ../../configs/SuperSlicer/printer;
 
       # FreeCAD helper macros
       dataFile."FreeCAD/Macro/rotate_and_duplicate.FCMacro".source = ../../configs/freecad/Macro/rotate_and_duplicate.FCMacro;
