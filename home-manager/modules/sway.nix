@@ -155,9 +155,6 @@ in {
         }) // createWsKeybindings workspaces);
 
         startup = [
-          # Clipboard manager
-          { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store"; always = false; }
-
           # Ensure sway notification center runs
           { command = "${pkgs.swaynotificationcenter}/bin/swaync"; always = false;}
 
