@@ -60,7 +60,6 @@ in {
         ];
         modules-right = [
           "custom/notification"
-          "custom/mail"
           "temperature"
           "cpu"
           "memory"
@@ -179,12 +178,6 @@ in {
             "on-click" = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
             "on-click-right" = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
             "escape" = true;
-          };
-          "custom/mail" = {
-            format = "📩 {}";
-            interval = 180;
-            exec = "${pkgs.notmuch}/bin/notmuch count 'tag:flagged OR (tag:inbox AND NOT tag:killed AND NOT tag:spam AND tag:unread)'";
-            escape = true;
           };
           "bluetooth" = {
               interval = 30;

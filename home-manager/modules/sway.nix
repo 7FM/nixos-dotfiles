@@ -13,7 +13,7 @@ let
   touchpad = cfg.sway.touchpad;
 
   startupPrograms = [
-    { command = "${pkgs.astroid}/bin/astroid --disable-log"; always = false; serviceName = "startup-astroid"; }
+    { command = "${pkgs.thunderbird}/bin/thunderbird --disable-log"; always = false; serviceName = "startup-thunderbird"; }
     { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland"; always = false; serviceName = "startup-mattermost"; }
     {
       command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc";
@@ -185,16 +185,16 @@ in {
         ] ++ startupPrograms);
 
         assigns = let
-          astroidCond = [ { app_id = "^astroid$"; } ];
+          thunderbirdCond = [ { app_id = "^thunderbird$"; } ];
           mattermostCond1 = [ { class = "^Mattermost$"; } ];
           mattermostCond2 = [ { title = "^Mattermost Desktop App$"; } ];
           keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!KeePassXC - Browser Access Request$)(?!Unlock Database - KeePassXC$)"; } ];
         in lib.optionalAttrs (disp1 != disp2) {
-          "18:A8" = astroidCond;
+          "18:A8" = thunderbirdCond;
           "19:A9" = mattermostCond1 ++ mattermostCond2;
           "20:A10" = keepassCond;
         } // lib.optionalAttrs (disp1 == disp2) {
-          "8" = astroidCond;
+          "8" = thunderbirdCond;
           "9" = mattermostCond1 ++ mattermostCond2;
           "10" = keepassCond;
         };
@@ -258,8 +258,6 @@ in {
             { app_id = "^firefox$"; title = "^Firefox — Sharing Indicator$"; }
             # File dialogs
             { app_id = "^xdg-desktop-portal-gtk$"; }
-            # Astroid file dialog
-            { app_id = "^astroid$"; title = "^Save attachment to folder..$"; }
             # Keepass browser access requests 
             { app_id = "^org.keepassxc.KeePassXC$"; title = "^KeePassXC - Browser Access Request$"; }
             # Cura dialogs

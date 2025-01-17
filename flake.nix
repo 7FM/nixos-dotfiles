@@ -56,21 +56,6 @@
                 drynomore = drynomore.packages."${system}".default;
                 tmdbot = tmdbot.packages."${system}".default;
 
-                astroid = prev.astroid.overrideAttrs (oldAttrs: {
-                  patches = oldAttrs.patches ++ [
-                    (prev.fetchpatch {
-                      name = "fix-message-view.patch";
-                      url = "https://github.com/ibuclaw/astroid/commit/6b7e302ae2d183cc6a9ffbfdf8e5a2f9477e8b89.patch";
-                      hash = "sha256-YPXIwle/mNymLm4Wuzq77Z3+/rKlw8B6Txe4NtWGq0c=";
-                    })
-                    (prev.fetchpatch {
-                      name = "fix-attachments.patch";
-                      url = "https://github.com/astroidmail/astroid/commit/7fd64c41435a2b99fb9e0a5770a83ba30cd11450.patch";
-                      hash = "sha256-JW5WdSlagHmtjmX9HxLPzubR5HpenjkVjQxOJx5mgx0=";
-                    })
-                  ];
-                });
-
                 # waybar: enable experimental features
                 waybar = prev.waybar.overrideAttrs (oldAttrs: {
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];

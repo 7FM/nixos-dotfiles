@@ -1,4 +1,4 @@
-{ pkgs, createPasswordLookupCmd, offlineimapConf, notmuchConf, astroidConf, msmtpConf }:
+{ createPasswordLookupCmd }:
 
 {
   # Take a look at https://nix-community.github.io/home-manager/options.html#opt-accounts.email.accounts
@@ -31,12 +31,6 @@
         useStartTls = true;
       };
     };
-    notmuch.enable = true;
-    # Parameters: emailAddr: shortTag: customHook: hasIMAP:
-    offlineimap = offlineimapConf false address "my_mail" "" (imap != null);
-    # Parameters: emailAddr:
-    astroid = astroidConf address;
-    # Parameters: emailAddr: hasSMTP:
-    msmtp = msmtpConf address (smtp != null);
+    thunderbird.enable = true;
   };
 }
