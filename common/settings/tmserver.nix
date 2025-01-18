@@ -20,7 +20,8 @@ let
   giteaAppName = myMiscSecrets.giteaAppName;
 
   # Exposed ports
-  radicalePort = myTools.extractPort myPorts.radicale "";
+  radicaleProxyPort = myTools.extractPort myPorts.radicale "proxy";
+  radicaleInternalPort = myTools.extractPort myPorts.radicale "internal";
   downloadPort = myTools.extractPort myPorts.downloadPage "";
   jenkinsPort =  myTools.extractPort myPorts.jenkins "proxy";
   giteaPort = myTools.extractPort myPorts.gitea "proxy";
@@ -474,10 +475,10 @@ in lib.mkMerge [
       };
 
       radicale = (defaultConf "") // {
-        listen = createListenEntries radicalePort;
+        listen = createListenEntries radicaleProxyPort;
         locations = defaultLocations // {
           "/" = {
-            proxyPass = "http://localhost:5232/";
+            proxyPass = "http://localhost:${toString radicaleInternalPort}/";
             extraConfig = ''
               sendfile off;
               proxy_set_header  X-Script-Name /;
