@@ -1,0 +1,21 @@
+commit fb538da935f70c119dca5774d0fc52ed5a2680c8
+Author: 7FM <41307817+7FM@users.noreply.github.com>
+Date:   Sun Jan 19 13:03:39 2025 +0100
+
+    Nix specific: disable update mechanism
+
+diff --git a/BridgeEmulator/services/updateManager.py b/BridgeEmulator/services/updateManager.py
+index 4b1399f..560acc5 100644
+--- a/BridgeEmulator/services/updateManager.py
++++ b/BridgeEmulator/services/updateManager.py
+@@ -101,9 +101,7 @@ def githubUICheck():
+ 
+ 
+ def githubInstall():
+-    if bridgeConfig["config"]["swupdate2"]["state"] in ["allreadytoinstall", "anyreadytoinstall"]:#diyhue + ui update
+-        subprocess.Popen("sh githubInstall.sh " + bridgeConfig["config"]["ipaddress"] + " " + bridgeConfig["config"]["swupdate2"]["state"],shell=True, close_fds=True)
+-        bridgeConfig["config"]["swupdate2"]["state"] = "installing"
++    pass
+ 
+ def startupCheck():
+     if bridgeConfig["config"]["swupdate2"]["install"] == True:

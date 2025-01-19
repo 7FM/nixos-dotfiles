@@ -1,0 +1,26 @@
+commit 035efbf0aefb8103bbf387d4402c2ab95c89e530
+Author: 7FM <41307817+7FM@users.noreply.github.com>
+Date:   Sun Jan 19 13:31:55 2025 +0100
+
+    HueEmulator3: add main function
+
+diff --git a/BridgeEmulator/HueEmulator3.py b/BridgeEmulator/HueEmulator3.py
+index 892be1c..584e592 100755
+--- a/BridgeEmulator/HueEmulator3.py
++++ b/BridgeEmulator/HueEmulator3.py
+@@ -99,7 +99,7 @@ def runHttps(BIND_IP, HOST_HTTPS_PORT, CONFIG_PATH):
+ def runHttp(BIND_IP, HOST_HTTP_PORT):
+     app.run(host=BIND_IP, port=HOST_HTTP_PORT)
+ 
+-if __name__ == '__main__':
++def main():
+     from services import mqtt, deconz, ssdp, mdns, scheduler, remoteApi, remoteDiscover, entertainment, stateFetch, eventStreamer, homeAssistantWS, updateManager
+     ### variables initialization
+     BIND_IP = configManager.runtimeConfig.arg["BIND_IP"]
+@@ -131,3 +131,6 @@ if __name__ == '__main__':
+     if not DISABLE_HTTPS:
+         Thread(target=runHttps, args=[BIND_IP, HOST_HTTPS_PORT, CONFIG_PATH]).start()
+     runHttp(BIND_IP, HOST_HTTP_PORT)
++
++if __name__ == '__main__':
++    main()

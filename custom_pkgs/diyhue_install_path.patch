@@ -1,0 +1,97 @@
+commit 830ec559f0dcc9409485e5b0f5de3efe2624b227
+Author: 7FM <41307817+7FM@users.noreply.github.com>
+Date:   Sun Jan 19 13:02:25 2025 +0100
+
+    Deduce installation folder instead of using a hardcoded value
+
+diff --git a/BridgeEmulator/configManager/argumentHandler.py b/BridgeEmulator/configManager/argumentHandler.py
+index 5d2e5b0..bfda24d 100644
+--- a/BridgeEmulator/configManager/argumentHandler.py
++++ b/BridgeEmulator/configManager/argumentHandler.py
+@@ -16,10 +16,13 @@ def get_environment_variable(var, boolean=False):
+     return value
+ 
+ 
+-def generate_certificate(mac, path):
++def generate_certificate(mac, conf_path):
+     logging.info("Generating certificate")
+     serial = (mac[:6] + "fffe" + mac[-6:]).encode('utf-8')
+-    call(["/usr/bin/env", "bash", "/opt/hue-emulator/genCert.sh", serial, path])
++    # Get the absolute directory of the current script
++    script_dir = path.dirname(path.abspath(__file__))
++    gen_cert_path = path.join(script_dir, "..", "genCert.sh")
++    call(["/usr/bin/env", "bash", gen_cert_path, serial, conf_path])
+     logging.info("Certificate created")
+ 
+ 
+diff --git a/BridgeEmulator/genCert.sh b/BridgeEmulator/genCert.sh
+index 7099466..bf0a75e 100755
+--- a/BridgeEmulator/genCert.sh
++++ b/BridgeEmulator/genCert.sh
+@@ -1,8 +1,10 @@
+ #!/usr/bin/env bash
++SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
++
+ mac=$1
+-config="${2:-/opt/hue-emulator/config}"
++config="${2:-$SCRIPT_DIR/config}"
+ dec_serial=`python3 -c "print(int(\"$mac\".strip('\u200e'), 16))"`
+-faketime '2017-01-01 00:00:00' openssl req -new -days 7670 -config /opt/hue-emulator/openssl.conf  -nodes -x509 -newkey  ec -pkeyopt ec_paramgen_curve:P-256 -pkeyopt ec_param_enc:named_curve   -subj "/C=NL/O=Philips Hue/CN=$mac" -keyout private.key -out public.crt -set_serial $dec_serial
++faketime '2017-01-01 00:00:00' openssl req -new -days 7670 -config $SCRIPT_DIR/openssl.conf  -nodes -x509 -newkey  ec -pkeyopt ec_paramgen_curve:P-256 -pkeyopt ec_param_enc:named_curve   -subj "/C=NL/O=Philips Hue/CN=$mac" -keyout private.key -out public.crt -set_serial $dec_serial
+ 
+ mkdir -p $config
+ touch $config/cert.pem
+diff --git a/BridgeEmulator/githubInstall.sh b/BridgeEmulator/githubInstall.sh
+index cf480dc..39f6ad6 100644
+--- a/BridgeEmulator/githubInstall.sh
++++ b/BridgeEmulator/githubInstall.sh
+@@ -1,3 +1,5 @@
++SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
++
+ curl -s $1/save
+ cd /
+ if [ $2 = allreadytoinstall ]; then
+@@ -6,19 +8,19 @@ if [ $2 = allreadytoinstall ]; then
+     #curl -sL -o diyhue.zip https://github.com/hendriksen-mark/diyhue/archive/master.zip
+     unzip -qo diyhue.zip
+     rm diyhue.zip
+-    cp -r diyHue-master/BridgeEmulator/flaskUI /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/functions /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/lights /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/sensors /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/HueObjects /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/services /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/configManager /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/logManager /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/HueEmulator3.py /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/githubInstall.sh /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/genCert.sh /opt/hue-emulator/
+-    cp -r diyHue-master/BridgeEmulator/openssl.conf /opt/hue-emulator/
+-    chmod +x /opt/hue-emulator/genCert.sh
++    cp -r diyHue-master/BridgeEmulator/flaskUI "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/functions "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/lights "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/sensors "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/HueObjects "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/services "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/configManager "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/logManager "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/HueEmulator3.py "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/githubInstall.sh "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/genCert.sh "$SCRIPT_DIR"/
++    cp -r diyHue-master/BridgeEmulator/openssl.conf "$SCRIPT_DIR"/
++    chmod +x "$SCRIPT_DIR"/genCert.sh
+     rm -r diyHue-master
+ else
+     echo "ui update"
+@@ -29,8 +31,8 @@ curl -sL https://github.com/diyhue/diyHueUI/releases/latest/download/DiyHueUI-re
+ #curl -sL https://github.com/hendriksen-mark/diyHueUI/releases/latest/download/DiyHueUI-release.zip -o diyHueUI.zip
+ unzip -qo diyHueUI.zip -d diyhueUI
+ rm diyHueUI.zip
+-cp -r diyhueUI/dist/index.html /opt/hue-emulator/flaskUI/templates/
+-cp -r diyhueUI/dist/assets /opt/hue-emulator/flaskUI/
++cp -r diyhueUI/dist/index.html "$SCRIPT_DIR"/flaskUI/templates/
++cp -r diyhueUI/dist/assets "$SCRIPT_DIR"/flaskUI/
+ rm -r diyhueUI
+ 
+ curl -s $1/restart

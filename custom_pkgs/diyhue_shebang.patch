@@ -1,0 +1,89 @@
+commit 55f07420a6ae80020b6fda61d682daaa8d89fab3
+Author: 7FM <41307817+7FM@users.noreply.github.com>
+Date:   Sun Jan 19 12:58:18 2025 +0100
+
+    Improve shebang compatibility
+
+diff --git a/.build/startup.sh b/.build/startup.sh
+index 92c5adb..ca27107 100644
+--- a/.build/startup.sh
++++ b/.build/startup.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ if [ -n ${1+x} ]; then 
+     mac=$1
+diff --git a/BridgeEmulator/check_updates.sh b/BridgeEmulator/check_updates.sh
+index dea9d96..14a20b8 100755
+--- a/BridgeEmulator/check_updates.sh
++++ b/BridgeEmulator/check_updates.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ echo "Checking for Updates"
+ curl -s https://raw.githubusercontent.com/diyhue/diyHue/master/BridgeEmulator/easy_install.sh | sudo bash /dev/stdin
+diff --git a/BridgeEmulator/configManager/argumentHandler.py b/BridgeEmulator/configManager/argumentHandler.py
+index 82b10e2..5d2e5b0 100644
+--- a/BridgeEmulator/configManager/argumentHandler.py
++++ b/BridgeEmulator/configManager/argumentHandler.py
+@@ -19,7 +19,7 @@ def get_environment_variable(var, boolean=False):
+ def generate_certificate(mac, path):
+     logging.info("Generating certificate")
+     serial = (mac[:6] + "fffe" + mac[-6:]).encode('utf-8')
+-    call(["/bin/bash", "/opt/hue-emulator/genCert.sh", serial, path])
++    call(["/usr/bin/env", "bash", "/opt/hue-emulator/genCert.sh", serial, path])
+     logging.info("Certificate created")
+ 
+ 
+diff --git a/BridgeEmulator/easy_openwrt.sh b/BridgeEmulator/easy_openwrt.sh
+index 9bf4262..0b01469 100755
+--- a/BridgeEmulator/easy_openwrt.sh
++++ b/BridgeEmulator/easy_openwrt.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ echo -e "\033[31m Installing diyHue Beta (flask)\033[0m"
+ echo -e "\033[32m Deleting folders.\033[0m"
+ rm -Rf /opt/hue-emulator
+diff --git a/BridgeEmulator/easy_uninstall.sh b/BridgeEmulator/easy_uninstall.sh
+index a629945..d7bf18f 100755
+--- a/BridgeEmulator/easy_uninstall.sh
++++ b/BridgeEmulator/easy_uninstall.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ cd /tmp
+ 
+ echo -e "\033[36m Stopping diyHue.\033[0m"
+diff --git a/BridgeEmulator/genCert.sh b/BridgeEmulator/genCert.sh
+index 150175d..7099466 100755
+--- a/BridgeEmulator/genCert.sh
++++ b/BridgeEmulator/genCert.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ mac=$1
+ config="${2:-/opt/hue-emulator/config}"
+ dec_serial=`python3 -c "print(int(\"$mac\".strip('\u200e'), 16))"`
+diff --git a/BridgeEmulator/install_openwrt.sh b/BridgeEmulator/install_openwrt.sh
+index 5100e23..83e4b8c 100755
+--- a/BridgeEmulator/install_openwrt.sh
++++ b/BridgeEmulator/install_openwrt.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ echo -e "\033[32m Updating repository.\033[0m"
+ opkg update
+diff --git a/BridgeEmulator/update_openwrt.sh b/BridgeEmulator/update_openwrt.sh
+index f60186b..415bc30 100644
+--- a/BridgeEmulator/update_openwrt.sh
++++ b/BridgeEmulator/update_openwrt.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ echo -e "\033[32m Disable startup service.\033[0m"
+ /etc/init.d/hueemulatorWrt-service disable
