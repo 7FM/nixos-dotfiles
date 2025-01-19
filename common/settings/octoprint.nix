@@ -2,6 +2,20 @@
 
 let
   myTools = pkgs.myTools { osConfig = config; };
+  myPorts = (myTools.getSecret ../../nixos "usedPorts.nix") myTools;
+
+  myMiscSecrets = (myTools.getSecret ../../nixos "misc.nix");
+
+  zigbee2mqttFrontendPort = myTools.extractPort myPorts.zigbee2mqtt "frontend";
+  zigbee2mqttPort = myTools.extractPort myPorts.zigbee2mqtt "mqtt";
+  octoprintInternal = myTools.extractPort myPorts.octoprint "internal";
+  octoprintProxy = myTools.extractPort myPorts.octoprint "proxy";
+  hassPort = myTools.extractPort myPorts.homeassistant "";
+  mjpegStreamerPort = myTools.extractPort myPorts.mjpegStreamer "";
+  diyhueInternal = myTools.extractPort myPorts.diyhue "internal";
+  diyhueHttpsProxy = myTools.extractPort myPorts.diyhue "https";
+  diyhueHttpProxy = myTools.extractPort myPorts.diyhue "http";
+
 in lib.mkMerge [
 {
   custom = {
@@ -63,6 +77,21 @@ in lib.mkMerge [
     };
   };
 
+  hardware.raspberry-pi."4" = {
+    audio.enable = false;
+    dwc2 = {
+      enable = false;
+    };
+    i2c0.enable = false;
+    i2c1.enable = false;
+    poe-hat.enable = false;
+    pwm0.enable = false;
+    tc358743.enable = false;
+    fkms-3d = {
+      enable = false;
+    };
+  };
+
   custom.grub = {
     enable = false;
     #useUEFI = false;
@@ -107,8 +136,230 @@ in lib.mkMerge [
   #  "wlan0"
   #];
 
+  # Nginx Proxy
+  services.nginx = {
+    enable = true;
+    serverTokens = false;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    virtualHosts = let
+      nginxSecurityHeaders = ''
+        add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+        add_header Referrer-Policy "no-referrer" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Download-Options "noopen" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Permitted-Cross-Domain-Policies "none" always;
+        add_header X-Robots-Tag "none" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        fastcgi_hide_header X-Powered-By;
+        ## Block some robots ##
+        if ($http_user_agent ~* msnbot|scrapbot) {
+            return 403;
+        }
+        ## Block download agents ##
+        if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+            return 403;
+        }
+      '';
+
+      defaultConf = extraConf : {
+        # forceSSL = true;
+        onlySSL = true;
+        extraConfig = ''
+          ${nginxSecurityHeaders}
+          # ignore_invalid_headers off;
+          ${extraConf}
+        '';
+        http2 = true;
+        kTLS = true;
+      };
+
+      defaultLocations = {
+        "/favicon.ico" = {
+          extraConfig = "log_not_found off;";
+        };
+      };
+
+      createListenEntriesOptSSL = myPort: ssl [
+        {
+          addr = "0.0.0.0";
+          port = myPort;
+          inherit ssl;
+        }
+        {
+          addr = "[::]";
+          port = myPort;
+          inherit ssl;
+        }
+      ];
+
+      createListenEntries = myPort: createListenEntriesOptSSL myPort true;
+
+    in {
+      octoprint = (defaultConf "") // {
+        listen = createListenEntries octoprintProxy;
+        locations = defaultLocations // {
+          "/" = {
+            proxyPass = "http://localhost:${toString octoprintInternal}/";
+            extraConfig = ''
+              proxy_set_header Host $http_host;
+              proxy_set_header Connection "upgrade";
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Scheme $scheme;
+              proxy_http_version 1.1;
+
+              client_max_body_size 0; 
+            '';
+          };
+          "/webcam/" = {
+            proxyPass = "http://localhost:${toString mjpegStreamerPort}/";
+            extraConfig = ''
+            '';
+          };
+
+          # TODO do we need this?
+          # # redirect server error pages to the static page /50x.html
+          # error_page   500 502 503 504  /50x.html;
+          # location = /50x.html {
+          #     root   html;
+          # }
+        };
+      };
+
+      diyhue_https = (defaultConf "") // {
+        listen = createListenEntries diyhueHttpsProxy;
+        locations = defaultLocations // {
+          "/" = {
+            proxyPass = "http://localhost:${toString diyhueInternal}/";
+            extraConfig = ''
+              # disable proxy buffering to keep behavior as close as possible to original ipbridge
+              proxy_buffering off;
+              proxy_request_buffering off;
+
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+            '';
+          };
+        };
+      };
+      diyhue_http = (defaultConf "") // {
+        listen = createListenEntriesOptSSL diyhueHttpProxy false;
+        locations = defaultLocations // {
+          "/" = {
+            proxyPass = "http://localhost:${toString diyhueInternal}/";
+            extraConfig = ''
+              # disable proxy buffering to keep behavior as close as possible to original ipbridge
+              proxy_buffering off;
+              proxy_request_buffering off;
+
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+            '';
+          };
+        };
+      };
+
+    };
+  };
+
+  services.zigbee2mqtt = {
+    enable = true;
+    settings = {
+      homeassistant = config.services.home-assistant.enable;
+      permit_join = true;
+      frontend = {
+        enable = false;
+        port = zigbee2mqttFrontendPort;
+      };
+      mqtt = {
+        base_topic = "zigbee2mqtt";
+        server = "mqtt://localhost:${toString zigbee2mqttPort}";
+      };
+      serial = {
+        adapter = "deconz";
+        port = "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2669275-if00";
+      };
+      advanced = {
+        log_output = [ "console" ];
+        network_key = myMiscSecrets.zigbee2mqtt.network_key;
+      };
+      devices = myMiscSecrets.zigbee2mqtt.devices;
+    };
+  };
+
+  systemd.services."diyhue" = let
+      jsonify = (pkgs.python3.pkgs.callPackage ../../custom_pkgs/jsonify.nix { });
+      rgbxy = (pkgs.python3.pkgs.callPackage ../../custom_pkgs/rgbxy.nix { });
+      diyhue = (pkgs.callPackage ../../custom_pkgs/diyhue.nix { python3Packages = pkgs.python3.pkgs; inherit jsonify rgbxy; });
+
+      securityOptions = {
+        ProtectHome = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = [ "AF_INET" "AF_NETLINK" ];
+      };
+  in {
+    path = with pkgs; [
+      gawk
+      iproute2
+      bash
+    ];
+    serviceConfig = securityOptions // {
+      Type = "simple";
+      User = "diyhue";
+      Group = "diyhue";
+      DynamicUser = true;
+      StateDirectory = "diyhue";
+      WorkingDirectory = "/var/lib/diyhue";
+      RuntimeDirectory = "diyhue";
+      LogsDirectory = "diyhue";
+      ConfigurationDirectory = "diyhue";
+      Restart = "always";
+      RestartSec = "30s";
+    };
+    script = "${lib.getExe diyhue} --config_path /var/lib/diyhue --bind-ip 127.0.0.1 --no-serve-https --http-port ${toString diyhueInternal}";
+    preStop = "${lib.getExe pkgs.curl} http://127.0.0.1:${toString diyhueInternal}/save";
+    wantedBy = [ "multi-user.target" ];
+  };
+
+
+  services.home-assistant = {
+    enable = true;
+    config = {
+      http.server_port = hassPort;
+      homeassistant.unit_system = "metric";
+    };
+  };
+
+  services.mjpg-streamer = {
+    enable = true;
+    user = config.services.octoprint.user;
+    group = config.services.octoprint.group;
+    outputPlugin = "output_http.so -w @www@ -n -p ${toString mjpegStreamerPort}";
+    inputPlugin = "input_uvc.so -r 1280x720 -f 10 -vf true -hf true -d /dev/video0";
+  };
+
   services.octoprint = {
     enable = true;
+    port = octoprintInternal;
     plugins = plugins: with plugins; [
       uploadanything
       themeify
@@ -135,10 +386,20 @@ in lib.mkMerge [
       multilineterminal
       displaylayerprogress
     ];
+    extraConfig = myMiscSecrets.octoprint.extraConfig;
   };
   services.klipper = {
     enable = true;
-    octoprintIntegration = true;
+    octoprintIntegration = config.services.octoprin.enable;
+
+    firmwares = {
+      "BIGTREETECH_SKR_E3_DIP" = {
+        enable = true;
+        configFile = ../../home-manager/configs/klipper/skr_e3_dip.cfg;
+        enableKlipperFlash = false;
+      };
+    };
+
     settings = let 
       stepperSettings = { step_pin, dir_pin, enable_pin, rotation_distance ? 40}: {
         inherit step_pin dir_pin enable_pin rotation_distance;

@@ -103,7 +103,7 @@
 
       { deviceName = "rpi4"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
       { deviceName = "tmserver"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
-      { deviceName = "octoprint-rpi2"; system = "armv7-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-2 ]; }
+      { deviceName = "octoprint"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
 
       { deviceName = "virtualbox"; forceNoSecrets = true; }
 
