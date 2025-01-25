@@ -19,11 +19,6 @@
       flake = false;
     };
 
-    nix-matlab = {
-      url = "gitlab:doronbehar/nix-matlab";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     drynomore = {
       url = "github:7FM/DryNoMore";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,16 +31,14 @@
     };
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, nix-matlab, drynomore, tmdbot, ...}@inputs: {
+  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, drynomore, tmdbot, ...}@inputs: {
     nixosConfigurations = let
-      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
+      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], nixpkgsOverlays ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
           {
             nixpkgs.overlays = [
-              # Matlab overlay
-              nix-matlab.overlay
               # NUR overlay
               nur.overlays.default
               #nur.modules.nixos.default
@@ -66,7 +59,7 @@
                   runtimeDependencies = (oldAttrs.runtimeDependencies or []) ++ [ prev.wayland ];
                 });
               })
-            ];
+            ] ++ nixpkgsOverlays;
 
             # Source: https://github.com/NixOS/nix/issues/3803#issuecomment-1181667475
             # Hack to support legacy worklows that use `<nixpkgs>` etc.
@@ -103,7 +96,22 @@
 
       { deviceName = "rpi4"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
       { deviceName = "tmserver"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
-      { deviceName = "octoprint"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
+      { deviceName = "octoprint"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ];
+        nixpkgsOverlays = [
+          # https://discourse.nixos.org/t/nixos-and-raspberry-pi-zero-2w-pi-camera-module-v3/46319
+          (self: super: {
+            # https://patchwork.libcamera.org/patch/19420
+            libcamera = super.libcamera.overrideAttrs ({ patches ? [ ], ... }: {
+              patches = patches ++ [
+                (self.fetchpatch {
+                  url = "https://patchwork.libcamera.org/patch/19420/raw";
+                  hash = "sha256-xJ8478CAKvyo2k1zrfIytDxFQ1Qdd8ilMdABQoNcdPU=";
+                })
+              ];
+            });
+          })
+        ];
+      }
 
       { deviceName = "virtualbox"; forceNoSecrets = true; }
 
