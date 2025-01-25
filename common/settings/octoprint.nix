@@ -213,7 +213,7 @@ in lib.mkMerge [
         };
       };
 
-      createListenEntriesOptSSL = myPort: ssl [
+      createListenEntriesOptSSL = myPort: ssl: [
         {
           addr = "0.0.0.0";
           port = myPort;
@@ -380,8 +380,6 @@ in lib.mkMerge [
 
   services.mjpg-streamer = {
     enable = true;
-    user = config.services.octoprint.user;
-    group = config.services.octoprint.group;
     outputPlugin = "output_http.so -w @www@ -n -p ${toString mjpegStreamerPort}";
     inputPlugin = "input_uvc.so -r 1280x720 -f 10 -vf true -hf true -d /dev/video0";
   };
@@ -419,10 +417,10 @@ in lib.mkMerge [
   };
   services.klipper = {
     enable = true;
-    octoprintIntegration = config.services.octoprin.enable;
+    octoprintIntegration = config.services.octoprint.enable;
 
     firmwares = {
-      "BIGTREETECH_SKR_E3_DIP" = {
+      mcu = {
         enable = true;
         configFile = ../../home-manager/configs/klipper/skr_e3_dip.cfg;
         enableKlipperFlash = false;
