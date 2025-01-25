@@ -100,6 +100,71 @@ in lib.mkMerge [
     fkms-3d = {
       enable = false;
     };
+
+    # https://github.com/Electrostasy/dots/blob/3b81723feece67610a252ce754912f6769f0cd34/hosts/phobos/klipper.nix#L11
+    apply-overlays-dtmerge.enable = true;
+  };
+
+  boot = {
+    # Give the GPU some memory # TODO we can probably reduce the amount!
+    kernelParams = [ "cma=512M" ];
+  };
+  hardware.deviceTree = {
+    enable = true;
+
+    # https://github.com/Electrostasy/dots/blob/3b81723feece67610a252ce754912f6769f0cd34/hosts/phobos/klipper.nix#L17-L42
+    filter = "bcm2711-rpi-4-b.dtb";
+    overlays =
+      let
+        mkCompatibleDtsFile = dtbo:
+          let
+            drv = pkgs.runCommand "fix-dts" { nativeBuildInputs = with pkgs; [ dtc gnused ]; } ''
+              mkdir "$out"
+              dtc -I dtb -O dts ${dtbo} | sed -e 's/bcm2835/bcm2711/' > $out/overlay.dts
+            '';
+          in
+            "${drv}/overlay.dts";
+
+        inherit (config.boot.kernelPackages) kernel;
+      in
+        [
+          # https://www.raspberrypi.com/documentation/accessories/camera.html#hardware-specification
+          {
+            # HQ Camera
+            name = "imx477.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/imx477.dtbo";
+          }
+          {
+            # GS Camera
+            name = "imx296.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/imx296.dtbo";
+          }
+          {
+            # AI Camera
+            name = "imx500.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/imx500.dtbo";
+          }
+          {
+            # Camera Module v3
+            name = "imx708.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/imx708.dtbo";
+          }
+          {
+            # Camera Module v2
+            name = "imx219.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/imx219.dtbo";
+          }
+          {
+            # Camera Module v1
+            name = "ov5647.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/ov5647.dtbo";
+          }
+          # GPU support
+          {
+            name = "vc4-kms-v3d-pi4.dtbo";
+            dtsFile = mkCompatibleDtsFile "${kernel}/dtbs/overlays/vc4-kms-v3d-pi4.dtbo";
+          }
+        ];
   };
 
   # Make gpio accessible to everyone in the gpio group
