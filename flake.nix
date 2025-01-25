@@ -3,31 +3,45 @@
 
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs_prepatch.url = "nixpkgs/nixos-unstable";
     #nixpkgs.url = "nixpkgs/nixpkgs-unstable";
     nur = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs_prepatch";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs_prepatch";
     };
     drynomore = {
       url = "github:7FM/DryNoMore";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs_prepatch";
     };
 
     tmdbot = {
       url = "github:7FM/TMDBot";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs_prepatch";
       inputs.flake-utils.follows = "drynomore/flake-utils";
     };
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, home-manager, nur, drynomore, tmdbot, ...}@inputs: {
+  outputs = { self, nixos-hardware, nixpkgs_prepatch, home-manager, nur, drynomore, tmdbot, ...}@inputs: {
     nixosConfigurations = let
-      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], nixpkgsOverlays ? [], forceNoSecrets ? false}: nixpkgs.lib.nixosSystem {
+      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], nixpkgsOverlays ? [], forceNoSecrets ? false}: let
+        nixpkgs-patched = (import nixpkgs_prepatch {
+          inherit system;
+        }).applyPatches {
+            name = "nixpkgs-patched";
+            src = inputs.nixpkgs_prepatch;
+            patches = [
+              (builtins.fetchurl {
+                url = "https://github.com/NixOS/nixpkgs/pull/370953.patch";
+                sha256 = "sha256:0xwm2hqaink23lky9rfc3vr6fbnhphb6fg7jhd86y68i5axdv4vi";
+              })
+            ];
+        };
+        nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
+      in nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
@@ -58,7 +72,7 @@
             # Source: https://github.com/NixOS/nix/issues/3803#issuecomment-1181667475
             # Hack to support legacy worklows that use `<nixpkgs>` etc.
             nix.nixPath = [
-              "nixpkgs=${inputs.nixpkgs}"
+              "nixpkgs=${nixpkgs-patched}"
             ];
           }
 
@@ -112,8 +126,8 @@
       { deviceName = "iso-image"; forceNoSecrets = true; customModules = [
         ({ pkgs, modulesPath, ... }: {
           imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
-        })
-      ]; }
+        })]; 
+      }
     ];
   };
 }
