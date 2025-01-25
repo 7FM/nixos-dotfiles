@@ -92,6 +92,26 @@ in lib.mkMerge [
     };
   };
 
+  # Make gpio accessible to everyone in the gpio group
+  users.groups.gpio = {};
+
+  # Change permissions gpio devices
+  services.udev.extraRules = ''
+    # Non-root GPIO access
+    SUBSYSTEM=="*gpiomem*", GROUP="gpio", MODE="0660"
+    SUBSYSTEM=="gpio", KERNEL=="gpiochip*", ACTION=="add", GROUP="gpio", MODE="0660", RUN+="${pkgs.bash}/bin/bash -c 'chown root:gpio /sys/class/gpio/export /sys/class/gpio/unexport ; chmod 220 /sys/class/gpio/export /sys/class/gpio/unexport'"
+    SUBSYSTEM=="gpio", KERNEL=="gpio*", ACTION=="add", RUN+="${pkgs.bash}/bin/bash -c 'chown root:gpio /sys%p/active_low /sys%p/direction /sys%p/edge /sys%p/value ; chmod 660 /sys%p/active_low /sys%p/direction /sys%p/edge /sys%p/value'"
+
+    # Camera via DMA access
+    # https://raspberrypi.stackexchange.com/a/141107
+    SUBSYSTEM=="dma_heap", GROUP="video", MODE="0660"
+  '';
+
+  users = {
+    # Add octoprint user to gpio group
+    users."${config.services.octoprint.user}".extraGroups = [ "gpio" ];
+  };
+
   custom.grub = {
     enable = false;
     #useUEFI = false;
