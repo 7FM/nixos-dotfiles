@@ -7,15 +7,19 @@ let
   myMiscSecrets = (myTools.getSecret ../../nixos "misc.nix");
 
   zigbee2mqttFrontendPort = myTools.extractPort myPorts.zigbee2mqtt "frontend";
-  zigbee2mqttPort = myTools.extractPort myPorts.zigbee2mqtt "mqtt";
+  mqttPort = myTools.extractPort myPorts.mosquitto "mqtt";
   octoprintInternal = myTools.extractPort myPorts.octoprint "internal";
   octoprintProxy = myTools.extractPort myPorts.octoprint "proxy";
-  hassPort = myTools.extractPort myPorts.homeassistant "";
+  hassInternalPort = myTools.extractPort myPorts.homeassistant "internal";
+  hassProxyPort = myTools.extractPort myPorts.homeassistant "proxy";
   mjpegStreamerPort = myTools.extractPort myPorts.mjpegStreamer "";
   diyhueInternal = myTools.extractPort myPorts.diyhue "internal";
   diyhueHttpsProxy = myTools.extractPort myPorts.diyhue "https";
   diyhueHttpProxy = myTools.extractPort myPorts.diyhue "http";
+  mqttUser = myMiscSecrets.mqtt.user;
+  mqttPwd = myMiscSecrets.mqtt.pwd;
 
+  localStaticIP = myMiscSecrets.localStaticIP;
 in lib.mkMerge [
 {
   custom = {
@@ -198,6 +202,8 @@ in lib.mkMerge [
       defaultConf = extraConf : {
         # forceSSL = true;
         onlySSL = true;
+        useACMEHost = localStaticIP;
+        serverName = localStaticIP;
         extraConfig = ''
           ${nginxSecurityHeaders}
           # ignore_invalid_headers off;
@@ -230,17 +236,22 @@ in lib.mkMerge [
 
     in {
       octoprint = (defaultConf "") // {
+        http2 = false;
         listen = createListenEntries octoprintProxy;
         locations = defaultLocations // {
           "/" = {
+            recommendedProxySettings = false;
             proxyPass = "http://localhost:${toString octoprintInternal}/";
             extraConfig = ''
-              proxy_set_header Host $http_host;
+              proxy_set_header Host $host:$server_port;
               proxy_set_header Connection "upgrade";
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
               proxy_set_header X-Scheme $scheme;
               proxy_http_version 1.1;
+              proxy_connect_timeout   60s;
+              proxy_send_timeout      60s;
+              proxy_read_timeout      60s;
 
               client_max_body_size 0; 
             '';
@@ -260,8 +271,10 @@ in lib.mkMerge [
         };
       };
 
-      diyhue_https = (defaultConf "") // {
-        listen = createListenEntries diyhueHttpsProxy;
+      diyhue = (defaultConf "") // {
+        enableACME = true;
+        useACMEHost = null;
+        listen = (createListenEntries diyhueHttpsProxy) ++ (createListenEntriesOptSSL diyhueHttpProxy false);
         locations = defaultLocations // {
           "/" = {
             proxyPass = "http://localhost:${toString diyhueInternal}/";
@@ -276,23 +289,19 @@ in lib.mkMerge [
           };
         };
       };
-      diyhue_http = (defaultConf "") // {
-        listen = createListenEntriesOptSSL diyhueHttpProxy false;
+
+      hass = (defaultConf "") // {
+        listen = createListenEntries hassProxyPort;
         locations = defaultLocations // {
           "/" = {
-            proxyPass = "http://localhost:${toString diyhueInternal}/";
+            proxyPass = "http://localhost:${toString hassInternalPort}/";
             extraConfig = ''
-              # disable proxy buffering to keep behavior as close as possible to original ipbridge
-              proxy_buffering off;
-              proxy_request_buffering off;
-
+              proxy_set_header Host $host:$server_port;
               proxy_http_version 1.1;
-              proxy_set_header Connection "";
             '';
           };
         };
       };
-
     };
   };
 
@@ -307,7 +316,9 @@ in lib.mkMerge [
       };
       mqtt = {
         base_topic = "zigbee2mqtt";
-        server = "mqtt://localhost:${toString zigbee2mqttPort}";
+        server = "mqtt://localhost:${toString mqttPort}";
+        user = mqttUser;
+        password = mqttPwd;
       };
       serial = {
         adapter = "deconz";
@@ -372,9 +383,23 @@ in lib.mkMerge [
 
   services.home-assistant = {
     enable = true;
+    extraComponents = [
+      "default_config"
+      "met"
+      "mqtt"
+      "sun"
+    ];
     config = {
-      http.server_port = hassPort;
+      http = {
+        server_port = hassInternalPort;
+        use_x_forwarded_for = true;
+        trusted_proxies = ["127.0.0.1"];
+      };
       homeassistant.unit_system = "metric";
+      frontend.themes = "!include_dir_merge_named themes";
+      automation = "!include automations.yaml";
+      script = "!include scripts.yaml";
+      scene = "!include scenes.yaml";
     };
   };
 
