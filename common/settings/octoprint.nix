@@ -441,29 +441,30 @@ in lib.mkMerge [
     enable = true;
     port = octoprintInternal;
     plugins = plugins: with plugins; [
-      uploadanything
+      uploadanything # TODO we must package this ourselfs # TODO check functionality
       themeify
-      webcamtab
-      taborder
+      webcamtab # TODO we must package this ourselfs # TODO check functionality
+      taborder # TODO we must package this ourselfs # TODO check functionality
       simpleemergencystop
       psucontrol
       printtimegenius
       navbartemp
-      multipleupload
-      heatertimeout
+      multipleupload # TODO we must package this ourselfs # TODO check functionality
+      heatertimeout # TODO we must package this ourselfs # TODO check functionality
       gcodeeditor
-      floatingnavbar
-      excluderegion
-      enclosure
-      emergencystopsimplified
-      bltouch
-      autoscroll
-      octolapse
+      floatingnavbar # TODO we must package this ourselfs # TODO check functionality
+      excluderegion # TODO we must package this ourselfs # TODO check functionality
+      enclosure # TODO we must package this ourselfs # TODO check functionality
+      emergencystopsimplified # TODO we must package this ourselfs # TODO check functionality
+      bltouch # TODO we must package this ourselfs # TODO check functionality
+      autoscroll # TODO we must package this ourselfs # TODO check functionality
+      # octolapse # TODO marked as broken
       bedlevelvisualizer
-      bedlevelingwizard
-      arc_welder
-      octoprint-dashboard
-      multilineterminal
+      bedlevelingwizard # TODO we must package this ourselfs # TODO check functionality
+      arc_welder # TODO we must package this ourselfs # TODO check functionality
+      # TODO report / fix broken alias: https://github.com/NixOS/nixpkgs/blob/nixos-24.11/pkgs/by-name/oc/octoprint/plugins.nix#L669 remove super.
+      dashboard
+      multilineterminal # TODO we must package this ourselfs # TODO check functionality
       displaylayerprogress
     ];
     extraConfig = myMiscSecrets.octoprint.extraConfig;

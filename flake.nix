@@ -117,6 +117,10 @@
                 })
               ];
             });
+            # Add not yet packaged octoprint plugins
+            octoprint = super.octoprint.override (prevArgs: {
+              packageOverrides = super.callPackage ./custom_pkgs/octoprint_plugins.nix {};
+            });
           })
         ];
       }
