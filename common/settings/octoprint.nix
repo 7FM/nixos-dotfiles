@@ -305,10 +305,38 @@ in lib.mkMerge [
     };
   };
 
+  services.mosquitto = {
+    enable = true;
+    # Helpful to debug whether publish requests etc. were denied
+    # logType = [ "all" ];
+    listeners = [
+      {
+        port = mqttPort;
+        address = "127.0.0.1";
+        users = {
+          "${mqttUser}" = {
+            password = mqttPwd;
+            acl = [
+              "readwrite homeassistant/#"
+              "readwrite zigbee2mqtt/#"
+            ];
+          };
+        };
+      }
+    ];
+  };
+
   services.zigbee2mqtt = {
     enable = true;
     settings = {
-      homeassistant = config.services.home-assistant.enable;
+      homeassistant = {
+        enabled = config.services.home-assistant.enable;
+        discovery_topic = "homeassistant";
+        status_topic = "homeassistant/status";
+        # Otherwise, homeassistant does not receive action updates
+        legacy_entity_attributes = true;
+        legacy_triggers = true;
+      };
       permit_join = true;
       frontend = {
         enable = false;
