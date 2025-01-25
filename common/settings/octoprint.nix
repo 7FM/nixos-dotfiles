@@ -79,6 +79,12 @@ in lib.mkMerge [
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
     };
+
+    # TODO is this possible?
+    "/var/lib/octoprint/storage" = {
+      device = "392a260b-9f69-4fa2-9d81-1ba569937188";
+      fsType = "ext4";
+    };
   };
 
   hardware.raspberry-pi."4" = {
