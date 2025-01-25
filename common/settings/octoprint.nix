@@ -156,6 +156,15 @@ in lib.mkMerge [
   #  "wlan0"
   #];
 
+  # Server certificate: self signed
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = "who@car.ez";
+      server = null;
+    };
+  };
+
   # Nginx Proxy
   services.nginx = {
     enable = true;
