@@ -492,7 +492,7 @@ in lib.mkMerge [
       http = {
         server_port = hassInternalPort;
         use_x_forwarded_for = true;
-        trusted_proxies = ["127.0.0.1"];
+        trusted_proxies = ["127.0.0.1" "::1"];
       };
       homeassistant.unit_system = "metric";
       frontend.themes = "!include_dir_merge_named themes";
