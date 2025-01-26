@@ -327,11 +327,6 @@ in lib.mkMerge [
               client_max_body_size 0; 
             '';
           };
-          "/webcam/" = {
-            proxyPass = "http://localhost:${toString mjpegStreamerPort}/";
-            extraConfig = ''
-            '';
-          };
 
           # TODO do we need this?
           # # redirect server error pages to the static page /50x.html
