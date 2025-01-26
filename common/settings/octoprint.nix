@@ -367,7 +367,8 @@ in lib.mkMerge [
           "/" = {
             proxyPass = "http://localhost:${toString hassInternalPort}/";
             extraConfig = ''
-              proxy_set_header Host $host:$server_port;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection $connection_upgrade;
               proxy_http_version 1.1;
             '';
           };
