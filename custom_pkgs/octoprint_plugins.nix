@@ -67,12 +67,12 @@ in
   };
   webcamtab = buildPlugin rec {
     pname = "WebcamTab";
-    version = "0.3.0";
+    version = "0.3.1";
     src = fetchFromGitHub {
       owner = "gruvin";
       repo = "OctoPrint-${pname}";
       rev = "${version}";
-      sha256 = "sha256-5c4uuwFzS4BaZMP00kfQKq6aHnCHms979DbQ6PlCROw=";
+      sha256 = "sha256-BoHghhWnZCRjq5eAxFV3H7Wm0UVFV2nHNO4Qmz1mjuo=";
     };
     meta = with lib; {
       description = "Moves the webcam stream from Control tab to its own Webcam tab";
@@ -197,14 +197,12 @@ in
   };
   bedlevelingwizard = buildPlugin rec {
     pname = "BedLevelingWizard";
-    version = "0.2.4";
+    version = "0.2.5";
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-${pname}";
-      # Note that there is also a branch named 0.2.4!
-      # Hence, we need to specify the commit manually.s
-      rev = "9f6160f8aadca088c2406622c0c6980e46364546";
-      sha256 = "sha256-wxgO6JLsVeW9zocVkSv6tErCB59VYp3S7q/Ljfe0OZE=";
+      rev = version;
+      sha256 = "sha256-3CSCGUWSsWoP2LuoFqCZXku5BqVdbHV9c1+Z4VCdzhs=";
     };
     meta = with lib; {
       description = "Plugin to aid in the process of manually leveling your bed";
