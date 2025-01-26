@@ -506,33 +506,33 @@ in lib.mkMerge [
     enable = true;
     port = octoprintInternal;
     plugins = plugins: with plugins; [
-      uploadanything # TODO we must package this ourselfs # TODO check functionality
+      uploadanything
       themeify
-      webcamtab # TODO we must package this ourselfs # TODO check functionality
-      taborder # TODO we must package this ourselfs # TODO check functionality
+      webcamtab
+      taborder
       simpleemergencystop
       psucontrol
       printtimegenius
       navbartemp
-      multipleupload # TODO we must package this ourselfs # TODO check functionality
-      heatertimeout # TODO we must package this ourselfs # TODO check functionality
+      multipleupload
+      heatertimeout # TODO check functionality
       gcodeeditor
-      floatingnavbar # TODO we must package this ourselfs # TODO check functionality
-      excluderegion # TODO we must package this ourselfs # TODO check functionality
-      enclosure # TODO we must package this ourselfs # TODO check functionality
-      emergencystopsimplified # TODO we must package this ourselfs # TODO check functionality
-      bltouch # TODO we must package this ourselfs # TODO check functionality
-      autoscroll # TODO we must package this ourselfs # TODO check functionality
+      floatingnavbar
+      excluderegion # TODO check functionality
+      enclosure
+      emergencystopsimplified # TODO check functionality
+      bltouch # TODO check functionality
+      autoscroll
       # octolapse # TODO marked as broken
       bedlevelvisualizer
-      bedlevelingwizard # TODO we must package this ourselfs # TODO check functionality
-      arc_welder # TODO we must package this ourselfs # TODO check functionality
+      bedlevelingwizard # TODO check functionality
+      arc_welder
       # TODO report / fix broken alias: https://github.com/NixOS/nixpkgs/blob/nixos-24.11/pkgs/by-name/oc/octoprint/plugins.nix#L669 remove super.
       dashboard
-      multilineterminal # TODO we must package this ourselfs # TODO check functionality
+      multilineterminal
       displaylayerprogress
     ];
-    extraConfig = myMiscSecrets.octoprint.extraConfig;
+    extraConfig = myMiscSecrets.octoprint.extraConfig mjpegStreamerPort;
   };
   services.klipper = {
     enable = true;
