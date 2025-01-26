@@ -147,20 +147,13 @@ in
   };
   excluderegion = buildPlugin rec {
     pname = "ExcludeRegionPlugin";
-    version = "0.3.0";
+    version = "0.3.2";
     src = fetchFromGitHub {
       owner = "bradcfisher";
       repo = "OctoPrint-${pname}";
       rev = "${version}";
-      sha256 = "sha256-ARObfzzfWTBi8JPr2mf5kN7R4suFrySOXpbDstpLHPo=";
+      sha256 = "sha256-YS67lq7Y15EXuJxpZ9VE0PsveYmtIEzRMHRn1GNMJBU=";
     };
-    patches = [
-      # Fix Python 3.10 compatibility
-      (fetchpatch {
-        url = "https://github.com/bradcfisher/OctoPrint-ExcludeRegionPlugin/commit/4fd8642c486bc60bc922237d0858f5115139783b.patch";
-        sha256 = "sha256-jdiA+e8uFqN3UQ73tzM88jviwGZj9xvLHvu6A7EZLOU=";
-      })
-    ];
     meta = with lib; {
       description = "Adds the ability to prevent printing within rectangular or circular regions of the currently active gcode file";
       homepage = "https://github.com/bradcfisher/OctoPrint-ExcludeRegionPlugin";
@@ -245,6 +238,20 @@ in
       rev = "${version}";
       sha256 = "sha256-FFYeTP4v9hvL0T67c+hITbrS9la51tGMAyW89hWmpus=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/7FM/ArcWelderPlugin/commit/d46382ef2eea16aab048b9368b48044a45de4397.patch";
+        sha256 = "sha256-hjly1oJJtMiHnIcfZXEdfnmKE5kIWWsKkCHNtA6+Q9A=";
+      })
+      (fetchpatch {
+        url = "https://github.com/7FM/ArcWelderPlugin/commit/7337b8cf65ed0e8dd2185434e8bb4b8b1a31a959.patch";
+        sha256 = "sha256-lBewnOxPzdmCS2GfRMT+3hO25l0SH70HJd26BeutEqo=";
+      })
+      (fetchpatch {
+        url = "https://github.com/7FM/ArcWelderPlugin/commit/04c951f3a1ccd9ea1185a8a04e535b080e8e8a79.patch";
+        sha256 = "sha256-dmmEzhy17huclo1wOubpBUDc2L7vqEU5b/6a5loM47A=";
+      })
+    ];
     meta = with lib; {
       description = "Anti-Stutter and GCode Compression. Replaces G0/G1 with G2/G3 where possible";
       homepage = "https://github.com/FormerLurker/ArcWelderPlugin";
