@@ -102,17 +102,7 @@
       { deviceName = "tmserver"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ]; }
       { deviceName = "octoprint"; system = "aarch64-linux"; customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ];
         nixpkgsOverlays = [
-          # https://discourse.nixos.org/t/nixos-and-raspberry-pi-zero-2w-pi-camera-module-v3/46319
           (self: super: {
-            # https://patchwork.libcamera.org/patch/19420
-            libcamera = super.libcamera.overrideAttrs ({ patches ? [ ], ... }: {
-              patches = patches ++ [
-                (self.fetchpatch {
-                  url = "https://patchwork.libcamera.org/patch/19420/raw";
-                  hash = "sha256-xJ8478CAKvyo2k1zrfIytDxFQ1Qdd8ilMdABQoNcdPU=";
-                })
-              ];
-            });
             # Add not yet packaged octoprint plugins
             octoprint = super.octoprint.override (prevArgs: {
               packageOverrides = super.callPackage ./custom_pkgs/octoprint_plugins.nix {};
