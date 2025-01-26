@@ -6,7 +6,7 @@ in lib.mkMerge [
 {
   custom = {
     # System settings
-    gpu = "amd";
+    gpu = "intel";
     cpu = "amd";
     # gui = "wayland";
     gui = "hm-wayland";
