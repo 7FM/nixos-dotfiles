@@ -82,7 +82,7 @@ in lib.mkMerge [
 
     # TODO is this possible?
     "/var/lib/octoprint/storage" = {
-      device = "392a260b-9f69-4fa2-9d81-1ba569937188";
+      device = "/dev/disk/by-uuid/392a260b-9f69-4fa2-9d81-1ba569937188";
       fsType = "ext4";
     };
   };
