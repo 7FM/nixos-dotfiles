@@ -27,18 +27,14 @@
 
   outputs = { self, nixos-hardware, nixpkgs_prepatch, home-manager, nur, drynomore, tmdbot, ...}@inputs: {
     nixosConfigurations = let
-      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], nixpkgsOverlays ? [], forceNoSecrets ? false}: let
+      mkSys = {deviceName, system ? "x86_64-linux", userName ? "tm", customModules ? [], nixpkgsOverlays ? [], nixpkgsPatches ? [], forceNoSecrets ? false}: let
         nixpkgs-patched = (import nixpkgs_prepatch {
           inherit system;
         }).applyPatches {
             name = "nixpkgs-patched";
             src = inputs.nixpkgs_prepatch;
             patches = [
-              (builtins.fetchurl {
-                url = "https://github.com/NixOS/nixpkgs/pull/370953.patch";
-                sha256 = "sha256:0xwm2hqaink23lky9rfc3vr6fbnhphb6fg7jhd86y68i5axdv4vi";
-              })
-            ];
+            ] ++ nixpkgsPatches;
         };
         nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
       in nixpkgs.lib.nixosSystem {
@@ -121,6 +117,13 @@
             octoprint = super.octoprint.override (prevArgs: {
               packageOverrides = super.callPackage ./custom_pkgs/octoprint_plugins.nix {};
             });
+          })
+        ];
+        nixpkgsPatches = [
+          # Apply octoprint fixes until they are merged
+          (builtins.fetchurl {
+            url = "https://github.com/NixOS/nixpkgs/pull/370953.patch";
+            sha256 = "sha256:0xwm2hqaink23lky9rfc3vr6fbnhphb6fg7jhd86y68i5axdv4vi";
           })
         ];
       }
