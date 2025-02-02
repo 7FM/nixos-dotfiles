@@ -542,7 +542,7 @@ in lib.mkMerge [
       mcu = {
         enable = true;
         configFile = ../../home-manager/configs/klipper/skr_e3_dip.cfg;
-        enableKlipperFlash = false;
+        enableKlipperFlash = true; # NOTE: this is not supported, but we at least want to keep the firmware to allow manual flashing
       };
     };
 
