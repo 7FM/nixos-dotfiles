@@ -786,42 +786,42 @@ in lib.mkMerge [
   };
 
   # DryNoMore Service
-  systemd.services."drynomore" = let 
-      securityOptions = {
-        ProtectHome = true;
-        PrivateUsers = true;
-        PrivateDevices = true;
-        ProtectClock = true;
-        ProtectHostname = true;
-        ProtectProc = "invisible";
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectKernelLogs = true;
-        ProtectControlGroups = true;
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        MemoryDenyWriteExecute = true;
-        SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
-      };
-  in {
-    serviceConfig = securityOptions // {
-      Type = "simple";
-      User = "drynomore";
-      Group = "drynomore";
-      DynamicUser = true;
-      StateDirectory = "drynomore";
-      RuntimeDirectory = "drynomore";
-      LogsDirectory = "drynomore";
-      ConfigurationDirectory = "drynomore";
-      Restart = "on-failure";
-      RestartSec = "5s";
-    };
-    script = "${pkgs.drynomore}/bin/drynomore-telegram-bot /var/lib/drynomore/config.yaml";
-    wantedBy = [ "multi-user.target" ];
-  };
+  # systemd.services."drynomore" = let 
+  #     securityOptions = {
+  #       ProtectHome = true;
+  #       PrivateUsers = true;
+  #       PrivateDevices = true;
+  #       ProtectClock = true;
+  #       ProtectHostname = true;
+  #       ProtectProc = "invisible";
+  #       ProtectKernelModules = true;
+  #       ProtectKernelTunables = true;
+  #       ProtectKernelLogs = true;
+  #       ProtectControlGroups = true;
+  #       RestrictNamespaces = true;
+  #       LockPersonality = true;
+  #       RestrictRealtime = true;
+  #       RestrictSUIDSGID = true;
+  #       MemoryDenyWriteExecute = true;
+  #       SystemCallArchitectures = "native";
+  #       RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
+  #     };
+  # in {
+  #   serviceConfig = securityOptions // {
+  #     Type = "simple";
+  #     User = "drynomore";
+  #     Group = "drynomore";
+  #     DynamicUser = true;
+  #     StateDirectory = "drynomore";
+  #     RuntimeDirectory = "drynomore";
+  #     LogsDirectory = "drynomore";
+  #     ConfigurationDirectory = "drynomore";
+  #     Restart = "on-failure";
+  #     RestartSec = "5s";
+  #   };
+  #   script = "${pkgs.drynomore}/bin/drynomore-telegram-bot /var/lib/drynomore/config.yaml";
+  #   wantedBy = [ "multi-user.target" ];
+  # };
   systemd.services."tmdbot" = let
       securityOptions = {
         ProtectHome = true;
