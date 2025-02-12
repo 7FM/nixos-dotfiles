@@ -42,15 +42,9 @@ let
 
   # OpenVPN config
   vpn-dev = "tun0";
-  # openvpnCipher = "AES-256-GCM";
-  openvpnCipher = "AES-256-CBC"; # GCM is not possible in non TLS mode!
-  openvpn_server_ip = "10.8.0.1";
-  openvpn_client_ip = "10.8.0.2";
-  commonConf = ip1: ip2: ''
-      ifconfig ${ip1} ${ip2}
+  commonConf = ''
       port ${toString openvpnServerPort}
 
-      cipher ${openvpnCipher}
       auth-nocache
 
       comp-lzo
@@ -58,26 +52,47 @@ let
       persist-key
       persist-tun
   '';
-  openvpn_client_key = "/root/openvpn-shared-secret.key";
+  openvpn_dh = "/root/openvpn/dh.pem";
+  openvpn_ca = "/root/openvpn/ca.crt";
+  openvpn_server_cert = "/root/openvpn/tmserver.crt";
+  openvpn_server_key = "/root/openvpn/tmserver.key";
   openvpn_server_conf = ''
       dev ${vpn-dev}
       proto udp
       proto udp6
-      ${commonConf openvpn_server_ip openvpn_client_ip}
-      secret ${openvpn_client_key}
+      server 10.8.0.0 255.255.255.0
+      max-clients 3
+      # Notify the client that when the server restarts so it
+      # can automatically reconnect.
+      explicit-exit-notify 1
+      ${commonConf}
       ping-timer-rem
+      dh ${openvpn_dh}
+      ca ${openvpn_ca}
+      cert ${openvpn_server_cert}
+      key ${openvpn_server_key}
   '';
-  openvpn_client_conf = ''
+
+  # Example openvpn client config:
+  openvpn_example_client_etc_path = "openvpn/nixos-client-example.ovpn";
+  openvpn_example_client_conf = ''
+      client
       dev tun
       remote "${letsEncryptHost}"
-      ${commonConf openvpn_client_ip openvpn_server_ip}
+      ${commonConf}
 
       redirect-gateway def1
       resolv-retry infinite
       nobind
-      secret [inline]
+      # Verify server certificate
+      remote-cert-tls server
+
+      ca [inline]
+      cert [inline]
+      key [inline]
+
+      # TODO copy & paste your .inline file here!
   '';
-  openvpn_client_etc_path = "openvpn/nixos-client.ovpn";
 in lib.mkMerge [
 {
   custom = {
@@ -765,20 +780,10 @@ in lib.mkMerge [
     config = openvpn_server_conf;
     autoStart = true;
   };
-  environment.etc."${openvpn_client_etc_path}" = {
-    text = openvpn_client_conf;
+  environment.etc."${openvpn_example_client_etc_path}" = {
+    text = openvpn_example_client_conf;
     mode = "600";
   };
-  # Append the shared secret to the client config!
-  system.activationScripts.openvpn-addkey = ''
-    f="/etc/${openvpn_client_etc_path}"
-    if ! grep -q '<secret>' $f; then
-      echo "appending secret key"
-      echo "<secret>" >> $f
-      cat ${openvpn_client_key} >> $f
-      echo "</secret>" >> $f
-    fi
-  '';
 
   # DryNoMore Service
   systemd.services."drynomore" = let 
