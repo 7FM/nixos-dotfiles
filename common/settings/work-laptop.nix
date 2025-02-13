@@ -130,7 +130,7 @@ in lib.mkMerge [
   #   };
   # };
 
-  # networking.networkmanager.fccUnlockScripts = let id = "1199:9079"; in [{
+  # networking.modemmanager.fccUnlockScripts = let id = "1199:9079"; in [{
   #     inherit id;
   #     path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
   # }];
