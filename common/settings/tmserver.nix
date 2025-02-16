@@ -42,6 +42,7 @@ let
 
   # OpenVPN config
   vpn-dev = "tun0";
+  openvpn_dns_server = "192.168.0.1";
   commonConf = ''
       port ${toString openvpnServerPort}
 
@@ -61,6 +62,7 @@ let
       proto udp
       proto udp6
       server 10.8.0.0 255.255.255.0
+      push "dhcp-option DNS ${openvpn_dns_server}"
       max-clients 3
       # Notify the client that when the server restarts so it
       # can automatically reconnect.
@@ -86,6 +88,7 @@ let
       nobind
       # Verify server certificate
       remote-cert-tls server
+      dhcp-option DNS ${openvpn_dns_server}
 
       ca [inline]
       cert [inline]
