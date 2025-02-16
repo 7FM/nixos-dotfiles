@@ -470,7 +470,7 @@ in lib.mkMerge [
       Restart = "always";
       RestartSec = "30s";
     };
-    script = "${lib.getExe diyhue} --config_path /var/lib/diyhue --bind-ip 127.0.0.1 --no-serve-https --http-port ${toString diyhueInternal}";
+    script = "${lib.getExe diyhue} --config_path /var/lib/diyhue --bind-ip 127.0.0.1 --ip ${localStaticIP} --no-serve-https --http-port ${toString diyhueInternal}";
     preStop = "${lib.getExe pkgs.curl} http://127.0.0.1:${toString diyhueInternal}/save";
     wantedBy = [ "multi-user.target" ];
   };
