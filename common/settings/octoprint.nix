@@ -455,6 +455,7 @@ in lib.mkMerge [
       iproute2
       bash
       gnutar
+      openssl
     ];
     serviceConfig = securityOptions // {
       Type = "simple";
