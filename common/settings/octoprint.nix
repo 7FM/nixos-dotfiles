@@ -454,6 +454,7 @@ in lib.mkMerge [
       gawk
       iproute2
       bash
+      gnutar
     ];
     serviceConfig = securityOptions // {
       Type = "simple";
