@@ -32,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "4.0.35";
-    sha256 = "1mnl5sl6vgd9fspym9pj0sm2bnxia9wq6bma7mvssg6zxflabw9i";
+    version = "4.0.41";
+    sha256 = "182jzz4mbsv5qvjl2p4q99v1h3d6zr8l6wfw8sfs97mq9v6smyrk";
   }
   {
     name = "code-spell-checker-german";
@@ -50,8 +50,8 @@
   {
     name = "openscad";
     publisher = "antyos";
-    version = "1.3.1";
-    sha256 = "08h69gjn723wjz7k4rj47rhz90rjg14iaphxv11787gljj0lk297";
+    version = "1.3.2";
+    sha256 = "0rylp5v4darxmv69pyahhnxz281q704k7g9322sdlh5qjl2184fn";
   }
   {
     name = "vscode-tcl";
@@ -86,8 +86,8 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.58.2024090204";
-    sha256 = "054494l06jiyl4jhvrz6qfggq4gs04fxkij42i3n2nd8w7117qn4";
+    version = "0.58.2025022807";
+    sha256 = "0l1l18vna2ml6vcph5alxcnswsrqkr45cr4vsx7lxpbl45nc7g7i";
   }
   {
     name = "vscode-java-dependency";
