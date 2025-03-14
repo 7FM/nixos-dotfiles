@@ -17,7 +17,7 @@ in {
 
     profiles = {
       "${userName}" = {
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; let 
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; let
           video-downloaderhelper = buildFirefoxXpiAddon rec {
             pname = "video-downloadhelper";
             version = "7.6.6";

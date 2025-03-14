@@ -52,10 +52,6 @@ let
       }
   ]));
 
-  vsCodeWithExtPkg = (pkgs.vscode-with-extensions.override {
-    vscodeExtensions = vsExtensions;
-  }) // {pname = "vscode";};
-
   extractExtensionInfo = extensions: builtins.concatStringsSep "\\n" (map (e: 
     builtins.concatStringsSep "." [(builtins.getAttr "publisher" e) (builtins.getAttr "name" e)]
   ) extensions);
@@ -79,121 +75,123 @@ in {
   programs.vscode = {
     enable = true;
 
-    package = vsCodeWithExtPkg;
-
-    enableUpdateCheck = false;
     mutableExtensionsDir = false;
-    enableExtensionUpdateCheck = false;
 
-    userSettings = {
-      "update.showReleaseNotes" = false;
-      "editor.suggestSelection" = "first";
-      "editor.formatOnPaste" = false;
-      "editor.formatOnType" = true;
-      "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
-      "vsintellicode.modelDownloadPath" = ".cache/vscode";
-      "telemetry.enableTelemetry" = false;
-      "telemetry.enableCrashReporter" = false;
-      "telemetry.telemetryLevel" = "off";
-      "C_Cpp.updateChannel" = "Insiders";
-      "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All, AlwaysBreakTemplateDeclarations: Yes}";
-      #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
-      "todohighlight.keywords" = [
-        "TODO"
-        "FIXME"
-      ];
-      "todohighlight.include" = [
-        "**/*.nix"
-        "**/*.tex"
-        "**/*.js"
-        "**/*.jsx"
-        "**/*.ts"
-        "**/*.tsx"
-        "**/*.html"
-        "**/*.php"
-        "**/*.css"
-        "**/*.scss"
-        "**/*.c"
-        "**/*.v"
-        "**/*.sv"
-        "**/*.cpp"
-        "**/*.tpp"
-        "**/*.java"
-        "**/*.h"
-        "**/*.hpp"
-      ];
-      "todohighlight.exclude" = [
-        "**/.direnv/**"
-        "**/node_modules/**"
-        "**/bower_components/**"
-        "**/dist/**"
-        "**/build/**"
-        "**/.direnv/**"
-        "**/.vscode/**"
-        "**/.github/**"
-        "**/_output/**"
-        "**/*.min.*"
-        "**/*.map"
-        "**/.next/**"
-      ];
-      "files.eol" = "\n";
-      "git.openRepositoryInParentFolders" = "always";
-      "liveshare.featureSet" = "stable";
-      "liveshare.anonymousGuestApproval" = "reject";
-      "liveshare.guestApprovalRequired" = true;
-      "liveshare.focusBehavior" = "prompt";
-      "liveshare.autoShareServers" = false;
-      "liveshare.codeLens" = false;
-      "liveshare.diagnosticLogging" = true;
-      "liveshare.diagnosticMode" = true;
-      "java.configuration.checkProjectSettingsExclusions" = false;
-      "cSpell.language" = "en,en-US,de,de-de";
-      "cSpell.enableFiletypes" = [
-        "bat"
-        "bibtex"
-        "bsv"
-        "cmake"
-        "dockerfile"
-        "lua"
-        "makefile"
-        "mlir"
-        "nix"
-        "powershell"
-        "r"
-        "raw"
-        "ruby"
-        "scad"
-        "shellscript"
-        "sql"
-        "systemverilog"
-        "tablegen"
-        "tcl"
-        "tex"
-        "verilog"
-        "xml"
-      ];
-      "workbench.editorAssociations" = {
-          "*.ipynb" = "jupyter-notebook";
+    profiles.default = {
+      extensions = vsExtensions;
+
+      enableUpdateCheck = false;
+      enableExtensionUpdateCheck = false;
+
+      userSettings = {
+        "update.showReleaseNotes" = false;
+        "editor.suggestSelection" = "first";
+        "editor.formatOnPaste" = false;
+        "editor.formatOnType" = true;
+        "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
+        "vsintellicode.modelDownloadPath" = ".cache/vscode";
+        "telemetry.enableTelemetry" = false;
+        "telemetry.enableCrashReporter" = false;
+        "telemetry.telemetryLevel" = "off";
+        "C_Cpp.updateChannel" = "Insiders";
+        "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All, AlwaysBreakTemplateDeclarations: Yes}";
+        #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
+        "todohighlight.keywords" = [
+          "TODO"
+          "FIXME"
+        ];
+        "todohighlight.include" = [
+          "**/*.nix"
+          "**/*.tex"
+          "**/*.js"
+          "**/*.jsx"
+          "**/*.ts"
+          "**/*.tsx"
+          "**/*.html"
+          "**/*.php"
+          "**/*.css"
+          "**/*.scss"
+          "**/*.c"
+          "**/*.v"
+          "**/*.sv"
+          "**/*.cpp"
+          "**/*.tpp"
+          "**/*.java"
+          "**/*.h"
+          "**/*.hpp"
+        ];
+        "todohighlight.exclude" = [
+          "**/.direnv/**"
+          "**/node_modules/**"
+          "**/bower_components/**"
+          "**/dist/**"
+          "**/build/**"
+          "**/.direnv/**"
+          "**/.vscode/**"
+          "**/.github/**"
+          "**/_output/**"
+          "**/*.min.*"
+          "**/*.map"
+          "**/.next/**"
+        ];
+        "files.eol" = "\n";
+        "git.openRepositoryInParentFolders" = "always";
+        "liveshare.featureSet" = "stable";
+        "liveshare.anonymousGuestApproval" = "reject";
+        "liveshare.guestApprovalRequired" = true;
+        "liveshare.focusBehavior" = "prompt";
+        "liveshare.autoShareServers" = false;
+        "liveshare.codeLens" = false;
+        "liveshare.diagnosticLogging" = true;
+        "liveshare.diagnosticMode" = true;
+        "java.configuration.checkProjectSettingsExclusions" = false;
+        "cSpell.language" = "en,en-US,de,de-de";
+        "cSpell.enableFiletypes" = [
+          "bat"
+          "bibtex"
+          "bsv"
+          "cmake"
+          "dockerfile"
+          "lua"
+          "makefile"
+          "mlir"
+          "nix"
+          "powershell"
+          "r"
+          "raw"
+          "ruby"
+          "scad"
+          "shellscript"
+          "sql"
+          "systemverilog"
+          "tablegen"
+          "tcl"
+          "tex"
+          "verilog"
+          "xml"
+        ];
+        "workbench.editorAssociations" = {
+            "*.ipynb" = "jupyter-notebook";
+        };
+        "workbench.colorTheme" = "Default Dark+";
+        "notebook.cellToolbarLocation" = {
+          "default" = "right";
+          "jupyter-notebook" = "left";
+        };
+        "extensions.autoUpdate" = false;
+        "extensions.ignoreRecommendations" = true;
+        "platformio-ide.useBuiltinPIOCore" = false;
+        "platformio-ide.activateOnlyOnPlatformIOProject" = true;
+        "platformio-ide.disablePIOHomeStartup" = true;
+        "mlir.onSettingsChanged" = "restart";
+        "files.watcherExclude" = {
+          "**/.bloop" = true;
+          "**/.metals" = true;
+          "**/.ammonite" = true;
+        };
+        "remote.SSH.lockfilesInTmp" = true;
       };
-      "workbench.colorTheme" = "Default Dark+";
-      "notebook.cellToolbarLocation" = {
-        "default" = "right";
-        "jupyter-notebook" = "left";
-      };
-      "extensions.autoUpdate" = false;
-      "extensions.ignoreRecommendations" = true;
-      "platformio-ide.useBuiltinPIOCore" = false;
-      "platformio-ide.activateOnlyOnPlatformIOProject" = true;
-      "platformio-ide.disablePIOHomeStartup" = true;
-      "mlir.onSettingsChanged" = "restart";
-      "files.watcherExclude" = {
-        "**/.bloop" = true;
-        "**/.metals" = true;
-        "**/.ammonite" = true;
-      };
-      "remote.SSH.lockfilesInTmp" = true;
     };
-
   };
 
   # Create dummy file to ensure that the vscode intellisense cache folder exists
