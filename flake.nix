@@ -109,13 +109,6 @@
             });
           })
         ];
-        nixpkgsPatches = [
-          # Apply octoprint fixes until they are merged
-          (builtins.fetchurl {
-            url = "https://github.com/NixOS/nixpkgs/pull/370953.patch";
-            sha256 = "sha256:0xwm2hqaink23lky9rfc3vr6fbnhphb6fg7jhd86y68i5axdv4vi";
-          })
-        ];
       }
 
       { deviceName = "virtualbox"; forceNoSecrets = true; }
