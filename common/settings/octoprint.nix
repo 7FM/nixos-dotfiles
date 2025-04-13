@@ -482,6 +482,7 @@ in lib.mkMerge [
       "default_config"
       "met"
       "mqtt"
+      "kodi"
       "sun"
     ];
     config = {
