@@ -4,6 +4,6 @@ let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.gpu == "generic";
 in {
-
+  config = lib.mkIf enable {};
 }
 
