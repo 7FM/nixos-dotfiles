@@ -652,7 +652,8 @@ in lib.mkMerge [
         # probe_with_touch_mode = true;
         x_offset = 48;
         y_offset = -2;
-        z_offset = 2.98;
+        # z_offset = 2.98;
+        z_offset = 4.3;
       };
 
       safe_z_home = {
