@@ -4,12 +4,12 @@ let
   userName = config.home.username;
   myTools = pkgs.myTools { inherit osConfig; };
 in {
-  home.packages = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
+  # home.packages = with pkgs; [ vdhcoapp ];
 
   programs.firefox = {
     enable = true;
     package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-      nativeMessagingHosts = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
+      # nativeMessagingHosts = [ "${pkgs.vdhcoapp}/host" ];
       extraPolicies = {
         ExtensionSettings = {};
       };
@@ -18,19 +18,19 @@ in {
     profiles = {
       "${userName}" = {
         extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; let
-          video-downloaderhelper = buildFirefoxXpiAddon rec {
-            pname = "video-downloadhelper";
-            version = "7.6.6";
-            addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-            url = "https://addons.mozilla.org/firefox/downloads/file/4040817/video_downloadhelper-${version}.xpi";
-            sha256 = "sha256-RgtkNIpmFsh73q2F9iJqbyLez8WzNFjZV3d3t2JDjIo=";
-            meta = with lib;
-            {
-              description = "The easy way to download and convert Web videos from hundreds of YouTube-like sites.";
-              license = licenses.unfree;
-              platforms = platforms.all;
-            };
-          };
+          #video-downloaderhelper = buildFirefoxXpiAddon rec {
+          #  pname = "video-downloadhelper";
+          #  version = "7.6.6";
+          #  addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
+          #  url = "https://addons.mozilla.org/firefox/downloads/file/4040817/video_downloadhelper-${version}.xpi";
+          #  sha256 = "sha256-RgtkNIpmFsh73q2F9iJqbyLez8WzNFjZV3d3t2JDjIo=";
+          #  meta = with lib;
+          #  {
+          #    description = "The easy way to download and convert Web videos from hundreds of YouTube-like sites.";
+          #    license = licenses.unfree;
+          #    platforms = platforms.all;
+          #  };
+          #};
         in [
           darkreader
           keepassxc-browser
@@ -38,7 +38,7 @@ in {
           localcdn
           umatrix
           ublock-origin
-          video-downloaderhelper
+          #video-downloaderhelper
 
           grammarly
           languagetool
