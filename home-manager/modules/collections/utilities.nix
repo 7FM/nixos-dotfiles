@@ -26,7 +26,7 @@ in {
       nix-direnv.enable = true;
     };
 
-    programs.zsh.initExtra = ''
+    programs.zsh.initContent = ''
 nixify() {
   if [ ! -e ./.envrc ]; then
     echo "use nix" > .envrc

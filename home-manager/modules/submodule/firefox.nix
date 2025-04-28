@@ -44,7 +44,10 @@ in {
           languagetool
         ];
 
-        bookmarks = myTools.getSecret ../../configs "bookmarks.nix";
+        bookmarks = {
+          force = true;
+          settings = myTools.getSecret ../../configs "bookmarks.nix";
+        };
 
         settings = {
           "browser.search.region" = "GB";
@@ -53,7 +56,7 @@ in {
           "browser.shell.didSkipDefaultBrowserCheckOnFirstRun" = true;
           "browser.bookmarks.restore_default_bookmarks" = false;
           "browser.contentblocking.category" = "strict";
-          "browser.urlbar.placeholderName" = "DuckDuckGo";
+          "browser.urlbar.placeholderName" = "ddg"; # DuckDuckGo
           "browser.urlbar.suggest.openpage" = false;
           "browser.startup.homepage" = "about:blank";
           "browser.newtabpage.enabled" = false;

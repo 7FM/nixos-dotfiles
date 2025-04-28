@@ -19,7 +19,7 @@ in {
         "${config.home.username}" = {
           isDefault = true;
           search = {
-            default = "DuckDuckGo";
+            default = "ddg"; # DuckDuckGo
           };
         };
       };
