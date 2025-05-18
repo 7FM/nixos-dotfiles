@@ -14,7 +14,7 @@ let
 
   startupPrograms = [
     { command = "${pkgs.thunderbird}/bin/thunderbird --disable-log"; always = false; serviceName = "startup-thunderbird"; }
-    { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland"; always = false; serviceName = "startup-mattermost"; }
+    # { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland"; always = false; serviceName = "startup-mattermost"; }
     {
       command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc";
       env = [
