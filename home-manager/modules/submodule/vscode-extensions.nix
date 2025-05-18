@@ -32,8 +32,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "4.0.48";
-    sha256 = "0bn4n1xgq8xwinbw698hzzwqjm3shqz8psizn6kx267s683sny2b";
+    version = "4.1.0";
+    sha256 = "0qdllgm288r32vh4a0z01laql9nk6w8kmmgv7vjgiispgpdbi5p6";
   }
   {
     name = "code-spell-checker-german";
