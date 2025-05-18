@@ -20,6 +20,7 @@ in {
           isDefault = true;
           search = {
             default = "ddg"; # DuckDuckGo
+            force = true;
           };
         };
       };
