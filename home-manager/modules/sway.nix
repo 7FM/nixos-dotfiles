@@ -155,9 +155,6 @@ in {
         }) // createWsKeybindings workspaces);
 
         startup = [
-          # Ensure sway notification center runs
-          { command = "${pkgs.swaynotificationcenter}/bin/swaync"; always = false;}
-
           # Set QT options
           {
             command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
@@ -315,6 +312,7 @@ in {
       '' + lib.optionalString (cfg.sway.extraConfig != null) cfg.sway.extraConfig;
     };
 
+    # Startup programs
     systemd.user.services = let
       createStartupServices = progs: builtins.listToAttrs (map (
         p: {
@@ -322,7 +320,7 @@ in {
           "value" = {
             Unit = rec {
               Requires = [ "tray.target" ];
-              After = [ "graphical-session-pre.target" "tray.target" ];
+              After = [ "graphical-session.target" "tray.target" ];
               PartOf = [ "graphical-session.target" ];
             };
             Service = {
@@ -333,17 +331,17 @@ in {
             }) // (lib.optionalAttrs ((builtins.length (p.env or [])) != 0) {
               Environment = p.env;
             });
-            Install = { WantedBy = [ "graphical-session.target" ]; };
+            Install = { WantedBy = [ config.programs.waybar.systemd.target ]; };
           };
         }
       ) progs);
     in lib.optionalAttrs enableSystemdSway (createStartupServices startupPrograms);
 
-    # Autostart sway in zsh
-    programs.zsh.initContent = if (!enableSystemdSway) then ''
-      # If running from tty1 start sway
-      [[ "$(tty)" == /dev/tty1 ]] && exec systemd-cat --identifier=sway sway
-    '' else lib.mkOverride 1001 "";
+    # Clipboard manager
+    services.copyq.enable = true;
+
+    # Notification center
+    services.swaync.enable = true;
 
     services.swayidle = {
       enable = enableSystemdSway;

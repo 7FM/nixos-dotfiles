@@ -31,7 +31,8 @@ in {
       font-awesome
     ];
 
-    systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];
+    # systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];
+    systemd.user.services.waybar.Unit.After = [ "bluetooth.target" ];
 
     # Waybar configuration
     programs.waybar = {
