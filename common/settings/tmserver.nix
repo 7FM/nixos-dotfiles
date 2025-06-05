@@ -381,6 +381,10 @@ in lib.mkMerge [
             # target send-receive      /var/lib/backup/seafile_snaps
             target = "${backup_mnt}/seafile_snaps";
           };
+          subvolume.opencloud = {
+            # target send-receive      /var/lib/backup/seafile_snaps
+            target = "${backup_mnt}/opencloud_snaps";
+          };
         };
 
         # Backup to external disk
