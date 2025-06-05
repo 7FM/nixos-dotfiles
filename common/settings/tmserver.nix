@@ -5,6 +5,7 @@ let
   myPorts = (myTools.getSecret ../../nixos "usedPorts.nix") myTools;
 
   mySeafileSecrets = (myTools.getSecret ../../nixos "seafile.nix");
+  myOpencloudSecrets = (myTools.getSecret ../../nixos "opencloud.nix");
   myLetsEncryptSecrets = (myTools.getSecret ../../nixos "letsencrypt.nix");
   myRadicaleSecrets = (myTools.getSecret ../../nixos "radicale.nix");
   myMiscSecrets = (myTools.getSecret ../../nixos "misc.nix");
@@ -14,6 +15,8 @@ let
   seafileAdminEmail = mySeafileSecrets.seafileAdminEmail;
   seafileInitialAdminPwd = mySeafileSecrets.seafileInitialAdminPwd;
   seafileTmpPath = mySeafileSecrets.seafileTmpPath;
+  opencloudInitialAdminPwd = myOpencloudSecrets.opencloudInitialAdminPwd;
+  opencloudStateDir = myOpencloudSecrets.opencloudStateDir;
 
   radicaleMntPoint = myMiscSecrets.radicaleMntPoint;
   downloadRoot = myMiscSecrets.downloadRoot;
@@ -26,6 +29,7 @@ let
   jenkinsPort =  myTools.extractPort myPorts.jenkins "proxy";
   giteaPort = myTools.extractPort myPorts.gitea "proxy";
   seafilePort = myTools.extractPort myPorts.seafile "proxy";
+  opencloudPort = myTools.extractPort myPorts.opencloud "proxy";
   jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
   nfsPortmapperPort = myTools.extractPort myPorts.nfs "portmapper";
@@ -34,6 +38,7 @@ let
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
   seafileInternalPort = myTools.extractPort myPorts.seafile "seafileInternal";
+  opencloudInternalPort = myTools.extractPort myPorts.opencloud "opencloudInternal";
   jenkinsInternalPort = myTools.extractPort myPorts.jenkins "internal";
   syncthingHttpPort = myTools.extractPort myPorts.syncthing "";
 
@@ -217,6 +222,11 @@ in lib.mkMerge [
       device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
       fsType = "btrfs";
       options = [ "subvol=nginx_temp_path" "noatime" ];
+    };
+    "${config.services.opencloud.stateDir}" = {
+      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
+      fsType = "btrfs";
+      options = [ "subvol=opencloud" "noatime" ];
     };
   };
 
@@ -622,6 +632,29 @@ in lib.mkMerge [
         };
       };
 
+      opencloud = (defaultConf "") // {
+        http2 = false;
+        listen = createListenEntries opencloudPort;
+        locations = defaultLocations // {
+          "/" = {
+            recommendedProxySettings = false;
+            proxyWebsockets = true;
+            proxyPass = "http://localhost:${toString config.services.opencloud.port}/";
+            extraConfig = ''
+              proxy_set_header Host $host:$server_port;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Scheme $scheme;
+              proxy_connect_timeout   60s;
+              proxy_send_timeout      60s;
+              proxy_read_timeout      60s;
+
+              client_max_body_size 0;
+            '';
+          };
+        };
+      };
+
       jellyfin = (defaultConf "") // {
         listen = createListenEntries jellyfinPort;
         locations = defaultLocations // {
@@ -684,6 +717,26 @@ in lib.mkMerge [
     # seahubExtraConf = ''
     #   DEBUG = True
     # '';
+  };
+
+  services.opencloud = {
+    enable = true;
+    port = opencloudInternalPort;
+    stateDir = opencloudStateDir;
+    url = "https://${letsEncryptHost}:${toString opencloudPort}";
+    environment = {
+      IDM_ADMIN_PASSWORD = opencloudInitialAdminPwd;
+      IDM_CREATE_DEMO_USERS = "false";
+      PROXY_TLS = "false"; # No encryption between opencloud and the reverse proxy
+      # INSECURE: needed if OpenCloud / reverse proxy is using self generated certificates
+      OC_INSECURE = "false";
+      # OC_LOG_LEVEL = "error";
+      # basic auth (not recommended, but needed for eg. WebDav clients that do not support OpenID Connect)
+      PROXY_ENABLE_BASIC_AUTH = "false";
+      PROXY_INSECURE_BACKENDS = "true"; # Disable TLS certificate validation for all HTTP backend connections
+    };
+    # settings = {
+    # };
   };
 
   # Git server:
