@@ -317,7 +317,7 @@ in {
             }) // (lib.optionalAttrs ((builtins.length (p.env or [])) != 0) {
               Environment = p.env;
             });
-            Install = { WantedBy = [ config.programs.waybar.systemd.target ]; };
+            Install = { WantedBy = [ "graphical-session.target" ]; };
           };
         }
       ) progs);
