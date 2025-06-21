@@ -398,7 +398,8 @@ in {
         }
         {
           "label" = "logout";
-          "action" = "${pkgs.systemd}/bin/loginctl terminate-user $USER";
+          # "action" = "${pkgs.systemd}/bin/loginctl terminate-user $USER";
+          "action" = "${pkgs.sway}/bin/swaymsg exit";
           "text" = "Logout";
           "keybind" = "e";
         }
