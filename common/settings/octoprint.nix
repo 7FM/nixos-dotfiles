@@ -86,6 +86,11 @@ in lib.mkMerge [
     };
   };
 
+  swapDevices = [ {
+    device = "/var/lib/swapfile";
+    size = 4*1024;
+  }];
+
   hardware.raspberry-pi."4" = {
     audio.enable = false;
     dwc2 = {
