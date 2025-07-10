@@ -145,21 +145,20 @@ in lib.mkMerge [
   };
 }
 {
-  # File systems configuration for using the installer's partition layout
   fileSystems = {
-    # Prior to 19.09, the boot partition was hosted on the smaller first partition
-    # Starting with 19.09, the /boot folder is on the main bigger partition.
-    # The following is to be used only with older images.
-    /*
-    "/boot" = {
-      device = "/dev/disk/by-label/NIXOS_BOOT";
-      fsType = "vfat";
-    };
-    */
-    "/" = {
-      device = "/dev/disk/by-label/NIXOS_SD";
-      fsType = "ext4";
-    };
+    fileSystems."/" =
+      { device = "/dev/disk/by-uuid/41607c2e-6b3e-4841-8a93-676d30bdced5";
+        fsType = "ext4";
+      };
+
+    fileSystems."/boot" =
+      { device = "/dev/disk/by-uuid/48D3-8954";
+        fsType = "vfat";
+      };
+
+    swapDevices =
+      [ { device = "/dev/disk/by-uuid/0336bfa3-bb49-4bb5-be01-d03564e897d9"; }
+      ];
 
     "/var/lib/nfs_data" = {
       device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
@@ -230,25 +229,14 @@ in lib.mkMerge [
     };
   };
 
-  swapDevices = [ {
-    device = "/var/lib/swapfile";
-    size = 4*1024;
-  }];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
+  hardware.cpu.intel.updateMicrocode = true;
 
-  hardware.raspberry-pi."4" = {
-    audio.enable = false;
-    dwc2 = {
-      enable = false;
-    };
-    i2c0.enable = false;
-    i2c1.enable = false;
-    poe-hat.enable = false;
-    pwm0.enable = false;
-    tc358743.enable = false;
-    fkms-3d = {
-      enable = false;
-    };
-  };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   custom = {
     grub = {
@@ -288,7 +276,13 @@ in lib.mkMerge [
     };
   };
 
-  networking.interfaces.eth0.useDHCP = true;
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+  networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
+  networking.interfaces.enp2s0.useDHCP = lib.mkDefault true;
 
   # TODO script + timer to fetch github and update the system!
   # TODO this might be of interest: https://nixos.wiki/wiki/Automatic_system_upgrades
