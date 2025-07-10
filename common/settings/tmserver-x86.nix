@@ -145,20 +145,17 @@ in lib.mkMerge [
   };
 }
 {
+  swapDevices = [ { device = "/dev/disk/by-uuid/0336bfa3-bb49-4bb5-be01-d03564e897d9"; } ];
+
   fileSystems = {
-    fileSystems."/" =
-      { device = "/dev/disk/by-uuid/41607c2e-6b3e-4841-8a93-676d30bdced5";
-        fsType = "ext4";
-      };
-
-    fileSystems."/boot" =
-      { device = "/dev/disk/by-uuid/48D3-8954";
-        fsType = "vfat";
-      };
-
-    swapDevices =
-      [ { device = "/dev/disk/by-uuid/0336bfa3-bb49-4bb5-be01-d03564e897d9"; }
-      ];
+    "/" = {
+      device = "/dev/disk/by-uuid/41607c2e-6b3e-4841-8a93-676d30bdced5";
+      fsType = "ext4";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-uuid/48D3-8954";
+      fsType = "vfat";
+    };
 
     "/var/lib/nfs_data" = {
       device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
