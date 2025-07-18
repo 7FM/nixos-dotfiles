@@ -47,6 +47,7 @@ let
 
   # OpenVPN config
   vpn-dev = "tun0";
+  eth-dev = "enp1s0";
   openvpn_dns_server = "192.168.0.1";
   commonConf = ''
       port ${toString openvpnServerPort}
@@ -824,7 +825,7 @@ in lib.mkMerge [
   # VPN server
   networking.nat = {
     enable = true;
-    externalInterface = "eth0";
+    externalInterface = eth-dev;
     internalInterfaces  = [ vpn-dev ];
   };
   networking.firewall.trustedInterfaces = [ vpn-dev ];
@@ -1023,7 +1024,7 @@ retry_count=0
 USE_CURL=0
 
 # Extract the ipv6 address
-ipv6Prefix=$(${pkgs.iproute2}/bin/ip -6 addr show dev eth0 | ${pkgs.gnugrep}/bin/grep -v 'mngtmpaddr' | ${pkgs.gnugrep}/bin/grep -v 'deprecated' | ${pkgs.gnugrep}/bin/grep 'global' | ${pkgs.gnugrep}/bin/grep -oP 'inet6 \K[0-9a-fA-F:]+(?=/)' | ${pkgs.coreutils}/bin/head -n 1)
+ipv6Prefix=$(${pkgs.iproute2}/bin/ip -6 addr show dev ${eth-dev} | ${pkgs.gnugrep}/bin/grep -v 'mngtmpaddr' | ${pkgs.gnugrep}/bin/grep -v 'deprecated' | ${pkgs.gnugrep}/bin/grep 'global' | ${pkgs.gnugrep}/bin/grep -oP 'inet6 \K[0-9a-fA-F:]+(?=/)' | ${pkgs.coreutils}/bin/head -n 1)
 __IP=''${ipv6Prefix%/??}
 
 VERBOSE=0		# default mode is log to console, but easily changed with parameter
