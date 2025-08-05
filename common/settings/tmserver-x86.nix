@@ -609,6 +609,7 @@ in lib.mkMerge [
 
               client_max_body_size 0;
               client_body_temp_path ${seafileTmpPath};
+              proxy_temp_path ${seafileTmpPath};
             '';
           };
           "/seafhttp" = {
@@ -625,6 +626,7 @@ in lib.mkMerge [
               send_timeout  3600s;
               client_max_body_size 0;
               client_body_temp_path ${seafileTmpPath};
+              proxy_temp_path ${seafileTmpPath};
             '';
           };
         };
@@ -647,6 +649,8 @@ in lib.mkMerge [
               proxy_read_timeout      3600s;
 
               client_max_body_size 0;
+              client_body_temp_path ${seafileTmpPath};
+              proxy_temp_path ${seafileTmpPath};
             '';
           };
         };
@@ -670,6 +674,10 @@ in lib.mkMerge [
       };
     };
   };
+  # Allow access to body temp path
+  systemd.services.nginx.serviceConfig.ReadWritePaths = [
+    seafileTmpPath
+  ];
 
   # Calendar + Contact Server: Radicale
   services.radicale = {
