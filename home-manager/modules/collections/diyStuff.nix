@@ -36,8 +36,6 @@ in {
       # TODO waiting for: https://nixpk.gs/pr-tracker.html?pr=362194
       #super-slicer-latest
       freecad
-      openscad
-      kicad
     ];
 
     xdg = let
