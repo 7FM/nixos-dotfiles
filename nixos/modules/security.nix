@@ -66,9 +66,6 @@ in {
     # Allow unfree software :(
     nixpkgs.config.allowUnfree = true;
 
-    # Enfore nixstore to be readonly
-    boot.readOnlyNixStore = true;
-
     # User settings as i.e. the password may not be changed! Also no new users or groups can be added!
     users.mutableUsers = false;
     # Disable root login
