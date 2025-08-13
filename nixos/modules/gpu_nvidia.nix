@@ -20,7 +20,6 @@ in {
     # nvidia gpu specific settings
     virtualisation.podman.enableNvidia = true;
     virtualisation.docker.enableNvidia = true;
-    services.displayManager.gdm.nvidiaWayland = true;
 
     services.xserver.videoDrivers = [ "nvidia" ];
     environment.systemPackages = [ nvidia-offload ];
