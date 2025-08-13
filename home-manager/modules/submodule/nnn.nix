@@ -35,14 +35,14 @@ in {
     # Extra packages that are used for i.e. plugins
     extraPackages = with pkgs; [
       nsxiv # Image viewer
-      moc # CLI audio player
+      # moc # CLI audio player
       unixtools.xxd # hexeditor
     ];
 
     plugins = {
       mappings = {
           v = "imgview";
-          q = "mocq";
+          # q = "mocq";
           e = "suedit";
           c = "rsynccp";
           h = "hexview";
