@@ -55,6 +55,7 @@ in {
     users.users."${userName}".openssh.authorizedKeys.keys = authorizedKeys;
 
     # Start ssh agent to manage the ssh keys
-    programs.ssh.startAgent = !runHeadless;
+    # Already started by using gnome's keyring
+    # programs.ssh.startAgent = !runHeadless;
   };
 }
