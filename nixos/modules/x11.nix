@@ -25,8 +25,8 @@ in {
     # NOTE: lightdm & sddm only supports X11
     #services.xserver.displayManager.lightdm.enable = true;
     #services.displayManager.sddm.enable = true;
-    #services.xserver.displayManager.gdm.enable = true;
-    services.xserver.displayManager.gdm.wayland = false;
+    #services.displayManager.gdm.enable = true;
+    services.displayManager.gdm.wayland = false;
 
     # Window manager
     #services.xserver.windowManager.xmonad.enable = true;

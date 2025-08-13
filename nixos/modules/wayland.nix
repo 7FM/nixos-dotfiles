@@ -9,12 +9,12 @@ in {
     # Enable bluetooth manager when bluetooth is enabled
     services.blueman.enable = config.hardware.bluetooth.enable;
 
-    services.xserver.displayManager.gdm.wayland = true;
+    services.displayManager.gdm.wayland = true;
     services.displayManager.sessionPackages = with pkgs; [sway];
     services.displayManager.defaultSession = "sway";
     services.xserver.desktopManager.xterm.enable = false;
 
-    services.xserver.displayManager.gdm.enable = false;
+    services.displayManager.gdm.enable = false;
 
     # SDDM requirements
     services.displayManager.sddm = rec {
@@ -32,7 +32,7 @@ in {
 
     # Ensure the keyrings are opened
     security.pam.services.sddm.enableGnomeKeyring = config.services.displayManager.sddm.enable;
-    security.pam.services.gdm.enableGnomeKeyring = config.services.xserver.displayManager.gdm.enable;
+    security.pam.services.gdm.enableGnomeKeyring = config.services.displayManager.gdm.enable;
 
     # Window system settings:
     # Wayland in the form of sway
