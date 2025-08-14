@@ -16,6 +16,8 @@
 python3Packages.buildPythonApplication rec {
   pname = "diyHue";
   version = "2025.01";
+  pyproject = true;
+  build-system = [ python3Packages.setuptools ];
 
   src = fetchFromGitHub {
     owner = pname;

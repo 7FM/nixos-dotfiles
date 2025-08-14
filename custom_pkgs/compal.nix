@@ -8,11 +8,14 @@
 , isort
 , responses
 , tox
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "compal";
   version = "0.5.1";
+  pyproject = true;
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
