@@ -57,5 +57,10 @@ in {
     # Start ssh agent to manage the ssh keys
     # Already started by using gnome's keyring
     # programs.ssh.startAgent = !runHeadless;
+    environment.extraInit = lib.optionalString (!runHeadless) ''
+      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+      fi
+    '';
   };
 }
