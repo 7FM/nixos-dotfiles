@@ -152,63 +152,64 @@ in lib.mkMerge [
     };
 
     "/var/lib/nfs_data" = {
-      device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
-      fsType = "btrfs";
-      options = [ "subvol=nfs" "noatime" ];
-    };
-    "${backup_mnt}" = {
-      device = "/dev/disk/by-uuid/0cbf23c7-3971-4b3e-b1f4-691fad433752";
-      fsType = "btrfs";
-      options = [ "subvol=backups" "noatime" ];
-    };
-
-    "${btrfs_roots_mnt}/misc_ssd" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "noatime" ];
+      device = "vault/nfs_data";
+      fsType = "zfs";
     };
     "${config.services.gitea.stateDir}" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "subvol=repositories" "noatime" ];
+      device = "vault/gitea";
+      fsType = "zfs";
     };
     "/var/www/html" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "subvol=html" "noatime" ];
+      device = "vault/html";
+      fsType = "zfs";
     };
     "${radicaleMntPoint}" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "subvol=radicale" "noatime" ];
+      device = "vault/radicale";
+      fsType = "zfs";
     };
     "/var/lib/syncthing" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "subvol=syncthing" "noatime" ];
+      device = "vault/syncthing";
+      fsType = "zfs";
     };
     "/var/lib/jellyfin" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "subvol=jellyfin" "noatime" ];
-    };
-
-    "${btrfs_roots_mnt}/cloud_ssd" = {
-      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
-      fsType = "btrfs";
-      options = [ "noatime" ];
+      device = "vault/jellyfin";
+      fsType = "zfs";
     };
     "${nginxTmpPath}" = {
-      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
-      fsType = "btrfs";
-      options = [ "subvol=nginx_temp_path" "noatime" ];
+      device = "vault/nginx_temp_path";
+      fsType = "zfs";
     };
     "${config.services.opencloud.stateDir}" = {
-      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
-      fsType = "btrfs";
-      options = [ "subvol=opencloud" "noatime" ];
+      device = "vault/opencloud";
+      fsType = "zfs";
     };
   };
+
+  # Trying to mitigate nvme connection losses
+  boot.kernelParams = [
+    "nvme_core.default_ps_max_latency_us=0"
+    "pcie_aspm=off"
+    "pcie_port_pm=off"
+  ];
+  # Enable zfs
+  boot.supportedFilesystems.zfs = true;
+  boot.initrd.supportedFilesystems.zfs = true;
+  boot.zfs.extraPools = [ "vault" ];
+  services.zfs = {
+    trim.enable = true;
+    autoScrub.enable = true;
+    zed.settings = {
+      ZED_EMAIL = "who@carez.cum";
+      ZED_EMAIL_PROG = "/home/tm/zed_telegram_notify.sh";
+
+      ZED_NOTIFY_VERBOSE = true; # TODO set to false
+      # ZED_DEBUG_LOG = "/tmp/zed.debug.log";
+
+      ZED_USE_ENCLOSURE_LEDS = true;
+      ZED_SCRUB_AFTER_RESILVER = false;
+    };
+  };
+  networking.hostId = "2c82493e"; # Not sure why ZFS requires a value for this
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
@@ -333,52 +334,6 @@ in lib.mkMerge [
       Type = "oneshot";
       User = "root";
     };
-  };
-
-  # Backups
-  services.btrbk = {
-    instances.btrbk.settings = {
-      stream_buffer = "512m";
-      snapshot_dir = "_btrbk_snap";
-      btrfs_commit_delete = "yes";
-      snapshot_preserve_min = "2d";
-      snapshot_preserve = "7d";
-      target_preserve_min = "no";
-      target_preserve = "14d 4w 3m";
-      archive_preserve_min = "latest";
-      archive_preserve = "12m 10y";
-
-      volume = {
-        # Backup to external disk
-        "${btrfs_roots_mnt}/cloud_ssd" = {
-          # no action if external disk is not attached
-          snapshot_create = "ondemand";
-
-          subvolume.opencloud = {
-            # target send-receive      /var/lib/backup/seafile_snaps
-            target = "${backup_mnt}/opencloud_snaps";
-          };
-        };
-
-        # Backup to external disk
-        "${btrfs_roots_mnt}/misc_ssd" = {
-          # no action if external disk is not attached
-          snapshot_create = "ondemand";
-
-          subvolume = {
-            radicale.target = "${backup_mnt}/radicale_snaps";
-            # html.target = "${backup_mnt}/html_snaps";
-            repositories.target = "${backup_mnt}/repo_snaps";
-            syncthing.target = "${backup_mnt}/syncthing_snaps";
-            jellyfin.target = "${backup_mnt}/jellyfin_snaps";
-          };
-        };
-      };
-    };
-
-    extraPackages = with pkgs; [
-      mbuffer # required for stream_buffer
-    ];
   };
 
   # Server certificate: Let's Encrypt!
