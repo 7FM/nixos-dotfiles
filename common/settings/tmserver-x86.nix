@@ -191,6 +191,19 @@ in lib.mkMerge [
     "pcie_aspm=off"
     "pcie_port_pm=off"
   ];
+
+  # Force Lexar NM790 NVME SSDs into power state 2 -> 3.6W each!
+  # Systemd service to force PS2 on all NVMe drives
+  systemd.services."nvme-ps2" = {
+    description = "Force NVMe drives into PS2";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "local-fs.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/bin/sh -c 'for dev in /dev/nvme[0-9]; do ${pkgs.nvme-cli}/bin/nvme set-feature \"$dev\" --feature-id=2 --value=2; done'";
+    };
+  };
+
   # Enable zfs
   boot.supportedFilesystems.zfs = true;
   boot.initrd.supportedFilesystems.zfs = true;
