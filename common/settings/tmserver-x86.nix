@@ -224,6 +224,45 @@ in lib.mkMerge [
   };
   networking.hostId = "2c82493e"; # Not sure why ZFS requires a value for this
 
+  # TODO setup remote backups
+
+  # Automatically creata and manage zfs backup snapshots!
+  services.sanoid = {
+    enable = true;
+
+    # Define reusable templates
+    templates = {
+      "daily14keepMonthly" = {
+        autosnap = true;
+        autoprune = true;
+
+        # Retention policy
+        hourly = 0;        # no hourly snapshots
+        daily = 14;        # keep 14 days
+        weekly = 0;        # no weeklies
+        monthly = 1;       # keep 1 monthly
+      };
+    };
+
+    # Apply template to all mounted dataset
+    datasets = let
+      # List of datasets to exclude
+      blacklistedDatasets = [ "vault/nginx_temp_path" "vault/html" ];
+
+      # Filter ZFS mounts, exclude blacklisted
+      zfsDatasets = lib.attrsets.filterAttrs
+        (_: fs: fs.fsType == "zfs" && fs.device != null && !(lib.elem fs.device blacklistedDatasets))
+        config.fileSystems;
+
+      # Extract dataset names from .device
+      datasetNames = builtins.attrValues (lib.attrsets.mapAttrs'
+        (_: fs: lib.nameValuePair fs.device fs.device)
+        zfsDatasets);
+    in lib.genAttrs datasetNames (_: {
+      useTemplate = [ "daily14keepMonthly" ];
+    });
+  };
+
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
