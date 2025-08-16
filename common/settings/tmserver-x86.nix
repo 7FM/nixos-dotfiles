@@ -4,7 +4,6 @@ let
   myTools = pkgs.myTools { osConfig = config; };
   myPorts = (myTools.getSecret ../../nixos "usedPorts.nix") myTools;
 
-  mySeafileSecrets = (myTools.getSecret ../../nixos "seafile.nix");
   myOpencloudSecrets = (myTools.getSecret ../../nixos "opencloud.nix");
   myLetsEncryptSecrets = (myTools.getSecret ../../nixos "letsencrypt.nix");
   myRadicaleSecrets = (myTools.getSecret ../../nixos "radicale.nix");
@@ -12,9 +11,7 @@ let
 
   letsEncryptHost = myLetsEncryptSecrets.letsEncryptHost;
   letsEncryptEmail = myLetsEncryptSecrets.letsEncryptEmail;
-  seafileAdminEmail = mySeafileSecrets.seafileAdminEmail;
-  seafileInitialAdminPwd = mySeafileSecrets.seafileInitialAdminPwd;
-  seafileTmpPath = mySeafileSecrets.seafileTmpPath;
+  nginxTmpPath = "/var/lib/nginx_temp_path";
   opencloudInitialAdminPwd = myOpencloudSecrets.opencloudInitialAdminPwd;
   opencloudStateDir = myOpencloudSecrets.opencloudStateDir;
 
@@ -26,9 +23,7 @@ let
   radicaleProxyPort = myTools.extractPort myPorts.radicale "proxy";
   radicaleInternalPort = myTools.extractPort myPorts.radicale "internal";
   downloadPort = myTools.extractPort myPorts.downloadPage "";
-  jenkinsPort =  myTools.extractPort myPorts.jenkins "proxy";
   giteaPort = myTools.extractPort myPorts.gitea "proxy";
-  seafilePort = myTools.extractPort myPorts.seafile "proxy";
   opencloudPort = myTools.extractPort myPorts.opencloud "proxy";
   jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
@@ -37,9 +32,7 @@ let
   openvpnServerPort = myTools.extractPort myPorts.openvpn_server "";
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
-  seafileInternalPort = myTools.extractPort myPorts.seafile "seafileInternal";
   opencloudInternalPort = myTools.extractPort myPorts.opencloud "opencloudInternal";
-  jenkinsInternalPort = myTools.extractPort myPorts.jenkins "internal";
   syncthingHttpPort = myTools.extractPort myPorts.syncthing "";
 
   backup_mnt = "/var/lib/backup";
@@ -194,11 +187,6 @@ in lib.mkMerge [
       fsType = "btrfs";
       options = [ "subvol=syncthing" "noatime" ];
     };
-    "/var/lib/mysql" = {
-      device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
-      fsType = "btrfs";
-      options = [ "subvol=mysql" "noatime" ];
-    };
     "/var/lib/jellyfin" = {
       device = "/dev/disk/by-uuid/7f2bd1b1-3bbc-43f3-a630-12ec6c00333c";
       fsType = "btrfs";
@@ -210,12 +198,7 @@ in lib.mkMerge [
       fsType = "btrfs";
       options = [ "noatime" ];
     };
-    "/var/lib/seafile" = {
-      device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
-      fsType = "btrfs";
-      options = [ "subvol=seafile" "noatime" ];
-    };
-    "${seafileTmpPath}" = {
+    "${nginxTmpPath}" = {
       device = "/dev/disk/by-uuid/4ab995d2-5562-4233-8d8d-0f42fccbdc35";
       fsType = "btrfs";
       options = [ "subvol=nginx_temp_path" "noatime" ];
@@ -371,10 +354,6 @@ in lib.mkMerge [
           # no action if external disk is not attached
           snapshot_create = "ondemand";
 
-          subvolume.seafile = {
-            # target send-receive      /var/lib/backup/seafile_snaps
-            target = "${backup_mnt}/seafile_snaps";
-          };
           subvolume.opencloud = {
             # target send-receive      /var/lib/backup/seafile_snaps
             target = "${backup_mnt}/opencloud_snaps";
@@ -388,11 +367,9 @@ in lib.mkMerge [
 
           subvolume = {
             radicale.target = "${backup_mnt}/radicale_snaps";
-            # jenkins.target = "${backup_mnt}/jenkins_snaps";
             # html.target = "${backup_mnt}/html_snaps";
             repositories.target = "${backup_mnt}/repo_snaps";
             syncthing.target = "${backup_mnt}/syncthing_snaps";
-            mysql.target = "${backup_mnt}/mysql_snaps";
             jellyfin.target = "${backup_mnt}/jellyfin_snaps";
           };
         };
@@ -539,30 +516,6 @@ in lib.mkMerge [
         };
       };
 
-      #jenkins = (defaultConf ''
-      #  #pass through headers from Jenkins which are considered invalid by Nginx server.
-      #  ignore_invalid_headers off;
-      #  ## Only allow these request methods ##
-      #  if ($request_method !~ ^(GET|HEAD|POST)$ ) {
-      #      return 403;
-      #  }
-      #  ## Do not accept DELETE, SEARCH and other methods ##
-      #'') // {
-      #  listen = createListenEntries jenkinsPort;
-      #  locations = defaultLocations // {
-      #    "/" = {
-      #      proxyPass = "http://localhost:${toString config.services.jenkins.port}/";
-      #      extraConfig = ''
-      #        proxy_max_temp_file_size 0;
-      #        proxy_connect_timeout      90s;
-      #        proxy_send_timeout         90s;
-      #        proxy_read_timeout         90s;
-      #        proxy_redirect default;
-      #      '';
-      #    };
-      #  };
-      #};
-
       gitea = (defaultConf ''
         ## Only allow these request methods ##
         ## PUT is required for LFS uploads ##
@@ -586,52 +539,6 @@ in lib.mkMerge [
         };
       };
 
-      seafile = (defaultConf ''
-      '') // {
-        extraConfig = ''
-          proxy_set_header   X-Forwarded-For $remote_addr;
-        '';
-        listen = createListenEntries seafilePort;
-        locations = defaultLocations // {
-          "/" = {
-            recommendedProxySettings = false;
-            proxyPass = "http://unix:/run/seahub/gunicorn.sock";
-            extraConfig = ''
-              proxy_set_header   X-Forwarded-Host $server_name;
-              proxy_set_header   Host $host:$server_port;
-              proxy_set_header   X-Real-IP $remote_addr;
-              proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header   X-Forwarded-Proto $scheme;
-              proxy_connect_timeout  3600s;
-              proxy_read_timeout  3600s;
-              proxy_send_timeout  3600s;
-              send_timeout  3600s;
-
-              client_max_body_size 0;
-              client_body_temp_path ${seafileTmpPath};
-              proxy_temp_path ${seafileTmpPath};
-            '';
-          };
-          "/seafhttp" = {
-            recommendedProxySettings = false;
-            proxyPass = "http://localhost:${toString config.services.seafile.seafileSettings.fileserver.port}";
-            extraConfig = ''
-              rewrite ^/seafhttp(.*)$ $1 break;
-
-              proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_connect_timeout  3600s;
-              proxy_read_timeout  3600s;
-              proxy_send_timeout  3600s;
-              proxy_request_buffering off;
-              send_timeout  3600s;
-              client_max_body_size 0;
-              client_body_temp_path ${seafileTmpPath};
-              proxy_temp_path ${seafileTmpPath};
-            '';
-          };
-        };
-      };
-
       opencloud = (defaultConf "") // {
         listen = createListenEntries opencloudPort;
         locations = defaultLocations // {
@@ -649,8 +556,8 @@ in lib.mkMerge [
               proxy_read_timeout      3600s;
 
               client_max_body_size 0;
-              client_body_temp_path ${seafileTmpPath};
-              proxy_temp_path ${seafileTmpPath};
+              client_body_temp_path ${nginxTmpPath};
+              proxy_temp_path ${nginxTmpPath};
             '';
           };
         };
@@ -676,7 +583,7 @@ in lib.mkMerge [
   };
   # Allow access to body temp path
   systemd.services.nginx.serviceConfig.ReadWritePaths = [
-    seafileTmpPath
+    nginxTmpPath
   ];
 
   # Calendar + Contact Server: Radicale
@@ -691,37 +598,6 @@ in lib.mkMerge [
         delay = 5;
       };
     };
-  };
-
-  # File server: Seafile
-  services.seafile = rec {
-    enable = true;
-    adminEmail = seafileAdminEmail;
-    initialAdminPassword = seafileInitialAdminPwd;
-    # workers = 2;
-    ccnetSettings = {
-      General.SERVICE_URL = "https://${letsEncryptHost}:${toString seafilePort}";
-    };
-
-    seafileSettings = {
-      fileserver = {
-        port = seafileInternalPort;
-
-        # Set maximum download directory size
-        # Default is 100M.
-        max_download_dir_size = 4096;
-      };
-      general.enable_syslog = true;
-    };
-    # TODO there is currently no seafdav support in nixos :'(
-    # [WEBDAV]
-    # enabled = true
-    # port = 4242
-    # share_name = /
-
-    # seahubExtraConf = ''
-    #   DEBUG = True
-    # '';
   };
 
   services.opencloud = {
@@ -793,21 +669,6 @@ in lib.mkMerge [
       api.ENABLE_SWAGGER = false;
       webhook.ALLOWED_HOST_LIST = "external, 127.0.0.1";
     };
-  };
-
-  # Jenkins server:
-  services.jenkins = {
-    enable = false;
-    port = jenkinsInternalPort;
-    listenAddress = "localhost";
-    extraJavaOptions = [
-      "-Djava.awt.headless=true"
-      "-Xmx128m"
-      "-Djava.net.preferIPv4Stack=true"
-    ];
-    withCLI = true;
-    # packages = [] add extra packages into the service path
-    # plugins = TODO use jenkinsPlugins2nix
   };
 
   services.jellyfin = {
