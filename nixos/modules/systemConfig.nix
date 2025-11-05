@@ -34,7 +34,6 @@ with lib;
     (import ./networking.nix deviceName userName)
     ./bluetooth.nix
     (import ./virtualisation.nix userName)
-    (import ./adb.nix userName)
     ./smartcards.nix
 
     ./wayland.nix
@@ -82,15 +81,6 @@ with lib;
       default = false;
       description = ''
         Whether to enable the tlp service for advanced laptop power-saving options.
-      '';
-    };
-
-    adb = mkOption {
-      type = types.enum [ "disabled" "global" "udevrules" ];
-      default = "disabled";
-      description = ''
-        Specifies whether and how to add support for adb.
-        "global" installs adb globally whereas "udevrules" only install the required udev rules and adb must be installed via i.e. homemanager.
       '';
     };
 

@@ -13,7 +13,7 @@ in {
 
     hardware.graphics.extraPackages = with pkgs; [
       #vaapiIntel # already part of nixos-hardware, but differently configured
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
       intel-media-driver
     ];

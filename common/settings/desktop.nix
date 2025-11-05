@@ -133,7 +133,6 @@ in lib.mkMerge [
     useUEFI = true;
   };
   custom.enableVirtualisation = true;
-  custom.adb = "udevrules";
   custom.smartcards = true;
   custom.nano_conf.enable = true;
   custom.networking = {

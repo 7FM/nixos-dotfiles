@@ -142,7 +142,6 @@ in lib.mkMerge [
   custom.cpuFreqGovernor = "powersave";
   custom.laptopPowerSaving = true;
   custom.enableVirtualisation = true;
-  custom.adb = "udevrules";
   custom.smartcards = true;
   custom.nano_conf.enable = true;
   custom.networking = {

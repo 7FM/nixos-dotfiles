@@ -44,9 +44,15 @@ in {
   hardware.bluetooth.powerOnBoot = false;
   networking.networkmanager.wifi.powersave = true;
 
-  services.logind.lidSwitch = "lock";
-  services.logind.lidSwitchExternalPower = "lock";
-  services.logind.lidSwitchDocked = "ignore";
+  services.logind = {
+    settings = {
+      Login = {
+        HandleLidSwitchDocked = "ignore";
+        HandleLidSwitchExternalPower = "lock";
+        HandleLidSwitch = "lock";
+      };
+    };
+  };
 
 }
 

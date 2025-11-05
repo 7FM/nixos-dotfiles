@@ -67,7 +67,6 @@ in lib.mkMerge [
   custom.cpuFreqGovernor = "ondemand";
   custom.laptopPowerSaving = true;
   custom.enableVirtualisation = true;
-  custom.adb = "disabled";
   custom.smartcards = true;
   custom.nano_conf.enable = true;
   custom.networking = {

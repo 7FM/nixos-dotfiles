@@ -13,7 +13,7 @@ in {
       hunspellDicts.en_US-large # Dictionaries for spell checking in libreoffice
       hunspellDicts.en_GB-large # Dictionaries for spell checking in libreoffice
       # PDF viewer
-      libsForQt5.okular
+      kdePackages.okular
       # needed to open urls from discord, vscode, etc...
       xdg-utils
       # printer utils

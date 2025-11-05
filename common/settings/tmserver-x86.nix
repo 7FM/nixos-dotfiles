@@ -280,7 +280,6 @@ in lib.mkMerge [
     cpuFreqGovernor = "ondemand";
     laptopPowerSaving = false;
     enableVirtualisation = false;
-    adb = "disabled";
     smartcards = false;
     nano_conf.enable = true;
     networking = {
