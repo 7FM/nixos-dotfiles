@@ -278,7 +278,6 @@ in lib.mkMerge [
     enable = true;
     # common arguments applied to all commands
     commonArgs = [
-      "--raw" # For encrypted mirroring
       "--delete-target-snapshots"
       "--skip-parent"
       "--no-sync-snap" # Do not create your own snapshots
@@ -293,6 +292,7 @@ in lib.mkMerge [
         source = "vault";       # your encrypted source pool
         target = "vault_backup";# your backup pool (can be unencrypted)
         recursive = true;
+        sendOptions = "raw"; # For encrypted mirroring
         extraArgs = map (ds: "--exclude-datasets=" + ds) zfsBackupBlacklistedDatasets; # Prevent backing up the blacklisted datasets
       };
     };
