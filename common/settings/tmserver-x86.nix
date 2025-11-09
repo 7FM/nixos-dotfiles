@@ -95,6 +95,9 @@ let
 
       # TODO copy & paste your .inline file here!
   '';
+
+  # List of datasets to exclude from ZFS backups
+  zfsBackupBlacklistedDatasets = [ "vault/nginx_temp_path" "vault/html" ];
 in lib.mkMerge [
 {
   custom = {
@@ -141,6 +144,7 @@ in lib.mkMerge [
 {
   swapDevices = [ { device = "/dev/disk/by-uuid/0336bfa3-bb49-4bb5-be01-d03564e897d9"; } ];
 
+  boot.zfs.extraPools = [ "vault_backup" ]; # Import the vault_backup zpool (since it is mounted nowhere!)
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/41607c2e-6b3e-4841-8a93-676d30bdced5";
@@ -185,6 +189,16 @@ in lib.mkMerge [
     };
   };
 
+  # MAIN POOL
+  # sudo zpool create -O encryption=on -O keyformat=raw -O keylocation=file:///root/zfs.key -O compression=on -O mountpoint=legacy -O xattr=sa -O atime=off -O acltype=posixacl -o ashift=12 vault raidz2 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 /dev/nvme4n1 /dev/nvme5n1
+  # sudo zpool import vault
+  # sudo zfs load-key -a
+
+  # BACKUP POOL
+  # sudo zpool create -O compression=on -O mountpoint=legacy -O xattr=sa -O atime=off -O acltype=posixacl -o ashift=12 vault_backup /dev/sda /dev/sdb /dev/sdd
+  # sudo zpool import vault_backup
+
+
   # Trying to mitigate nvme connection losses
   boot.kernelParams = [
     "nvme_core.default_ps_max_latency_us=0"
@@ -224,8 +238,6 @@ in lib.mkMerge [
   };
   networking.hostId = "2c82493e"; # Not sure why ZFS requires a value for this
 
-  # TODO setup remote backups
-
   # Automatically creata and manage zfs backup snapshots!
   services.sanoid = {
     enable = true;
@@ -246,12 +258,9 @@ in lib.mkMerge [
 
     # Apply template to all mounted dataset
     datasets = let
-      # List of datasets to exclude
-      blacklistedDatasets = [ "vault/nginx_temp_path" "vault/html" ];
-
       # Filter ZFS mounts, exclude blacklisted
       zfsDatasets = lib.attrsets.filterAttrs
-        (_: fs: fs.fsType == "zfs" && fs.device != null && !(lib.elem fs.device blacklistedDatasets))
+        (_: fs: fs.fsType == "zfs" && fs.device != null && !(lib.elem fs.device zfsBackupBlacklistedDatasets))
         config.fileSystems;
 
       # Extract dataset names from .device
@@ -261,6 +270,32 @@ in lib.mkMerge [
     in lib.genAttrs datasetNames (_: {
       useTemplate = [ "daily14keepMonthly" ];
     });
+  };
+
+  # Setup local/remote backups
+  # TODO change to off-site backups!
+  services.syncoid = {
+    enable = true;
+    # common arguments applied to all commands
+    commonArgs = [
+      "--raw" # For encrypted mirroring
+      "--delete-target-snapshots"
+      "--skip-parent"
+      "--no-sync-snap" # Do not create your own snapshots
+    ];
+
+    # interval for all jobs (systemd timer)
+    interval = "weekly";  # runs once per week
+
+    commands = {
+      "vault-to-vault_backup" = {
+        useCommonArgs = true;
+        source = "vault";       # your encrypted source pool
+        target = "vault_backup";# your backup pool (can be unencrypted)
+        recursive = true;
+        extraArgs = map (ds: "--exclude-datasets=" + ds) zfsBackupBlacklistedDatasets; # Prevent backing up the blacklisted datasets
+      };
+    };
   };
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
