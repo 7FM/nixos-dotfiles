@@ -144,7 +144,6 @@ in lib.mkMerge [
 {
   swapDevices = [ { device = "/dev/disk/by-uuid/0336bfa3-bb49-4bb5-be01-d03564e897d9"; } ];
 
-  boot.zfs.extraPools = [ "vault_backup" ]; # Import the vault_backup zpool (since it is mounted nowhere!)
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/41607c2e-6b3e-4841-8a93-676d30bdced5";
@@ -221,7 +220,8 @@ in lib.mkMerge [
   # Enable zfs
   boot.supportedFilesystems.zfs = true;
   boot.initrd.supportedFilesystems.zfs = true;
-  boot.zfs.extraPools = [ "vault" ];
+  # Import the vault_backup zpool (since it is mounted nowhere!)
+  boot.zfs.extraPools = [ "vault" "vault_backup" ];
   services.zfs = {
     trim.enable = true;
     autoScrub.enable = true;
