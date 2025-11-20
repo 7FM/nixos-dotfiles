@@ -12,6 +12,7 @@ in {
 
     programs.ssh = {
       enable = true;
+      enableDefaultConfig = false;
       matchBlocks = (myTools.getSecret ../configs "sshConfig.nix" { inherit config pkgs lib; }) // {
         "*" = {
           forwardAgent = false;
