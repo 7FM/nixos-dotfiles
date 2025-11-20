@@ -20,7 +20,7 @@ in {
           name = "7FM";
           email = "41307817+7FM@users.noreply.github.com";
         };
-        aliases = {
+        alias = {
           a = "add";
           b = "branch";
           c = "commit";
