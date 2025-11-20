@@ -35,9 +35,6 @@ let
   opencloudInternalPort = myTools.extractPort myPorts.opencloud "opencloudInternal";
   syncthingHttpPort = myTools.extractPort myPorts.syncthing "";
 
-  backup_mnt = "/var/lib/backup";
-  btrfs_roots_mnt = "/var/lib/btrfs_roots";
-
   # OpenVPN config
   vpn-dev = "tun0";
   eth-dev = "enp1s0";
@@ -220,8 +217,7 @@ in lib.mkMerge [
   # Enable zfs
   boot.supportedFilesystems.zfs = true;
   boot.initrd.supportedFilesystems.zfs = true;
-  # Import the vault_backup zpool (since it is mounted nowhere!)
-  boot.zfs.extraPools = [ "vault" "vault_backup" ];
+  boot.zfs.extraPools = [ "vault" ];
   services.zfs = {
     trim.enable = true;
     autoScrub.enable = true;
