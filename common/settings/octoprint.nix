@@ -306,6 +306,11 @@ in lib.mkMerge [
       createListenEntries = myPort: createListenEntriesOptSSL myPort true;
 
     in {
+      acme = (defaultConf "") // {
+        enableACME = true;
+        useACMEHost = null;
+      };
+
       octoprint = (defaultConf "") // {
         http2 = false;
         listen = createListenEntries octoprintProxy;
