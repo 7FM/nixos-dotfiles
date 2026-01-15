@@ -13,9 +13,6 @@ let
   hassInternalPort = myTools.extractPort myPorts.homeassistant "internal";
   hassProxyPort = myTools.extractPort myPorts.homeassistant "proxy";
   mjpegStreamerPort = myTools.extractPort myPorts.mjpegStreamer "";
-  diyhueInternal = myTools.extractPort myPorts.diyhue "internal";
-  diyhueHttpsProxy = myTools.extractPort myPorts.diyhue "https";
-  diyhueHttpProxy = myTools.extractPort myPorts.diyhue "http";
   mqttUser = myMiscSecrets.mqtt.user;
   mqttPwd = myMiscSecrets.mqtt.pwd;
 
@@ -339,25 +336,6 @@ in lib.mkMerge [
         };
       };
 
-      diyhue = (defaultConf "") // {
-        enableACME = true;
-        useACMEHost = null;
-        listen = (createListenEntries diyhueHttpsProxy) ++ (createListenEntriesOptSSL diyhueHttpProxy false);
-        locations = defaultLocations // {
-          "/" = {
-            proxyPass = "http://localhost:${toString diyhueInternal}/";
-            extraConfig = ''
-              # disable proxy buffering to keep behavior as close as possible to original ipbridge
-              proxy_buffering off;
-              proxy_request_buffering off;
-
-              proxy_http_version 1.1;
-              proxy_set_header Connection "";
-            '';
-          };
-        };
-      };
-
       hass = (defaultConf "") // {
         listen = createListenEntries hassProxyPort;
         locations = defaultLocations // {
@@ -402,9 +380,6 @@ in lib.mkMerge [
         enabled = config.services.home-assistant.enable;
         discovery_topic = "homeassistant";
         status_topic = "homeassistant/status";
-        # Otherwise, homeassistant does not receive action updates
-        legacy_entity_attributes = true;
-        legacy_triggers = true;
       };
       permit_join = true;
       frontend = {
@@ -428,57 +403,6 @@ in lib.mkMerge [
       devices = myMiscSecrets.zigbee2mqtt.devices;
     };
   };
-
-  systemd.services."diyhue" = let
-      jsonify = (pkgs.python3.pkgs.callPackage ../../custom_pkgs/jsonify.nix { });
-      rgbxy = (pkgs.python3.pkgs.callPackage ../../custom_pkgs/rgbxy.nix { });
-      diyhue = (pkgs.callPackage ../../custom_pkgs/diyhue.nix { python3Packages = pkgs.python3.pkgs; inherit jsonify rgbxy; });
-
-      securityOptions = {
-        ProtectHome = true;
-        PrivateUsers = true;
-        PrivateDevices = true;
-        ProtectClock = true;
-        ProtectHostname = true;
-        ProtectProc = "invisible";
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectKernelLogs = true;
-        ProtectControlGroups = true;
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        MemoryDenyWriteExecute = true;
-        SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_INET" "AF_NETLINK" ];
-      };
-  in {
-    path = with pkgs; [
-      gawk
-      iproute2
-      bash
-      gnutar
-      openssl
-    ];
-    serviceConfig = securityOptions // {
-      Type = "simple";
-      User = "diyhue";
-      Group = "diyhue";
-      DynamicUser = true;
-      StateDirectory = "diyhue";
-      WorkingDirectory = "/var/lib/diyhue";
-      RuntimeDirectory = "diyhue";
-      LogsDirectory = "diyhue";
-      ConfigurationDirectory = "diyhue";
-      Restart = "always";
-      RestartSec = "30s";
-    };
-    script = "${lib.getExe diyhue} --config_path /var/lib/diyhue --bind-ip 127.0.0.1 --ip ${localStaticIP} --no-serve-https --http-port ${toString diyhueInternal}";
-    preStop = "${lib.getExe pkgs.curl} http://127.0.0.1:${toString diyhueInternal}/save";
-    wantedBy = [ "multi-user.target" ];
-  };
-
 
   services.home-assistant = {
     enable = true;
