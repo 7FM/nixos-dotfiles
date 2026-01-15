@@ -2,6 +2,7 @@
 , config
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 }:
 
 self: super:
@@ -12,6 +13,8 @@ let
     propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
     # none of the following have tests
     doCheck = false;
+    pyproject = true;
+    build-system = [ setuptools ];
   });
 in
 {
