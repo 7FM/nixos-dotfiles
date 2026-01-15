@@ -15,6 +15,8 @@ let
     pyproject = true;
     build-system = with super; [ setuptools ];
   });
+
+  gpiozero__1_6_2 = (super.callPackage ./gpiozero_1.6.2.nix { });
 in
 {
   inherit buildPlugin;
@@ -172,7 +174,7 @@ in
       rev = "${version}";
       sha256 = "sha256-lfPh7Uq/NUMo/tC3OIkr/LUsDzw1ihw38yXoRNikOO0=";
     };
-    propagatedBuildInputs = with super; [ rpi-gpio smbus2 gpiozero ];
+    propagatedBuildInputs = with super; [ rpi-gpio smbus2 gpiozero__1_6_2 ];
     meta = with lib; {
       description = "Control printer environment (Temperature control / Lights / Fans and Filament Sensor) using Raspberry Pi GPIO";
       homepage = "https://github.com/vitormhenrique/OctoPrint-Enclosure";
