@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,9 @@ buildPythonPackage rec {
 
   # no tests are present
   doCheck = true;
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "rgbxy" ];
 }
