@@ -53,12 +53,12 @@ in
   };
   taborder = buildPlugin rec {
     pname = "TabOrder";
-    version = "0.5.12";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-${pname}";
       rev = "${version}";
-      sha256 = "sha256-o1mkDsgpRh6PsDl9U60nQJZ3B8fSz/xmscfH81BULs0=";
+      sha256 = "sha256-iY1v+ajYO07EzoWx1iWOl3QF2yRGuz6GMbCV92HE4Qw=";
     };
     meta = with lib; {
       description = "Simple plugin to allow the ordering of tabs within OctoPrint";
