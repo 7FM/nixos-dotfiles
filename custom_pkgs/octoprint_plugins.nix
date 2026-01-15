@@ -16,7 +16,7 @@ let
     build-system = with super; [ setuptools ];
   });
 
-  gpiozero__1_6_2 = (super.callPackage ./gpiozero_1.6.2.nix { });
+  gpiozero__1_6_2 = (super.pkgs.callPackage ./gpiozero_1.6.2.nix { inherit (self) buildPythonPackage colorzero mock pytestCheckHook pythonOlder sphinx-rtd-theme; });
 in
 {
   inherit buildPlugin;
