@@ -2,7 +2,6 @@
 , config
 , fetchFromGitHub
 , fetchpatch
-, setuptools
 }:
 
 self: super:
@@ -14,7 +13,7 @@ let
     # none of the following have tests
     doCheck = false;
     pyproject = true;
-    build-system = [ setuptools ];
+    build-system = with super; [ setuptools ];
   });
 in
 {
