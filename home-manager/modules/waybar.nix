@@ -68,9 +68,11 @@ in {
           "custom/gpu"
         ] ++ [
           "custom/disk_root"
+          "pulseaudio/slider#out"
           "pulseaudio#out"
           "pulseaudio#in"
         ] ++ lib.optionals waybarLaptopFeatures [ 
+          "backlight/slider"
           "backlight"
           "battery"
         ] ++ [
@@ -209,9 +211,15 @@ in {
             on-click-right = "${pkgs.util-linux}/bin/rfkill toggle wlan";
             tooltip = false;
           };
+          "backlight/slider" = {
+              "min" = 0;
+              "max" = 100;
+              "orientation" = "horizontal";
+              "device" = "intel_backlight";
+          };
           "backlight" = {
             device = "intel_backlight";
-            format = "{icon} {percent}%";
+            format = "{icon} {percent:>3}%";
             format-icons = ["🔅" "🔆"];
             tooltip = false;
           };
@@ -254,6 +262,12 @@ in {
             on-scroll-up = "${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ +1%";
             on-scroll-down = "${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ -1%";
             tooltip = false;
+          };
+          "pulseaudio/slider#out" = {
+            "min" = 0;
+            "max" = 100;
+            "rotate" = 0;
+            "scroll-step" = 1;
           };
           "clock" = {
             interval = 60;

@@ -151,6 +151,8 @@ tooltip label {
 #memory,
 #network,
 #pulseaudio,
+#pulseaudio-slider,
+#backlight-slider,
 #backlight,
 #idle_inhibitor,
 #tray,
@@ -302,6 +304,35 @@ tooltip label {
     background-color: #D08770;
     color: @audio_color;
     /* No styles */
+}
+
+#backlight-slider,
+#pulseaudio-slider {
+    padding: 0;
+    margin: 0;
+    /* background-color: @audio; */
+}
+#backlight-slider slider,
+#pulseaudio-slider slider {
+    min-height: 0px;
+    min-width: 0px;
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+#backlight-slider trough,
+#pulseaudio-slider trough {
+    min-height: 10px;
+    min-width: 80px;
+    border-radius: 5px;
+    background: black;
+}
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+    min-width: 10px;
+    border-radius: 5px;
+    background: green;
 }
 
 #tray {
