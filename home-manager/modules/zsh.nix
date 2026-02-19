@@ -4,13 +4,6 @@ let
   enable = osConfig.custom.hm.modules.zsh.enable;
 in {
   config = lib.mkIf enable {
-    # This enables discovering fonts that where installed with home.packages
-    fonts.fontconfig.enable = true;
-    home.packages = [
-      # needed for powerlevel10k
-      pkgs.nerd-fonts.meslo-lg
-    ];
-
     programs.nix-index = {
       enable = true;
       enableZshIntegration = true;

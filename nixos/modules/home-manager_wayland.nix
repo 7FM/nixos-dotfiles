@@ -37,7 +37,27 @@ in {
     security.pam.services.swaylock = {};
     programs.dconf.enable = true;
 
-    fonts.enableDefaultPackages = true;
+    fonts = {
+      enableDefaultPackages = true;
+      fontconfig.enable = true;
+      fontconfig.defaultFonts = {
+        # serif = [ "MesloLGS Nerd Font" ];
+        # sansSerif = [ "MesloLGS Nerd Font" ];
+        # monospace = [ "MesloLGS Nerd Font Mono" ];
+        serif = [ "DejaVu Serif" ];
+        sansSerif = [ "DejaVu Sans" ];
+        monospace = [ "DejaVu Sans Mono" ];
+        emoji = [ "Noto Color Emoji" ];
+      };
+      packages = with pkgs; [
+        libertine
+        libertinus
+        noto-fonts
+        noto-fonts-color-emoji
+        nerd-fonts.meslo-lg
+        google-fonts
+      ];
+    };
 
     # Enable support for screen sharing
     services.pipewire.enable = true;

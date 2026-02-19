@@ -25,12 +25,6 @@ in {
   config = let
     waybarPkg = (pkgs.waybar.override { withMediaPlayer = true; });
   in lib.mkIf enable {
-
-    home.packages = with pkgs; [
-      # needed for waybar customization
-      font-awesome
-    ];
-
     # systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];
     systemd.user.services.waybar.Unit.After = [ "bluetooth.target" ];
 
@@ -119,6 +113,7 @@ in {
             escape = true;
           };
           "custom/logout" = {
+            justify = "center";
             format = "";
             on-click = "${pkgs.wlogout}/bin/wlogout";
             on-click-right = "${pkgs.wlogout}/bin/wlogout";
@@ -143,15 +138,15 @@ in {
               escape = true;
           };
           "temperature" = {
-            critical-threshold = 80;
+            critical-threshold = 90;
             # format-critical = "{temperatureC:>3}°C {icon}";
-            format = "<span color='#e88939'>{icon}</span> {temperatureC}°C";
+            format = "{icon} {temperatureC}°C";
             format-icons = [
-              "" # Icon: temperature-empty
-              "" # Icon: temperature-quarter
-              "" # Icon: temperature-half
-              "" # Icon: temperature-three-quarters
-              "" # Icon: temperature-full
+              "<span color='#0c6e08'></span>" # Icon: temperature-empty
+              "<span color='#adca39'></span>" # Icon: temperature-quarter
+              "<span color='#e88939'></span>" # Icon: temperature-half
+              "<span color='#e85f39'></span>" # Icon: temperature-three-quarters
+              "<span color='#ff3700'></span>" # Icon: temperature-full
             ];
             tooltip = false;
           } // (if (hwmonPath != null) then { hwmon-path = hwmonPath; } else {})
@@ -168,13 +163,14 @@ in {
             on-click-right = "${pkgs.alacritty}/bin/alacritty --command ${pkgs.htop}/bin/htop";
           };
           "custom/notification" = {
-            "tooltip" = false;
-            "format" = "{icon}";
-            "format-icons" = {
-              "notification" = "<span foreground='red'><sup></sup></span>";
-              "none" = "";
-              "dnd-notification" = "<span foreground='red'><sup></sup></span>";
-              "dnd-none" = "";
+            justify = "center";
+            tooltip = false;
+            format = "{icon}";
+            format-icons = {
+              "notification" = "<span font='10'></span><span foreground='red'><sup></sup></span>";
+              "none" = "<span font='10'></span>";
+              "dnd-notification" = "<span font='10'></span><span foreground='red'><sup></sup></span>";
+              "dnd-none" = "<span font='10'></span>";
             };
             "return-type" = "json";
             "exec" = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
@@ -183,6 +179,7 @@ in {
             "escape" = true;
           };
           "bluetooth" = {
+              justify = "center";
               interval = 30;
               format-on = "<span color='#589df6'></span>";
               format-off = "";
@@ -289,15 +286,23 @@ in {
             format-plugged =  "{icon}<span color='#e88939'></span>{capacity:>3}%{time}";
             # format-good = "", # An empty format will hide the module
             # format-full = "";
+            # format-icons = [
+            #   "<span font='8.6' rise='-500'></span>"
+            #   "<span font='8.6' rise='-500'></span>"
+            #   "<span font='8.6' rise='-500'></span>"
+            #   "<span font='8.6' rise='-500'></span>"
+            #   "<span font='8.6' rise='-500'></span>"
+            # ];
             format-icons = [
-              "<span font='8.6' rise='-500'></span>"
-              "<span font='8.6' rise='-500'></span>"
-              "<span font='8.6' rise='-500'></span>"
-              "<span font='8.6' rise='-500'></span>"
-              "<span font='8.6' rise='-500'></span>"
+              ""
+              ""
+              ""
+              ""
+              ""
             ];
           };
           "idle_inhibitor" = {
+            justify = "center";
             format = "<span font='8' color='#589df6'>{icon}</span>";
             format-icons = {
               "activated" = "";
@@ -368,12 +373,372 @@ in {
           };
         };
       }];
+
+      style = ''
+        /* Based on: https://github.com/Pipshag/dotfiles_nord/blob/master/.config/waybar/style.css */
+
+        /* COLORS */
+
+        /* Nord */
+        @define-color nord_bg #434C5E;
+        @define-color nord_bg_blue #546484;
+        @define-color nord_light #D8DEE9;
+        @define-color nord_light_font @nord_light;
+        @define-color nord_dark_font @nord_bg;
+        @define-color bg #2E3440;
+        /*@define-color bg #353C4A;*/
+        /*@define-color dark @nord_dark_font;*/
+
+        @define-color waybar_bg @bg;
+        @define-color waybar_color @nord_light_font;
+
+        @define-color warning #ebcb8b;
+        @define-color warning_color @nord_dark_font;
+        @define-color critical #BF616A;
+        @define-color critical_color @nord_dark_font;
+
+        /* Module Colors: */
+
+        /* Left */
+        /*@define-color workspaces @bg;*/
+        /*@define-color workspaces @nord_dark_font;*/
+        /*@define-color workspacesfocused @nord_bg;*/
+        @define-color workspacesfocused #4C566A;
+        @define-color workspacesfocused_color @nord_light_font;
+
+        @define-color scratchpad @nord_light;
+        @define-color scratchpad_color @nord_dark_font;
+
+        @define-color mode @nord_bg;
+        @define-color mode_color @nord_light_font;
+
+        @define-color bluetooth @nord_bg;
+
+        @define-color network @nord_bg;
+        @define-color network_color @nord_light_font;
+
+        /* Center */
+        @define-color tray @nord_bg;
+
+        /* Right */
+        @define-color temp @nord_bg;
+        @define-color temp_color @nord_light_font;
+
+        @define-color cpu @nord_bg;
+        @define-color cpu_color @nord_light_font;
+
+        @define-color memory @nord_bg;
+        @define-color memory_color @nord_light_font;
+
+        @define-color audio @nord_bg_blue;
+        @define-color audio_color @nord_light_font;
+
+        @define-color backlight @nord_bg;
+        @define-color backlight_color @nord_light_font;
+
+        @define-color battery @nord_bg;
+        @define-color battery_color @nord_light_font;
+
+        @define-color clock @nord_bg_blue;
+        @define-color clock_color @nord_light_font;
+        @define-color date @nord_bg;
+        @define-color time @nord_bg;
+
+        @define-color idle @nord_bg;
+
+        @define-color custom_bg @nord_bg;
+        @define-color custom_color @nord_light_font;
+
+        @define-color language @nord_bg_blue;
+        @define-color language_color @nord_light_font;
+
+
+        * {
+            /* fck default gtk-theme settings! */
+            all: unset;
+            /* all: initial; */
+
+            border: none;
+            border-radius: 2px;
+            font-family: "MesloLGS Nerd Font", monospace;
+            font-size: 10px;
+            /* min-height: 0; */
+            /* min-width: 0; */
+            margin: 1px 0.2em 1px 0.2em;
+
+            /* min-height: 14px; */
+        }
+
+        window#waybar {
+            background-color: @waybar_bg;
+            color: @waybar_color;
+            font-weight: bold;
+        }
+
+        tooltip {
+            background: rgba(43, 48, 59, 0.7);
+            border: 1px solid rgba(100, 114, 125, 0.7);
+        }
+
+        tooltip label {
+            color: white;
+        }
+
+        /* Workspaces stuff */
+
+        #workspaces button {
+            padding: 0 2px;
+            margin: 0px;
+            opacity: 0.3;
+            background: none;
+            color: #ff8700;
+            border: 1px solid #1b1d1e;
+        }
+
+        #workspaces button.focused {
+            background-color: @workspacesfocused;
+            color: @workspacesfocused_color;
+            opacity: 1;
+            padding: 0 0.2em;
+        }
+
+        #workspaces button.urgent {
+            border-color: #c9545d;
+            color: #c9545d;
+            opacity: 1;
+        }
+
+        #window {
+            margin-right: 40px;
+            margin-left: 40px;
+            font-weight: normal;
+        }
+
+        /* Each module */
+        #custom-gpu,
+        #custom-disk_home,
+        #custom-disk_root,
+        #custom-notification,
+        #custom-logout,
+        #custom-spotify,
+        #custom-media_firefox,
+        #bluetooth,
+        #temperature,
+        #clock,
+        #battery,
+        #cpu,
+        #memory,
+        #network,
+        #pulseaudio,
+        #pulseaudio-slider,
+        #backlight-slider,
+        #backlight,
+        #idle_inhibitor,
+        #tray,
+        #mode,
+        #mpd {
+            padding-left: 0.2em;
+            padding-right: 0.2em;
+        }
+
+        /* Each module that should blink */
+        #mode,
+        #memory,
+        #temperature,
+        #battery {
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+
+        /* Each critical module */
+        #memory.critical,
+        #cpu.critical,
+        #temperature.critical,
+        #battery.critical {
+            background-color: @critical;
+            color: @critical_color;
+        }
+
+        /* Each critical that should blink */
+        #mode,
+        #memory.critical,
+        #temperature.critical,
+        #battery.critical.discharging {
+            animation-name: blink-critical;
+            animation-duration: 2s;
+        }
+
+        /* Each warning */
+        #network.disconnected,
+        #memory.warning,
+        #cpu.warning,
+        #temperature.warning,
+        #battery.warning {
+            background-color: @warning;
+            color: @warning_color;
+        }
+
+        /* Each warning that should blink */
+        #battery.warning.discharging {
+            animation-name: blink-warning;
+            animation-duration: 3s;
+        }
+
+        #mode {
+            /* Shown current Sway mode (resize etc.) */
+            background-color: @mode;
+            color: @mode_color;
+        }
+
+        #bluetooth {
+            background-color: @bluetooth;
+            /* font-size: 1.2em; */
+            padding: 0 0.2em;
+        }
+
+        #custom-gpu,
+        #custom-disk_home,
+        #custom-disk_root,
+        #custom-notification,
+        #custom-logout,
+        #custom-spotify {
+            background-color: @custom_bg;
+            color: @custom_color;
+            padding: 0 0.2em;
+        }
+
+        #idle_inhibitor {
+            min-width: 10px;
+        }
+        #custom-notification {
+            min-width: 15px;
+            /* padding-right: 7px; */
+        }
+        #custom-logout {
+            min-width: 15px;
+            /* padding-right: 4px; */
+            margin-right: 0em;
+        }
+
+        #custom-scratchpad-indicator {
+            background-color: @scratchpad;
+            color: @scratchpad_color;
+            padding: 0 0.2em;
+        }
+
+        #idle_inhibitor {
+            background-color: @idle;
+            padding: 0 0.2em;
+            padding-right: 7px;
+            /*margin-right: 0.1em; */
+        }
+
+        #network {
+            background-color: @network;
+            color: @network_color;
+        }
+
+        #memory {
+            background-color: @memory;
+            color: @memory_color;
+        }
+
+        #cpu {
+            background-color: @cpu;
+            color: @cpu_color;
+        }
+
+        #language {
+            background-color: @language;
+            color: @language_color;
+            padding: 0 0.2em;
+        }
+
+        #temperature {
+            background-color: @temp;
+            color: @temp_color;
+        }
+
+        #battery {
+            background-color: @battery;
+            color: @battery_color;
+        }
+
+        #backlight {
+            background-color: @backlight;
+            color: @backlight_color;
+        }
+
+        #clock {
+            background-color: @clock;
+            color: @clock_color;
+        }
+
+        #clock.date {
+            background-color: @date;
+        }
+
+        #clock.time {
+            background-color: @time;
+        }
+
+        #pulseaudio.in,
+        #pulseaudio.out {
+            background-color: @audio;
+            color: @audio_color;
+        }
+
+        #pulseaudio.out.muted,
+        #pulseaudio.in.source-muted {
+            background-color: #D08770;
+            color: @audio_color;
+            /* No styles */
+        }
+
+        #backlight-slider,
+        #pulseaudio-slider {
+            padding: 0;
+            margin: 0;
+            /* background-color: @audio; */
+        }
+        #backlight-slider slider,
+        #pulseaudio-slider slider {
+            min-height: 0px;
+            min-width: 0px;
+            opacity: 0;
+            background-image: none;
+            border: none;
+            box-shadow: none;
+        }
+        #backlight-slider trough,
+        #pulseaudio-slider trough {
+            min-height: 10px;
+            min-width: 80px;
+            border-radius: 5px;
+            background: black;
+        }
+        #backlight-slider highlight,
+        #pulseaudio-slider highlight {
+            min-width: 10px;
+            border-radius: 5px;
+            background: green;
+        }
+
+        #tray {
+            background-color: @tray;
+        }
+
+        #tray menu {
+            background: rgba(43, 48, 59, 0.7);
+            border: 1px solid rgba(100, 114, 125, 0.7);
+        }
+      '';
     };
 
     # This enables discovering fonts that where installed with home.packages
     fonts.fontconfig.enable = true;
 
-    xdg.configFile."waybar/style.css".source = ../configs/waybar/style.css;
     xdg.configFile."waybar/scripts/custom_gpu.sh" = {
       text = ''
         #!/bin/sh
