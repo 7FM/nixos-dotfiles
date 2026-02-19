@@ -69,7 +69,7 @@ in {
     # Enables wireless support via wpa_supplicant.
     networking.wireless.enable = true && wifiSupport;
     # Allow changes with wpa_gui & wpa_cli
-    networking.wireless.userControlled.enable = true;
+    networking.wireless.userControlled = true;
     # Allow coexistence of declaratively & imeratively network configs!
     networking.wireless.allowAuxiliaryImperativeNetworks = true;
 
