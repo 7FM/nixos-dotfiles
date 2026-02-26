@@ -57,10 +57,6 @@ in {
 
         # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
         [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-        bindkey "$terminfo[kRIT5]" forward-word > /dev/null 2>&1
-        bindkey "$terminfo[kLFT5]" backward-word > /dev/null 2>&1
-        bindkey "^R" history-incremental-search-backward
       '';
     };
 

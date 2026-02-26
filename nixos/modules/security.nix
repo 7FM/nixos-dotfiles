@@ -70,6 +70,7 @@ in {
     users.mutableUsers = false;
     # Disable root login
     users.users.root.hashedPassword = "!";
+    users.users.root.shell = pkgs.zsh;
     # Emergency mode requires root -> not usable anyway
     systemd.enableEmergencyMode = false;
 

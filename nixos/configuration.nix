@@ -85,6 +85,11 @@ in {
     enable = true;
     enableCompletion = true;
   #  promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+    interactiveShellInit = ''
+      bindkey "$terminfo[kRIT5]" forward-word 2>/dev/null
+      bindkey "$terminfo[kLFT5]" backward-word 2>/dev/null
+      bindkey "^R" history-incremental-search-backward
+    '';
   };
 
   environment.shells = [ pkgs.zsh ];  
