@@ -99,6 +99,18 @@ in {
         autoStart = openvpnAutoConnect;
         updateResolvConf = true;
       };
+      workVPN = {
+        config = ''
+          config /home/${userName}/vpns/workVPN.ovpn
+
+          route 130.83.161.129 255.255.255.255 net_gateway
+          # Fix MTU issues: large packets get dropped in the tunnel
+          tun-mtu 1400
+          mssfix 1360
+        ''; # The content of the config file can be pasted here too!
+        autoStart = false;
+        updateResolvConf = true;
+      };
     };
 
     # The global useDHCP flag is deprecated, therefore explicitly set to false here.
