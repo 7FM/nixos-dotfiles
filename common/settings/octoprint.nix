@@ -17,6 +17,14 @@ let
   mqttPwd = myMiscSecrets.mqtt.pwd;
 
   localStaticIP = myMiscSecrets.localStaticIP;
+
+  libpisp = pkgs.callPackage ../../custom_pkgs/libpisp.nix {};
+  libcamera = pkgs.callPackage ../../custom_pkgs/libcamera-raspi.nix {
+    inherit libpisp;
+  };
+  rpicam-apps = pkgs.callPackage ../../custom_pkgs/rpicam-apps.nix {
+    inherit libpisp libcamera;
+  };
 in lib.mkMerge [
 {
   custom = {
@@ -106,10 +114,6 @@ in lib.mkMerge [
     apply-overlays-dtmerge.enable = true;
   };
 
-  boot = {
-    # Give the GPU some memory # TODO we can probably reduce the amount!
-    kernelParams = [ "cma=512M" ];
-  };
   hardware.deviceTree = {
     enable = true;
 
@@ -328,7 +332,15 @@ in lib.mkMerge [
               proxy_send_timeout      60s;
               proxy_read_timeout      60s;
 
-              client_max_body_size 0; 
+              client_max_body_size 0;
+            '';
+          };
+
+          "/webcam/" = {
+            proxyPass = "http://localhost:${toString mjpegStreamerPort}/";
+            extraConfig = ''
+              proxy_buffering off;
+              proxy_read_timeout 3600s;
             '';
           };
 
@@ -432,10 +444,19 @@ in lib.mkMerge [
     };
   };
 
-  services.mjpg-streamer = {
-    enable = true;
-    outputPlugin = "output_http.so -w @www@ -n -p ${toString mjpegStreamerPort}";
-    inputPlugin = "input_uvc.so -r 1280x720 -f 10 -vf true -hf true -d /dev/video0";
+  # Pi Camera v2 (IMX219) via rpicam-vid + Python MJPEG HTTP server
+  # Serves ?action=stream and ?action=snapshot for OctoPrint
+  systemd.services.camera-stream = {
+    description = "MJPEG stream for OctoPrint";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.python3}/bin/python3 ${../../custom_pkgs/mjpeg-server.py} ${toString mjpegStreamerPort} ${rpicam-apps}/bin/rpicam-vid -t 0 --codec mjpeg --inline --width 1280 --height 720 --framerate 10 --vflip --hflip -n -o -";
+      Restart = "always";
+      RestartSec = 5;
+      SupplementaryGroups = [ "video" ];
+      DynamicUser = true;
+    };
   };
 
   services.octoprint = {
