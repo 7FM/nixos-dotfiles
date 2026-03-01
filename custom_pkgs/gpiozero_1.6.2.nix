@@ -50,6 +50,7 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/gpiozero/gpiozero/issues/1087
     "test_spi_hardware_write"
+    "test_input_rotary_encoder_wait"
   ];
 
   meta = with lib; {

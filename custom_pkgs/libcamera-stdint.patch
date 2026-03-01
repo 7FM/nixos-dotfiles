@@ -1,0 +1,65 @@
+From d021d298226aa392c9c21394535fe71c625c36cc Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sun, 4 Aug 2024 21:55:43 +0100
+Subject: [PATCH] libcamera: Add missing <stdint.h> include to base/file.h
+
+Without the change the build fails on upcoming `gcc-15` as:
+
+    In file included from ../src/libcamera/base/file.cpp:8:
+    ../include/libcamera/base/file.h:62:33: error: 'uint8_t' was not declared in this scope
+       62 |         ssize_t read(const Span<uint8_t> &data);
+          |                                 ^~~~~~~
+
+Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+---
+ include/libcamera/base/file.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/libcamera/base/file.h b/include/libcamera/base/file.h
+index 5637934c0..192668abe 100644
+--- a/include/libcamera/base/file.h
++++ b/include/libcamera/base/file.h
+@@ -7,6 +7,7 @@
+ 
+ #pragma once
+ 
++#include <stdint.h>
+ #include <sys/types.h>
+ 
+ #include <map>
+From b6369e7df246859c2a9f7196397413fb5e82d52f Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sun, 4 Aug 2024 21:55:44 +0100
+Subject: [PATCH] libcamera: Add missing <stdint.h> include to
+ internal/yaml_parser.h
+
+Without the change the build fails on upcoming `gcc-15` as:
+
+    In file included from ../src/libcamera/yaml_parser.cpp:8:
+    ../include/libcamera/internal/yaml_parser.h:183:41: error: 'uint8_t' was not declared in this scope
+      183 |                          std::is_same_v<uint8_t, T> ||
+          |                                         ^~~~~~~
+
+Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+---
+ include/libcamera/internal/yaml_parser.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/libcamera/internal/yaml_parser.h b/include/libcamera/internal/yaml_parser.h
+index e38a2df9a..16708e488 100644
+--- a/include/libcamera/internal/yaml_parser.h
++++ b/include/libcamera/internal/yaml_parser.h
+@@ -10,6 +10,7 @@
+ #include <iterator>
+ #include <map>
+ #include <optional>
++#include <stdint.h>
+ #include <string>
+ #include <vector>
+ 
