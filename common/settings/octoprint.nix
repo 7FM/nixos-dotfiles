@@ -18,13 +18,7 @@ let
 
   localStaticIP = myMiscSecrets.localStaticIP;
 
-  libpisp = pkgs.callPackage ../../custom_pkgs/libpisp.nix {};
-  libcamera = pkgs.callPackage ../../custom_pkgs/libcamera-raspi.nix {
-    inherit libpisp;
-  };
-  rpicam-apps = pkgs.callPackage ../../custom_pkgs/rpicam-apps.nix {
-    inherit libpisp libcamera;
-  };
+  rpicam-apps = pkgs.callPackage ../../custom_pkgs/rpicam-apps.nix {};
 in lib.mkMerge [
 {
   custom = {

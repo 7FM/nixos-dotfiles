@@ -22,13 +22,12 @@
 
 stdenv.mkDerivation rec {
   pname = "rpicam-apps";
-  version = "1.5.1";
+  version = "1.11.1";
 
   src = fetchgit {
     url = "https://github.com/raspberrypi/rpicam-apps";
     rev = "v${version}";
-    hash = "sha256-rl5GVigiZWXkpfIteRWUMjtCaPweXRWrBrZOjQ1hiU8=";
-    # hash = "sha256-KH30jmHfxXq4j2CL7kv18DYECJRp9ECuWNPnqPZajPA=";
+    hash = "sha256-hVoKbvWFeramPkHuibJwUgFOPS9v588+K8828a1fNnA=";
   };
 
   outputs = [ "out" "dev" ];
@@ -63,13 +62,11 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Denable_libav=disabled"
-    "-Ddownload_hailo_models=false"
     "-Denable_egl=disabled"
     "-Denable_qt=disabled"
     "-Denable_hailo=disabled"
     "-Denable_opencv=enabled"
-    # "-Ddownload_imx500_models=false"
-    # "-Denable_imx500=false"
+    "-Denable_imx500=false"
   ];
 
   env = {
