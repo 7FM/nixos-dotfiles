@@ -289,8 +289,8 @@ in {
         # restarts some user services to make sure they have the correct environment variables
         exec "systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr; systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr"
       '' + lib.optionalString (laptopDisplay != null) ''
-        bindswitch --reload --locked lid:on output ${laptopDisplay} disable
-        bindswitch --reload --locked lid:off output ${laptopDisplay} enable
+        bindswitch --reload --locked lid:on exec '${pkgs.brightnessctl}/bin/brightnessctl -s && ${pkgs.sway}/bin/swaymsg "output ${laptopDisplay} disable"'
+        bindswitch --reload --locked lid:off exec '${pkgs.sway}/bin/swaymsg "output ${laptopDisplay} enable" && ${pkgs.brightnessctl}/bin/brightnessctl -r'
       '' + ''
         # output * bg ${../configs/sway/backgrounds/cheatsheet.jpg} fit
         # credits for the image go to: https://www.youtube.com/watch?v=Lqz5ZtiCmYk
