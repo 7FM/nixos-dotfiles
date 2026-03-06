@@ -62,12 +62,10 @@ in {
           "custom/gpu"
         ] ++ [
           "custom/disk_root"
-          "pulseaudio/slider#out"
-          "pulseaudio#out"
-          "pulseaudio#in"
-        ] ++ lib.optionals waybarLaptopFeatures [ 
-          "backlight/slider"
-          "backlight"
+          "group/audio-out"
+          "group/audio-in"
+        ] ++ lib.optionals waybarLaptopFeatures [
+          "group/backlight"
           "battery"
         ] ++ [
           "idle_inhibitor"
@@ -208,6 +206,18 @@ in {
             on-click-right = "${pkgs.util-linux}/bin/rfkill toggle wlan";
             tooltip = false;
           };
+          "group/backlight" = {
+            "orientation" = "inherit";
+            "drawer" = {
+              "transition-duration" = 300;
+              "children-class" = "backlight-drawer-child";
+              "transition-left-to-right" = false;
+            };
+            "modules" = [
+              "backlight"
+              "backlight/slider"
+            ];
+          };
           "backlight/slider" = {
               "min" = 0;
               "max" = 100;
@@ -253,18 +263,47 @@ in {
             format-source = "{volume:>3}%";
             format-source-muted = "  0%";
 
+            target = "source";
             on-click = "${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
             on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
-
-            on-scroll-up = "${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ +1%";
-            on-scroll-down = "${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ -1%";
             tooltip = false;
+          };
+          "group/audio-out" = {
+            "orientation" = "inherit";
+            "drawer" = {
+              "transition-duration" = 300;
+              "children-class" = "audio-drawer-child";
+              "transition-left-to-right" = false;
+            };
+            "modules" = [
+              "pulseaudio#out"
+              "pulseaudio/slider#out"
+            ];
+          };
+          "group/audio-in" = {
+            "orientation" = "inherit";
+            "drawer" = {
+              "transition-duration" = 300;
+              "children-class" = "audio-drawer-child";
+              "transition-left-to-right" = false;
+            };
+            "modules" = [
+              "pulseaudio#in"
+              "pulseaudio/slider#in"
+            ];
           };
           "pulseaudio/slider#out" = {
             "min" = 0;
             "max" = 100;
             "rotate" = 0;
             "scroll-step" = 1;
+          };
+          "pulseaudio/slider#in" = {
+            "min" = 0;
+            "max" = 100;
+            "rotate" = 0;
+            "scroll-step" = 1;
+            "target" = "source";
           };
           "clock" = {
             interval = 60;

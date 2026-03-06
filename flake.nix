@@ -53,9 +53,15 @@
                 drynomore = drynomore.packages."${system}".default;
                 tmdbot = tmdbot.packages."${system}".default;
 
-                # waybar: enable experimental features
+                # waybar: enable experimental features + pulseaudio slider source target support
                 waybar = prev.waybar.overrideAttrs (oldAttrs: {
                   mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+                  patches = (oldAttrs.patches or []) ++ [
+                    (prev.fetchpatch {
+                      url = "https://github.com/Alexays/Waybar/pull/4908.patch";
+                      hash = "sha256-bGweDV7E1f1ht7+tB3Z2R77KF0z8SRWm8A7JVuCJI1c=";
+                    })
+                  ];
                 });
 
                 # fix mattermost in wayland mode
