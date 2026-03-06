@@ -3,43 +3,42 @@
 let
   myTools = pkgs.myTools { osConfig = config; };
   governor = config.custom.cpuFreqGovernor;
-  enableTlp = config.custom.laptopPowerSaving;
+  enableLaptopPowerSaving = config.custom.laptopPowerSaving;
 in {
 
   # Power management
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = governor;
+    # power-profiles-daemon manages governors dynamically, so don't set a static one
+    cpuFreqGovernor = lib.mkIf (!enableLaptopPowerSaving) governor;
   };
 
-  services.tlp = {
-    enable = enableTlp;
-    settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+  # power-profiles-daemon for runtime profile switching (power-saver, balanced, performance)
+  # Use `powerprofilesctl` to switch profiles
+  services.power-profiles-daemon.enable = enableLaptopPowerSaving;
 
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+  # Battery charge thresholds (managed separately from power-profiles-daemon)
+  services.upower = lib.mkIf enableLaptopPowerSaving {
+    enable = true;
+    percentageLow = 20;
+    percentageCritical = 10;
+  };
 
-      PLATFORM_PROFILE_ON_AC = "performance";
-      PLATFORM_PROFILE_ON_BAT = "low-power";
-
-      # Disable boosting on battery
-      CPU_BOOST_ON_AC = 1;
-      CPU_BOOST_ON_BAT = 0;
-      CPU_HWP_DYN_BOOST_ON_AC = 1;
-      CPU_HWP_DYN_BOOST_ON_BAT = 0;
-
-      CPU_MIN_PERF_ON_AC = 0;
-      CPU_MAX_PERF_ON_AC = 100;
-      CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 100;
-      #CPU_MAX_PERF_ON_BAT = 20;
-
-      #Optional helps save long term battery health
-      START_CHARGE_THRESH_BAT0 = 70; # 70 and bellow it starts to charge
-      STOP_CHARGE_THRESH_BAT0 = 80; # 80 and above it stops charging
+  # Charge thresholds via sysfs (ThinkPad-compatible)
+  systemd.services.battery-charge-threshold = lib.mkIf enableLaptopPowerSaving {
+    description = "Set battery charge thresholds";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
     };
+    script = ''
+      if [ -f /sys/class/power_supply/BAT0/charge_control_start_threshold ]; then
+        echo 70 > /sys/class/power_supply/BAT0/charge_control_start_threshold
+        echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold
+      fi
+    '';
   };
 
   hardware.bluetooth.powerOnBoot = false;

@@ -67,6 +67,7 @@ in {
         ] ++ lib.optionals waybarLaptopFeatures [
           "group/backlight"
           "battery"
+          "custom/power-profile"
         ] ++ [
           "idle_inhibitor"
           "clock"
@@ -109,6 +110,40 @@ in {
             exec = "${pkgs.coreutils}/bin/df -h --output=avail / | ${pkgs.coreutils}/bin/tail -1 | ${pkgs.coreutils}/bin/tr -d ' '";
             tooltip = false;
             escape = true;
+          };
+          "custom/power-profile" = {
+            justify = "center";
+            format = "{icon}";
+            format-icons = {
+              "power-saver" = "<span font='8' color='#2ecc71'>󰌪</span>";
+              "balanced" = "<span font='8' color='#589df6'>󰗑</span>";
+              "performance" = "<span font='8' color='#e74c3c'>󱐌</span>";
+            };
+            return-type = "json";
+            interval = 5;
+            exec = ''
+              profile=$(${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)
+              echo "{\"alt\":\"$profile\",\"tooltip\":\"Power profile: $profile\"}"
+            '';
+            on-click = ''
+              current=$(${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)
+              case "$current" in
+                power-saver) next=balanced ;;
+                balanced) next=performance ;;
+                performance) next=power-saver ;;
+              esac
+              ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set "$next"
+            '';
+            on-click-right = ''
+              current=$(${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)
+              case "$current" in
+                power-saver) next=performance ;;
+                balanced) next=power-saver ;;
+                performance) next=balanced ;;
+              esac
+              ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set "$next"
+            '';
+            tooltip = true;
           };
           "custom/logout" = {
             justify = "center";
@@ -559,6 +594,7 @@ in {
         #custom-disk_root,
         #custom-notification,
         #custom-logout,
+        #custom-power-profile,
         #custom-spotify,
         #custom-media_firefox,
         #bluetooth,
@@ -641,6 +677,7 @@ in {
         #custom-disk_root,
         #custom-notification,
         #custom-logout,
+        #custom-power-profile,
         #custom-spotify {
             background-color: @custom_bg;
             color: @custom_color;
@@ -658,6 +695,10 @@ in {
             min-width: 15px;
             /* padding-right: 4px; */
             margin-right: 0em;
+        }
+        #custom-power-profile {
+            min-width: 10px;
+            padding-right: 7px;
         }
 
         #custom-scratchpad-indicator {
