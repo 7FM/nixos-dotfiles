@@ -69,7 +69,13 @@ with lib;
     };
 
     cpuFreqGovernor = mkOption {
-      type = types.nullOr (types.enum [ "ondemand" "powersave" "performance" ]);
+      type = types.nullOr (
+        types.enum [
+          "ondemand"
+          "powersave"
+          "performance"
+        ]
+      );
       default = "ondemand";
       description = ''
         Specifies the cpu frequency governor to use.
@@ -100,7 +106,6 @@ with lib;
       '';
     };
   };
-
 
   config = {
     # System sanity checks

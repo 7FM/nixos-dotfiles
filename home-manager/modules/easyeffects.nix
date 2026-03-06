@@ -1,4 +1,10 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   runHeadless = osConfig.custom.gui == "headless";
@@ -6,7 +12,8 @@ let
   backendUsePipewire = cfg.backend == "pipewire";
 
   enable = !runHeadless && backendUsePipewire && osConfig.custom.hm.modules.easyeffects.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     services.easyeffects = {
       enable = true;

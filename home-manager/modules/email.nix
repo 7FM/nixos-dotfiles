@@ -1,12 +1,20 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { inherit osConfig; };
 
-  createPasswordLookupCmd = searchTerm: "${pkgs.libsecret}/bin/secret-tool lookup email ${searchTerm}";
+  createPasswordLookupCmd =
+    searchTerm: "${pkgs.libsecret}/bin/secret-tool lookup email ${searchTerm}";
 
   enable = osConfig.custom.hm.modules.email.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       libsecret # Needed for secret-tool
@@ -37,6 +45,8 @@ in {
       };
     };
 
-    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" { inherit createPasswordLookupCmd; };
+    accounts.email.accounts = myTools.getSecret ../configs "email/emailAddresses.nix" {
+      inherit createPasswordLookupCmd;
+    };
   };
 }

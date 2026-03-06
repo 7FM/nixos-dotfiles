@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   governor = config.custom.cpuFreqGovernor;
   enableLaptopPowerSaving = config.custom.laptopPowerSaving;
-in {
+in
+{
 
   # Power management
   powerManagement = {
@@ -55,4 +61,3 @@ in {
   };
 
 }
-

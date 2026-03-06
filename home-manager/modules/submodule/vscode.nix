@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   useClangd = true;
@@ -6,7 +11,9 @@ let
 
   marketplaceExtensions = (import ./vscode-extensions.nix);
 
-  vsExtensions = with pkgs.vscode-extensions; [
+  vsExtensions =
+    with pkgs.vscode-extensions;
+    [
       # Nix language support + formatting
       jnoortheen.nix-ide
       # Nix env selector
@@ -39,38 +46,59 @@ let
       dotjoshjohnson.xml
       # Languagetool integration
       valentjn.vscode-ltex
-  ] ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace (
+    ]
+    ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       marketplaceExtensions
+      ++ lib.optionals (!useClangd && usePlatformIO) [
+        # PlatformIO depends on ms-vscode.cpptools
+        #platformio.platformio-ide
+        {
+          name = "platformio-ide";
+          publisher = "platformio";
+          version = "2.5.4";
+          sha256 = "sha256-/vBdZ6Mu1KlF+glqp5CNt9WeK1ECqfaivCnK8TisChg=";
+        }
+      ]
+    ));
+
+  extractExtensionInfo =
+    extensions:
+    builtins.concatStringsSep "\\n" (
+      map (
+        e:
+        builtins.concatStringsSep "." [
+          (builtins.getAttr "publisher" e)
+          (builtins.getAttr "name" e)
+        ]
+      ) extensions
+    );
+
+  extensionUpdaterHelperScript = (
+    pkgs.writeScript "extensionUpdaterHelperScript" (
+      import ./vscode-extension-updater.nix (extractExtensionInfo marketplaceExtensions)
+    )
+  );
+  vscodeExtensionUpdater = (
+    pkgs.writeShellScriptBin "vscodeExtensionUpdater" ''
+      ${extensionUpdaterHelperScript} > /home/${config.home.username}/nixos-dotfiles/home-manager/modules/submodule/vscode-extensions.nix
+    ''
+  );
+
+in
+{
+
+  home.packages =
+    with pkgs;
+    [
+      vscodeExtensionUpdater
+    ]
+    ++ lib.optionals useClangd [
+      # Clang tools with clangd
+      clang-tools
+    ]
     ++ lib.optionals (!useClangd && usePlatformIO) [
-      # PlatformIO depends on ms-vscode.cpptools
-      #platformio.platformio-ide
-      {
-        name = "platformio-ide";
-        publisher = "platformio";
-        version = "2.5.4";
-        sha256 = "sha256-/vBdZ6Mu1KlF+glqp5CNt9WeK1ECqfaivCnK8TisChg=";
-      }
-  ]));
-
-  extractExtensionInfo = extensions: builtins.concatStringsSep "\\n" (map (e: 
-    builtins.concatStringsSep "." [(builtins.getAttr "publisher" e) (builtins.getAttr "name" e)]
-  ) extensions);
-
-  extensionUpdaterHelperScript = (pkgs.writeScript "extensionUpdaterHelperScript" (import ./vscode-extension-updater.nix (extractExtensionInfo marketplaceExtensions)));
-  vscodeExtensionUpdater = (pkgs.writeShellScriptBin "vscodeExtensionUpdater" ''
-    ${extensionUpdaterHelperScript} > /home/${config.home.username}/nixos-dotfiles/home-manager/modules/submodule/vscode-extensions.nix
-  '');
-
-in {
-
-  home.packages = with pkgs; [
-    vscodeExtensionUpdater
-  ] ++ lib.optionals useClangd [
-    # Clang tools with clangd
-    clang-tools
-  ] ++ lib.optionals (!useClangd && usePlatformIO) [
-    platformio
-  ];
+      platformio
+    ];
 
   programs.vscode = {
     enable = true;
@@ -95,7 +123,8 @@ in {
         "telemetry.telemetryLevel" = "off";
         "chat.enabled" = false;
         "C_Cpp.updateChannel" = "Insiders";
-        "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All, AlwaysBreakTemplateDeclarations: Yes}";
+        "C_Cpp.clang_format_fallbackStyle" =
+          "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All, AlwaysBreakTemplateDeclarations: Yes}";
         #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
         "todohighlight.keywords" = [
           "TODO"
@@ -172,7 +201,7 @@ in {
           "xml"
         ];
         "workbench.editorAssociations" = {
-            "*.ipynb" = "jupyter-notebook";
+          "*.ipynb" = "jupyter-notebook";
         };
         "workbench.colorTheme" = "Default Dark+";
         "notebook.cellToolbarLocation" = {

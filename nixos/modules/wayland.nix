@@ -1,16 +1,22 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.gui == "wayland";
-in {
+in
+{
 
   config = lib.mkIf enable {
     # Enable bluetooth manager when bluetooth is enabled
     services.blueman.enable = config.hardware.bluetooth.enable;
 
     services.displayManager.gdm.wayland = true;
-    services.displayManager.sessionPackages = with pkgs; [sway];
+    services.displayManager.sessionPackages = with pkgs; [ sway ];
     services.displayManager.defaultSession = "sway";
     services.xserver.desktopManager.xterm.enable = false;
 
@@ -47,7 +53,7 @@ in {
       wlr.enable = true;
 
       extraPortals = with pkgs; [
-       xdg-desktop-portal-gtk
+        xdg-desktop-portal-gtk
       ];
 
       config.common.default = [
@@ -65,9 +71,13 @@ in {
 
     # Allow programs within sway to request real-time priorities
     security.pam.loginLimits = [
-      { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
+      {
+        domain = "@users";
+        item = "rtprio";
+        type = "-";
+        value = 1;
+      }
     ];
   };
 
 }
-

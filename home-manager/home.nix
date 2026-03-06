@@ -1,4 +1,10 @@
-{ deviceName, userName, config, pkgs, ... }:
+{
+  deviceName,
+  userName,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   imports = [

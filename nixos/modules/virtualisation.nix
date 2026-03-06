@@ -1,5 +1,10 @@
 userName:
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
@@ -9,12 +14,11 @@ let
   isIntelGpu = config.custom.gpu == "intel";
 
   enable = config.custom.enableVirtualisation;
-in {
+in
+{
   config = lib.mkIf enable {
-    boot.kernelModules = [] ++
-      (lib.optionals isAmdCpu [ "kvm-amd" ] ) ++ 
-      (lib.optionals isIntelCpu [ "kvm-intel" ] )
-    ;
+    boot.kernelModules =
+      [ ] ++ (lib.optionals isAmdCpu [ "kvm-amd" ]) ++ (lib.optionals isIntelCpu [ "kvm-intel" ]);
 
     virtualisation = {
       docker.rootless = {
@@ -26,7 +30,7 @@ in {
         host = {
           enable = true;
           enableHardening = true;
-      #    enableExtensionPack = true;
+          #    enableExtensionPack = true;
           headless = isHeadless;
         };
       };
@@ -51,4 +55,3 @@ in {
     ];
   };
 }
-

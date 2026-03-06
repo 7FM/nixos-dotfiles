@@ -1,11 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   cfg = config.custom.grub;
   enable = cfg.enable;
   useUEFI = cfg.useUEFI;
-in lib.mkIf enable {
+in
+lib.mkIf enable {
   # Use the GRUB boot loader.
   boot.loader.grub = {
     enable = true;
@@ -27,4 +33,3 @@ in lib.mkIf enable {
   # Check if other OS are installed and if so add them to the grub menu!
   boot.loader.grub.useOSProber = true;
 }
-

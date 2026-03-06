@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.smartcards;
-in {
+in
+{
   config = lib.mkIf enable {
     # Enable smartcard reader support
     services.pcscd.enable = true;
@@ -13,4 +19,3 @@ in {
     ];
   };
 }
-

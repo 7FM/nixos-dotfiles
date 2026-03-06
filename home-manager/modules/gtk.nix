@@ -1,8 +1,15 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   enable = osConfig.custom.hm.modules.gtk.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # Install compatible icon theme for Lutris, gtkwave, etc.

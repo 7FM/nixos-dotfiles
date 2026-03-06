@@ -1,22 +1,39 @@
-{ lib
-, config
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 self: super:
 let
-  buildPlugin = args: self.buildPythonPackage (args // {
-    pname = "octoprint-plugin-${args.pname}";
-    inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
-    # none of the following have tests
-    doCheck = false;
-    pyproject = true;
-    build-system = with super; [ setuptools ];
-  });
+  buildPlugin =
+    args:
+    self.buildPythonPackage (
+      args
+      // {
+        pname = "octoprint-plugin-${args.pname}";
+        inherit (args) version;
+        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
+        # none of the following have tests
+        doCheck = false;
+        pyproject = true;
+        build-system = with super; [ setuptools ];
+      }
+    );
 
-  gpiozero__1_6_2 = (super.pkgs.callPackage ./gpiozero_1.6.2.nix { inherit (self) buildPythonPackage colorzero mock pytestCheckHook pythonOlder sphinx-rtd-theme; });
+  gpiozero__1_6_2 = (
+    super.pkgs.callPackage ./gpiozero_1.6.2.nix {
+      inherit (self)
+        buildPythonPackage
+        colorzero
+        mock
+        pytestCheckHook
+        pythonOlder
+        sphinx-rtd-theme
+        ;
+    }
+  );
 in
 {
   inherit buildPlugin;
@@ -174,7 +191,11 @@ in
       rev = "${version}";
       sha256 = "sha256-lfPh7Uq/NUMo/tC3OIkr/LUsDzw1ihw38yXoRNikOO0=";
     };
-    propagatedBuildInputs = with super; [ rpi-gpio smbus2 gpiozero__1_6_2 ];
+    propagatedBuildInputs = with super; [
+      rpi-gpio
+      smbus2
+      gpiozero__1_6_2
+    ];
     meta = with lib; {
       description = "Control printer environment (Temperature control / Lights / Fans and Filament Sensor) using Raspberry Pi GPIO";
       homepage = "https://github.com/vitormhenrique/OctoPrint-Enclosure";

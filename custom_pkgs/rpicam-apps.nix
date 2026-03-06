@@ -1,23 +1,24 @@
-{ stdenv
-, fetchgit
-, lib
-, meson
-, ninja
-, libcamera
-, libpisp
-, python3
-, python3Packages
-, pkg-config
-, boost
-, cmake
-#, libav
-, ffmpeg
-, libexif
-, libjpeg
-, libtiff
-, libpng
-, libdrm
-, opencv
+{
+  stdenv,
+  fetchgit,
+  lib,
+  meson,
+  ninja,
+  libcamera,
+  libpisp,
+  python3,
+  python3Packages,
+  pkg-config,
+  boost,
+  cmake,
+  #, libav
+  ffmpeg,
+  libexif,
+  libjpeg,
+  libtiff,
+  libpng,
+  libdrm,
+  opencv,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-hVoKbvWFeramPkHuibJwUgFOPS9v588+K8828a1fNnA=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs utils/

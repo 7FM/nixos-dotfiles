@@ -1,4 +1,10 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   cfg = osConfig.custom.hm.modules;
@@ -13,10 +19,16 @@ let
   touchpad = cfg.sway.touchpad;
 
   startupPrograms = [
-    { command = "${pkgs.thunderbird}/bin/thunderbird --disable-log"; always = false; serviceName = "startup-thunderbird"; }
+    {
+      command = "${pkgs.thunderbird}/bin/thunderbird --disable-log";
+      always = false;
+      serviceName = "startup-thunderbird";
+    }
     # { command = "${pkgs.mattermost-desktop}/bin/mattermost-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland"; always = false; serviceName = "startup-mattermost"; }
     {
-      command = "${pkgs.keepassxc}/bin/keepassxc"; always = false; serviceName = "startup-keepassxc";
+      command = "${pkgs.keepassxc}/bin/keepassxc";
+      always = false;
+      serviceName = "startup-keepassxc";
       env = [
         # Fix QT systemd integration See: https://github.com/nix-community/home-manager/issues/249
         "PATH=${config.home.profileDirectory}/bin"
@@ -24,25 +36,37 @@ let
     }
     # TODO probably some timing issue... it almost never starts in tray mode!
     {
-      command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t"; always = false; serviceName = "startup-wpa_gui"; 
+      command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t";
+      always = false;
+      serviceName = "startup-wpa_gui";
       env = [
         # Fix QT systemd integration See: https://github.com/nix-community/home-manager/issues/249
         "PATH=${config.home.profileDirectory}/bin"
       ];
     }
     # this one is not installed by homemanager, but the path is identical as we use the same nixpkgs revision
-    { command = "${pkgs.blueman}/bin/blueman-applet"; always = false; serviceName = "startup-blueman-applet"; }
+    {
+      command = "${pkgs.blueman}/bin/blueman-applet";
+      always = false;
+      serviceName = "startup-blueman-applet";
+    }
 
     # Authentication agent
-    { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; always = false; serviceName = "polkit-gnome-authentication-agent"; }
-  ] ++ lib.optionals (!desktop) [
+    {
+      command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      always = false;
+      serviceName = "polkit-gnome-authentication-agent";
+    }
+  ]
+  ++ lib.optionals (!desktop) [
     # Battery level monitor
-    { 
-      command = "${pkgs.swaynag-battery}/bin/swaynag-battery"; 
-      always = false; serviceName = "swaynag-battery";
+    {
+      command = "${pkgs.swaynag-battery}/bin/swaynag-battery";
+      always = false;
+      serviceName = "swaynag-battery";
       env = [
         "PATH=${pkgs.sway}/bin"
-      ]; 
+      ];
     }
   ];
 
@@ -61,7 +85,8 @@ let
 
   mod = "Mod4";
   mod2 = if (mod == "Mod4") then "Mod1" else "Mod4";
-in {
+in
+{
   config = lib.mkIf enable {
 
     assertions = [
@@ -71,9 +96,11 @@ in {
       }
     ];
 
-    home.packages = lib.optionals hmManageSway (import ../../common/sway_extra_packages.nix { inherit pkgs; });
+    home.packages = lib.optionals hmManageSway (
+      import ../../common/sway_extra_packages.nix { inherit pkgs; }
+    );
 
-    wayland.windowManager.sway = (lib.optionalAttrs (!hmManageSway) { package = null; } ) // {
+    wayland.windowManager.sway = (lib.optionalAttrs (!hmManageSway) { package = null; }) // {
       enable = true;
 
       wrapperFeatures.gtk = true;
@@ -82,180 +109,327 @@ in {
 
       xwayland = hmManageSway;
 
-      config = let
-        # Workspace labels
-        workspaces = [
-          rec { name = "1"; modifier = name; output = disp1; }
-          rec { name = "2"; modifier = name; output = disp1; }
-          rec { name = "3"; modifier = name; output = disp1; }
-          rec { name = "4"; modifier = name; output = disp1; }
-          rec { name = "5"; modifier = name; output = disp1; }
-          rec { name = "6"; modifier = name; output = disp1; }
-          rec { name = "7"; modifier = name; output = disp1; }
-          rec { name = "8"; modifier = name; output = disp1; }
-          rec { name = "9"; modifier = name; output = disp1; }
-              { name = "10"; modifier = "0"; output = disp1; }
+      config =
+        let
+          # Workspace labels
+          workspaces = [
+            rec {
+              name = "1";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "2";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "3";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "4";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "5";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "6";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "7";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "8";
+              modifier = name;
+              output = disp1;
+            }
+            rec {
+              name = "9";
+              modifier = name;
+              output = disp1;
+            }
+            {
+              name = "10";
+              modifier = "0";
+              output = disp1;
+            }
 
-          { name = "11:A1"; modifier = "F1";   output = disp2; }
-          { name = "12:A2"; modifier = "F2";   output = disp2; }
-          { name = "13:A3"; modifier = "F3";   output = disp2; }
-          { name = "14:A4"; modifier = "F4";   output = disp2; }
-          { name = "15:A5"; modifier = "F5";   output = disp2; }
-          { name = "16:A6"; modifier = "F6";   output = disp2; }
-          { name = "17:A7"; modifier = "F7";   output = disp2; }
-          { name = "18:A8"; modifier = "F8";   output = disp2; }
-          { name = "19:A9"; modifier = "F9";   output = disp2; }
-          { name = "20:A10"; modifier = "F10"; output = disp2; }
-        ];
+            {
+              name = "11:A1";
+              modifier = "F1";
+              output = disp2;
+            }
+            {
+              name = "12:A2";
+              modifier = "F2";
+              output = disp2;
+            }
+            {
+              name = "13:A3";
+              modifier = "F3";
+              output = disp2;
+            }
+            {
+              name = "14:A4";
+              modifier = "F4";
+              output = disp2;
+            }
+            {
+              name = "15:A5";
+              modifier = "F5";
+              output = disp2;
+            }
+            {
+              name = "16:A6";
+              modifier = "F6";
+              output = disp2;
+            }
+            {
+              name = "17:A7";
+              modifier = "F7";
+              output = disp2;
+            }
+            {
+              name = "18:A8";
+              modifier = "F8";
+              output = disp2;
+            }
+            {
+              name = "19:A9";
+              modifier = "F9";
+              output = disp2;
+            }
+            {
+              name = "20:A10";
+              modifier = "F10";
+              output = disp2;
+            }
+          ];
 
-        createWsSwitchKeybindings = ws: map (
-          w: { name = "${mod}+${w.modifier}"; value = "workspace ${w.name}"; }
-        ) ws;
-        createWsMoveKeybindings = ws: map (
-          w: { name = "${mod}+Shift+${w.modifier}"; value = "move container to workspace ${w.name}"; }
-        ) ws;
+          createWsSwitchKeybindings =
+            ws:
+            map (w: {
+              name = "${mod}+${w.modifier}";
+              value = "workspace ${w.name}";
+            }) ws;
+          createWsMoveKeybindings =
+            ws:
+            map (w: {
+              name = "${mod}+Shift+${w.modifier}";
+              value = "move container to workspace ${w.name}";
+            }) ws;
 
-        createWsKeybindings = ws:
-          builtins.listToAttrs ((createWsSwitchKeybindings ws) ++ (createWsMoveKeybindings ws));
+          createWsKeybindings =
+            ws: builtins.listToAttrs ((createWsSwitchKeybindings ws) ++ (createWsMoveKeybindings ws));
 
-        createWsOutputAssigns = ws: map (
-          w: { workspace = w.name; output = w.output; }
-        ) ws;
-      in {
-        fonts = {
-          names = [ "FontAwesome5Free" ];
-          style = "";
-        };
-
-        menu = "${pkgs.wofi}/bin/wofi --show=drun --lines=5 --prompt=\"\"";
-
-        terminal = "alacritty";
-
-        modifier = mod;
-
-        keybindings = lib.mkOptionDefault ({
-          # Volume control
-          "XF86AudioRaiseVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +1%\"";
-          "XF86AudioLowerVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -1%\"";
-          "XF86AudioMute" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle\"";
-          "XF86AudioMicMute" = "exec \"${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle\"";
-          # Lock hotkey
-          "${mod}+${mod2}+l" = "exec ${lockcmd}";
-          # Screenshots
-          "Print" = "exec ${pkgs.grim}/bin/grim ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
-          # Take a screenshot of a selected region
-          "${mod}+Print" = "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
-          # Toggle the notification control center
-          "${mod}+Shift+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
-        } // (lib.optionalAttrs (!desktop) {
-          # Brightness control
-          "XF86MonBrightnessDown" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set 2%-\"";
-          "XF86MonBrightnessUp" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set +2%\"";
-        }) // createWsKeybindings workspaces);
-
-        startup = [
-          # Set QT options
-          {
-            command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
-            always = false;
-          }
-
-          # Expose the SSH-AGENT
-          {
-            command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd SSH_AUTH_SOCK";
-            always = false;
-          }
-        ]
-        # Auto-focus the first display
-        ++ lib.optional (disp1 != null) { command = "${pkgs.sway}/bin/swaymsg focus output ${disp1}"; always = false; }
-        # Clamshell mode
-        ++ lib.optional (laptopDisplay != null) { command = "\${XDG_CONFIG_HOME:-\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}"; always = true; };
-
-        assigns = let
-          thunderbirdCond = [ { app_id = "^thunderbird$"; } ];
-          mattermostCond1 = [ { class = "^Mattermost$"; } ];
-          mattermostCond2 = [ { title = "^Mattermost Desktop App$"; } ];
-          keepassCond = [ { app_id = "^org.keepassxc.KeePassXC$"; title = "^(?!KeePassXC - Browser Access Request$)(?!Unlock Database - KeePassXC$)"; } ];
-        in lib.optionalAttrs (disp1 != disp2) {
-          "18:A8" = thunderbirdCond;
-          "19:A9" = mattermostCond1 ++ mattermostCond2;
-          "20:A10" = keepassCond;
-        } // lib.optionalAttrs (disp1 == disp2) {
-          "8" = thunderbirdCond;
-          "9" = mattermostCond1 ++ mattermostCond2;
-          "10" = keepassCond;
-        };
-
-        bars = []; # Disable swaybar
-
-        # Input settings
-        input = lib.optionalAttrs (touchpad != null) {
-          "${touchpad}" = {
-            "dwt" = "enabled";
-            "tap" = "enabled";
-            "natural_scroll" = "enabled";
-            "middle_emulation" = "enabled";
+          createWsOutputAssigns =
+            ws:
+            map (w: {
+              workspace = w.name;
+              output = w.output;
+            }) ws;
+        in
+        {
+          fonts = {
+            names = [ "FontAwesome5Free" ];
+            style = "";
           };
-        };
 
-        # Output settings
-        output = let 
-          createDispCfg = disp: res: pos: {
-            "${disp}" = lib.mkIf (res != null) {
-              "res" = res;
-            } // lib.mkIf (pos != null) {
-              "pos" = pos;
+          menu = "${pkgs.wofi}/bin/wofi --show=drun --lines=5 --prompt=\"\"";
+
+          terminal = "alacritty";
+
+          modifier = mod;
+
+          keybindings = lib.mkOptionDefault (
+            {
+              # Volume control
+              "XF86AudioRaiseVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +1%\"";
+              "XF86AudioLowerVolume" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -1%\"";
+              "XF86AudioMute" = "exec \"${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle\"";
+              "XF86AudioMicMute" =
+                "exec \"${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle\"";
+              # Lock hotkey
+              "${mod}+${mod2}+l" = "exec ${lockcmd}";
+              # Screenshots
+              "Print" = "exec ${pkgs.grim}/bin/grim ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
+              # Take a screenshot of a selected region
+              "${mod}+Print" =
+                "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png";
+              # Toggle the notification control center
+              "${mod}+Shift+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+            }
+            // (lib.optionalAttrs (!desktop) {
+              # Brightness control
+              "XF86MonBrightnessDown" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set 2%-\"";
+              "XF86MonBrightnessUp" = "exec \"${pkgs.brightnessctl}/bin/brightnessctl set +2%\"";
+            })
+            // createWsKeybindings workspaces
+          );
+
+          startup = [
+            # Set QT options
+            {
+              command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
+              always = false;
+            }
+
+            # Expose the SSH-AGENT
+            {
+              command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd SSH_AUTH_SOCK";
+              always = false;
+            }
+          ]
+          # Auto-focus the first display
+          ++ lib.optional (disp1 != null) {
+            command = "${pkgs.sway}/bin/swaymsg focus output ${disp1}";
+            always = false;
+          }
+          # Clamshell mode
+          ++ lib.optional (laptopDisplay != null) {
+            command = "\${XDG_CONFIG_HOME:-\$HOME/.config}/sway/scripts/clamshell_mode_fix.sh ${laptopDisplay}";
+            always = true;
+          };
+
+          assigns =
+            let
+              thunderbirdCond = [ { app_id = "^thunderbird$"; } ];
+              mattermostCond1 = [ { class = "^Mattermost$"; } ];
+              mattermostCond2 = [ { title = "^Mattermost Desktop App$"; } ];
+              keepassCond = [
+                {
+                  app_id = "^org.keepassxc.KeePassXC$";
+                  title = "^(?!KeePassXC - Browser Access Request$)(?!Unlock Database - KeePassXC$)";
+                }
+              ];
+            in
+            lib.optionalAttrs (disp1 != disp2) {
+              "18:A8" = thunderbirdCond;
+              "19:A9" = mattermostCond1 ++ mattermostCond2;
+              "20:A10" = keepassCond;
+            }
+            // lib.optionalAttrs (disp1 == disp2) {
+              "8" = thunderbirdCond;
+              "9" = mattermostCond1 ++ mattermostCond2;
+              "10" = keepassCond;
+            };
+
+          bars = [ ]; # Disable swaybar
+
+          # Input settings
+          input = lib.optionalAttrs (touchpad != null) {
+            "${touchpad}" = {
+              "dwt" = "enabled";
+              "tap" = "enabled";
+              "natural_scroll" = "enabled";
+              "middle_emulation" = "enabled";
             };
           };
-          disp1_cfg = createDispCfg disp1 disp1_res disp1_pos;
-          disp2_cfg = createDispCfg disp2 disp2_res disp2_pos;
-        in {
-        # Does not work, dont know why
-        #  "*" = {
-        #    bg = "${XDG_CONFIG_HOME:-$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit";
-        #  };
-        } // (disp2_cfg // disp1_cfg);
 
-        # Default assign workspaces to outputs
-        workspaceAutoBackAndForth = true;
+          # Output settings
+          output =
+            let
+              createDispCfg = disp: res: pos: {
+                "${disp}" =
+                  lib.mkIf (res != null) {
+                    "res" = res;
+                  }
+                  // lib.mkIf (pos != null) {
+                    "pos" = pos;
+                  };
+              };
+              disp1_cfg = createDispCfg disp1 disp1_res disp1_pos;
+              disp2_cfg = createDispCfg disp2 disp2_res disp2_pos;
+            in
+            {
+              # Does not work, dont know why
+              #  "*" = {
+              #    bg = "${XDG_CONFIG_HOME:-$HOME/.config}/sway/backgrounds/cheatsheet.jpg fit";
+              #  };
+            }
+            // (disp2_cfg // disp1_cfg);
 
-        workspaceOutputAssign = if desktop then
-          (createWsOutputAssigns workspaces)
-        else [];
+          # Default assign workspaces to outputs
+          workspaceAutoBackAndForth = true;
 
-        gaps = {
-          inner = 2;
-          smartGaps = true;
-          smartBorders = "on";
+          workspaceOutputAssign = if desktop then (createWsOutputAssigns workspaces) else [ ];
+
+          gaps = {
+            inner = 2;
+            smartGaps = true;
+            smartBorders = "on";
+          };
+
+          floating = {
+            criteria = [
+              {
+                title = "^Steam - News";
+                class = "^Steam$";
+              }
+              {
+                title = "^Friends List$";
+                class = "^Steam$";
+              }
+              { app_id = "^pavucontrol$"; }
+              { app_id = "^nm-connection-editor$"; }
+              { title = "^Print$"; }
+              { title = "^wpa_gui$"; }
+              # Firefox sharing indicator
+              {
+                app_id = "^firefox$";
+                title = "^Firefox — Sharing Indicator$";
+              }
+              # File dialogs
+              { app_id = "^xdg-desktop-portal-gtk$"; }
+              # Keepass browser access requests
+              {
+                app_id = "^org.keepassxc.KeePassXC$";
+                title = "^KeePassXC - Browser Access Request$";
+              }
+              # Cura dialogs
+              {
+                app_id = "^com\/.https:\/\/ultimaker.python3$";
+                title = "^Multiply Selected Model$";
+              }
+              # Zoom fixes
+              {
+                title = "^.zoom$";
+                app_id = "$";
+              }
+              {
+                title = "^zoom$";
+                app_id = "$";
+              }
+              {
+                title = "^Settings$";
+                app_id = "$";
+              }
+              {
+                title = "^Polls$";
+                app_id = "$";
+              }
+              {
+                title = "^as_toolbar$";
+                app_id = "$";
+              }
+              {
+                title = "^Select a window or an application that you want to share$";
+                app_id = "$";
+              }
+            ];
+          };
+
         };
-
-        floating = {
-          criteria = [
-            { title = "^Steam - News"; class = "^Steam$"; }
-            { title = "^Friends List$"; class = "^Steam$"; }
-            { app_id = "^pavucontrol$"; }
-            { app_id = "^nm-connection-editor$"; }
-            { title = "^Print$"; }
-            { title = "^wpa_gui$"; }
-            # Firefox sharing indicator
-            { app_id = "^firefox$"; title = "^Firefox — Sharing Indicator$"; }
-            # File dialogs
-            { app_id = "^xdg-desktop-portal-gtk$"; }
-            # Keepass browser access requests 
-            { app_id = "^org.keepassxc.KeePassXC$"; title = "^KeePassXC - Browser Access Request$"; }
-            # Cura dialogs
-            { app_id = "^com\/.https:\/\/ultimaker.python3$"; title = "^Multiply Selected Model$"; }
-            # Zoom fixes
-            { title = "^.zoom$"; app_id = "$"; }
-            { title = "^zoom$"; app_id = "$"; }
-            { title = "^Settings$"; app_id = "$"; }
-            { title = "^Polls$"; app_id = "$"; }
-            { title = "^as_toolbar$"; app_id = "$"; }
-            { title = "^Select a window or an application that you want to share$"; app_id = "$"; }
-          ];
-        };
-
-      };
 
       extraConfig = ''
         bindsym ${mod}+ctrl+1 [workspace="^1$"] move workspace to output current; workspace number 1
@@ -288,40 +462,54 @@ in {
 
         # restarts some user services to make sure they have the correct environment variables
         exec "systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr; systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr"
-      '' + lib.optionalString (laptopDisplay != null) ''
+      ''
+      + lib.optionalString (laptopDisplay != null) ''
         bindswitch --reload --locked lid:on exec '${pkgs.brightnessctl}/bin/brightnessctl -s && ${pkgs.sway}/bin/swaymsg "output ${laptopDisplay} disable"'
         bindswitch --reload --locked lid:off exec '${pkgs.sway}/bin/swaymsg "output ${laptopDisplay} enable" && ${pkgs.brightnessctl}/bin/brightnessctl -r'
-      '' + ''
+      ''
+      + ''
         # output * bg ${../configs/sway/backgrounds/cheatsheet.jpg} fit
         # credits for the image go to: https://www.youtube.com/watch?v=Lqz5ZtiCmYk
         output * bg ${../configs/sway/backgrounds/die_shot.jpg} fit
-      '' + lib.optionalString (cfg.sway.extraConfig != null) cfg.sway.extraConfig;
+      ''
+      + lib.optionalString (cfg.sway.extraConfig != null) cfg.sway.extraConfig;
     };
 
     # Startup programs
-    systemd.user.services = let
-      createStartupServices = progs: builtins.listToAttrs (map (
-        p: {
-          "name" = "${p.serviceName}";
-          "value" = {
-            Unit = rec {
-              Requires = [ "tray.target" ];
-              After = [ "graphical-session.target" "tray.target" ];
-              PartOf = [ "graphical-session.target" ];
-            };
-            Service = {
-              Type = "simple";
-              ExecStart = p.command;
-            } // (lib.optionalAttrs ((p.precommand or "") != "") {
-              ExecStartPre = p.precommand;
-            }) // (lib.optionalAttrs ((builtins.length (p.env or [])) != 0) {
-              Environment = p.env;
-            });
-            Install = { WantedBy = [ "graphical-session.target" ]; };
-          };
-        }
-      ) progs);
-    in createStartupServices startupPrograms;
+    systemd.user.services =
+      let
+        createStartupServices =
+          progs:
+          builtins.listToAttrs (
+            map (p: {
+              "name" = "${p.serviceName}";
+              "value" = {
+                Unit = rec {
+                  Requires = [ "tray.target" ];
+                  After = [
+                    "graphical-session.target"
+                    "tray.target"
+                  ];
+                  PartOf = [ "graphical-session.target" ];
+                };
+                Service = {
+                  Type = "simple";
+                  ExecStart = p.command;
+                }
+                // (lib.optionalAttrs ((p.precommand or "") != "") {
+                  ExecStartPre = p.precommand;
+                })
+                // (lib.optionalAttrs ((builtins.length (p.env or [ ])) != 0) {
+                  Environment = p.env;
+                });
+                Install = {
+                  WantedBy = [ "graphical-session.target" ];
+                };
+              };
+            }) progs
+          );
+      in
+      createStartupServices startupPrograms;
 
     # Clipboard manager
     services.copyq.enable = true;
@@ -332,11 +520,17 @@ in {
     services.swayidle = {
       enable = true;
       events = [
-        { event = "before-sleep"; command = lockcmd; }
+        {
+          event = "before-sleep";
+          command = lockcmd;
+        }
       ];
 
       timeouts = [
-        { timeout = lockTimeout; command = lockcmd; }
+        {
+          timeout = lockTimeout;
+          command = lockcmd;
+        }
         {
           timeout = disableDisplayTimeout;
           command = disableDisplayCmdRaw;

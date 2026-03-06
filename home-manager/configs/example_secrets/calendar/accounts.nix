@@ -1,4 +1,8 @@
-{ khalConfig, createCalendarAcc, createPasswordLookupCmd }:
+{
+  khalConfig,
+  createCalendarAcc,
+  createPasswordLookupCmd,
+}:
 
 let
   calDavServer = urlSuffix: rec {
@@ -8,9 +12,17 @@ let
     type = "caldav"; # "http", "google_calendar"
   };
 
-in {
-  "Private" = (createCalendarAcc "Private" (ownCalDavServer "MyCalDavCalendarID") (khalConfig { color = "magenta"; })) // {
-    primary = true;
-  };
-  "Bdays" = createCalendarAcc "Bdays" (ownCalDavServer "MyCalDavBDayCalendarID") (khalConfig { color = "dark green"; priority = 20; });
+in
+{
+  "Private" =
+    (createCalendarAcc "Private" (ownCalDavServer "MyCalDavCalendarID") (khalConfig {
+      color = "magenta";
+    }))
+    // {
+      primary = true;
+    };
+  "Bdays" = createCalendarAcc "Bdays" (ownCalDavServer "MyCalDavBDayCalendarID") (khalConfig {
+    color = "dark green";
+    priority = 20;
+  });
 }

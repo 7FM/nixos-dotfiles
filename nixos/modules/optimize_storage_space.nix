@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
-in {
+in
+{
 
   # Nix settings
   nix = {
@@ -34,4 +40,3 @@ in {
   '';
 
 }
-

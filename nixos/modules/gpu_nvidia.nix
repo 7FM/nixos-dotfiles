@@ -1,9 +1,13 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.gpu == "nvidia";
-
 
   # This creates a new 'nvidia-offload' program that runs the application passed to it on the GPU
   # As per https://nixos.wiki/wiki/Nvidia
@@ -14,7 +18,8 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
-in {
+in
+{
 
   config = lib.mkIf enable {
     # nvidia gpu specific settings
@@ -31,4 +36,3 @@ in {
   };
 
 }
-

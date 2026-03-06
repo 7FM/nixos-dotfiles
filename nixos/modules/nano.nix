@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   enable = config.custom.nano_conf.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     programs.nano = {
       nanorc = ''
@@ -14,4 +20,3 @@ in {
     };
   };
 }
-

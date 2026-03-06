@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.cpu == "intel";
-in {
+in
+{
 
   config = lib.mkIf enable {
     # Patch some issues via microcode
@@ -19,4 +25,3 @@ in {
     ];
   };
 }
-

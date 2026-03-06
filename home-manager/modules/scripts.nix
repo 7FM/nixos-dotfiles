@@ -1,7 +1,13 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
-  enable = true; #TODO create option?
+  enable = true; # TODO create option?
 
   myTools = pkgs.myTools { inherit osConfig; };
   identity = myTools.getSecret ../configs "git/identity.nix";
@@ -94,55 +100,57 @@ let
     '';
   };
 
-  run_with_creater = prot: pkgs.writeShellApplication {
-    name = "run_with_${prot}_port";
-    runtimeInputs = with pkgs; [
-      iptables
-      util-linux
-    ];
-    text = ''
-      # Source: https://discourse.nixos.org/t/how-to-temporarily-open-a-tcp-port-in-nixos/12306/2
-      # Usage: sudo run-with-port <port> <cmd> <args...>
+  run_with_creater =
+    prot:
+    pkgs.writeShellApplication {
+      name = "run_with_${prot}_port";
+      runtimeInputs = with pkgs; [
+        iptables
+        util-linux
+      ];
+      text = ''
+        # Source: https://discourse.nixos.org/t/how-to-temporarily-open-a-tcp-port-in-nixos/12306/2
+        # Usage: sudo run-with-port <port> <cmd> <args...>
 
-      set -ueo pipefail
+        set -ueo pipefail
 
-      open-port() {
-        local port=$1
-        iptables -I INPUT -p ${prot} --dport "$port" -j ACCEPT
-        ip6tables -I INPUT -p ${prot} --dport "$port" -j ACCEPT
-      }
+        open-port() {
+          local port=$1
+          iptables -I INPUT -p ${prot} --dport "$port" -j ACCEPT
+          ip6tables -I INPUT -p ${prot} --dport "$port" -j ACCEPT
+        }
 
-      close-port() {
-        local port=''\${1:-0}
-        iptables -D INPUT -p ${prot} --dport "$port" -j ACCEPT
-        ip6tables -D INPUT -p ${prot} --dport "$port" -j ACCEPT
-      }
+        close-port() {
+          local port=''\${1:-0}
+          iptables -D INPUT -p ${prot} --dport "$port" -j ACCEPT
+          ip6tables -D INPUT -p ${prot} --dport "$port" -j ACCEPT
+        }
 
 
-      if [[ -z "$1" ]]; then
-        echo "Port not given" >&2
-        exit 1
-      fi
+        if [[ -z "$1" ]]; then
+          echo "Port not given" >&2
+          exit 1
+        fi
 
-      PORT=$1
-      shift;  # Drop port argument
+        PORT=$1
+        shift;  # Drop port argument
 
-      if [[ 0 -eq $# ]]; then
-        echo "No command given" >&2
-        exit 1
-      fi
+        if [[ 0 -eq $# ]]; then
+          echo "No command given" >&2
+          exit 1
+        fi
 
-      open-port "$PORT"
+        open-port "$PORT"
 
-      # Ensure port closes if error occurs.
-      trap 'close-port $PORT' EXIT
+        # Ensure port closes if error occurs.
+        trap 'close-port $PORT' EXIT
 
-      # Run the command as user, not root.
-      runuser -u "$SUDO_USER" -- "$@"
+        # Run the command as user, not root.
+        runuser -u "$SUDO_USER" -- "$@"
 
-      # Trap will close port.
-    '';
-  };
+        # Trap will close port.
+      '';
+    };
 
   run_with_tcp_port = run_with_creater "tcp";
   run_with_udp_port = run_with_creater "udp";
@@ -198,17 +206,25 @@ let
     run_with_tcp_port
     run_with_udp_port
     wait_for_process
-  ] ++ lib.optionals ((osConfig.custom.gui == "hm-wayland") || (osConfig.custom.gui == "wayland")) [
+  ]
+  ++ lib.optionals ((osConfig.custom.gui == "hm-wayland") || (osConfig.custom.gui == "wayland")) [
     sway-screenshare
-  ] ++ lib.optionals osConfig.custom.hm.modules.ssh.enable [
+  ]
+  ++ lib.optionals osConfig.custom.hm.modules.ssh.enable [
     esa_gitlab_shuttle
-  ] ++ lib.optionals osConfig.custom.hm.collections.office.enable [
+  ]
+  ++ lib.optionals osConfig.custom.hm.collections.office.enable [
     uni_vpn
-  ] ++ lib.optionals (osConfig.custom.hm.modules.git.enable && osConfig.custom.hm.modules.git.identity_scripts.enable) [
-    git_set_author
-    git_fix_author
-  ];
-in {
+  ]
+  ++
+    lib.optionals
+      (osConfig.custom.hm.modules.git.enable && osConfig.custom.hm.modules.git.identity_scripts.enable)
+      [
+        git_set_author
+        git_fix_author
+      ];
+in
+{
   config = lib.mkIf enable {
     home.packages = scripts;
   };

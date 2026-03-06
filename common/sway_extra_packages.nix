@@ -1,6 +1,7 @@
 { pkgs }:
 
-with pkgs; [
+with pkgs;
+[
   qt5.qtwayland
 
   alacritty # gpu accelerated terminal emulator

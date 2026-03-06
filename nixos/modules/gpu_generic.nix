@@ -1,9 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.gpu == "generic";
-in {
-  config = lib.mkIf enable {};
+in
+{
+  config = lib.mkIf enable { };
 }
-

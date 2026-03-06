@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 # Window system settings:
 let
@@ -10,7 +15,8 @@ let
   backendUsePulseaudio = cfg.backend == "pulseaudio";
   backendUsePipewire = cfg.backend == "pipewire";
   noBackend = cfg.backend == "none";
-in {
+in
+{
 
   config = lib.mkIf (!runHeadless) {
     # Common sound settings

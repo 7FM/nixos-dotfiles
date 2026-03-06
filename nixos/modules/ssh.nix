@@ -1,5 +1,10 @@
 userName:
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   runHeadless = config.custom.gui == "headless";
@@ -10,7 +15,8 @@ let
   ports = if lib.types.path.check _ports then (import _ports) else _ports;
   myTools = pkgs.myTools { osConfig = config; };
   authorizedKeys = cfg.authorizedKeys;
-in {
+in
+{
   options.custom.sshServer = with lib; {
     enable = mkOption {
       type = types.bool;
@@ -22,7 +28,9 @@ in {
     };
     ports = mkOption {
       type = types.either types.path (types.nonEmptyListOf types.port);
-      default = myTools.collectPorts ({ssh = [];} // ((myTools.getSecret ../. "usedPorts.nix") myTools)).ssh;
+      default =
+        myTools.collectPorts
+          ({ ssh = [ ]; } // ((myTools.getSecret ../. "usedPorts.nix") myTools)).ssh;
       description = ''
         Specifies the ports on which the ssh server should listen!
       '';

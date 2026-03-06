@@ -1,8 +1,13 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let 
+let
   bookmarks = [
-    { 
+    {
       hotkey = "D";
       path = "${config.home.homeDirectory}/Downloads";
     }
@@ -21,11 +26,19 @@ let
   ];
 
   toGtkBookmarks = bList: map (b: "file://${b.path}") bList;
-  toNNNBookmarks = bList: builtins.listToAttrs (map (b: { name = b.hotkey; value = b.path; }) bList);
-in {
+  toNNNBookmarks =
+    bList:
+    builtins.listToAttrs (
+      map (b: {
+        name = b.hotkey;
+        value = b.path;
+      }) bList
+    );
+in
+{
   gtk.gtk3.bookmarks = toGtkBookmarks bookmarks;
 
-  # NNN: CLI file browser 
+  # NNN: CLI file browser
   programs.nnn = {
     enable = true;
     package = pkgs.nnn.override { withNerdIcons = true; };
@@ -41,25 +54,25 @@ in {
 
     plugins = {
       mappings = {
-          v = "imgview";
-          # q = "mocq";
-          e = "suedit";
-          c = "rsynccp";
-          h = "hexview";
+        v = "imgview";
+        # q = "mocq";
+        e = "suedit";
+        c = "rsynccp";
+        h = "hexview";
       };
 
-  #      src = (pkgs.fetchFromGitHub {
-  #        owner = "jarun";
-  #        repo = "nnn";
-  #        rev = "v4.3";
-  #        sha256 = "sha256-Hpc8YaJeAzJoEi7aJ6DntH2VLkoR6ToP6tPYn3llR7k=";
-  #      }) + "/plugins";
+      #      src = (pkgs.fetchFromGitHub {
+      #        owner = "jarun";
+      #        repo = "nnn";
+      #        rev = "v4.3";
+      #        sha256 = "sha256-Hpc8YaJeAzJoEi7aJ6DntH2VLkoR6ToP6tPYn3llR7k=";
+      #      }) + "/plugins";
       src = (pkgs.nnn.src) + "/plugins";
     };
   };
 
   xdg.desktopEntries.nnn = {
-    type ="Application";
+    type = "Application";
     name = "nnn";
     comment = "Terminal file manager";
     exec = "nnn %f";
@@ -82,7 +95,12 @@ in {
       "application/x-bzip"
       "application/x-bzip2"
     ];
-    categories = [" System" "FileTools" "FileManager" "ConsoleOnly"];
+    categories = [
+      " System"
+      "FileTools"
+      "FileManager"
+      "ConsoleOnly"
+    ];
     # Keywords=File;Manager;Management;Explorer;Launcher
   };
 

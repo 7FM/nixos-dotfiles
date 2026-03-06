@@ -1,11 +1,17 @@
 forceNoSecrets: deviceName: userName:
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 # Window system settings:
 let
   runHeadless = config.custom.gui == "headless";
   myTools = pkgs.myTools { osConfig = config; };
-in {
+in
+{
 
   custom.useDummySecrets = if forceNoSecrets then lib.mkForce true else lib.mkDefault true;
 
@@ -19,9 +25,9 @@ in {
 
   boot.kernel.sysctl = {
     # Performance settings
-#    "net.core.rmem_max" = 512 * 1024;
+    #    "net.core.rmem_max" = 512 * 1024;
     "net.core.rmem_max" = 25 * 1024 * 1024;
-#    "net.core.rmem_default" = 512 * 1024;
+    #    "net.core.rmem_default" = 512 * 1024;
     "net.core.rmem_default" = 25 * 1024 * 1024;
     # Source: https://mdleom.com/blog/2020/03/04/caddy-nixos-part-2/
     # TCP Fast Open (TFO)
@@ -84,7 +90,7 @@ in {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-  #  promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+    #  promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
     interactiveShellInit = ''
       bindkey "$terminfo[kRIT5]" forward-word 2>/dev/null
       bindkey "$terminfo[kLFT5]" backward-word 2>/dev/null
@@ -92,7 +98,7 @@ in {
     '';
   };
 
-  environment.shells = [ pkgs.zsh ];  
+  environment.shells = [ pkgs.zsh ];
   users.defaultUserShell = pkgs.zsh;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -104,10 +110,11 @@ in {
   users.users."${userName}" = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ 
+    extraGroups = [
       "wheel" # Enable ‘sudo’ for the user.
       "networkmanager" # Allow changing the network settings
-      "audio" "video" # For sound settings
+      "audio"
+      "video" # For sound settings
       "scanner" # For scanners
       "lp" # For scanners
       "wpa_supplicant" # To control wpa_supplicant through wpa_gui or wpa_cli
@@ -128,4 +135,3 @@ in {
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05"; # Did you read the comment?
 }
-

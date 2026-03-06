@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, lxml
-, pythonOlder
-, black
-, isort
-, responses
-, tox
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  lxml,
+  pythonOlder,
+  black,
+  isort,
+  responses,
+  tox,
+  setuptools,
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 # See: https://nix-community.github.io/home-manager/options.html#opt-programs.ssh.matchBlocks
 # Example is also taken from there!

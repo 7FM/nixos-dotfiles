@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.gui == "x11";
-in {
+in
+{
 
   config = lib.mkIf enable {
 
@@ -47,4 +53,3 @@ in {
   };
 
 }
-

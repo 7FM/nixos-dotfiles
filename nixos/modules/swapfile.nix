@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
@@ -7,7 +12,8 @@ let
   useSwapFile = cfg.enable;
   swapFileSize = cfg.size;
   swapFilePath = cfg.path;
-in {
+in
+{
 
   options.custom.swapfile = with lib; {
     enable = mkOption {
@@ -46,4 +52,3 @@ in {
     ];
   };
 }
-

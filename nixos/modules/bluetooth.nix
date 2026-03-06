@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.bluetooth;
-in {
+in
+{
 
   config = lib.mkIf enable {
     hardware.bluetooth = {
@@ -15,4 +21,3 @@ in {
   };
 
 }
-

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
@@ -7,7 +12,8 @@ let
   cfg = config.custom.security.usbguard;
   fixedRules = cfg.fixedRules;
   enforce = cfg.enforceRules || fixedRules != null;
-in {
+in
+{
 
   options.custom.security = with lib; {
     gnupg = {
@@ -74,15 +80,18 @@ in {
     # Emergency mode requires root -> not usable anyway
     systemd.enableEmergencyMode = false;
 
-    warnings = if (config.services.usbguard.implicitPolicyTarget != "block") then [
-      ''
-        The fallback policy of usbguard should be set to block! Else no additional security is gained!
-        HOWEVER, ensure that usbguard is setup with a policy before setting the fallback to block,
-        else there might be no way to interact with the system!
-      ''
-    ] else [ ];
+    warnings =
+      if (config.services.usbguard.implicitPolicyTarget != "block") then
+        [
+          ''
+            The fallback policy of usbguard should be set to block! Else no additional security is gained!
+            HOWEVER, ensure that usbguard is setup with a policy before setting the fallback to block,
+            else there might be no way to interact with the system!
+          ''
+        ]
+      else
+        [ ];
 
   };
 
 }
-

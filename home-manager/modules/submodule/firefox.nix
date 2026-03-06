@@ -1,9 +1,16 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   userName = config.home.username;
   myTools = pkgs.myTools { inherit osConfig; };
-in {
+in
+{
   # home.packages = with pkgs; [ vdhcoapp ];
 
   programs.firefox = {
@@ -11,38 +18,41 @@ in {
     package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
       # nativeMessagingHosts = [ "${pkgs.vdhcoapp}/host" ];
       extraPolicies = {
-        ExtensionSettings = {};
+        ExtensionSettings = { };
       };
     };
 
     profiles = {
       "${userName}" = {
-        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; let
-          #video-downloaderhelper = buildFirefoxXpiAddon rec {
-          #  pname = "video-downloadhelper";
-          #  version = "7.6.6";
-          #  addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-          #  url = "https://addons.mozilla.org/firefox/downloads/file/4040817/video_downloadhelper-${version}.xpi";
-          #  sha256 = "sha256-RgtkNIpmFsh73q2F9iJqbyLez8WzNFjZV3d3t2JDjIo=";
-          #  meta = with lib;
-          #  {
-          #    description = "The easy way to download and convert Web videos from hundreds of YouTube-like sites.";
-          #    license = licenses.unfree;
-          #    platforms = platforms.all;
-          #  };
-          #};
-        in [
-          darkreader
-          keepassxc-browser
-          ghostery
-          localcdn
-          umatrix
-          ublock-origin
-          #video-downloaderhelper
+        extensions.packages =
+          with pkgs.nur.repos.rycee.firefox-addons;
+          let
+            #video-downloaderhelper = buildFirefoxXpiAddon rec {
+            #  pname = "video-downloadhelper";
+            #  version = "7.6.6";
+            #  addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
+            #  url = "https://addons.mozilla.org/firefox/downloads/file/4040817/video_downloadhelper-${version}.xpi";
+            #  sha256 = "sha256-RgtkNIpmFsh73q2F9iJqbyLez8WzNFjZV3d3t2JDjIo=";
+            #  meta = with lib;
+            #  {
+            #    description = "The easy way to download and convert Web videos from hundreds of YouTube-like sites.";
+            #    license = licenses.unfree;
+            #    platforms = platforms.all;
+            #  };
+            #};
+          in
+          [
+            darkreader
+            keepassxc-browser
+            ghostery
+            localcdn
+            umatrix
+            ublock-origin
+            #video-downloaderhelper
 
-          grammarly
-          languagetool
-        ];
+            grammarly
+            languagetool
+          ];
 
         bookmarks = {
           force = true;
@@ -66,7 +76,7 @@ in {
 
           "extensions.update.autoUpdateDefault" = false;
           "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
-          "doh-rollout.doneFirstRun" =  true;
+          "doh-rollout.doneFirstRun" = true;
           "doh-rollout.home-region" = "GB";
           "distribution.searchplugins.defaultLocale" = "en-GB";
           "general.useragent.locale" = "en-GB";

@@ -9,4 +9,3 @@
   # };
   # "free.wifi" = {};             # Public wireless network
 }
-

@@ -1,8 +1,15 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   enable = osConfig.custom.hm.collections.media.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # media playback tools
@@ -13,9 +20,19 @@ in {
 
     # use vlc by default for the following mime types
     xdg.mimeApps.defaultApplications = {
-      "image/svg+xml" = [ "firefox.desktop" "nsxiv.desktop" "gimp.desktop" ];
-      "image/png" = [ "nsxiv.desktop" "gimp.desktop" ];
-      "image/jpeg" = [ "nsxiv.desktop" "gimp.desktop" ];
+      "image/svg+xml" = [
+        "firefox.desktop"
+        "nsxiv.desktop"
+        "gimp.desktop"
+      ];
+      "image/png" = [
+        "nsxiv.desktop"
+        "gimp.desktop"
+      ];
+      "image/jpeg" = [
+        "nsxiv.desktop"
+        "gimp.desktop"
+      ];
       "application/ogg" = [ "vlc.desktop" ];
       "application/x-ogg" = [ "vlc.desktop" ];
       "audio/ogg" = [ "vlc.desktop" ];

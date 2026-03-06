@@ -1,8 +1,15 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   enable = osConfig.custom.hm.collections.gaming.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     home.packages = with pkgs; [
       # Gaming

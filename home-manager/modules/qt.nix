@@ -1,8 +1,15 @@
-{ config, pkgs, lib, osConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   enable = osConfig.custom.hm.modules.qt.enable;
-in {
+in
+{
   config = lib.mkIf enable {
     qt = {
       enable = true;

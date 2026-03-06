@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx-rtd-theme
-, sphinxHook
-, colorzero
-, mock
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx-rtd-theme,
+  sphinxHook,
+  colorzero,
+  mock,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

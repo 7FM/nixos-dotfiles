@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   myTools = pkgs.myTools { osConfig = config; };
   enable = config.custom.gpu == "amd";
-in {
+in
+{
 
   config = lib.mkIf enable {
     boot.initrd.kernelModules = [ "amdgpu" ];
@@ -16,4 +22,3 @@ in {
   };
 
 }
-

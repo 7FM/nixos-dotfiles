@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let 
+let
   myTools = pkgs.myTools { osConfig = config; };
-in {
+in
+{
 
   # Basic hardware settings
   hardware.graphics = {
@@ -12,4 +18,3 @@ in {
   };
 
 }
-

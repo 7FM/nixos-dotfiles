@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -14,7 +19,8 @@ let
   keyboardLayout = cfg.keyboardLayout;
   consoleFont = cfg.consoleFont;
 
-in {
+in
+{
   # Declare available module options
   options.custom.internationalization = {
     timeZone = mkOption {
@@ -104,4 +110,3 @@ in {
 
   };
 }
-
