@@ -7,8 +7,8 @@ let
   marketplaceExtensions = (import ./vscode-extensions.nix);
 
   vsExtensions = with pkgs.vscode-extensions; [
-      # Nix language support
-      bbenoist.nix
+      # Nix language support + formatting
+      jnoortheen.nix-ide
       # Nix env selector
       arrterian.nix-env-selector
 
@@ -93,6 +93,7 @@ in {
         "telemetry.enableTelemetry" = false;
         "telemetry.enableCrashReporter" = false;
         "telemetry.telemetryLevel" = "off";
+        "chat.enabled" = false;
         "C_Cpp.updateChannel" = "Insiders";
         "C_Cpp.clang_format_fallbackStyle" = "{BasedOnStyle: LLVM, UseTab: Never, IndentCaseLabels: true, NamespaceIndentation: All, AlwaysBreakTemplateDeclarations: Yes}";
         #"clangd.path" = "${pkgs.clang-tools}/bin/clangd";
@@ -177,6 +178,19 @@ in {
         "notebook.cellToolbarLocation" = {
           "default" = "right";
           "jupyter-notebook" = "left";
+        };
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "${pkgs.nil}/bin/nil";
+        "nix.serverSettings" = {
+          "nil" = {
+            "formatting" = {
+              "command" = [ "${pkgs.nixfmt-rfc-style}/bin/nixfmt" ];
+            };
+          };
+        };
+        "[nix]" = {
+          "editor.defaultFormatter" = "jnoortheen.nix-ide";
+          "editor.formatOnSave" = true;
         };
         "extensions.autoUpdate" = false;
         "extensions.ignoreRecommendations" = true;
