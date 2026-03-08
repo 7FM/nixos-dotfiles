@@ -278,7 +278,7 @@ in
                 ];
               };
               "backlight/slider" = {
-                "min" = 0;
+                "min" = 1;
                 "max" = 100;
                 "orientation" = "horizontal";
                 "device" = "intel_backlight";
