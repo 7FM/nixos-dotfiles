@@ -12,8 +12,27 @@ let
 
   myOpencloudSecrets = (myTools.getSecret ../../nixos "opencloud.nix");
   myLetsEncryptSecrets = (myTools.getSecret ../../nixos "letsencrypt.nix");
-  myRadicaleSecrets = (myTools.getSecret ../../nixos "radicale.nix");
   myMiscSecrets = (myTools.getSecret ../../nixos "misc.nix");
+
+  botSecurityOptions = {
+    ProtectHome = true;
+    PrivateUsers = true;
+    PrivateDevices = true;
+    ProtectClock = true;
+    ProtectHostname = true;
+    ProtectProc = "invisible";
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectKernelLogs = true;
+    ProtectControlGroups = true;
+    RestrictNamespaces = true;
+    LockPersonality = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    MemoryDenyWriteExecute = true;
+    SystemCallArchitectures = "native";
+    RestrictAddressFamilies = [ ];
+  };
 
   letsEncryptHost = myLetsEncryptSecrets.letsEncryptHost;
   letsEncryptEmail = myLetsEncryptSecrets.letsEncryptEmail;
@@ -810,45 +829,39 @@ lib.mkMerge [
     #   script = "${pkgs.drynomore}/bin/drynomore-telegram-bot /var/lib/drynomore/config.yaml";
     #   wantedBy = [ "multi-user.target" ];
     # };
-    systemd.services."tmdbot" =
-      let
-        securityOptions = {
-          ProtectHome = true;
-          PrivateUsers = true;
-          PrivateDevices = true;
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectProc = "invisible";
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          RestrictNamespaces = true;
-          LockPersonality = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          MemoryDenyWriteExecute = true;
-          SystemCallArchitectures = "native";
-          RestrictAddressFamilies = [ ];
-          # RestrictAddressFamilies = [ "AF_INET" ];
-        };
-      in
-      {
-        serviceConfig = securityOptions // {
-          Type = "simple";
-          User = "tmdbot";
-          Group = "tmdbot";
-          DynamicUser = true;
-          StateDirectory = "tmdbot";
-          RuntimeDirectory = "tmdbot";
-          LogsDirectory = "tmdbot";
-          ConfigurationDirectory = "tmdbot";
-          Restart = "on-failure";
-          RestartSec = "5s";
-        };
-        script = "${pkgs.tmdbot}/bin/tmdbot /var/lib/tmdbot/settings.yaml /var/lib/tmdbot/user_data.yaml";
-        wantedBy = [ "multi-user.target" ];
+    systemd.services."tmdbot" = {
+      serviceConfig = botSecurityOptions // {
+        Type = "simple";
+        User = "tmdbot";
+        Group = "tmdbot";
+        DynamicUser = true;
+        StateDirectory = "tmdbot";
+        RuntimeDirectory = "tmdbot";
+        LogsDirectory = "tmdbot";
+        ConfigurationDirectory = "tmdbot";
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
+      script = "${pkgs.tmdbot}/bin/tmdbot /var/lib/tmdbot/settings.yaml /var/lib/tmdbot/user_data.yaml";
+      wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services."bookbot" = {
+      serviceConfig = botSecurityOptions // {
+        Type = "simple";
+        User = "bookbot";
+        Group = "bookbot";
+        DynamicUser = true;
+        StateDirectory = "bookbot";
+        RuntimeDirectory = "bookbot";
+        LogsDirectory = "bookbot";
+        ConfigurationDirectory = "bookbot";
+        Restart = "on-failure";
+        RestartSec = "5s";
+      };
+      script = "${pkgs.tmdbot}/bin/bookbot /var/lib/bookbot/settings.yaml /var/lib/bookbot/user_data.yaml";
+      wantedBy = [ "multi-user.target" ];
+    };
 
     # Scripted DDNS & Router firewall updates
     systemd.timers."update-ddns" = {
