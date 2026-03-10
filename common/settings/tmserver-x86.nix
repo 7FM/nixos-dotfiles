@@ -908,7 +908,7 @@ lib.mkMerge [
         BindReadOnlyPaths = [ "/srv/ebooks" ];
       };
       script = ''
-        ${pkgs.python3}/bin/python3 ${./services/tolino-ebook-server.py} \
+        ${pkgs.python3}/bin/python3 ${../../services/tolino-ebook-server.py} \
           --port ${toString ebookInternalPort} \
           --ebook-dir /srv/ebooks \
           --base-url "https://${letsEncryptHost}:${toString ebookPort}" \
