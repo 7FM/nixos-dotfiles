@@ -43,8 +43,11 @@ let
   radicaleMntPoint = myMiscSecrets.radicaleMntPoint;
   downloadRoot = myMiscSecrets.downloadRoot;
   giteaAppName = myMiscSecrets.giteaAppName;
+  ebookDir = "${opencloudStateDir}/${myMiscSecrets.ebookDir}";
 
   # Exposed ports
+  ebookPort = myTools.extractPort myPorts.ebook "proxy";
+  ebookInternalPort = myTools.extractPort myPorts.ebook "internal";
   radicaleProxyPort = myTools.extractPort myPorts.radicale "proxy";
   radicaleInternalPort = myTools.extractPort myPorts.radicale "internal";
   downloadPort = myTools.extractPort myPorts.downloadPage "";
@@ -52,8 +55,6 @@ let
   opencloudPort = myTools.extractPort myPorts.opencloud "proxy";
   jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
-  nfsPortmapperPort = myTools.extractPort myPorts.nfs "portmapper";
-  nfsNfsdPort = myTools.extractPort myPorts.nfs "nfsd";
   openvpnServerPort = myTools.extractPort myPorts.openvpn_server "";
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
@@ -664,6 +665,22 @@ lib.mkMerge [
               };
             };
           };
+
+          ebook =
+            (defaultConf ''
+              ## Only allow GET ##
+              if ($request_method !~ ^(GET)$ ) {
+                  return 403;
+              }
+            '')
+            // {
+              listen = createListenEntries ebookPort;
+              locations = defaultLocations // {
+                "/" = {
+                  proxyPass = "http://localhost:${toString ebookInternalPort}/";
+                };
+              };
+            };
         };
     };
     # Allow access to body temp path
@@ -860,6 +877,44 @@ lib.mkMerge [
         RestartSec = "5s";
       };
       script = "${pkgs.tmdbot}/bin/bookbot /var/lib/bookbot/settings.yaml /var/lib/bookbot/user_data.yaml";
+      wantedBy = [ "multi-user.target" ];
+    };
+
+    # Expose OpenCloud ebook dir as readable via bindfs (originals are drwx------)
+    fileSystems."/srv/ebooks" = {
+      device = ebookDir;
+      fsType = "fuse.bindfs";
+      options = [
+        "ro"
+        "perms=a+rX"
+        "map=opencloud/nobody"
+      ];
+    };
+
+    # Tolino Ebook Server
+    systemd.services."tolino-ebook-server" = rec {
+      after = [ "srv-ebooks.mount" ];
+      requires = [ "srv-ebooks.mount" ];
+      serviceConfig = botSecurityOptions // {
+        Type = "simple";
+        DynamicUser = true;
+        StateDirectory = "ebook-server";
+        Restart = "on-failure";
+        RestartSec = "5s";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        BindReadOnlyPaths = [ "/srv/ebooks" ];
+      };
+      script = ''
+        ${pkgs.python3}/bin/python3 ${./services/tolino-ebook-server.py} \
+          --port ${toString ebookInternalPort} \
+          --ebook-dir /srv/ebooks \
+          --base-url "https://${letsEncryptHost}:${toString ebookPort}" \
+          --cover-cache-dir /var/lib/${serviceConfig.StateDirectory}/covers \
+          --auth-token-file /var/lib/${serviceConfig.StateDirectory}/auth_token
+      '';
       wantedBy = [ "multi-user.target" ];
     };
 
