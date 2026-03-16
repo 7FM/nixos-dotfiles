@@ -33,6 +33,12 @@ in
   config =
     let
       waybarPkg = (pkgs.waybar.override { withMediaPlayer = true; });
+      # networkmanager_dmenu hardcodes bare `pidof` and `wofi`/`dmenu` by name;
+      # waybar runs with a stripped PATH so we inject the needed store paths.
+      nmDmenuWrapper = pkgs.writeShellScript "nm-dmenu" ''
+        export PATH="${pkgs.procps}/bin:${pkgs.wofi}/bin:$PATH"
+        exec ${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu
+      '';
     in
     lib.mkIf enable {
       # systemd.user.services.waybar.Unit.After = [ "graphical-session.target" "bluetooth.target" ];
@@ -261,7 +267,7 @@ in
                 format-linked = " {ifname} (No IP) <span color='#589df6'>⇵</span> {bandwidthDownBits}|{bandwidthUpBits}";
                 format-disconnected = "⚠ Disconnected";
                 interval = 2;
-                on-click = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
+                on-click = "${nmDmenuWrapper}";
                 on-click-right = "${pkgs.util-linux}/bin/rfkill toggle wlan";
                 tooltip = false;
               };

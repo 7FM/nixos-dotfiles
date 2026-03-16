@@ -11,7 +11,6 @@ let
   hostname = cfg.hostname;
   nfsSupport = cfg.nfsSupport;
   wifiSupport = cfg.wifiSupport;
-  withNetworkManager = cfg.withNetworkManager;
   myTools = pkgs.myTools { osConfig = config; };
   openvpnClient = cfg.openvpn.client.enable;
   openvpnAutoConnect = cfg.openvpn.client.autoConnect;
@@ -29,17 +28,9 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to add WiFi support with a collection of WAPs.
+        Whether to add WiFi support via NetworkManager.
       '';
     };
-    withNetworkManager = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable NetworkManager for Ethernet, WWAN, VPN, etc..
-      '';
-    };
-
     hostname = mkOption {
       type = types.str;
       default = "nixos-" + deviceName;
@@ -72,32 +63,20 @@ in
     services.rpcbind.enable = lib.mkDefault nfsSupport;
     boot.supportedFilesystems = lib.optionals nfsSupport [ "nfs" ];
 
-    # Enables wireless support via wpa_supplicant.
-    networking.wireless.enable = true && wifiSupport;
-    # Allow changes with wpa_gui & wpa_cli
-    networking.wireless.userControlled = true;
-    # Allow coexistence of declaratively & imeratively network configs!
-    networking.wireless.allowAuxiliaryImperativeNetworks = true;
+    # NM uses wpa_supplicant as its WiFi backend — stays true whenever WiFi is wanted.
+    networking.wireless.enable = wifiSupport;
 
-    # Device specific wireless network adapters, should be listed in their corresponding conf file!
-    #networking.wireless.interfaces = [
-    #];
-
-    # Endpoints to use with wpa_supplicant
-    # WARNING: Be aware that keys will be written to the nix store in plaintext!
-    #          When no netwokrs are set it will default to using a configuration file at /etc/wpa_supplicant.conf
-    networking.wireless.networks = myTools.getSecret ../. "waps.nix";
-
-    networking.networkmanager.enable = wifiSupport && withNetworkManager;
-    # NOTE: networking.networkmanager and networking.wireless (WPA Supplicant) can be used together if desired.
-    #       To do this you need to instruct NetworkManager to ignore those interfaces like:
-    networking.networkmanager.unmanaged = [
-      "*"
-      "except:type:ethernet"
-      "except:type:wwan"
-      "except:type:gsm"
-    ];
-    # nixos-rebuild fails somtimes... See: https://github.com/NixOS/nixpkgs/issues/180175
+    networking.networkmanager.enable = wifiSupport;
+    # NM manages WiFi when wifiSupport is on; otherwise only ethernet/wwan/gsm.
+    networking.networkmanager.unmanaged =
+      [
+        "*"
+        "except:type:ethernet"
+        "except:type:wwan"
+        "except:type:gsm"
+      ]
+      ++ lib.optional wifiSupport "except:type:wifi";
+    # nixos-rebuild fails sometimes... See: https://github.com/NixOS/nixpkgs/issues/180175
     systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
     systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
@@ -121,10 +100,6 @@ in
     # Per-interface useDHCP will be mandatory in the future, so this generated config
     # replicates the default behaviour.
     networking.useDHCP = false;
-
-    # Configure network proxy if necessary
-    # networking.proxy.default = "http://user:password@proxy:port/";
-    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
     networking.firewall =
       let

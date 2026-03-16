@@ -79,7 +79,6 @@ lib.mkMerge [
     custom.networking = {
       nfsSupport = true;
       wifiSupport = true;
-      withNetworkManager = true;
       openvpn.client = {
         enable = true;
         autoConnect = false;

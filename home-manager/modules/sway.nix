@@ -34,16 +34,6 @@ let
         "PATH=${config.home.profileDirectory}/bin"
       ];
     }
-    # TODO probably some timing issue... it almost never starts in tray mode!
-    {
-      command = "${pkgs.wpa_supplicant_gui}/bin/wpa_gui -t";
-      always = false;
-      serviceName = "startup-wpa_gui";
-      env = [
-        # Fix QT systemd integration See: https://github.com/nix-community/home-manager/issues/249
-        "PATH=${config.home.profileDirectory}/bin"
-      ];
-    }
     # this one is not installed by homemanager, but the path is identical as we use the same nixpkgs revision
     {
       command = "${pkgs.blueman}/bin/blueman-applet";
@@ -56,6 +46,13 @@ let
       command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
       always = false;
       serviceName = "polkit-gnome-authentication-agent";
+    }
+  ]
+  ++ lib.optionals osConfig.custom.networking.wifiSupport [
+    {
+      command = "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
+      always = false;
+      serviceName = "startup-nm-applet";
     }
   ]
   ++ lib.optionals (!desktop) [
@@ -381,9 +378,7 @@ in
                 class = "^Steam$";
               }
               { app_id = "^pavucontrol$"; }
-              { app_id = "^nm-connection-editor$"; }
               { title = "^Print$"; }
-              { title = "^wpa_gui$"; }
               # Firefox sharing indicator
               {
                 app_id = "^firefox$";
@@ -539,5 +534,13 @@ in
 
     xdg.configFile."swaylock/config".source = ../configs/swaylock/config;
     xdg.configFile."sway/scripts".source = ../configs/sway/scripts;
+
+    # Configure networkmanager_dmenu to use wofi when WiFi (and thus NM) is enabled
+    xdg.configFile."networkmanager-dmenu/config.ini" = lib.mkIf osConfig.custom.networking.wifiSupport {
+      text = ''
+        [dmenu]
+        dmenu_command = ${pkgs.wofi}/bin/wofi --show dmenu
+      '';
+    };
   };
 }

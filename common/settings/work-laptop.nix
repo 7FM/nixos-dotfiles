@@ -162,7 +162,6 @@ lib.mkMerge [
     custom.networking = {
       nfsSupport = true;
       wifiSupport = true;
-      withNetworkManager = true;
       openvpn.client = {
         enable = true;
         autoConnect = false;
@@ -181,10 +180,6 @@ lib.mkMerge [
       defaultLcMeasurement = "de_DE.UTF-8";
     };
 
-    networking.interfaces.wlp0s20f3.useDHCP = true;
-    networking.wireless.interfaces = [
-      "wlp0s20f3"
-    ];
     networking.interfaces.wwan0.useDHCP = true;
     #networking.interfaces.enp7s0f3u3u4u4.useDHCP = true;
 
