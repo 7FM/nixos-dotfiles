@@ -7,7 +7,7 @@
 
 # Window system settings:
 let
-  runHeadless = config.custom.gui == "headless";
+  runHeadless = config.custom.gui.headless;
   myTools = pkgs.myTools { osConfig = config; };
 
   cfg = config.custom.audio;

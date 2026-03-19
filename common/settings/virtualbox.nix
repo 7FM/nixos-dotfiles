@@ -8,8 +8,8 @@
 
 let
   myTools = pkgs.myTools { osConfig = config; };
-  useWayland = config.custom.gui == "wayland";
-  useX11 = config.custom.gui == "x11";
+  useWayland = config.custom.gui.sway;
+  useX11 = config.custom.gui.x11;
 in
 lib.mkMerge [
   {
@@ -17,7 +17,7 @@ lib.mkMerge [
       # System settings
       gpu = "generic";
       cpu = "generic";
-      gui = "wayland";
+      gui.sway = true;
       useDummySecrets = true;
       bluetooth = false;
       audio.backend = "pipewire";

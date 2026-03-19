@@ -10,7 +10,7 @@ let
   myTools = pkgs.myTools { osConfig = config; };
   isAmdCpu = config.custom.cpu == "amd";
   isIntelCpu = config.custom.cpu == "intel";
-  isHeadless = config.custom.gui == "headless";
+  isHeadless = config.custom.gui.headless;
   isIntelGpu = config.custom.gpu == "intel";
 
   enable = config.custom.enableVirtualisation;

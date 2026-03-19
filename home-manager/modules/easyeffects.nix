@@ -7,7 +7,7 @@
 }:
 
 let
-  runHeadless = osConfig.custom.gui == "headless";
+  runHeadless = osConfig.custom.gui.headless;
   cfg = osConfig.custom.audio;
   backendUsePipewire = cfg.backend == "pipewire";
 

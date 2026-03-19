@@ -207,7 +207,7 @@ let
     run_with_udp_port
     wait_for_process
   ]
-  ++ lib.optionals ((osConfig.custom.gui == "hm-wayland") || (osConfig.custom.gui == "wayland")) [
+  ++ lib.optionals ((osConfig.custom.gui.sway) || (osConfig.custom.gui.sway)) [
     sway-screenshare
   ]
   ++ lib.optionals osConfig.custom.hm.modules.ssh.enable [

@@ -15,7 +15,7 @@ lib.mkMerge [
       # System settings
       gpu = "generic";
       cpu = "generic";
-      gui = "headless";
+      gui.headless = true;
       useDummySecrets = false;
       bluetooth = false;
       audio.backend = "none";

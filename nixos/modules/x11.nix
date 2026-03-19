@@ -7,7 +7,7 @@
 
 let
   myTools = pkgs.myTools { osConfig = config; };
-  enable = config.custom.gui == "x11";
+  enable = config.custom.gui.x11;
 in
 {
 

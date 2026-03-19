@@ -7,8 +7,7 @@
 }:
 
 let
-  hmManageSway = osConfig.custom.gui == "hm-wayland";
-  enable = hmManageSway || (osConfig.custom.gui == "wayland");
+  enable = osConfig.custom.gui.sway;
 in
 {
   config = lib.mkIf enable {

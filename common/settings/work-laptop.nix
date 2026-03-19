@@ -15,8 +15,8 @@ lib.mkMerge [
       # System settings
       gpu = "intel";
       cpu = "intel";
-      # gui = "wayland";
-      gui = "hm-wayland";
+      gui.sway = true;
+      gui.hyprland = true;
       useDummySecrets = false;
       bluetooth = true;
       audio.backend = "pipewire";

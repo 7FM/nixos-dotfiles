@@ -7,7 +7,7 @@ userName:
 }:
 
 let
-  runHeadless = config.custom.gui == "headless";
+  runHeadless = config.custom.gui.headless;
 
   cfg = config.custom.sshServer;
   enable = cfg.enable;

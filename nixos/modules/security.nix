@@ -7,7 +7,7 @@
 
 let
   myTools = pkgs.myTools { osConfig = config; };
-  runHeadless = config.custom.gui == "headless";
+  runHeadless = config.custom.gui.headless;
 
   cfg = config.custom.security.usbguard;
   fixedRules = cfg.fixedRules;

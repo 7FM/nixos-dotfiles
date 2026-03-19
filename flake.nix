@@ -23,6 +23,11 @@
       inputs.nixpkgs.follows = "nixpkgs_prepatch";
       inputs.flake-utils.follows = "drynomore/flake-utils";
     };
+
+    ags = {
+      url = "github:aylur/ags/v1.7.6";
+      inputs.nixpkgs.follows = "nixpkgs_prepatch";
+    };
   };
 
   outputs =
@@ -34,6 +39,7 @@
       nur,
       drynomore,
       tmdbot,
+      ags,
       ...
     }@inputs:
     {
@@ -78,6 +84,7 @@
 
                       drynomore = drynomore.packages."${system}".default;
                       tmdbot = tmdbot.packages."${system}".default;
+                      agsv1 = ags.packages."${system}".ags;
 
                       # waybar: enable experimental features + pulseaudio slider source target support
                       waybar = prev.waybar.overrideAttrs (oldAttrs: {

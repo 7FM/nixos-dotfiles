@@ -36,9 +36,10 @@ with lib;
     (import ./virtualisation.nix userName)
     ./smartcards.nix
 
-    ./wayland.nix
-    ./home-manager_wayland.nix
+    ./wayland_common.nix
+    ./hyprland.nix
     ./x11.nix
+    ./wifi_hotspot.nix
   ];
 
   options.custom = {

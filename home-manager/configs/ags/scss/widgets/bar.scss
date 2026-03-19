@@ -1,0 +1,167 @@
+$bar-spacing: $spacing / 2;
+$button-radius: if($bar-style == 'floating', max(0, $radii - $bar-spacing), $radii);
+
+@mixin panel-button($flat: false) {
+    @include unset;
+    transition: $transition;
+    border-radius: $radii;
+    margin: $wm-gaps $bar-spacing;
+    padding: $padding * 0.4 $padding * 0.8;
+    color: $hover-fg;
+
+    @if not $flat {
+        &:hover {
+            box-shadow: 0 0 min(6px, $spacing/2) 0 $shadow, inset 0 0 0 99px $hover;
+        }
+
+        &:active, &.active {
+            background-image: $active-gradient;
+            background-color: $accent;
+            color: $accent-fg;
+            font-weight: bold;
+        }
+    } @else {
+        &:hover {
+            background-color: $hover;
+        }
+
+        &:active, &.active {
+            background-image: $active-gradient;
+            background-color: $accent;
+            color: $accent-fg;
+        }
+    }
+}
+
+.panel {
+    @if $bar-style == 'normal' {
+        background-color: $bg-color;
+        border-bottom: $border;
+    }
+
+    @if $bar-style == 'floating' {
+        background-color: $bg-color;
+        border-radius: $radii;
+        margin: $wm-gaps;
+        padding: 0;
+        border: $border;
+    }
+
+    @if $bar-style == 'separated' {
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .panel-button {
+        @include panel-button;
+    }
+
+    .tray-item, .color-picker {
+        @include panel-button($flat: true);
+    }
+
+    separator {
+        background-color: transparentize($fg-color, 0.86);
+        border-radius: $radii;
+        min-height: 5px;
+        min-width: 5px;
+    }
+
+    .overview label { color: transparentize($accent, 0.2); }
+    .overview:hover label { color: $accent; }
+    .overview:active label, .overview.active label { color: $accent-fg; }
+
+    .powermenu image, .recorder image { color: transparentize($red, 0.3); }
+    .powermenu:hover image, .recorder:hover image { color: transparentize($red, 0.15); }
+    .powermenu:active image, .recorder:active image { color: $red; }
+
+    .focused-client > box > box, .quicksettings > box > box {
+        @include spacing;
+    }
+
+    .quicksettings:not(.active):not(:active) .bluetooth { color: $blue; }
+    .quicksettings:not(.active):not(:active) .battery.low { color: $red; }
+    .quicksettings:not(.active):not(:active) .battery.charged,
+    .battery.charging { color: $green; }
+
+    .media.spotify image { color: $green; }
+    .media.firefox image { color: $orange; }
+    .media.mpv image { color: $magenta; }
+
+    .notifications image { color: $yellow; }
+
+    .battery-bar {
+        .font-icon { font-size: 1.15em; }
+        > box { padding: 0; }
+        image, .font-icon { margin-right: $bar-spacing * .5; }
+
+        levelbar trough {
+            @include widget;
+            min-width: $battery-bar-width;
+            min-height: $battery-bar-height;
+        }
+
+        block.filled {
+            border-radius: max($radii - $border-width, 0);
+            background-image: $active-gradient;
+        }
+
+        @mixin color($color) {
+            block.filled { background-image: linear-gradient($color, $color); }
+            label { color: $color; }
+        }
+
+        &.medium { @include color($yellow); }
+        &.low { @include color($red); }
+        &.charging { @include color($green); }
+        &:active { @include color($accent-fg); }
+
+        .whole-button label {
+            color: $fg-color;
+            text-shadow: $text-shadow;
+        }
+
+        .whole-button trough,
+        .whole-button block.filled {
+            border-radius: $button-radius;
+        }
+
+        @if $bar-style == 'separated' {
+            .whole-button trough { border: none; }
+        }
+    }
+
+    .workspaces button {
+        all: unset;
+
+        .indicator {
+            font-size: 0;
+            min-width: 8px;
+            min-height: 8px;
+            border-radius: $radii*0.6;
+            box-shadow: inset 0 0 0 $border-width $border-color;
+            margin: 0 $padding/2;
+            transition: $transition/2;
+            background-color: transparentize($fg-color, 0.8);
+        }
+
+        &.occupied .indicator {
+            background-color: transparentize($fg-color, 0.2);
+            min-width: 10px;
+            min-height: 10px;
+        }
+
+        &:hover .indicator {
+            box-shadow: inset 0 0 0 10px transparentize($fg-color, 0.8);
+        }
+
+        &.active .indicator, &:active .indicator {
+            background-color: $accent;
+        }
+
+        &.active .indicator {
+            min-width: 24px;
+            min-height: 16px;
+        }
+    }
+}

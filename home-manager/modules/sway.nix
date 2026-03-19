@@ -76,8 +76,7 @@ let
   enableDisplayCmdRaw = "${pkgs.sway}/bin/swaymsg \"output * power on\"";
   enableDisplayCmd = "resume '${enableDisplayCmdRaw}'";
 
-  hmManageSway = osConfig.custom.gui == "hm-wayland";
-  enable = hmManageSway || (osConfig.custom.gui == "wayland");
+  enable = osConfig.custom.gui.sway;
   desktop = laptopDisplay == null;
 
   mod = "Mod4";
@@ -93,18 +92,20 @@ in
       }
     ];
 
-    home.packages = lib.optionals hmManageSway (
-      import ../../common/sway_extra_packages.nix { inherit pkgs; }
-    );
+    home.packages =
+      [ pkgs.wofi ]
+      ++ lib.optionals enable (
+        import ../../common/sway_extra_packages.nix { inherit pkgs; }
+      );
 
-    wayland.windowManager.sway = (lib.optionalAttrs (!hmManageSway) { package = null; }) // {
+    wayland.windowManager.sway = {
       enable = true;
 
       wrapperFeatures.gtk = true;
       systemd.enable = true;
       extraSessionCommands = import ../../common/sway_extra_session_commands.nix;
 
-      xwayland = hmManageSway;
+      xwayland = true;
 
       config =
         let

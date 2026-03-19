@@ -21,8 +21,7 @@ let
   # We enable gpu stats iff at least gpu stat command was given
   enableGpuStats = gpuCfgValueCount > 0;
 
-  hmManageSway = osConfig.custom.gui == "hm-wayland";
-  enable = hmManageSway || (osConfig.custom.gui == "wayland");
+  enable = osConfig.custom.gui.sway;
 
   # Waybar settings
   enableSystemdWaybar =
