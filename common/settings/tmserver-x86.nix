@@ -630,7 +630,7 @@ lib.mkMerge [
               "/" = {
                 recommendedProxySettings = false;
                 proxyWebsockets = true;
-                proxyPass = "http://localhost:${toString config.services.opencloud.port}/";
+                proxyPass = "http://localhost:${toString config.services.opencloud.port}";
                 extraConfig = ''
                   proxy_set_header Host $host:$server_port;
                   proxy_set_header X-Real-IP $remote_addr;
