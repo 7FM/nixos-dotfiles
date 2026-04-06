@@ -26,7 +26,8 @@
 
     ags = {
       url = "github:aylur/ags/v1.7.6";
-      inputs.nixpkgs.follows = "nixpkgs_prepatch";
+      # Do NOT follow nixpkgs_prepatch: ags v1.7.6 references gnome.gnome-bluetooth
+      # which was moved to top-level in nixos-unstable after its release date.
     };
   };
 
