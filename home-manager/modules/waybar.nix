@@ -847,8 +847,8 @@ in
           }
 
           #tray menu {
-              background: rgba(43, 48, 59, 0.7);
-              border: 1px solid rgba(100, 114, 125, 0.7);
+              background: #2B303B;
+              border: 1px solid #64727D;
           }
         '';
       };
