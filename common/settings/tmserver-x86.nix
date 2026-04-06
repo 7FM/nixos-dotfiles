@@ -667,8 +667,8 @@ lib.mkMerge [
 
           ebook =
             (defaultConf ''
-              ## Only allow GET ##
-              if ($request_method !~ ^(GET)$ ) {
+              ## Only allow GET and POST ##
+              if ($request_method !~ ^(GET|POST)$ ) {
                   return 403;
               }
             '')
@@ -676,7 +676,7 @@ lib.mkMerge [
               listen = createListenEntries ebookPort;
               locations = defaultLocations // {
                 "/" = {
-                  proxyPass = "http://localhost:${toString ebookInternalPort}/";
+                  proxyPass = "http://127.0.0.1:${toString ebookInternalPort}";
                 };
               };
             };

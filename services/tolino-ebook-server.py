@@ -17,7 +17,13 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 import html as html_mod
+import itertools
 import math
+import time
+import random
+import sqlite3
+import string
+import tempfile
 
 EBOOK_EXTENSIONS = {".epub", ".pdf"}
 BOOKS_PER_PAGE = 6
@@ -206,7 +212,7 @@ def build_recommendation(filename, ebook_dir, base_url, cover_cache_dir, auth_to
         "title": title,
         "author": author,
         "cover_url": cover_url,
-        "shop_url": f"{base_url}/shop/{encoded_name}{token_qs}",
+        "shop_url": f"{base_url}/shop/{encoded_name}.detail{token_qs}",
         "publicationType": "EBOOK",
         "format": fmt,
     }
@@ -262,7 +268,7 @@ def render_shop_index(ebooks, ebook_dir, cover_cache_dir, base_url, auth_token, 
             cover_html = f'<div class="no-cover">{esc(title)}</div>'
 
         books_html.append(
-            f'<div class="book"><a href="{esc(base_url)}/shop/{esc(encoded)}{esc(token_qs)}">'
+            f'<div class="book"><a href="{esc(base_url)}/shop/{esc(encoded)}.detail{esc(token_qs)}">'
             f'{cover_html}<div class="title">{esc(title)}</div>'
             f'<div class="author">{esc(author)}</div></a></div>'
         )
@@ -279,6 +285,7 @@ def render_shop_index(ebooks, ebook_dir, cover_cache_dir, base_url, auth_token, 
 <meta name="viewport" content="width=567">
 <title>Library</title>
 <link rel="stylesheet" href="{esc(base_url)}/shop/static/style.css{esc(token_qs)}">
+<script>function android_init(){{}}</script>
 </head><body>
 <h1>Library</h1>
 <div class="nav">
@@ -317,6 +324,7 @@ def render_shop_detail(filename, ebook_dir, cover_cache_dir, base_url, auth_toke
 <meta name="viewport" content="width=567">
 <title>{esc(title)}</title>
 <link rel="stylesheet" href="{esc(base_url)}/shop/static/style.css{esc(token_qs)}">
+<script>function android_init(){{}}</script>
 </head><body>
 <div class="detail">
 {cover_html}
@@ -326,6 +334,147 @@ def render_shop_detail(filename, ebook_dir, cover_cache_dir, base_url, auth_toke
 <div class="back"><a href="{esc(base_url)}/shop{esc(token_qs)}">&lt; Back to Library</a></div>
 </div>
 </body></html>"""
+
+
+def init_vocab_db(db_path):
+    """Create vocab SQLite database if it doesn't exist."""
+    conn = sqlite3.connect(db_path)
+    conn.execute("""CREATE TABLE IF NOT EXISTS vocab (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        word TEXT, definition TEXT,
+        source_lang TEXT, target_lang TEXT,
+        book TEXT, timestamp INTEGER,
+        created_at REAL DEFAULT (strftime('%s','now'))
+    )""")
+    conn.commit()
+    conn.close()
+
+
+def _base91(num):
+    table = string.ascii_letters + string.digits + '!#$%&()*+,-./:;<=>?@[]^_`{|}~'
+    buf = ''
+    while num:
+        num, mod = divmod(num, len(table))
+        buf = table[mod] + buf
+    return buf or 'a'
+
+
+def _field_checksum(text):
+    return int(hashlib.sha1(text.encode('utf-8')).hexdigest()[:8], 16)
+
+
+def generate_apkg(vocab_rows):
+    """Generate an .apkg file in memory from vocab rows.
+    Each row: (word, definition, source_lang, target_lang, book, timestamp).
+    Returns bytes of the ZIP file.
+    """
+    import io as _io
+
+    ts = time.time()
+    model_id = int(ts * 1000)
+    deck_id = model_id + 1
+    id_counter = itertools.count(int(ts * 1000) + 2)
+
+    model = {
+        "id": model_id, "name": "Tolino Vocabulary", "type": 0,
+        "mod": int(ts), "usn": -1, "sortf": 0, "did": deck_id,
+        "css": ".card { font-family: arial; font-size: 20px; text-align: center; }\n"
+               ".lang { font-size: 12px; color: #888; margin-top: 8px; }",
+        "latexPre": "", "latexPost": "", "latexsvg": False,
+        "req": [[0, "any", [0]]], "tags": [], "vers": [],
+        "flds": [
+            {"name": "Front", "ord": 0, "sticky": False, "rtl": False, "font": "Arial", "size": 20, "media": []},
+            {"name": "Back", "ord": 1, "sticky": False, "rtl": False, "font": "Arial", "size": 20, "media": []},
+        ],
+        "tmpls": [{
+            "name": "Card 1", "ord": 0,
+            "qfmt": "{{Front}}",
+            "afmt": "{{FrontSide}}<hr id=answer>{{Back}}",
+            "bqfmt": "", "bafmt": "", "did": None, "bfont": "", "bsize": 0,
+        }],
+    }
+
+    deck = {
+        "id": deck_id, "name": "Tolino Vocabulary", "desc": "",
+        "mod": int(ts), "usn": -1, "collapsed": False, "browserCollapsed": False,
+        "conf": 1, "dyn": 0, "extendNew": 10, "extendRev": 50,
+        "lrnToday": [0, 0], "revToday": [0, 0], "newToday": [0, 0], "timeToday": [0, 0],
+    }
+
+    dconf = {"1": {
+        "id": 1, "name": "Default", "mod": 0, "usn": 0, "maxTaken": 60,
+        "autoplay": True, "timer": 0, "replayq": True, "dyn": False,
+        "new": {"bury": True, "delays": [1, 10], "initialFactor": 2500, "ints": [1, 4, 7], "order": 1, "perDay": 20, "separate": True},
+        "rev": {"bury": True, "ease4": 1.3, "fuzz": 0.05, "ivlFct": 1, "maxIvl": 36500, "minSpace": 1, "perDay": 100},
+        "lapse": {"delays": [10], "leechAction": 0, "leechFails": 8, "minInt": 1, "mult": 0},
+    }}
+
+    conf = {
+        "activeDecks": [deck_id], "addToCur": True, "collapseTime": 1200,
+        "curDeck": deck_id, "curModel": str(model_id), "dueCounts": True,
+        "estTimes": True, "newBury": True, "newSpread": 0, "nextPos": 1,
+        "sortBackwards": False, "sortType": "noteFld", "timeLim": 0,
+    }
+
+    schema_sql = """
+    CREATE TABLE col (id integer primary key, crt integer not null, mod integer not null,
+        scm integer not null, ver integer not null, dty integer not null, usn integer not null,
+        ls integer not null, conf text not null, models text not null, decks text not null,
+        dconf text not null, tags text not null);
+    CREATE TABLE notes (id integer primary key, guid text not null, mid integer not null,
+        mod integer not null, usn integer not null, tags text not null, flds text not null,
+        sfld integer not null, csum integer not null, flags integer not null, data text not null);
+    CREATE TABLE cards (id integer primary key, nid integer not null, did integer not null,
+        ord integer not null, mod integer not null, usn integer not null, type integer not null,
+        queue integer not null, due integer not null, ivl integer not null, factor integer not null,
+        reps integer not null, lapses integer not null, left integer not null, odue integer not null,
+        odid integer not null, flags integer not null, data text not null);
+    CREATE TABLE revlog (id integer primary key, cid integer not null, usn integer not null,
+        ease integer not null, ivl integer not null, lastIvl integer not null, factor integer not null,
+        time integer not null, type integer not null);
+    CREATE TABLE graves (usn integer not null, oid integer not null, type integer not null);
+    CREATE INDEX ix_notes_usn ON notes (usn);
+    CREATE INDEX ix_cards_usn ON cards (usn);
+    CREATE INDEX ix_revlog_usn ON revlog (usn);
+    CREATE INDEX ix_cards_nid ON cards (nid);
+    CREATE INDEX ix_cards_sched ON cards (did, queue, due);
+    CREATE INDEX ix_revlog_cid ON revlog (cid);
+    CREATE INDEX ix_notes_csum ON notes (csum);
+    """
+
+    fd, db_path = tempfile.mkstemp(suffix='.anki2')
+    os.close(fd)
+    try:
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.executescript(schema_sql)
+        c.execute('INSERT INTO col VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                  (None, int(ts), int(ts * 1000), int(ts * 1000), 11, 0, 0, 0,
+                   json.dumps(conf), json.dumps({str(model_id): model}),
+                   json.dumps({str(deck_id): deck}), json.dumps(dconf), '{}'))
+
+        for due_pos, (word, definition, src, tgt, book, tstamp) in enumerate(vocab_rows):
+            front = f"{word}<div class='lang'>{src}</div>" if src else word
+            back = f"{definition}<div class='lang'>{tgt}</div>" if tgt else (definition or "")
+            nid = next(id_counter)
+            guid = _base91(random.randint(0, 2**64 - 1))
+            c.execute('INSERT INTO notes VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                      (nid, guid, model_id, int(ts), -1, '',
+                       front + '\x1f' + back, word, _field_checksum(word), 0, ''))
+            c.execute('INSERT INTO cards VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                      (next(id_counter), nid, deck_id, 0, int(ts), -1,
+                       0, 0, due_pos, 0, 0, 0, 0, 0, 0, 0, 0, ''))
+
+        conn.commit()
+        conn.close()
+
+        buf = _io.BytesIO()
+        with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as zf:
+            zf.write(db_path, 'collection.anki2')
+            zf.writestr('media', '{}')
+        return buf.getvalue()
+    finally:
+        os.unlink(db_path)
 
 
 class EbookHandler(BaseHTTPRequestHandler):
@@ -362,6 +511,8 @@ class EbookHandler(BaseHTTPRequestHandler):
 
         if path == "/recommendations":
             self.handle_recommendations(query)
+        elif path == "/sync/vocab/anki":
+            self.handle_vocab_anki()
         elif path == "/sync/list.txt":
             self.handle_sync_list()
         elif path.startswith("/download/"):
@@ -374,11 +525,75 @@ class EbookHandler(BaseHTTPRequestHandler):
             self.handle_shop_css()
         elif path == "/shop" or path == "":
             self.handle_shop_index(query)
-        elif path.startswith("/shop/"):
-            filename = urllib.parse.unquote(path[len("/shop/"):])
+        elif path.startswith("/shop/") and path.endswith(".detail"):
+            filename = urllib.parse.unquote(path[len("/shop/"):-len(".detail")])
             self.handle_shop_detail(filename)
         else:
             self.send_error(404)
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        path = parsed.path.rstrip("/")
+        query = urllib.parse.parse_qs(parsed.query)
+
+        if not self.check_auth(query):
+            self.send_error(403, "Invalid or missing token")
+            return
+
+        if path == "/sync/vocab":
+            self.handle_vocab_post()
+        else:
+            self.send_error(404)
+
+    def handle_vocab_post(self):
+        length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(length)
+        try:
+            entries = json.loads(body)
+        except json.JSONDecodeError:
+            self.send_error(400, "Invalid JSON")
+            return
+
+        if not isinstance(entries, list):
+            entries = [entries]
+
+        db_path = self.server.vocab_db_path
+        conn = sqlite3.connect(db_path)
+        for e in entries:
+            conn.execute(
+                "INSERT INTO vocab (word, definition, source_lang, target_lang, book, timestamp) VALUES (?,?,?,?,?,?)",
+                (e.get("word", ""), e.get("definition", ""),
+                 e.get("sourceLanguage", ""), e.get("targetLanguage", ""),
+                 e.get("book", ""), e.get("timestamp", 0)))
+        conn.commit()
+        conn.close()
+
+        data = json.dumps({"ok": True, "count": len(entries)}).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def handle_vocab_anki(self):
+        db_path = self.server.vocab_db_path
+        conn = sqlite3.connect(db_path)
+        rows = conn.execute(
+            "SELECT word, definition, source_lang, target_lang, book, timestamp "
+            "FROM vocab ORDER BY timestamp DESC").fetchall()
+        conn.close()
+
+        if not rows:
+            self.send_error(404, "No vocabulary entries")
+            return
+
+        data = generate_apkg(rows)
+        self.send_response(200)
+        self.send_header("Content-Type", "application/octet-stream")
+        self.send_header("Content-Disposition", 'attachment; filename="tolino-vocab.apkg"')
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def handle_recommendations(self, query):
         count = int(query.get("count", ["12"])[0])
@@ -402,7 +617,7 @@ class EbookHandler(BaseHTTPRequestHandler):
 
     def handle_sync_list(self):
         ebook_dir = self.server.ebook_dir
-        base_url = self.server.base_url
+        base_url = self.server.sync_base_url
         auth_token = self.server.auth_token
         token_qs = f"?token={urllib.parse.quote(auth_token, safe='')}" if auth_token else ""
 
@@ -546,9 +761,13 @@ def main():
     parser.add_argument("--port", type=int, required=True)
     parser.add_argument("--ebook-dir", required=True)
     parser.add_argument("--base-url", required=True, help="External base URL (e.g. https://host:port)")
+    parser.add_argument("--sync-base-url", default=None,
+                        help="HTTP base URL for sync download links (for clients that can't do HTTPS)")
     parser.add_argument("--cover-cache-dir", required=True)
     parser.add_argument("--auth-token-file", required=True,
                         help="Path to file containing auth token (auto-generated if missing)")
+    parser.add_argument("--vocab-db", default=None,
+                        help="Path to vocabulary SQLite database (default: <state-dir>/vocab.db)")
     args = parser.parse_args()
 
     if not os.path.isdir(args.ebook_dir):
@@ -558,14 +777,22 @@ def main():
 
     auth_token = load_or_generate_token(args.auth_token_file)
 
+    # Initialize vocabulary database
+    vocab_db = args.vocab_db or os.path.join(args.cover_cache_dir, "..", "vocab.db")
+    vocab_db = os.path.abspath(vocab_db)
+    init_vocab_db(vocab_db)
+
     server = HTTPServer(("127.0.0.1", args.port), EbookHandler)
     server.ebook_dir = args.ebook_dir
     server.base_url = args.base_url.rstrip("/")
+    server.sync_base_url = (args.sync_base_url or args.base_url).rstrip("/")
     server.cover_cache_dir = args.cover_cache_dir
     server.auth_token = auth_token
+    server.vocab_db_path = vocab_db
 
     print(f"Tolino Ebook Server listening on 127.0.0.1:{args.port}")
     print(f"Serving ebooks from: {args.ebook_dir}")
+    print(f"Vocabulary DB: {vocab_db}")
     print(f"External base URL: {server.base_url}")
     print(f"Auth token: {auth_token}")
     server.serve_forever()
