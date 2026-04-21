@@ -13,6 +13,8 @@ in
   config = lib.mkIf enable {
     programs.neovim = {
       enable = true;
+      withRuby = false;
+      withPython3 = false;
       vimAlias = true;
       viAlias = true;
       extraConfig = ''

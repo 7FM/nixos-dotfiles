@@ -112,8 +112,8 @@ in
       hyprlock
       hypridle
       qt5.qtwayland
-      xorg.xlsclients
-      xorg.xhost
+      xlsclients
+      xhost
       wl-clipboard
       wdisplays
       grim

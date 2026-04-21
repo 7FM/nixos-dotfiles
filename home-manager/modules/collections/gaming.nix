@@ -19,7 +19,7 @@ in
       heroic # linux native Epic Games Launcher alternative
       #wine
       winetricks
-      wineWowPackages.full
+      wineWow64Packages.full
     ];
   };
 }

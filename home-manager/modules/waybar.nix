@@ -48,7 +48,7 @@ in
         enable = true;
         systemd = {
           enable = enableSystemdWaybar;
-          target = "sway-session.target";
+          targets = [ "sway-session.target" ];
         };
         package = waybarPkg;
 
