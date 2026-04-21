@@ -11,7 +11,7 @@ let
 
   cfg = config.custom.security.usbguard;
   fixedRules = cfg.fixedRules;
-  enforce = cfg.enforceRules || fixedRules != null;
+  enforce = cfg.enforceRules;
 in
 {
 
