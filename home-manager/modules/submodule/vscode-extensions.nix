@@ -26,8 +26,8 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "4.5.3";
-    sha256 = "1vr4715nzp7nswc4pzj0mmwnsfna92hxadka098zl4w79mfq247i";
+    version = "4.6.0";
+    sha256 = "0dk1ra8vfxryl5pz2cxq9zw6ap59xvmcks33xsgh54d622ircwsc";
   }
   {
     name = "code-spell-checker-german";
@@ -38,8 +38,8 @@
   {
     name = "vscode-mlir";
     publisher = "llvm-vs-code-extensions";
-    version = "0.0.14";
-    sha256 = "1gspk7d6ncfsmj3wjpxzk6k63fskp1dkdrnpf1nl6b09i34k2f89";
+    version = "0.0.15";
+    sha256 = "155i0x1ahfijmq9rhk9g5cql2a0blfhx7kj46cy5v98gvm4dzq7p";
   }
   {
     name = "openscad";
@@ -80,20 +80,20 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.58.2026012907";
-    sha256 = "1kvgjasb65f02wk7nsxcmgm3y9dcxd2pd25gi7g63x5n0ywi3sby";
+    version = "0.59.2026041007";
+    sha256 = "0dqjhk87zip9zmha9awliy8mh0m20h1baiw7v5mbids4hzjvlmma";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.27.0";
-    sha256 = "0w2smgmas17706s24nl5v27m22qixhcpahgz7zigjnlq421yhg8k";
+    version = "0.27.2026040100";
+    sha256 = "1igybsj8siy2kw4awkhjsis89rh154k86hjixilnmzby86pf9pvf";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.44.0";
-    sha256 = "0g2s9k8l8zss4ciq9j9ljhmcilg5rlxh9605rbrfzasdbsrhrgj2";
+    version = "0.45.0";
+    sha256 = "1ni168d4h7186h87c3fik22v2gyc9yv7db3qxx4mi2lm7f52wqg8";
   }
   {
     name = "vscode-maven";
