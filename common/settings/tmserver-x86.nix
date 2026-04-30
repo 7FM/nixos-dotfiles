@@ -875,6 +875,7 @@ lib.mkMerge [
         Restart = "on-failure";
         RestartSec = "5s";
       };
+      path = [ pkgs.python3 ];
       script = "${pkgs.tmdbot}/bin/bookbot /var/lib/bookbot/settings.yaml /var/lib/bookbot/user_data.yaml";
       wantedBy = [ "multi-user.target" ];
     };
