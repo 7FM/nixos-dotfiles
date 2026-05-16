@@ -1,5 +1,4 @@
 {
-  khalConfig,
   createCalendarAcc,
   createPasswordLookupCmd,
 }:
@@ -15,14 +14,9 @@ let
 in
 {
   "Private" =
-    (createCalendarAcc "Private" (ownCalDavServer "MyCalDavCalendarID") (khalConfig {
-      color = "magenta";
-    }))
+    (createCalendarAcc "Private" (ownCalDavServer "MyCalDavCalendarID") { })
     // {
       primary = true;
     };
-  "Bdays" = createCalendarAcc "Bdays" (ownCalDavServer "MyCalDavBDayCalendarID") (khalConfig {
-    color = "dark green";
-    priority = 20;
-  });
+  "Bdays" = createCalendarAcc "Bdays" (ownCalDavServer "MyCalDavBDayCalendarID") { };
 }
