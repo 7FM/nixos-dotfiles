@@ -23,7 +23,34 @@ in
       services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
+        # Override the weston compositor command so the greeter actually
+        # renders a cursor. The default NixOS weston.ini for SDDM only
+        # has [keyboard]/[libinput]; weston reads cursor theme/size from
+        # a [shell] section, which we add here. SDDM's own [Theme]
+        # CursorTheme/CursorSize are not propagated to weston.
+        wayland.compositorCommand =
+          let
+            westonIni = (pkgs.formats.ini { }).generate "weston.ini" {
+              keyboard = {
+                keymap_layout = "de";
+                keymap_model = "pc104";
+                keymap_options = "terminate:ctrl_alt_bksp";
+                keymap_variant = "";
+              };
+              libinput = {
+                enable-tap = true;
+                left-handed = false;
+              };
+              shell = {
+                cursor-theme = "Nordic-cursors";
+                cursor-size = 24;
+              };
+            };
+          in
+          "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
       };
+      # Expose the cursor theme so weston can resolve "Nordic-cursors".
+      environment.systemPackages = [ pkgs.nordic ];
       services.libinput = {
         enable = true;
         touchpad = {
@@ -63,9 +90,12 @@ in
       services.pipewire.enable = true;
       xdg.portal = {
         enable = true;
+        # xdg-desktop-portal-hyprland is added by the NixOS hyprland
+        # module itself (as cfg.portalPackage). Listing it again here
+        # registers two store paths (the override-rebuilt one and the
+        # bare one) for the same service file, breaking user-units.
         extraPortals =
           lib.optionals config.custom.gui.sway (with pkgs; [ xdg-desktop-portal-wlr ])
-          ++ lib.optionals config.custom.gui.hyprland (with pkgs; [ xdg-desktop-portal-hyprland ])
           ++ (with pkgs; [ xdg-desktop-portal-gtk ]);
         config = lib.mkMerge (
           lib.optionals config.custom.gui.sway [
@@ -91,7 +121,18 @@ in
     (lib.mkIf config.custom.gui.sway {
       xdg.portal.wlr.enable = true;
       security.pam.services.swaylock = { };
-      services.displayManager.sessionPackages = with pkgs; [ sway ];
+      # Register sway as a UWSM-managed compositor. This generates a
+      # "Sway (UWSM)" session entry in SDDM and also adds it to
+      # services.displayManager.sessionPackages. Upstream sway does not
+      # ship a *-uwsm.desktop of its own (unlike hyprland).
+      programs.uwsm = {
+        enable = true;
+        waylandCompositors.sway = {
+          prettyName = "Sway";
+          comment = "Sway compositor managed by UWSM";
+          binPath = "/run/current-system/sw/bin/sway";
+        };
+      };
     })
   ];
 

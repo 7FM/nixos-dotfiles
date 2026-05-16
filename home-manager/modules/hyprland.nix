@@ -186,14 +186,26 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      systemd.enable = true;
+      # The binary and wayland-session .desktop file come from the NixOS
+      # module (programs.hyprland). Setting these to null prevents HM
+      # from installing a second copy, which would surface as a duplicate
+      # "Hyprland" entry in SDDM.
+      package = null;
+      portalPackage = null;
+      # UWSM owns the session targets (wayland-session@Hyprland.target /
+      # graphical-session.target). HM's own systemd integration registers
+      # competing units, which is what produces the black screen on the
+      # uwsm-managed session. Let UWSM drive systemd here; the startup
+      # services below still hook into graphical-session.target which UWSM
+      # activates.
+      systemd.enable = false;
 
       settings = {
         monitor = monitorStrings;
 
         general = {
-          gaps_in = 9;
-          gaps_out = 10;
+          gaps_in = 2;
+          gaps_out = 4;
           border_size = 2;
           "col.active_border" = "rgb(5E81AC)";
           "col.inactive_border" = "rgb(4C566A)";
@@ -234,6 +246,7 @@ in
         };
 
         input = {
+          kb_layout = osConfig.custom.internationalization.keyboardLayout;
           follow_mouse = 1;
           touchpad = {
             natural_scroll = true;
@@ -286,11 +299,21 @@ in
           [
             ", XF86AudioRaiseVolume, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +1%"
             ", XF86AudioLowerVolume, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -1%"
+            # Resize focused window (binde so holding the arrow repeats)
+            "SUPER CTRL, left,  resizeactive, -40 0"
+            "SUPER CTRL, right, resizeactive,  40 0"
+            "SUPER CTRL, up,    resizeactive,  0 -40"
+            "SUPER CTRL, down,  resizeactive,  0  40"
           ]
           ++ lib.optionals (!desktop) [
             ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +2%"
             ", XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 2%-"
           ];
+
+        bindm = [
+          "SUPER, mouse:272, movewindow"   # left-drag to move
+          "SUPER, mouse:273, resizewindow" # right-drag to resize
+        ];
 
         bindl =
           [
@@ -302,29 +325,46 @@ in
             ", switch:off:Lid Switch, exec, hyprctl keyword monitor ${cfg.laptopDisplay},preferred,auto,1"
           ];
 
-        windowrulev2 = [
-          "float, class:^pavucontrol$"
-          "float, title:^Print$"
-          "float, class:^firefox$, title:^Firefox — Sharing Indicator$"
-          "float, class:^xdg-desktop-portal-gtk$"
-          "float, class:^org.keepassxc.KeePassXC$, title:^KeePassXC - Browser Access Request$"
-          "float, title:^Steam - News, class:^Steam$"
-          "float, title:^Friends List$, class:^Steam$"
+        # Hyprland 0.53+ syntax: selectors take a `match:` prefix and
+        # boolean actions (float, pin, …) take an explicit on/off.
+        windowrule = [
+          "float on, match:class ^pavucontrol$"
+          "float on, match:title ^Print$"
+          "float on, match:class ^firefox$, match:title ^Firefox — Sharing Indicator$"
+          "float on, match:class ^xdg-desktop-portal-gtk$"
+          "float on, match:class ^org.keepassxc.KeePassXC$, match:title ^KeePassXC - Browser Access Request$"
+          "float on, match:title ^Steam - News, match:class ^Steam$"
+          "float on, match:title ^Friends List$, match:class ^Steam$"
           # Zoom
-          "float, title:^.zoom$"
-          "float, title:^zoom$"
-          "float, title:^Settings$, class:^zoom$"
-          "float, title:^Polls$, class:^zoom$"
-          "float, title:^as_toolbar$, class:^zoom$"
-          "float, title:^Select a window.*$, class:^zoom$"
+          "float on, match:title ^.zoom$"
+          "float on, match:title ^zoom$"
+          "float on, match:title ^Settings$, match:class ^zoom$"
+          "float on, match:title ^Polls$, match:class ^zoom$"
+          "float on, match:title ^as_toolbar$, match:class ^zoom$"
+          "float on, match:title ^Select a window.*$, match:class ^zoom$"
           # Workspace assignments
-          "workspace 18 silent, class:^thunderbird$"
-          "workspace 20 silent, class:^org.keepassxc.KeePassXC$, title:^(?!KeePassXC - Browser Access Request)(?!Unlock Database - KeePassXC)"
+          "workspace 18 silent, match:class ^thunderbird$"
+          "workspace 20 silent, match:class ^org.keepassxc.KeePassXC$, match:title ^(?!KeePassXC - Browser Access Request)(?!Unlock Database - KeePassXC)"
         ];
       };
 
       extraConfig =
         ''
+          # Resize submap: SUPER+R enters; bare arrows/hjkl resize; Esc/Return exit.
+          bind = SUPER, R, submap, resize
+          submap = resize
+          binde = , left,  resizeactive, -40 0
+          binde = , right, resizeactive,  40 0
+          binde = , up,    resizeactive,  0 -40
+          binde = , down,  resizeactive,  0  40
+          binde = , h,     resizeactive, -40 0
+          binde = , l,     resizeactive,  40 0
+          binde = , k,     resizeactive,  0 -40
+          binde = , j,     resizeactive,  0  40
+          bind = , Escape, submap, reset
+          bind = , Return, submap, reset
+          submap = reset
+
           # Present submap (mirrors Sway's present mode, bound to SUPER+P)
           bind = SUPER, P, submap, present
           submap = present

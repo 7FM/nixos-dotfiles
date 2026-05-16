@@ -9,7 +9,10 @@ let
 in
 {
   config = lib.mkIf enable {
-    programs.hyprland.enable = true;
+    programs.hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
 
     # PAM entry required for hyprlock
     security.pam.services.hyprlock = { };
