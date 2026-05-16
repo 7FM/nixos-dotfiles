@@ -16,28 +16,18 @@ let
     "${searchTerm}"
   ];
 
-  # calendar sync program config
-  vdirsyncer = {
-    enable = true;
-  };
-
   createCalendarAcc =
     name: remote:
     {
       readOnly ? false,
     }:
     {
-      inherit
-        vdirsyncer
-        remote
-        ;
+      inherit remote;
       thunderbird = {
         enable = true;
         inherit readOnly;
       };
       primary = false;
-      local.type = "filesystem";
-      local.fileExt = ".ics";
     };
 
   enable = osConfig.custom.hm.modules.calendar.enable;
@@ -47,12 +37,6 @@ in
     home.packages = with pkgs; [
       libsecret # Needed for secret-tool
     ];
-
-    programs.vdirsyncer.enable = true;
-    services.vdirsyncer = {
-      enable = true;
-      frequency = "*:0/15";
-    };
 
     accounts.calendar = {
       basePath = "${config.xdg.dataHome}/cal";
