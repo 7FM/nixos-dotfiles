@@ -43,11 +43,14 @@ let
 
   createCalendarAcc = name: remote: khal: {
     inherit
-      name
       vdirsyncer
       remote
       khal
       ;
+    thunderbird = {
+      enable = true;
+      inherit (khal) readOnly;
+    };
     primary = false;
     local.type = "filesystem";
     local.fileExt = ".ics";

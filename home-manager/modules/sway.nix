@@ -100,9 +100,18 @@ in
 
     wayland.windowManager.sway = {
       enable = true;
+      # System module (programs.sway in wayland_common.nix) owns the
+      # binary so /run/current-system/sw/bin/sway exists for UWSM. HM
+      # only manages config.
+      package = null;
 
       wrapperFeatures.gtk = true;
-      systemd.enable = true;
+      # UWSM owns wayland-session@sway.target / graphical-session.target.
+      # HM's systemd.enable injects a competing sway-session.target plus
+      # a `swaymsg subscribe` lifetime hook into the sway config — when
+      # both are active the session ends within a few seconds (sddm-helper
+      # exits 64 before sway is ever launched). Let UWSM drive systemd.
+      systemd.enable = false;
       extraSessionCommands = import ../../common/sway_extra_session_commands.nix;
 
       xwayland = true;
@@ -276,6 +285,16 @@ in
           );
 
           startup = [
+            # Notify UWSM the compositor is ready and push SWAYSOCK +
+            # WAYLAND_DISPLAY into the systemd-user activation environment.
+            # Without this, wayland-session-waitenv times out after ~30s and
+            # tears down the session, and units with
+            # `ConditionEnvironment=WAYLAND_DISPLAY` (e.g. waybar) never start.
+            {
+              command = "${pkgs.uwsm}/bin/uwsm finalize SWAYSOCK";
+              always = false;
+            }
+
             # Set QT options
             {
               command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME QT_STYLE_OVERRIDE QT_QPA_PLATFORM QT_WAYLAND_DISABLE_WINDOWDECORATION";
@@ -384,6 +403,11 @@ in
               {
                 app_id = "^firefox$";
                 title = "^Firefox — Sharing Indicator$";
+              }
+              # Thunderbird calendar reminder popup
+              {
+                app_id = "^thunderbird$";
+                title = "Reminders?$";
               }
               # File dialogs
               { app_id = "^xdg-desktop-portal-gtk$"; }

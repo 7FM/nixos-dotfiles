@@ -97,9 +97,12 @@ in
         extraPortals =
           lib.optionals config.custom.gui.sway (with pkgs; [ xdg-desktop-portal-wlr ])
           ++ (with pkgs; [ xdg-desktop-portal-gtk ]);
+        # programs.sway itself sets xdg.portal.config.sway.default = "gtk",
+        # which conflicts with our richer "wlr;gtk" preference order.
+        # mkForce keeps the value we actually want.
         config = lib.mkMerge (
           lib.optionals config.custom.gui.sway [
-            { sway.default = [ "wlr" "gtk" ]; }
+            { sway.default = lib.mkForce [ "wlr" "gtk" ]; }
           ]
           ++ lib.optionals config.custom.gui.hyprland [
             { "Hyprland".default = [ "hyprland" "gtk" ]; }
@@ -121,10 +124,12 @@ in
     (lib.mkIf config.custom.gui.sway {
       xdg.portal.wlr.enable = true;
       security.pam.services.swaylock = { };
-      # Register sway as a UWSM-managed compositor. This generates a
-      # "Sway (UWSM)" session entry in SDDM and also adds it to
-      # services.displayManager.sessionPackages. Upstream sway does not
-      # ship a *-uwsm.desktop of its own (unlike hyprland).
+      # Install sway system-wide so /run/current-system/sw/bin/sway exists
+      # (UWSM's generated sway-uwsm.desktop hardcodes that path). HM alone
+      # only places sway in the user profile, which UWSM cannot resolve.
+      # The hyprland symlinkJoin trick to strip the non-UWSM .desktop
+      # doesn't work here because programs.sway calls package.override.
+      programs.sway.enable = true;
       programs.uwsm = {
         enable = true;
         waylandCompositors.sway = {

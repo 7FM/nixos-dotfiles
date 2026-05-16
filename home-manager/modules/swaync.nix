@@ -7,7 +7,7 @@
 }:
 
 let
-  enable = osConfig.custom.gui.sway;
+  enable = osConfig.custom.gui.sway || osConfig.custom.gui.hyprland;
 in
 {
   config = lib.mkIf enable {

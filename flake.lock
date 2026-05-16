@@ -1,24 +1,5 @@
 {
   "nodes": {
-    "ags": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1708045757,
-        "narHash": "sha256-UDFJzw2MJcd4oHk+xOPkmyM3u+UwrNuKBFsKAVQaoQQ=",
-        "owner": "aylur",
-        "repo": "ags",
-        "rev": "4ac0dbb473918eda325143c2053bdd428f9708d4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "aylur",
-        "ref": "v1.7.6",
-        "repo": "ags",
-        "type": "github"
-      }
-    },
     "drynomore": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -115,22 +96,6 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
-      "locked": {
-        "lastModified": 1705496572,
-        "narHash": "sha256-rPIe9G5EBLXdBdn9ilGc0nq082lzQd0xGGe092R/5QE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "842d9d80cfd4560648c785f8a4e6f3b096790e19",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_prepatch": {
       "locked": {
         "lastModified": 1777268161,
@@ -169,7 +134,6 @@
     },
     "root": {
       "inputs": {
-        "ags": "ags",
         "drynomore": "drynomore",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",

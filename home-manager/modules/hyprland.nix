@@ -11,6 +11,7 @@ let
   enable = osConfig.custom.gui.hyprland;
   desktop = cfg.laptopDisplay == null;
 
+
   # Convert monitor list to Hyprland monitor strings
   monitorStrings =
     if cfg.monitors == [ ] then
@@ -108,9 +109,10 @@ in
   config = lib.mkIf enable {
 
     home.packages = with pkgs; [
-      agsv1
       hyprlock
       hypridle
+      wofi
+      wlogout
       qt5.qtwayland
       xlsclients
       xhost
@@ -119,9 +121,6 @@ in
       grim
       slurp
     ];
-
-    # Deploy AGS config (symlink to the Nix store copy)
-    xdg.configFile."ags".source = ../configs/ags;
 
     # Screenshots directory
     home.file."screenshots/.keep".text = "";
@@ -224,15 +223,7 @@ in
           };
         };
 
-        animations = {
-          enabled = true;
-          bezier = "overshot,0.05,0.9,0.1,1.1";
-          animation = [
-            "windows,1,7,overshot,slide"
-            "workspaces,1,7,overshot,slide"
-            "fade,1,7,default"
-          ];
-        };
+        animations.enabled = false;
 
         dwindle = {
           pseudotile = true;
@@ -255,8 +246,12 @@ in
           };
         };
 
+        # movefocus cycles through group tabs first; once at the edge it
+        # moves to the next window outside the group. Lets SUPER+←/→
+        # double as tab-switching when the focused window is in a group.
+        binds.movefocus_cycles_groupfirst = true;
+
         "exec-once" = [
-          "${pkgs.agsv1}/bin/ags"
           # Restart portal services to ensure correct environment
           "systemctl --user stop xdg-desktop-portal xdg-desktop-portal-hyprland; systemctl --user start xdg-desktop-portal xdg-desktop-portal-hyprland"
         ];
@@ -266,10 +261,12 @@ in
             # Lock / session
             "SUPER ALT, L, exec, ${pkgs.hyprlock}/bin/hyprlock"
             # Launcher and terminal
-            "SUPER, D, exec, ${pkgs.agsv1}/bin/ags -t applauncher"
+            "SUPER, D, exec, ${pkgs.wofi}/bin/wofi --show=drun --lines=5 --prompt=\"\""
             "SUPER, Return, exec, ${pkgs.alacritty}/bin/alacritty"
-            # Notifications / quicksettings
-            "SUPER SHIFT, N, exec, ${pkgs.agsv1}/bin/ags -t quicksettings"
+            # Powermenu (wlogout: lock / logout / suspend / reboot / poweroff)
+            "SUPER SHIFT, P, exec, ${pkgs.wlogout}/bin/wlogout -p layer-shell"
+            # Notification center toggle (swaync, same binding as sway)
+            "SUPER SHIFT, N, exec, ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw"
             # Window management
             "SUPER SHIFT, Q, killactive,"
             "SUPER SHIFT, Space, togglefloating,"
@@ -291,6 +288,15 @@ in
             "SUPER SHIFT, right, movewindow, r"
             "SUPER SHIFT, up, movewindow, u"
             "SUPER SHIFT, down, movewindow, d"
+            # Groups (Hyprland's tabbed-layout analogue — mirrors sway's $mod+W).
+            # Tab cycling is implicit: SUPER+←/→ uses movefocus, which
+            # cycles within the group first (see binds above).
+            "SUPER, W, togglegroup,"
+            "SUPER SHIFT, W, moveoutofgroup,"
+            "SUPER ALT, left,  moveintogroup, l"
+            "SUPER ALT, right, moveintogroup, r"
+            "SUPER ALT, up,    moveintogroup, u"
+            "SUPER ALT, down,  moveintogroup, d"
           ]
           ++ wsBinds
           ++ wsMoveBinds;
