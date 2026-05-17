@@ -966,11 +966,14 @@ lib.mkMerge [
     };
 
     # Scripted DDNS & Router firewall updates
+    # Primary trigger is ipv6-address-monitor.service (event-driven).
+    # This daily timer is a safety net for cases the monitor can't catch
+    # (router-side firewall rules wiped externally, monitor missed an event, etc.).
     systemd.timers."update-ddns" = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnBootSec = "30m";
-        OnUnitActiveSec = "30m";
+        OnCalendar = "daily";
+        Persistent = true;
         Unit = "update-ddns.service";
       };
     };
@@ -1059,6 +1062,11 @@ lib.mkMerge [
 
       in
       {
+        # Run once at boot (after network is online), then on every event from
+        # ipv6-address-monitor.service, plus the daily safety-net timer above.
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = securityOptions // {
           Type = "oneshot";
           User = "updateddns";
@@ -1370,6 +1378,70 @@ lib.mkMerge [
           ${myPythonWithPackages}/bin/python ${update_router_forwards} "$router_pwd" "$__IP"
         '';
       };
+
+    # Event-driven trigger: watch netlink for IPv6 address changes on ${eth-dev}
+    # and kick update-ddns.service.
+    systemd.services."ipv6-address-monitor" = {
+      description = "Trigger update-ddns on IPv6 address changes on ${eth-dev}";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        RestartSec = "10s";
+        # Hardening (runs as root because it needs to start another unit via systemctl)
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        NoNewPrivileges = true;
+        SystemCallArchitectures = "native";
+        # AF_NETLINK for `ip monitor`, AF_UNIX for systemctl<->systemd IPC
+        RestrictAddressFamilies = [
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+      };
+      script = ''
+        # Only react to address events for the kind of address update-ddns
+        # actually reports: scope global, temporary (privacy-extension),
+        # not deprecated, and not the mngtmpaddr master. This drops the
+        # bulk of the per-RA noise (mngtmpaddr lifetime refreshes,
+        # deprecated-temp refreshes, deprecated-temp deletions).
+        #
+        # Plus in-memory dedup: the kernel re-emits RTM_NEWADDR for the
+        # active temp on every RA even if nothing changed. Skip when the
+        # address is identical to the previous trigger. State is process-
+        # local; on monitor restart the next event always fires (acts as
+        # a resync).
+        last_addr=""
+        ${pkgs.iproute2}/bin/ip -6 monitor address dev ${eth-dev} | while read -r line; do
+          case "$line" in
+            *mngtmpaddr*) continue ;;
+            *deprecated*) continue ;;
+            *"scope global temporary"*)
+              addr=$(${pkgs.coreutils}/bin/echo "$line" | ${pkgs.gnugrep}/bin/grep -oP 'inet6 \K[0-9a-fA-F:]+(?=/)')
+              if [ "$addr" = "$last_addr" ]; then
+                continue
+              fi
+              last_addr="$addr"
+              ${pkgs.coreutils}/bin/echo "ipv6 event on ${eth-dev}: $line"
+              ${pkgs.systemd}/bin/systemctl start --no-block update-ddns.service
+              ;;
+          esac
+        done
+      '';
+    };
   }
   (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
 ]
