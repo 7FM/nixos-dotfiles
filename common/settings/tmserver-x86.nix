@@ -255,7 +255,10 @@ lib.mkMerge [
     # Enable zfs
     boot.supportedFilesystems.zfs = true;
     boot.initrd.supportedFilesystems.zfs = true;
-    boot.zfs.extraPools = [ "vault" ];
+    boot.zfs.extraPools = [
+      "vault"
+      "vault_backup"
+    ];
     services.zfs = {
       trim.enable = true;
       autoScrub.enable = true;
