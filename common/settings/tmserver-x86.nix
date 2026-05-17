@@ -259,6 +259,13 @@ lib.mkMerge [
       "vault"
       "vault_backup"
     ];
+    # vault_backup holds raw-received (encrypted) datasets from vault.
+    # They share vault's key, but their keylocation defaults to `prompt`
+    # after `zfs recv -w` into an unencrypted pool root, which would
+    # block boot waiting for a password. Restrict auto-key-loading to
+    # vault; vault_backup datasets stay locked but the pool is imported
+    # (sufficient for syncoid raw-recv).
+    boot.zfs.requestEncryptionCredentials = [ "vault" ];
     services.zfs = {
       trim.enable = true;
       autoScrub.enable = true;
