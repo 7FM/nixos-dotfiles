@@ -129,6 +129,61 @@ let
     "vault/nginx_temp_path"
     "vault/html"
   ];
+
+  # Nginx virtualHost helpers, lifted from the virtualHosts attrset so they
+  # can be threaded into modules imported below (see private.nix import).
+  nginxSecurityHeaders = ''
+    add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+    add_header Referrer-Policy "no-referrer" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Download-Options "noopen" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Permitted-Cross-Domain-Policies "none" always;
+    add_header X-Robots-Tag "none" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    fastcgi_hide_header X-Powered-By;
+    ## Block some robots ##
+    if ($http_user_agent ~* msnbot|scrapbot) {
+        return 403;
+    }
+    ## Block download agents ##
+    if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+        return 403;
+    }
+  '';
+
+  defaultConf = extraConf: {
+    # forceSSL = true;
+    onlySSL = true;
+    useACMEHost = letsEncryptHost;
+    serverName = letsEncryptHost;
+    extraConfig = ''
+      ${nginxSecurityHeaders}
+      # ignore_invalid_headers off;
+      ${extraConf}
+    '';
+    http2 = true;
+    kTLS = true;
+  };
+
+  defaultLocations = {
+    "/favicon.ico" = {
+      extraConfig = "log_not_found off;";
+    };
+  };
+
+  createListenEntries = myPort: [
+    {
+      addr = "0.0.0.0";
+      port = myPort;
+      ssl = true;
+    }
+    {
+      addr = "[::]";
+      port = myPort;
+      ssl = true;
+    }
+  ];
 in
 lib.mkMerge [
   {
@@ -515,211 +570,155 @@ lib.mkMerge [
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
 
-      virtualHosts =
-        let
-          nginxSecurityHeaders = ''
-            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
-            add_header Referrer-Policy "no-referrer" always;
-            add_header X-Content-Type-Options "nosniff" always;
-            add_header X-Download-Options "noopen" always;
-            add_header X-Frame-Options "SAMEORIGIN" always;
-            add_header X-Permitted-Cross-Domain-Policies "none" always;
-            add_header X-Robots-Tag "none" always;
-            add_header X-XSS-Protection "1; mode=block" always;
-            fastcgi_hide_header X-Powered-By;
-            ## Block some robots ##
-            if ($http_user_agent ~* msnbot|scrapbot) {
-                return 403;
-            }
-            ## Block download agents ##
-            if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
-                return 403;
-            }
-          '';
-
-          defaultConf = extraConf: {
-            # forceSSL = true;
-            onlySSL = true;
-            useACMEHost = letsEncryptHost;
-            serverName = letsEncryptHost;
-            extraConfig = ''
-              ${nginxSecurityHeaders}
-              # ignore_invalid_headers off;
-              ${extraConf}
-            '';
-            http2 = true;
-            kTLS = true;
-          };
-
-          defaultLocations = {
-            "/favicon.ico" = {
-              extraConfig = "log_not_found off;";
-            };
-          };
-
-          createListenEntries = myPort: [
-            {
-              addr = "0.0.0.0";
-              port = myPort;
-              ssl = true;
-            }
-            {
-              addr = "[::]";
-              port = myPort;
-              ssl = true;
-            }
-          ];
-
-        in
-        {
-          "${letsEncryptHost}" = {
-            forceSSL = true;
-            enableACME = true;
-          };
-
-          radicale = (defaultConf "") // {
-            listen = createListenEntries radicaleProxyPort;
-            locations = defaultLocations // {
-              "/" = {
-                proxyPass = "http://localhost:${toString radicaleInternalPort}/";
-                extraConfig = ''
-                  sendfile off;
-                  proxy_set_header  X-Script-Name /;
-                  proxy_pass_header Authorization;
-                '';
-              };
-            };
-          };
-
-          download =
-            (defaultConf ''
-              ## Only allow these request methods ##
-              if ($request_method !~ ^(GET)$ ) {
-                  return 403;
-              }
-            '')
-            // {
-              root = downloadRoot;
-              basicAuthFile = "${downloadRoot}/.htpasswd";
-              listen = createListenEntries downloadPort;
-              locations = defaultLocations // {
-                "/robots.txt" = {
-                  extraConfig = ''
-                    allow all;
-                    log_not_found off;
-                    access_log off;
-                  '';
-                };
-                "/" = {
-                  extraConfig = ''
-                    autoindex on;
-                  '';
-                };
-              };
-            };
-
-          gitea =
-            (defaultConf ''
-              ## Only allow these request methods ##
-              ## PUT is required for LFS uploads ##
-              if ($request_method !~ ^(GET|HEAD|POST|PUT)$ ) {
-                  return 403;
-              }
-              ## Do not accept DELETE, SEARCH and other methods ##
-            '')
-            // {
-              listen = createListenEntries giteaPort;
-              locations = defaultLocations // {
-                "/" = {
-                  proxyPass = "http://localhost:${toString config.services.gitea.settings.server.HTTP_PORT}/";
-                  extraConfig = ''
-                    proxy_max_temp_file_size 0;
-                    proxy_connect_timeout      90s;
-                    proxy_send_timeout         90s;
-                    proxy_read_timeout         90s;
-                    proxy_redirect default;
-                  '';
-                };
-              };
-            };
-
-          opencloud = (defaultConf "") // {
-            listen = createListenEntries opencloudPort;
-            locations = defaultLocations // {
-              "/" = {
-                recommendedProxySettings = false;
-                proxyWebsockets = true;
-                proxyPass = "http://localhost:${toString config.services.opencloud.port}";
-                extraConfig = ''
-                  proxy_set_header Host $host:$server_port;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Scheme $scheme;
-                  proxy_connect_timeout   3600s;
-                  proxy_send_timeout      3600s;
-                  proxy_read_timeout      3600s;
-
-                  client_max_body_size 0;
-                  client_body_temp_path ${nginxTmpPath};
-                  proxy_temp_path ${nginxTmpPath};
-                '';
-              };
-            };
-          };
-
-          jellyfin = (defaultConf "") // {
-            listen = createListenEntries jellyfinPort;
-            locations = defaultLocations // {
-              "/" = {
-                proxyPass = "http://localhost:${toString jellyfinInternalHttpPort}";
-                extraConfig = ''
-                  proxy_pass_request_headers on;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection $http_connection;
-
-                  # Disable buffering when the nginx proxy gets very resource heavy upon streaming
-                  proxy_buffering off;
-                '';
-              };
-            };
-          };
-
-          ebook =
-            (defaultConf ''
-              ## Only allow GET and POST ##
-              if ($request_method !~ ^(GET|POST)$ ) {
-                  return 403;
-              }
-            '')
-            // {
-              listen = createListenEntries ebookPort;
-              locations = defaultLocations // {
-                "/" = {
-                  proxyPass = "http://127.0.0.1:${toString ebookInternalPort}";
-                };
-              };
-            };
-
-          calibreWeb =
-            (defaultConf ''
-              ## Only allow GET and POST ##
-              if ($request_method !~ ^(GET|POST)$ ) {
-                  return 403;
-              }
-            '')
-            // {
-              listen = createListenEntries calibreWebPort;
-              locations = defaultLocations // {
-                "/" = {
-                  proxyPass = "http://127.0.0.1:${toString calibreWebInternalPort}";
-                  extraConfig = ''
-                    client_max_body_size 0;
-                    proxy_request_buffering off;
-                  '';
-                };
-              };
-            };
+      virtualHosts = {
+        "${letsEncryptHost}" = {
+          forceSSL = true;
+          enableACME = true;
         };
+
+        radicale = (defaultConf "") // {
+          listen = createListenEntries radicaleProxyPort;
+          locations = defaultLocations // {
+            "/" = {
+              proxyPass = "http://localhost:${toString radicaleInternalPort}/";
+              extraConfig = ''
+                sendfile off;
+                proxy_set_header  X-Script-Name /;
+                proxy_pass_header Authorization;
+              '';
+            };
+          };
+        };
+
+        download =
+          (defaultConf ''
+            ## Only allow these request methods ##
+            if ($request_method !~ ^(GET)$ ) {
+                return 403;
+            }
+          '')
+          // {
+            root = downloadRoot;
+            basicAuthFile = "${downloadRoot}/.htpasswd";
+            listen = createListenEntries downloadPort;
+            locations = defaultLocations // {
+              "/robots.txt" = {
+                extraConfig = ''
+                  allow all;
+                  log_not_found off;
+                  access_log off;
+                '';
+              };
+              "/" = {
+                extraConfig = ''
+                  autoindex on;
+                '';
+              };
+            };
+          };
+
+        gitea =
+          (defaultConf ''
+            ## Only allow these request methods ##
+            ## PUT is required for LFS uploads ##
+            if ($request_method !~ ^(GET|HEAD|POST|PUT)$ ) {
+                return 403;
+            }
+            ## Do not accept DELETE, SEARCH and other methods ##
+          '')
+          // {
+            listen = createListenEntries giteaPort;
+            locations = defaultLocations // {
+              "/" = {
+                proxyPass = "http://localhost:${toString config.services.gitea.settings.server.HTTP_PORT}/";
+                extraConfig = ''
+                  proxy_max_temp_file_size 0;
+                  proxy_connect_timeout      90s;
+                  proxy_send_timeout         90s;
+                  proxy_read_timeout         90s;
+                  proxy_redirect default;
+                '';
+              };
+            };
+          };
+
+        opencloud = (defaultConf "") // {
+          listen = createListenEntries opencloudPort;
+          locations = defaultLocations // {
+            "/" = {
+              recommendedProxySettings = false;
+              proxyWebsockets = true;
+              proxyPass = "http://localhost:${toString config.services.opencloud.port}";
+              extraConfig = ''
+                proxy_set_header Host $host:$server_port;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Scheme $scheme;
+                proxy_connect_timeout   3600s;
+                proxy_send_timeout      3600s;
+                proxy_read_timeout      3600s;
+
+                client_max_body_size 0;
+                client_body_temp_path ${nginxTmpPath};
+                proxy_temp_path ${nginxTmpPath};
+              '';
+            };
+          };
+        };
+
+        jellyfin = (defaultConf "") // {
+          listen = createListenEntries jellyfinPort;
+          locations = defaultLocations // {
+            "/" = {
+              proxyPass = "http://localhost:${toString jellyfinInternalHttpPort}";
+              extraConfig = ''
+                proxy_pass_request_headers on;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection $http_connection;
+
+                # Disable buffering when the nginx proxy gets very resource heavy upon streaming
+                proxy_buffering off;
+              '';
+            };
+          };
+        };
+
+        ebook =
+          (defaultConf ''
+            ## Only allow GET and POST ##
+            if ($request_method !~ ^(GET|POST)$ ) {
+                return 403;
+            }
+          '')
+          // {
+            listen = createListenEntries ebookPort;
+            locations = defaultLocations // {
+              "/" = {
+                proxyPass = "http://127.0.0.1:${toString ebookInternalPort}";
+              };
+            };
+          };
+
+        calibreWeb =
+          (defaultConf ''
+            ## Only allow GET and POST ##
+            if ($request_method !~ ^(GET|POST)$ ) {
+                return 403;
+            }
+          '')
+          // {
+            listen = createListenEntries calibreWebPort;
+            locations = defaultLocations // {
+              "/" = {
+                proxyPass = "http://127.0.0.1:${toString calibreWebInternalPort}";
+                extraConfig = ''
+                  client_max_body_size 0;
+                  proxy_request_buffering off;
+                '';
+              };
+            };
+          };
+      };
     };
     # Allow access to body temp path
     systemd.services.nginx.serviceConfig.ReadWritePaths = [
@@ -1451,5 +1450,18 @@ lib.mkMerge [
     };
   }
   (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
-  (import ../../nixos/secrets/tmserver-x86/private.nix { inherit config lib pkgs; })
+  (import ../../nixos/secrets/tmserver-x86/private.nix {
+    inherit
+      config
+      lib
+      pkgs
+      myTools
+      myPorts
+      letsEncryptHost
+      nginxSecurityHeaders
+      defaultConf
+      defaultLocations
+      createListenEntries
+      ;
+  })
 ]
