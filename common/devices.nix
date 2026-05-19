@@ -105,6 +105,7 @@ deviceName:
           };
           gtk.enable = mkEnableOption "the gtk module";
           neovim.enable = mkEnableDefaultTrueOption "the neovim module";
+          nix_index.enable = mkEnableDefaultTrueOption "the nix-index module (pre-built nix-locate database)";
           optimize_storage.enable = mkEnableOption "storage optimizations";
           qt.enable = mkEnableOption "the qt module";
           ssh.enable = mkEnableOption "the ssh module";

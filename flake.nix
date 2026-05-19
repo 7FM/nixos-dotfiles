@@ -24,6 +24,10 @@
       inputs.flake-utils.follows = "drynomore/flake-utils";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs_prepatch";
+    };
   };
 
   outputs =
@@ -35,6 +39,7 @@
       nur,
       drynomore,
       tmdbot,
+      nix-index-database,
       ...
     }@inputs:
     {
@@ -118,6 +123,7 @@
                   home-manager.extraSpecialArgs = {
                     inherit deviceName;
                     inherit userName;
+                    inherit nix-index-database;
                   };
                 }
               ]
