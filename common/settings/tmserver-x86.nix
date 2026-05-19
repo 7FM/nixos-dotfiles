@@ -1451,4 +1451,5 @@ lib.mkMerge [
     };
   }
   (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
+  (import ../../nixos/secrets/tmserver-x86/private.nix { inherit config lib pkgs; })
 ]
