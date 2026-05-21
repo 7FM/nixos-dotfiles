@@ -1475,8 +1475,11 @@ lib.mkMerge [
           {
             # Regex location captures any trailing /path; $is_args+$args
             # forward the query string. /slug, /slug/, /slug/x?y=1 all work;
-            # /slugextra does not (the (/.*)? requires a / after the slug).
-            name = "~ ^/${slug}(/.*)?$";
+            # /slugextra does not (the (/...)? requires a / after the slug).
+            # The capture excludes \r\n so a request like /slug/%0d%0aX-Injected
+            # cannot inject headers via $1 in the Location response
+            # (http-splitting; gixy plugin: httpsplitting).
+            name = "~ ^/${slug}(/[^\\r\\n]*)?$";
             value = {
               return = "301 https://${letsEncryptHost}:${toString port}$1$is_args$args";
             };
