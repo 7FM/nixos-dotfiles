@@ -1449,6 +1449,41 @@ lib.mkMerge [
       '';
     };
   }
+  {
+    # Auto-generated convenience redirects. For every nginx vhost defined on
+    # this server with its own listen port (i.e. anything built via
+    # createListenEntries), expose /<vhostName> on the public letsEncryptHost
+    # as a 301 to https://${letsEncryptHost}:<port>/ so we don't have to
+    # remember per-service ports. Redirect (not proxy) so services that are
+    # not port-forwarded stay unreachable from the internet by design.
+    #
+    # Kept in its own mkMerge entry so the module system can merge these
+    # locations onto the same letsEncryptHost vhost defined above (a single
+    # attrset cannot define the same dynamic attribute path twice).
+    services.nginx.virtualHosts."${letsEncryptHost}".locations =
+      let
+        redirectable = lib.filterAttrs (
+          name: vhost: name != letsEncryptHost && vhost.listen != [ ]
+        ) config.services.nginx.virtualHosts;
+
+        mkRedirectPair =
+          name: vhost:
+          let
+            slug = lib.toLower name;
+            port = (builtins.head vhost.listen).port;
+          in
+          {
+            # Regex location captures any trailing /path; $is_args+$args
+            # forward the query string. /slug, /slug/, /slug/x?y=1 all work;
+            # /slugextra does not (the (/.*)? requires a / after the slug).
+            name = "~ ^/${slug}(/.*)?$";
+            value = {
+              return = "301 https://${letsEncryptHost}:${toString port}$1$is_args$args";
+            };
+          };
+      in
+      builtins.listToAttrs (lib.mapAttrsToList mkRedirectPair redirectable);
+  }
   (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
   (import ../../nixos/secrets/tmserver-x86/private.nix {
     inherit
