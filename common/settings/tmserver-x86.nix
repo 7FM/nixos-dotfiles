@@ -124,11 +124,14 @@ let
     # TODO copy & paste your .inline file here!
   '';
 
-  # List of datasets to exclude from ZFS backups
-  zfsBackupBlacklistedDatasets = [
-    "vault/nginx_temp_path"
-    "vault/html"
-  ];
+  # Datasets to exclude from ZFS backups, derived from any fileSystems entry
+  # that opts out via `zfsBackup = false`. Set the flag at the definition
+  # site rather than maintaining a list here.
+  zfsBackupBlacklistedDatasets = lib.mapAttrsToList (_: fs: fs.device) (
+    lib.filterAttrs (
+      _: fs: fs.fsType == "zfs" && fs.device != null && !fs.zfsBackup
+    ) config.fileSystems
+  );
 
   # Nginx virtualHost helpers, lifted from the virtualHosts attrset so they
   # can be threaded into modules imported below (see private.nix import).
@@ -185,7 +188,26 @@ let
     }
   ];
 in
-lib.mkMerge [
+{
+  # Extend NixOS's fileSystems submodule with a `zfsBackup` flag so individual
+  # mounts can opt out of sanoid snapshots + syncoid replication at the
+  # definition site (avoids a central blacklist that leaks dataset names).
+  options.fileSystems = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule {
+        options.zfsBackup = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            If false, exclude this dataset from sanoid auto-snapshots and
+            syncoid replication. Only meaningful when `fsType = "zfs"`.
+          '';
+        };
+      }
+    );
+  };
+
+  config = lib.mkMerge [
   {
     custom = {
       # System settings
@@ -244,6 +266,8 @@ lib.mkMerge [
       "/var/lib/nfs_data" = {
         device = "vault/nfs_data";
         fsType = "zfs";
+        # Exceeds vault_backup's total capacity.
+        zfsBackup = false;
       };
       "${config.services.gitea.stateDir}" = {
         device = "vault/gitea";
@@ -252,6 +276,7 @@ lib.mkMerge [
       "/var/www/html" = {
         device = "vault/html";
         fsType = "zfs";
+        zfsBackup = false;
       };
       "${radicaleMntPoint}" = {
         device = "vault/radicale";
@@ -268,6 +293,7 @@ lib.mkMerge [
       "${nginxTmpPath}" = {
         device = "vault/nginx_temp_path";
         fsType = "zfs";
+        zfsBackup = false;
       };
       "${config.services.opencloud.stateDir}" = {
         device = "vault/opencloud";
@@ -358,9 +384,9 @@ lib.mkMerge [
       # Apply template to all mounted dataset
       datasets =
         let
-          # Filter ZFS mounts, exclude blacklisted
+          # Filter ZFS mounts, exclude any with `zfsBackup = false`
           zfsDatasets = lib.attrsets.filterAttrs (
-            _: fs: fs.fsType == "zfs" && fs.device != null && !(lib.elem fs.device zfsBackupBlacklistedDatasets)
+            _: fs: fs.fsType == "zfs" && fs.device != null && fs.zfsBackup
           ) config.fileSystems;
 
           # Extract dataset names from .device
@@ -1502,4 +1528,5 @@ lib.mkMerge [
       createListenEntries
       ;
   })
-]
+  ];
+}
