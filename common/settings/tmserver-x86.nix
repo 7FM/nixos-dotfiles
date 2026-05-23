@@ -319,6 +319,10 @@ in
       "nvme_core.default_ps_max_latency_us=0"
       "pcie_aspm=off"
       "pcie_port_pm=off"
+      # Cap ZFS ARC at 1 GiB — this host's RAM is small relative to its
+      # workload, and the default cap (~50%+ of RAM) let ARC compete with
+      # anonymous process memory, driving the box into swap.
+      "zfs.zfs_arc_max=1073741824"
     ];
 
     # Force Lexar NM790 NVME SSDs into power state 2 -> 3.6W each!
