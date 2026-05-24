@@ -207,6 +207,23 @@ in
     );
   };
 
+  imports = [
+    (import ../../nixos/secrets/tmserver-x86/private.nix {
+      inherit
+        config
+        lib
+        pkgs
+        myTools
+        myPorts
+        letsEncryptHost
+        nginxSecurityHeaders
+        defaultConf
+        defaultLocations
+        createListenEntries
+        ;
+    })
+  ];
+
   config = lib.mkMerge [
   {
     custom = {
@@ -1518,19 +1535,5 @@ in
       builtins.listToAttrs (lib.mapAttrsToList mkRedirectPair redirectable);
   }
   (import (modulesPath + "/installer/scan/not-detected.nix") { inherit lib; })
-  (import ../../nixos/secrets/tmserver-x86/private.nix {
-    inherit
-      config
-      lib
-      pkgs
-      myTools
-      myPorts
-      letsEncryptHost
-      nginxSecurityHeaders
-      defaultConf
-      defaultLocations
-      createListenEntries
-      ;
-  })
   ];
 }
