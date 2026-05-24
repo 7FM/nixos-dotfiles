@@ -74,6 +74,7 @@ in
         "except:type:ethernet"
         "except:type:wwan"
         "except:type:gsm"
+        "except:type:wireguard"
       ]
       ++ lib.optional wifiSupport "except:type:wifi";
     # nixos-rebuild fails sometimes... See: https://github.com/NixOS/nixpkgs/issues/180175
