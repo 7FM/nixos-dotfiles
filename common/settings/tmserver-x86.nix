@@ -55,16 +55,11 @@ let
   opencloudPort = myTools.extractPort myPorts.opencloud "proxy";
   jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
-  calibreWebPort = myTools.extractPort myPorts.calibreWeb "proxy";
   openvpnServerPort = myTools.extractPort myPorts.openvpn_server "";
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
   opencloudInternalPort = myTools.extractPort myPorts.opencloud "opencloudInternal";
   syncthingHttpPort = myTools.extractPort myPorts.syncthing "";
-  calibreWebInternalPort = myTools.extractPort myPorts.calibreWeb "internal";
-
-  calibreWebDataDir = "/var/lib/calibre-web";
-  calibreWebLibraryDir = "${calibreWebDataDir}/library";
 
   # OpenVPN config
   vpn-dev = "tun0";
@@ -314,10 +309,6 @@ in
       };
       "${config.services.opencloud.stateDir}" = {
         device = "vault/opencloud";
-        fsType = "zfs";
-      };
-      "${calibreWebDataDir}" = {
-        device = "vault/calibre-web";
         fsType = "zfs";
       };
     };
@@ -798,26 +789,6 @@ in
               };
             };
           };
-
-        calibreWeb =
-          (defaultConf ''
-            ## Only allow GET and POST ##
-            if ($request_method !~ ^(GET|POST)$ ) {
-                return 403;
-            }
-          '')
-          // {
-            listen = createListenEntries calibreWebPort;
-            locations = defaultLocations // {
-              "/" = {
-                proxyPass = "http://127.0.0.1:${toString calibreWebInternalPort}";
-                extraConfig = ''
-                  client_max_body_size 0;
-                  proxy_request_buffering off;
-                '';
-              };
-            };
-          };
       };
     };
     # Allow access to body temp path
@@ -925,20 +896,6 @@ in
       enable = true;
     };
 
-    services.calibre-web = {
-      enable = true;
-      listen = {
-        ip = "127.0.0.1";
-        port = calibreWebInternalPort;
-      };
-      dataDir = calibreWebDataDir;
-      options = {
-        calibreLibrary = calibreWebLibraryDir;
-        enableBookUploading = true;
-        enableBookConversion = true;
-        enableKepubify = false;
-      };
-    };
     # services.jellyseerr = {
     #   enable = true;
     # };
