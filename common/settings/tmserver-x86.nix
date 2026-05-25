@@ -283,7 +283,7 @@ in
       "/var/lib/nfs_data" = {
         device = "vault/nfs_data";
         fsType = "zfs";
-        # Exceeds vault_backup's total capacity.
+        # Exceeds backup1's total capacity.
         zfsBackup = false;
       };
       "${config.services.gitea.stateDir}" = {
@@ -327,9 +327,27 @@ in
     # sudo zpool import vault
     # sudo zfs load-key -a
 
-    # BACKUP POOL
-    # sudo zpool create -O compression=on -O mountpoint=legacy -O xattr=sa -O atime=off -O acltype=posixacl -o ashift=12 vault_backup /dev/sda /dev/sdb /dev/sdd
-    # sudo zpool import vault_backup
+    # BACKUP POOLS — four single-disk encrypted pools on the QNAP TR-004 USB DAS.
+    # backup1 is the syncoid target (bay 0); backup*/general datasets are
+    # unioned at /mnt/storage via mergerfs (see systemd service below).
+    # Encryption key lives at /root/zfs-backup.key (out-of-tree — back it up
+    # offline! Lose it and all four pools are unreadable after the next reboot).
+    # First-time setup (run once on the host):
+    #   sudo install -m 0600 /dev/null /root/zfs-backup.key
+    #   sudo dd if=/dev/urandom of=/root/zfs-backup.key bs=32 count=1 conv=fsync
+    #   for B in 0 1 2 3; do
+    #     N=$((B+1))
+    #     DEV=/dev/disk/by-id/usb-QNAP_TR-004_DISK0${B}_<serial>-0:${B}
+    #     sudo zpool create -f \
+    #       -o ashift=12 -o autotrim=off \
+    #       -O compression=zstd -O atime=off -O xattr=sa -O acltype=posixacl \
+    #       -O encryption=aes-256-gcm -O keyformat=raw \
+    #       -O keylocation=file:///root/zfs-backup.key \
+    #       -O mountpoint=/mnt/backup${N} \
+    #       backup${N} "$DEV"
+    #     sudo zfs create backup${N}/syncoid
+    #     sudo zfs create backup${N}/general
+    #   done
 
     # Trying to mitigate nvme connection losses
     boot.kernelParams = [
@@ -354,20 +372,55 @@ in
       };
     };
 
+    # MergerFS union of the four backup pools' `general` datasets at
+    # /mnt/storage. Invoked via absolute store path so mergerfs doesn't need
+    # to live in environment.systemPackages.
+    systemd.services."mnt-storage" = {
+      description = "MergerFS union of backup*/general at /mnt/storage";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "zfs-mount.service" "local-fs.target" ];
+      requires = [ "zfs-mount.service" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /mnt/storage";
+        ExecStart = ''
+          ${pkgs.mergerfs}/bin/mergerfs -f \
+            -o defaults,allow_other,use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs,minfreespace=10G,fsname=mergerfs \
+            /mnt/backup1/general:/mnt/backup2/general:/mnt/backup3/general:/mnt/backup4/general \
+            /mnt/storage
+        '';
+        ExecStop = "${pkgs.fuse3}/bin/fusermount3 -u /mnt/storage";
+        Restart = "on-failure";
+      };
+    };
+
     # Enable zfs
     boot.supportedFilesystems.zfs = true;
     boot.initrd.supportedFilesystems.zfs = true;
     boot.zfs.extraPools = [
       "vault"
-      "vault_backup"
+      "backup1"
+      "backup2"
+      "backup3"
+      "backup4"
     ];
-    # vault_backup holds raw-received (encrypted) datasets from vault.
-    # They share vault's key, but their keylocation defaults to `prompt`
-    # after `zfs recv -w` into an unencrypted pool root, which would
-    # block boot waiting for a password. Restrict auto-key-loading to
-    # vault; vault_backup datasets stay locked but the pool is imported
-    # (sufficient for syncoid raw-recv).
-    boot.zfs.requestEncryptionCredentials = [ "vault" ];
+    # backup1..backup4 pool roots are encrypted under /root/zfs-backup.key and
+    # auto-load at boot so backup*/general datasets can mount for mergerfs.
+    # backup1/syncoid/* receives raw streams from vault and is its own
+    # encryption root with keylocation=prompt — those datasets stay locked at
+    # boot (sufficient for syncoid raw-recv).
+    #
+    # DO NOT change this to `true`. The list form runs `zfs list` without `-r`,
+    # so only the explicitly named datasets get key-loaded. `true` would walk
+    # the whole pool recursively and hit `systemd-ask-password` on the
+    # raw-received datasets, blocking boot.
+    boot.zfs.requestEncryptionCredentials = [
+      "vault"
+      "backup1"
+      "backup2"
+      "backup3"
+      "backup4"
+    ];
     services.zfs = {
       trim.enable = true;
       autoScrub.enable = true;
@@ -435,10 +488,10 @@ in
       interval = "weekly"; # runs once per week
 
       commands = {
-        "vault-to-vault_backup" = {
+        "vault-to-backup1" = {
           useCommonArgs = true;
-          source = "vault"; # your encrypted source pool
-          target = "vault_backup"; # your backup pool (can be unencrypted)
+          source = "vault"; # encrypted source pool
+          target = "backup1/syncoid"; # syncoid container on backup1 (bay 0)
           recursive = true;
           sendOptions = "raw"; # For encrypted mirroring
           extraArgs = map (ds: "--exclude-datasets=" + ds) zfsBackupBlacklistedDatasets; # Prevent backing up the blacklisted datasets
