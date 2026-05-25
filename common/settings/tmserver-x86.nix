@@ -801,6 +801,17 @@ in
         # basic auth (not recommended, but needed for eg. WebDav clients that do not support OpenID Connect)
         PROXY_ENABLE_BASIC_AUTH = "false";
         PROXY_INSECURE_BACKENDS = "true"; # Disable TLS certificate validation for all HTTP backend connections
+
+        # Go runtime memory tuning to rein in OCIS's RAM footprint.
+        # AUTOMEMLIMIT=off: OCIS uses the automemlimit lib, which would call
+        #   debug.SetMemoryLimit() and override our env GOMEMLIMIT — disable it
+        #   so the explicit limit below actually takes effect.
+        # GOMEMLIMIT: soft heap ceiling — Go GCs harder as it approaches this
+        #   (won't OOM the process; can still exceed if the live set truly needs it).
+        # GOGC=50: collect at +50% heap growth instead of +100% — less RAM, more CPU.
+        AUTOMEMLIMIT = "off";
+        GOMEMLIMIT = "2GiB";
+        GOGC = "50";
       };
       # settings = {
       # };
