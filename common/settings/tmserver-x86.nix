@@ -274,7 +274,7 @@ in
     ];
 
     boot.initrd.luks.devices."luks".device =
-      "/dev/disk/by-uuid/6423a674-3af4-428c-bfdb-2b3ee2ab4d5e";
+      "/dev/disk/by-uuid/6423a674-3af4-428c-bfdb-2b3ee2a04d5e";
 
     fileSystems = {
       "/" = {
