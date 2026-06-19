@@ -56,14 +56,14 @@
   {
     name = "systemverilog";
     publisher = "eirikpre";
-    version = "0.13.11";
-    sha256 = "1z9jm84bhgpcwr6smcj1maygnzrs8q34s0gkjxk0xp8kaml42kf1";
+    version = "0.15.0";
+    sha256 = "0slkc2xja6amfb1jn73y2y5802gwzgsfkyhp0hxynzyaz02a8ca1";
   }
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.22.2";
-    sha256 = "19w1z85jssjwslwinyc9f0n1qjf72xwbb8mw38sqrsi4qc7q2i5a";
+    version = "1.27.0";
+    sha256 = "0299zbrxc5cz23h5dya3zh6mhfxis56xmz9lq4p5q6739a8p1q0k";
   }
   {
     name = "latex-support";
@@ -80,26 +80,26 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.59.2026042907";
-    sha256 = "0rffsg7l0qgf5r7m0aqkq8ja7ff9mbmpqdddnl7h830n2sk5r0zn";
+    version = "0.59.2026061007";
+    sha256 = "12j8vqvffr8vx1jqi8rs8bvcy0k379s3l7lcp1nfchcl38fhwvk5";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.27.2026042307";
-    sha256 = "1zfr38drwykqrwd14mq52mm37hg74mn40q78iyk8h9bmhb7m97cv";
+    version = "0.27.2026050100";
+    sha256 = "0kbi0vwi6sk19n9iilzv9q7hjk4nka7r62x3d8ahfsa58ynkg9w5";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.45.0";
-    sha256 = "1ni168d4h7186h87c3fik22v2gyc9yv7db3qxx4mi2lm7f52wqg8";
+    version = "0.45.2026060902";
+    sha256 = "04xzxx1bknfj9sf2nvg1m6f4plggqxvk01alw7khiky1ypx8hsds";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.45.2025120808";
-    sha256 = "06sgzx4jd9v9jx9bghnyja3nix98i26lxga76xb57wzy021bj1za";
+    version = "0.45.2026052803";
+    sha256 = "126mjpik88cpbsmb008pm76aa6hra3w6r2x03gzvikdj8vd4z120";
   }
   {
     name = "octave";
