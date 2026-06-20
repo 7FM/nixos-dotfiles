@@ -420,6 +420,11 @@ in
     # Enable zfs
     boot.supportedFilesystems.zfs = true;
     boot.initrd.supportedFilesystems.zfs = true;
+    # Don't force the root pool import: -f overrides ZFS's multi-host safety
+    # interlock (only needed for hostid mismatch / shared storage). Single host
+    # with a stable networking.hostId, so a normal import is safe and fails-safe
+    # on an ambiguous pool. This becomes the upstream default in 26.11.
+    boot.zfs.forceImportRoot = false;
     boot.zfs.extraPools = [
       "vault"
       "backup1"
