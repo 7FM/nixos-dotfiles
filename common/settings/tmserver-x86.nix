@@ -55,6 +55,8 @@ let
   opencloudPort = myTools.extractPort myPorts.opencloud "proxy";
   jellyfinPort = myTools.extractPort myPorts.jellyfin "proxy";
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
+  immichProxyPort = myTools.extractPort myPorts.immich "proxy";
+  immichInternalPort = myTools.extractPort myPorts.immich "internal";
   openvpnServerPort = myTools.extractPort myPorts.openvpn_server "";
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
@@ -311,6 +313,25 @@ in
       };
       "/var/lib/jellyfin" = {
         device = "vault/jellyfin";
+        fsType = "zfs";
+      };
+      # Immich photo/video library lives on vault. These are irreplaceable
+      # originals, so keep zfsBackup = true (snapshot + syncoid). If the library
+      # grows past backup1's capacity (cf. nfs_data), set zfsBackup = false here
+      # and back the originals up out-of-band instead. `zfs create vault/immich`
+      # before the rebuild.
+      "/var/lib/immich" = {
+        device = "vault/immich";
+        fsType = "zfs";
+      };
+      # Postgres data on vault too: holds immich's faces/people/albums/metadata
+      # (small but irreplaceable), so it rides the sanoid/syncoid backup set.
+      # Mount the parent dir so the versioned subdir (postgresql/17) is covered.
+      # `zfs create vault/postgresql` before the rebuild; if a postgres instance
+      # already wrote to /var/lib/postgresql, migrate that content onto the
+      # dataset first (cf. the vault/mysql note in private.nix).
+      "/var/lib/postgresql" = {
+        device = "vault/postgresql";
         fsType = "zfs";
       };
       "${nginxTmpPath}" = {
@@ -785,6 +806,21 @@ in
           };
         };
 
+        immich = (defaultConf "") // {
+          listen = createListenEntries immichProxyPort;
+          locations = defaultLocations // {
+            "/" = {
+              proxyPass = "http://127.0.0.1:${toString immichInternalPort}";
+              proxyWebsockets = true; # immich uses a websocket for live job/upload status
+              extraConfig = ''
+                client_max_body_size 0; # large photo/video uploads
+                proxy_request_buffering off;
+                proxy_read_timeout 600s;
+              '';
+            };
+          };
+        };
+
         ebook =
           (defaultConf ''
             ## Only allow GET and POST ##
@@ -905,6 +941,46 @@ in
 
     services.jellyfin = {
       enable = true;
+    };
+
+    # Immich: self-hosted photo/video backup with on-device face recognition +
+    # CLIP smart search. Runs on the host (not the protonvpn netns) and is
+    # reverse-proxied by the `immich` nginx vhost below. The ML service uses
+    # onnxruntime's OpenVINO execution provider on the Alder Lake-N iGPU — see
+    # the onnxruntime nixpkgsPatch (flake.nix) + hardware.graphics below.
+    services.immich = {
+      enable = true;
+      host = "127.0.0.1";
+      port = immichInternalPort;
+      mediaLocation = "/var/lib/immich";
+      machine-learning.enable = true;
+      # renderD128 = iGPU render node. Setting this makes the module flip the ML
+      # unit's PrivateDevices=false and DeviceAllow the node, so OpenVINO can
+      # reach the GPU. (Postgres + redis are auto-provisioned by the module.)
+      accelerationDevices = [ "/dev/dri/renderD128" ];
+    };
+
+    # The immich module provisions postgres but inherits services.postgresql.package,
+    # which defaults from stateVersion (21.05 -> postgresql_11, now removed). Pin a
+    # current version; vectorchord + pgvector (required by immich) are available for
+    # it. Safe to pick freely since this is a fresh DB with nothing to migrate.
+    services.postgresql.package = pkgs.postgresql_17;
+
+    # immich + immich-machine-learning run as the `immich` user; the module does
+    # not add it to the GPU groups, so do it here (the render node is what
+    # OpenVINO opens; video added defensively).
+    users.users.immich.extraGroups = [
+      "render"
+      "video"
+    ];
+
+    # iGPU userspace for OpenVINO compute. This box is headless (gpu="generic")
+    # so nothing else enables hardware.graphics. intel-compute-runtime provides
+    # the OpenCL/Level-Zero (NEO) stack OpenVINO's GPU plugin loads to target the
+    # Alder Lake-N iGPU.
+    hardware.graphics = {
+      enable = true;
+      extraPackages = [ pkgs.intel-compute-runtime ];
     };
 
     # services.jellyseerr = {
