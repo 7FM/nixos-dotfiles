@@ -25,7 +25,6 @@ deviceName:
     gui = {
       headless = mkEnableOption "headless mode (no GUI)";
       sway = mkEnableOption "Sway window manager (home-manager managed)";
-      hyprland = mkEnableOption "Hyprland compositor (home-manager managed)";
       x11 = mkEnableOption "X11 desktop (GNOME)";
     };
 
@@ -179,65 +178,6 @@ deviceName:
               '';
             };
           };
-          hyprland = {
-            laptopDisplay = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                Specifies the name of the laptop display (e.g., eDP-1).
-                Or null if the computer is not a laptop.
-              '';
-            };
-            touchpad = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                Specifies the name of the laptop's touchpad (from hyprctl devices).
-              '';
-            };
-            monitors = mkOption {
-              type = types.listOf (
-                types.submodule {
-                  options = {
-                    name = mkOption {
-                      type = types.str;
-                      description = "Monitor name (e.g., eDP-1, HDMI-A-1).";
-                    };
-                    resolution = mkOption {
-                      type = types.nullOr types.str;
-                      default = null;
-                      description = "Resolution string (e.g., 1920x1080@60), or null for 'preferred'.";
-                    };
-                    position = mkOption {
-                      type = types.nullOr types.str;
-                      default = null;
-                      description = "Position string (e.g., 0x0), or null for 'auto'.";
-                    };
-                    scale = mkOption {
-                      type = types.number;
-                      default = 1;
-                      description = "Display scale factor.";
-                    };
-                    primary = mkOption {
-                      type = types.bool;
-                      default = false;
-                      description = "Whether this is the primary monitor.";
-                    };
-                  };
-                }
-              );
-              default = [ ];
-              description = "List of monitor configurations for Hyprland.";
-            };
-            extraConfig = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                Additional Hyprland config lines appended to extraConfig.
-              '';
-            };
-          };
-
           waybar = {
             hwmonPath = mkOption {
               type = types.nullOr types.str;
@@ -304,14 +244,13 @@ deviceName:
         assertion =
           config.custom.gui.headless
           || config.custom.gui.sway
-          || config.custom.gui.hyprland
           || config.custom.gui.x11;
         message = "At least one GUI mode or headless must be enabled!";
       }
       {
         assertion =
-          !(config.custom.gui.headless && (config.custom.gui.sway || config.custom.gui.hyprland || config.custom.gui.x11));
-        message = "gui.headless conflicts with gui.sway, gui.hyprland, and gui.x11!";
+          !(config.custom.gui.headless && (config.custom.gui.sway || config.custom.gui.x11));
+        message = "gui.headless conflicts with gui.sway and gui.x11!";
       }
       {
         assertion = config.custom.gpu != null;

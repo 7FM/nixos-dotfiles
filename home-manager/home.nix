@@ -22,7 +22,6 @@
     ./modules/scripts.nix
     ./modules/ssh.nix
     ./modules/sway.nix
-    ./modules/hyprland.nix
     ./modules/swaync.nix
     ./modules/waybar.nix
     ./modules/xdg.nix

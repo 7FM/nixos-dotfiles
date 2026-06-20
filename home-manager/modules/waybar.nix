@@ -22,14 +22,13 @@ let
   enableGpuStats = gpuCfgValueCount > 0;
 
   swayEnabled = osConfig.custom.gui.sway;
-  hyprlandEnabled = osConfig.custom.gui.hyprland;
-  enable = swayEnabled || hyprlandEnabled;
+  enable = swayEnabled;
 
   # Waybar settings. Under UWSM the compositor HM modules have
   # systemd.enable = false, but UWSM itself activates graphical-session.target,
   # which is what waybar.service binds to. So enable systemd-waybar whenever
   # a compositor is enabled, regardless of the compositor's own HM systemd flag.
-  enableSystemdWaybar = swayEnabled || hyprlandEnabled;
+  enableSystemdWaybar = swayEnabled;
   waybarLaptopFeatures = laptopDisplay != null;
 in
 {
@@ -56,9 +55,8 @@ in
         enable = true;
         systemd = {
           enable = enableSystemdWaybar;
-          # graphical-session.target is started by both sway (via HM's
-          # systemd.enable wiring) and uwsm-managed Hyprland, so waybar
-          # autostarts in either session.
+          # graphical-session.target is started by sway (via HM's
+          # systemd.enable wiring), so waybar autostarts in the session.
           targets = [ "graphical-session.target" ];
         };
         package = waybarPkg;
@@ -66,14 +64,8 @@ in
         settings = [
           {
             modules-left =
-              # Workspace / mode modules differ per compositor. When both
-              # are enabled in custom.gui, we still ship both — waybar
-              # logs a warning for the inactive one and proceeds; the
-              # user sees only the working one.
               lib.optionals swayEnabled [ "sway/workspaces" ]
-              ++ lib.optionals hyprlandEnabled [ "hyprland/workspaces" ]
               ++ lib.optionals swayEnabled [ "custom/scratchpad-indicator" "sway/mode" ]
-              ++ lib.optionals hyprlandEnabled [ "hyprland/submap" ]
               ++ lib.optionals osConfig.custom.bluetooth [
                 "bluetooth"
               ]
@@ -131,19 +123,6 @@ in
                 };
               };
               "sway/mode" = {
-                format = "{}";
-              };
-              "hyprland/workspaces" = {
-                disable-scroll = false;
-                all-outputs = false;
-                format = "{id}{icon}";
-                format-icons = {
-                  "urgent" = " ";
-                  "focused" = "";
-                  "default" = "";
-                };
-              };
-              "hyprland/submap" = {
                 format = "{}";
               };
               "custom/disk_home" = {

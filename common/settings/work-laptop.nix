@@ -16,7 +16,6 @@ lib.mkMerge [
       gpu = "intel";
       cpu = "intel";
       gui.sway = true;
-      gui.hyprland = true;
       useDummySecrets = false;
       bluetooth = true;
       audio.backend = "pipewire";

@@ -6,7 +6,7 @@
 }:
 
 let
-  anyWayland = config.custom.gui.sway || config.custom.gui.hyprland;
+  anyWayland = config.custom.gui.sway;
 in
 {
 
@@ -90,10 +90,6 @@ in
       services.pipewire.enable = true;
       xdg.portal = {
         enable = true;
-        # xdg-desktop-portal-hyprland is added by the NixOS hyprland
-        # module itself (as cfg.portalPackage). Listing it again here
-        # registers two store paths (the override-rebuilt one and the
-        # bare one) for the same service file, breaking user-units.
         extraPortals =
           lib.optionals config.custom.gui.sway (with pkgs; [ xdg-desktop-portal-wlr ])
           ++ (with pkgs; [ xdg-desktop-portal-gtk ]);
@@ -103,9 +99,6 @@ in
         config = lib.mkMerge (
           lib.optionals config.custom.gui.sway [
             { sway.default = lib.mkForce [ "wlr" "gtk" ]; }
-          ]
-          ++ lib.optionals config.custom.gui.hyprland [
-            { "Hyprland".default = [ "hyprland" "gtk" ]; }
           ]
         );
       };
@@ -127,8 +120,6 @@ in
       # Install sway system-wide so /run/current-system/sw/bin/sway exists
       # (UWSM's generated sway-uwsm.desktop hardcodes that path). HM alone
       # only places sway in the user profile, which UWSM cannot resolve.
-      # The hyprland symlinkJoin trick to strip the non-UWSM .desktop
-      # doesn't work here because programs.sway calls package.override.
       programs.sway.enable = true;
       programs.uwsm = {
         enable = true;

@@ -37,7 +37,6 @@ with lib;
     ./smartcards.nix
 
     ./wayland_common.nix
-    ./hyprland.nix
     ./x11.nix
     ./wifi_hotspot.nix
   ];
