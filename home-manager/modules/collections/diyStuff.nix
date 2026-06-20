@@ -8,6 +8,10 @@
 
 let
   enable = osConfig.custom.hm.collections.diyStuff.enable;
+  # Single source of truth for the Cura version: the upstream `cura` package was
+  # removed from nixpkgs (unmaintained), so we ship the AppImage below and can no
+  # longer read `pkgs.cura.version`.
+  curaVersion = "5.9.0";
 in
 {
   config = lib.mkIf enable {
@@ -20,7 +24,7 @@ in
         let
           cura5 = appimageTools.wrapType2 rec {
             pname = "cura5";
-            version = "5.9.0";
+            version = curaVersion;
             src =
               let
                 tagName = "${version}";
@@ -93,7 +97,7 @@ in
           # TODO can we also run this when a new cura version is used?
           source = ../../configs/cura/config;
           onChange = ''
-            ${config.xdg.configHome}/cura/setup.sh ${pkgs.cura.version}
+            ${config.xdg.configHome}/cura/setup.sh ${curaVersion}
           '';
         };
         dataFile."cura/baseSettings".source = ../../configs/cura/local;
