@@ -975,21 +975,27 @@ in
     };
 
     # ML container — replaces the nixpkgs immich-machine-learning (disabled
-    # above). immich's buffalo_l face-detection model has an unbounded dynamic
-    # input shape that OpenVINO's Intel-GPU plugin mishandles: nixpkgs's 2026.x
-    # crashes outright ("[GPU] get_tensor() ... dynamic shape without upper
-    # bound") and the 2025.x line silently returns wrong results / drops faces
-    # (immich#27637, immich#25830). v2.4.1-openvino is the last image where it
-    # works (bundles onnxruntime-openvino 1.18 + OpenVINO 2024.1); the immich
-    # maintainers recommend pinning ML to 2.4.x until the upstream OpenVINO bug
-    # is fixed, and running server 2.7.x against ML 2.4.1 is supported. Pinned by
-    # digest so the tag can't drift. Once upstream OpenVINO handles the model
-    # again, drop this and flip machine-learning.enable back to true.
+    # above), because nixpkgs's OpenVINO crashes on immich's face-detection model.
+    #
+    # History: this was pinned to v2.4.1-openvino because immich's buffalo_l
+    # face-detection model has an unbounded dynamic input shape that OpenVINO's
+    # Intel-GPU plugin mishandles — nixpkgs's 2026.x crashes outright ("[GPU]
+    # get_tensor() ... dynamic shape without upper bound") and the 2025.x line
+    # silently dropped faces (immich#27637, immich#25830). But server 2.7.5 moved
+    # on: it defaults face detection to antelopev2 and added an OCR pipeline
+    # (PP-OCRv5), neither of which the 2.4.1 image can serve — its onnxruntime-
+    # openvino 1.18 segfaulted under the new requests during bulk import.
+    #
+    # Now matched to the server version (v2.7.5-openvino) so CLIP, antelopev2 and
+    # OCR all line up. Pinned by digest so the tag can't drift. If face detection
+    # crashes again on the OpenVINO GPU plugin, revert to the v2.4.1-openvino
+    # digest below and disable OCR in the Immich UI:
+    #   v2.4.1-openvino@sha256:1c6c703477072b8878b5285d2186af7861f941458a55f2d994158bef373ef010
     virtualisation.podman.enable = true;
     virtualisation.oci-containers = {
       backend = "podman";
       containers.immich-machine-learning = {
-        image = "ghcr.io/immich-app/immich-machine-learning:v2.4.1-openvino@sha256:1c6c703477072b8878b5285d2186af7861f941458a55f2d994158bef373ef010";
+        image = "ghcr.io/immich-app/immich-machine-learning:v2.7.5-openvino@sha256:71cd5a681823c4b818f4b24b3f05816eccc3d085559e7615f695bde77e64f1f2";
         autoStart = true;
         # Loopback only; the host immich-server connects here (localhost:3003).
         ports = [ "127.0.0.1:3003:3003" ];
