@@ -13,6 +13,7 @@ in
   config = lib.mkIf enable {
     hardware.graphics = {
       extraPackages = with pkgs; [
+        intel-compute-runtime # OpenCL/Level-Zero (NEO) — GPU compute (e.g. OpenVINO)
         vpl-gpu-rt
         intel-media-driver # For Broadwell (2014) or newer processors. LIBVA_DRIVER_NAME=iHD
         #intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965

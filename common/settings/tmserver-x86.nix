@@ -225,7 +225,7 @@ in
   {
     custom = {
       # System settings
-      gpu = "generic";
+      gpu = "intel"; # Alder Lake-N iGPU: OpenVINO ML compute + QSV/VAAPI transcode (gpu_intel.nix)
       cpu = "generic";
       gui.headless = true;
       useDummySecrets = false;
@@ -983,14 +983,11 @@ in
       "video"
     ];
 
-    # iGPU userspace for OpenVINO compute. This box is headless (gpu="generic")
-    # so nothing else enables hardware.graphics. intel-compute-runtime provides
-    # the OpenCL/Level-Zero (NEO) stack OpenVINO's GPU plugin loads to target the
-    # Alder Lake-N iGPU.
-    hardware.graphics = {
-      enable = true;
-      extraPackages = [ pkgs.intel-compute-runtime ];
-    };
+    # iGPU userspace (intel-compute-runtime for OpenVINO ML, vpl-gpu-rt +
+    # intel-media-driver for QSV/VAAPI transcode) comes from gpu_intel.nix via
+    # custom.gpu = "intel" above; hardware.graphics.enable is set by gpu.nix.
+    # Quick Sync still has to be enabled in the Immich UI (Administration ->
+    # Video Transcoding -> Hardware Acceleration).
 
     # Expose the /srv/photos external-library copy to the hardened immich-server
     # unit (the module only grants it mediaLocation), and order it after the
