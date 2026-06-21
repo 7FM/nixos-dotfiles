@@ -343,10 +343,6 @@ in
         device = "vault/opencloud";
         fsType = "zfs";
       };
-      "/srv/photos" = {
-        device = "vault/photos";
-        fsType = "zfs";
-      };
     };
 
     # MAIN POOL
@@ -1030,16 +1026,6 @@ in
     # host's intel-compute-runtime (OpenCL/Level-Zero) was for the native
     # OpenVINO ML and is now unused here — the ML container bundles its own;
     # kernel i915 + /dev/dri is all the container needs from the host.
-
-    # Expose the /srv/photos external-library copy to the hardened immich-server
-    # unit (the module only grants it mediaLocation), and order it after the
-    # dataset mount. BindReadOnlyPaths appends to the module's sandbox config.
-    # Add /srv/photos as an External Library in the Immich UI (read-only).
-    systemd.services.immich-server = {
-      requires = [ "srv-photos.mount" ];
-      after = [ "srv-photos.mount" ];
-      serviceConfig.BindReadOnlyPaths = [ "/srv/photos" ];
-    };
 
     # services.jellyseerr = {
     #   enable = true;
