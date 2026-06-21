@@ -45,17 +45,6 @@
     {
       nixosConfigurations =
         let
-          # onnxruntime OpenVINO execution-provider support is not yet in nixpkgs
-          # (https://github.com/NixOS/nixpkgs/pull/527714, still open). Pulled in as
-          # a nixpkgsPatch on tmserver-x86 so immich-machine-learning can use the
-          # Alder Lake-N iGPU. Drop this once the PR merges (a later flake update
-          # will then make the patch fail to apply -> rebase or remove it).
-          onnxruntimeOpenvinoPatch =
-            (import nixpkgs_prepatch { system = "x86_64-linux"; }).fetchpatch {
-              name = "onnxruntime-openvino-pr527714.patch";
-              url = "https://github.com/NixOS/nixpkgs/pull/527714.diff";
-              hash = "sha256-lGQYk0Jmw6GT9GTZtzdkHqlMIukaObnGC/s65/1im7E=";
-            };
           mkSys =
             {
               deviceName,
@@ -179,10 +168,7 @@
             system = "aarch64-linux";
             customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ];
           }
-          {
-            deviceName = "tmserver-x86";
-            nixpkgsPatches = [ onnxruntimeOpenvinoPatch ];
-          }
+          { deviceName = "tmserver-x86"; }
           {
             deviceName = "octoprint";
             system = "aarch64-linux";
