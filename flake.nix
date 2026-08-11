@@ -56,18 +56,29 @@
               forceNoSecrets ? false,
             }:
             let
-              nixpkgs-patched =
-                (import nixpkgs_prepatch {
-                  inherit system;
-                }).applyPatches
-                  {
-                    name = "nixpkgs-patched";
-                    src = inputs.nixpkgs_prepatch;
-                    patches = [
-                    ]
-                    ++ nixpkgsPatches;
-                  };
-              nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
+              patches = [
+              ]
+              ++ nixpkgsPatches;
+              # Patching requires building the patched tree (import from derivation)
+              # and re-evaluating nixpkgs' flake.nix, which is expensive. Skip all of
+              # that and use the input as-is when there is nothing to patch.
+              nixpkgs-src =
+                if patches == [ ] then
+                  inputs.nixpkgs_prepatch
+                else
+                  (import nixpkgs_prepatch {
+                    inherit system;
+                  }).applyPatches
+                    {
+                      name = "nixpkgs-patched";
+                      src = inputs.nixpkgs_prepatch;
+                      inherit patches;
+                    };
+              nixpkgs =
+                if patches == [ ] then
+                  nixpkgs_prepatch
+                else
+                  (import "${nixpkgs-src}/flake.nix").outputs { self = inputs.self; };
             in
             nixpkgs.lib.nixosSystem {
               inherit system;
@@ -107,7 +118,7 @@
                   # Source: https://github.com/NixOS/nix/issues/3803#issuecomment-1181667475
                   # Hack to support legacy worklows that use `<nixpkgs>` etc.
                   nix.nixPath = [
-                    "nixpkgs=${nixpkgs-patched}"
+                    "nixpkgs=${nixpkgs-src}"
                   ];
                 }
 
@@ -168,7 +179,23 @@
             system = "aarch64-linux";
             customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ];
           }
-          { deviceName = "tmserver-x86"; }
+          {
+            deviceName = "tmserver-x86";
+            nixpkgsOverlays = [
+              # Option-A experiment: build OpenVINO's Intel-GPU plugin WITH
+              # oneDNN-for-GPU. nixpkgs sets ENABLE_ONEDNN_FOR_GPU=OFF; Intel's
+              # prebuilt OpenVINO (the working immich ML container) builds it ON.
+              # onnxruntime's OpenVINO EP + immich-machine-learning rebuild against
+              # this, so the native iGPU ML path exercises the oneDNN GPU kernels.
+              (final: prev: {
+                openvino = prev.openvino.overrideAttrs (old: {
+                  cmakeFlags =
+                    (builtins.filter (f: !(prev.lib.hasInfix "ENABLE_ONEDNN_FOR_GPU" f)) old.cmakeFlags)
+                    ++ [ (prev.lib.cmakeBool "ENABLE_ONEDNN_FOR_GPU" true) ];
+                });
+              })
+            ];
+          }
           {
             deviceName = "octoprint";
             system = "aarch64-linux";
