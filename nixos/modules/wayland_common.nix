@@ -42,15 +42,16 @@ in
                 left-handed = false;
               };
               shell = {
-                cursor-theme = "Nordic-cursors";
+                cursor-theme = "Nordzy-cursors";
                 cursor-size = 24;
               };
             };
           in
           "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
       };
-      # Expose the cursor theme so weston can resolve "Nordic-cursors".
-      environment.systemPackages = [ pkgs.nordic ];
+      # Expose the cursor theme so weston can resolve "Nordzy-cursors" (the
+      # Nord-styled successor to nordic's cursors, which went away with nordic).
+      environment.systemPackages = [ pkgs.nordzy-cursor-theme ];
       services.libinput = {
         enable = true;
         touchpad = {

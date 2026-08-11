@@ -21,9 +21,15 @@ in
 
       gtk4.theme = null;
 
+      # Was `nordic`, dropped from nixpkgs along with every other theme that
+      # depended on the GTK2-only gtk-engine-murrine. Colloid's `nord` tweak is
+      # the closest surviving match to the old Nord palette.
       theme = {
-        name = "Nordic";
-        package = pkgs.nordic;
+        name = "Colloid-Dark-Nord";
+        package = pkgs.colloid-gtk-theme.override {
+          colorVariants = [ "dark" ];
+          tweaks = [ "nord" ];
+        };
       };
 
       iconTheme = {

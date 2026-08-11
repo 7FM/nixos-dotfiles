@@ -29,8 +29,9 @@ in
           system-config-printer
           # scanner utils
           simple-scan
-          # For MTP connection with an android phone
-          jmtpfs
+          # For MTP connection with an android phone (was jmtpfs, removed from
+          # nixpkgs as unmaintained; simple-mtpfs is the same FUSE-mount idea)
+          simple-mtpfs
         ];
       }
       (import ../submodule/firefox.nix {
