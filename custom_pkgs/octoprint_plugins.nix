@@ -17,6 +17,8 @@ let
         propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
         # none of the following have tests
         doCheck = false;
+        # we prefix pname above, so it never matches the name in .dist-info/METADATA
+        dontCheckPythonMetadata = true;
         pyproject = true;
         build-system = with super; [ setuptools ];
       }
@@ -31,6 +33,7 @@ let
         pytestCheckHook
         pythonOlder
         sphinx-rtd-theme
+        standard-pkg-resources
         ;
     }
   );

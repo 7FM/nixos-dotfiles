@@ -8,6 +8,7 @@
   mock,
   pythonOlder,
   pytestCheckHook,
+  standard-pkg-resources,
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorzero
+    # gpiozero 1.6.2 still uses pkg_resources at runtime (devices.py, boards.py,
+    # pins/mock.py); setuptools >= 81 no longer ships it
+    standard-pkg-resources
   ];
 
   nativeCheckInputs = [
