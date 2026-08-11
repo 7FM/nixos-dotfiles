@@ -944,9 +944,87 @@ in
       };
     };
 
+    # Transcoding runs on the N150 (Twin Lake / Alder Lake-N, Gen12 media
+    # engine) iGPU via Quick Sync (QSV), the path Jellyfin recommends on Intel —
+    # it uses the oneVPL runtime (vpl-gpu-rt) instead of plain VAAPI and keeps
+    # decode/scale/encode in GPU memory. The userspace stack comes from
+    # gpu_intel.nix (custom.gpu = "intel"): intel-media-driver (iHD),
+    # vpl-gpu-rt, and intel-compute-runtime — the last one backs the OpenCL
+    # device used for HDR tone mapping.
+    #
+    # The codec toggles below mirror what the iHD driver actually reports on
+    # this chip; re-check after a driver bump with:
+    #   nix shell nixpkgs#libva-utils -c vainfo --display drm --device /dev/dri/renderD128
+    # (VAEntrypointVLD = decode, VAEntrypointEncSlice/EncSliceLP = encode.)
     services.jellyfin = {
       enable = true;
+
+      hardwareAcceleration = {
+        enable = true;
+        type = "qsv";
+        # For type = "qsv" the module writes this as <OpenclDevice> (tone
+        # mapping) and DeviceAllow's it on the unit; ffmpeg picks the same
+        # render node for QSV itself since <QsvDevice> is left empty.
+        device = "/dev/dri/renderD128";
+      };
+
+      # The module only writes encoding.xml when it does not exist yet, unless
+      # forced — and this host already has one from running software-only. Force
+      # it so the settings below are actually what runs; the previous file is
+      # kept as config/encoding.xml.backup-<timestamp>. Trade-off: transcoding
+      # settings changed in the Jellyfin dashboard are reverted on every restart,
+      # this config is now the single source of truth for them.
+      forceEncodingConfig = true;
+
+      transcoding = {
+        enableHardwareEncoding = true;
+        hardwareEncodingCodecs = {
+          # HEVCMain/Main10 both expose EncSlice + EncSliceLP.
+          hevc = true;
+          # AV1Profile0 is decode-only here (VLD, no Enc* entrypoint) — this
+          # chip has no AV1 encoder, that starts at Arc/Meteor Lake.
+          av1 = false;
+        };
+        # Every decoder the driver exposes that Jellyfin has a toggle for. VC1
+        # (Simple/Main/Advanced) is still there on Gen12, so it is on.
+        hardwareDecodingCodecs = {
+          h264 = true;
+          hevc = true;
+          hevc10bit = true;
+          mpeg2 = true;
+          vc1 = true;
+          vp8 = true;
+          vp9 = true;
+          av1 = true;
+          # HEVC Range Extension: the driver lists VLD for Main422_10/12 and
+          # Main444/444_10/444_12. Rare source material, and Jellyfin flags
+          # these as "may not work on some hardware" — if an odd 4:2:2/4:4:4
+          # file starts failing to play, these two are the first suspects.
+          hevcRExt10bit = true;
+          hevcRExt12bit = true;
+        };
+        enableToneMapping = true;
+        # Low-power (VDEnc) encoding: lower power draw and more concurrent
+        # streams than the full VME encoder. Two prerequisites, both verified on
+        # this box: the driver exposes EncSliceLP for H.264 and HEVC, and the
+        # i915 HuC firmware (which VDEnc rate control needs) is loaded — i915
+        # loads it on its own here, no i915.enable_guc= kernel param required.
+        # If a kernel/firmware bump ever breaks that, transcodes fail outright;
+        # confirm with
+        #   sudo sh -c 'grep -H . /sys/kernel/debug/dri/*/gt*/uc/huc_info'
+        # which should report status: RUNNING.
+        enableIntelLowPowerEncoding = true;
+      };
     };
+
+    # The unit's DeviceAllow lets it *see* the render node; opening it still
+    # needs the group. The module does not add these itself (same situation as
+    # the immich user below; video added defensively alongside render).
+    users.users.jellyfin.extraGroups = [
+      "render"
+      "video"
+    ];
+
 
     # Immich: self-hosted photo/video backup with on-device face recognition +
     # CLIP smart search. Runs on the host (not the protonvpn netns) and is
