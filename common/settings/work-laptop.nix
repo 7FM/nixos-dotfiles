@@ -190,6 +190,8 @@ lib.mkMerge [
     networking.interfaces.wwan0.useDHCP = true;
     #networking.interfaces.enp7s0f3u3u4u4.useDHCP = true;
 
+    programs.nix-ld.enable = true;
+
     services.udev = {
       packages = with pkgs; [
         platformio
