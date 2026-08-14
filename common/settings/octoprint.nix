@@ -514,9 +514,9 @@ lib.mkMerge [
 
       firmwares = {
         mcu = {
-          enable = true;
+          #enable = true;
           configFile = ../../home-manager/configs/klipper/skr_e3_dip.cfg;
-          enableKlipperFlash = true; # NOTE: this is not supported, but we at least want to keep the firmware to allow manual flashing
+          #enableKlipperFlash = true; # NOTE: this is not supported, but we at least want to keep the firmware to allow manual flashing
         };
       };
 
