@@ -84,6 +84,14 @@ lib.mkMerge [
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];
+
+    # Register qemu-user for aarch64 so this machine can build the raspberry pi
+    # configurations (nixos-octoprint, ...) locally instead of on the pi itself.
+    # Their kernel comes from nixos-hardware, which no hydra jobset builds, so it
+    # is never in cache.nixos.org and has to be compiled on every toolchain bump.
+    # Emulated here that is still far quicker than natively on the pi.
+    # This also adds aarch64-linux to nix.settings.extra-platforms.
+    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
     # boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
     fileSystems."/" = {
