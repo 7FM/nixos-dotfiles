@@ -228,5 +228,55 @@
             ];
           }
         ];
+
+      # `nix fmt`. The tree is formatted with nixfmt (RFC style); declaring it
+      # here makes that explicit instead of something you have to infer from the
+      # existing files. Covers both architectures used by the systems above.
+      #
+      # Wrapped rather than using pkgs.nixfmt directly because nixfmt aborts on
+      # git-crypt blobs ("hGetContents: invalid argument (cannot decode byte
+      # sequence)") — and since no single machine holds every device key, some
+      # secret is always still encrypted. Those are skipped by magic header.
+      formatter =
+        nixpkgs_prepatch.lib.genAttrs
+          [
+            "x86_64-linux"
+            "aarch64-linux"
+          ]
+          (
+            system:
+            let
+              pkgs = nixpkgs_prepatch.legacyPackages.${system};
+            in
+            pkgs.writeShellApplication {
+              name = "nixfmt-skip-encrypted";
+              runtimeInputs = with pkgs; [
+                nixfmt
+                findutils
+                coreutils
+              ];
+              text = ''
+                flags=()
+                paths=()
+                for arg in "$@"; do
+                  case "$arg" in
+                    -*) flags+=("$arg") ;;
+                    *) paths+=("$arg") ;;
+                  esac
+                done
+                [ ''${#paths[@]} -gt 0 ] || paths=(.)
+
+                files=()
+                while IFS= read -r f; do
+                  # git-crypt blobs start with a NUL byte then "GITCRYPT"
+                  [ "$(head -c 9 "$f" | tr -d '\0')" = "GITCRYPT" ] && continue
+                  files+=("$f")
+                done < <(find "''${paths[@]}" -type f -name '*.nix' -not -path '*/.git/*' | sort)
+
+                [ ''${#files[@]} -gt 0 ] || exit 0
+                exec nixfmt ''${flags[@]+"''${flags[@]}"} "''${files[@]}"
+              '';
+            }
+          );
     };
 }
