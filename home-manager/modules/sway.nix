@@ -92,11 +92,10 @@ in
       }
     ];
 
-    home.packages =
-      [ pkgs.wofi ]
-      ++ lib.optionals enable (
-        import ../../common/sway_extra_packages.nix { inherit pkgs; }
-      );
+    home.packages = [
+      pkgs.wofi
+    ]
+    ++ lib.optionals enable (import ../../common/sway_extra_packages.nix { inherit pkgs; });
 
     wayland.windowManager.sway = {
       enable = true;

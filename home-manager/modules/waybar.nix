@@ -65,7 +65,10 @@ in
           {
             modules-left =
               lib.optionals swayEnabled [ "sway/workspaces" ]
-              ++ lib.optionals swayEnabled [ "custom/scratchpad-indicator" "sway/mode" ]
+              ++ lib.optionals swayEnabled [
+                "custom/scratchpad-indicator"
+                "sway/mode"
+              ]
               ++ lib.optionals osConfig.custom.bluetooth [
                 "bluetooth"
               ]

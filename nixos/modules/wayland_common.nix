@@ -99,7 +99,12 @@ in
         # mkForce keeps the value we actually want.
         config = lib.mkMerge (
           lib.optionals config.custom.gui.sway [
-            { sway.default = lib.mkForce [ "wlr" "gtk" ]; }
+            {
+              sway.default = lib.mkForce [
+                "wlr"
+                "gtk"
+              ];
+            }
           ]
         );
       };

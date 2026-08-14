@@ -241,15 +241,11 @@ deviceName:
   config = {
     assertions = [
       {
-        assertion =
-          config.custom.gui.headless
-          || config.custom.gui.sway
-          || config.custom.gui.x11;
+        assertion = config.custom.gui.headless || config.custom.gui.sway || config.custom.gui.x11;
         message = "At least one GUI mode or headless must be enabled!";
       }
       {
-        assertion =
-          !(config.custom.gui.headless && (config.custom.gui.sway || config.custom.gui.x11));
+        assertion = !(config.custom.gui.headless && (config.custom.gui.sway || config.custom.gui.x11));
         message = "gui.headless conflicts with gui.sway and gui.x11!";
       }
       {

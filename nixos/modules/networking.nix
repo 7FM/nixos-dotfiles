@@ -68,15 +68,14 @@ in
 
     networking.networkmanager.enable = wifiSupport;
     # NM manages WiFi when wifiSupport is on; otherwise only ethernet/wwan/gsm.
-    networking.networkmanager.unmanaged =
-      [
-        "*"
-        "except:type:ethernet"
-        "except:type:wwan"
-        "except:type:gsm"
-        "except:type:wireguard"
-      ]
-      ++ lib.optional wifiSupport "except:type:wifi";
+    networking.networkmanager.unmanaged = [
+      "*"
+      "except:type:ethernet"
+      "except:type:wwan"
+      "except:type:gsm"
+      "except:type:wireguard"
+    ]
+    ++ lib.optional wifiSupport "except:type:wifi";
     # nixos-rebuild fails sometimes... See: https://github.com/NixOS/nixpkgs/issues/180175
     systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
     systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;

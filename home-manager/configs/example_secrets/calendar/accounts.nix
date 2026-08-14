@@ -13,10 +13,8 @@ let
 
 in
 {
-  "Private" =
-    (createCalendarAcc "Private" (ownCalDavServer "MyCalDavCalendarID") { })
-    // {
-      primary = true;
-    };
+  "Private" = (createCalendarAcc "Private" (ownCalDavServer "MyCalDavCalendarID") { }) // {
+    primary = true;
+  };
   "Bdays" = createCalendarAcc "Bdays" (ownCalDavServer "MyCalDavBDayCalendarID") { };
 }

@@ -36,7 +36,10 @@ in
     };
 
     band = mkOption {
-      type = types.enum [ "2g" "5g" ];
+      type = types.enum [
+        "2g"
+        "5g"
+      ];
       default = "5g";
       description = ''
         WiFi band to use for the hotspot.
@@ -77,8 +80,12 @@ in
       # wlanInterfaces, NixOS no longer auto-creates its default udev interface,
       # so the upstream station interface must be re-declared here too.
       networking.wlanInterfaces = {
-        ${upstreamIf} = { device = upstreamIf; };
-        ${apIf}       = { device = upstreamIf; };
+        ${upstreamIf} = {
+          device = upstreamIf;
+        };
+        ${apIf} = {
+          device = upstreamIf;
+        };
       };
 
       networking = {
@@ -96,7 +103,10 @@ in
         ];
 
         firewall.interfaces.${apIf} = {
-          allowedUDPPorts = [ 53 67 ];
+          allowedUDPPorts = [
+            53
+            67
+          ];
           allowedTCPPorts = [ 53 ];
         };
 
