@@ -132,9 +132,15 @@ let
 
   # Nginx virtualHost helpers, lifted from the virtualHosts attrset so they
   # can be threaded into modules imported below (see private.nix import).
-  nginxSecurityHeaders = ''
+  # `referrerPolicy = null` omits the header, for backends that set their own:
+  # nginx appends add_header *after* the upstream's, and when several
+  # Referrer-Policy values arrive the browser takes the last valid one, so ours
+  # would silently override the backend's.
+  mkSecurityHeaders = referrerPolicy: ''
     add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
-    add_header Referrer-Policy "no-referrer" always;
+    ${lib.optionalString (
+      referrerPolicy != null
+    ) ''add_header Referrer-Policy "${referrerPolicy}" always;''}
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-Download-Options "noopen" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -152,19 +158,23 @@ let
     }
   '';
 
-  defaultConf = extraConf: {
+  nginxSecurityHeaders = mkSecurityHeaders "no-referrer";
+
+  mkConf = referrerPolicy: extraConf: {
     # forceSSL = true;
     onlySSL = true;
     useACMEHost = letsEncryptHost;
     serverName = letsEncryptHost;
     extraConfig = ''
-      ${nginxSecurityHeaders}
+      ${mkSecurityHeaders referrerPolicy}
       # ignore_invalid_headers off;
       ${extraConf}
     '';
     http2 = true;
     kTLS = true;
   };
+
+  defaultConf = mkConf "no-referrer";
 
   defaultLocations = {
     "/favicon.ico" = {
@@ -840,7 +850,11 @@ in
           # servarr family, same fix (see proxyLocationWithHostPort in private.nix).
           # /static/ is served off the package, as the upstream module's own nginx
           # block does.
-          paperless = (defaultConf "") // {
+          # No Referrer-Policy from us: paperless sets `same-origin` itself, and
+          # our `no-referrer` would win (appended last), which makes browsers
+          # send `Origin: null` — Django then rejects every login POST with
+          # "Origin checking failed - null does not match any trusted origins".
+          paperless = (mkConf null "") // {
             listen = createListenEntries paperlessProxyPort;
             root = "${config.services.paperless.package}";
             locations = defaultLocations // {
