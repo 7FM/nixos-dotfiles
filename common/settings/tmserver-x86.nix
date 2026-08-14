@@ -57,6 +57,8 @@ let
   jellyfinInternalHttpPort = myTools.extractPort myPorts.jellyfin "http";
   immichProxyPort = myTools.extractPort myPorts.immich "proxy";
   immichInternalPort = myTools.extractPort myPorts.immich "internal";
+  paperlessProxyPort = myTools.extractPort myPorts.paperless "proxy";
+  paperlessInternalPort = myTools.extractPort myPorts.paperless "internal";
   openvpnServerPort = myTools.extractPort myPorts.openvpn_server "";
   # Hidden internal ports
   giteaInternalPort = myTools.extractPort myPorts.gitea "internal";
@@ -322,6 +324,12 @@ in
       # before the rebuild.
       "/var/lib/immich" = {
         device = "vault/immich";
+        fsType = "zfs";
+      };
+      # Scanned originals are irreplaceable, so keep zfsBackup = true.
+      # `zfs create vault/paperless` before the rebuild.
+      "${config.services.paperless.dataDir}" = {
+        device = "vault/paperless";
         fsType = "zfs";
       };
       # Postgres data on vault too: holds immich's faces/people/albums/metadata
@@ -826,6 +834,41 @@ in
           };
         };
 
+        # Django (behind granian) builds absolute redirect URLs from
+        # request.get_host(), so the Host header must keep the port or the
+        # allauth login flow redirects to https://<host>/ — same trap as the
+        # servarr family, same fix (see proxyLocationWithHostPort in private.nix).
+        # /static/ is served off the package, as the upstream module's own nginx
+        # block does.
+        paperless = (defaultConf "") // {
+          listen = createListenEntries paperlessProxyPort;
+          root = "${config.services.paperless.package}";
+          locations = defaultLocations // {
+            "/" = {
+              proxyPass = "http://127.0.0.1:${toString paperlessInternalPort}";
+              proxyWebsockets = true; # /ws/status pushes live consume/OCR progress
+              recommendedProxySettings = false;
+              extraConfig = ''
+                proxy_set_header Host $host:$server_port;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Forwarded-Host $host:$server_port;
+                proxy_set_header X-Forwarded-Server $hostname;
+
+                client_max_body_size 0; # bulk document uploads
+                proxy_request_buffering off;
+                proxy_read_timeout 600s; # OCR of a large scan outlasts the 60s default
+              '';
+            };
+            "/static/" = {
+              extraConfig = ''
+                rewrite ^/(.*)$ /lib/paperless-ngx/$1 break;
+              '';
+            };
+          };
+        };
+
         ebook =
           (defaultConf ''
             ## Only allow GET and POST ##
@@ -1075,6 +1118,52 @@ in
     # OpenVINO's GPU plugin needs — load-bearing again now that ML runs natively.
     # Quick Sync still has to be enabled in the Immich UI (Administration ->
     # Video Transcoding -> Hardware Acceleration).
+
+    # Paperless-ngx: scan/OCR/archive document manager, reverse-proxied by the
+    # `paperless` nginx vhost above. Postgres side rides the shared instance
+    # pinned to postgresql_17 for immich, so DB + documents share one backup set.
+    #
+    # Bootstrap once, before the first rebuild — paperless-scheduler fails to
+    # start until the dataset is mounted and the password file exists:
+    #   zfs create vault/paperless          # inherits mountpoint=legacy from the pool
+    #   mkdir -p /var/lib/paperless
+    #   mount -t zfs vault/paperless /var/lib/paperless
+    #   umask 077; printf '<admin password>' > /var/lib/paperless/admin-password
+    # root:root 0600 is correct — systemd LoadCredential reads it before the unit
+    # drops privileges. Out of the repo on purpose, like the recyclarr API keys.
+    # It only *seeds* the `admin` superuser: manage_superuser bails if any
+    # superuser exists, so a WebUI password change sticks and later edits to this
+    # file do nothing (reset via `paperless-manage changepassword`).
+    services.paperless = {
+      enable = true;
+      address = "127.0.0.1"; # nginx-only; never bound on a LAN interface
+      port = paperlessInternalPort;
+      dataDir = "/var/lib/paperless";
+      database.createLocally = true;
+      passwordFile = "/var/lib/paperless/admin-password";
+      settings = {
+        # Appended verbatim to CSRF_TRUSTED_ORIGINS, so it must keep the port to
+        # match the browser's Origin — without it every WebUI POST fails CSRF.
+        PAPERLESS_URL = "https://${letsEncryptHost}:${toString paperlessProxyPort}";
+        # Also drives the tesseract closure: the module rebuilds it with exactly
+        # these languages (plus eng/osd/equ) instead of all ~100 langpacks.
+        PAPERLESS_OCR_LANGUAGE = "deu+eng";
+        # RAM-tight box (cf. the 1 GiB ARC cap): keep a batch of large scans from
+        # stacking OCR processes into swap. Raise if documents queue up.
+        PAPERLESS_TASK_WORKERS = 2;
+        PAPERLESS_THREADS_PER_WORKER = 1;
+        # ocrmypdf args; lossless so scans stay pixel-exact, at the cost of size.
+        PAPERLESS_OCR_USER_ARGS = {
+          optimize = 1;
+          pdfa_image_compression = "lossless";
+        };
+      };
+      # Office/e-mail formats (docx, odt, eml) — adds a JVM + headless chromium.
+      configureTika = false;
+      # Nightly document_exporter dump; duplicates the archive on disk, and the
+      # dataset is already snapshotted + replicated.
+      exporter.enable = false;
+    };
 
     # services.jellyseerr = {
     #   enable = true;
