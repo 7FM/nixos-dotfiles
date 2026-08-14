@@ -1135,6 +1135,18 @@ in
       # file do nothing (reset via `paperless-manage changepassword`).
       services.paperless = {
         enable = true;
+        # PAPERLESS_OCR_LANGUAGE below rebuilds tesseract with only those
+        # languages, so this isn't Hydra's cached package and gets built here,
+        # running the test suite. These two are flaky rather than broken: they
+        # mock the consume task (tesseract is never involved), then race a 2 s
+        # filesystem-watch timeout under parallel pytest-xdist — a race a busy
+        # machine loses. nixpkgs already disables two others from this suite.
+        package = pkgs.paperless-ngx.overrideAttrs (old: {
+          disabledTests = (old.disabledTests or [ ]) ++ [
+            "test_ignores_macos_files"
+            "test_subdirs_as_tags"
+          ];
+        });
         address = "127.0.0.1"; # nginx-only; never bound on a LAN interface
         port = paperlessInternalPort;
         dataDir = "/var/lib/paperless";
