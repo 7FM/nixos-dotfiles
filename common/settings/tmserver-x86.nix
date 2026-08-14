@@ -1031,55 +1031,26 @@ in
     # reverse-proxied by the `immich` nginx vhost below. Server-side video
     # transcoding uses the Alder Lake-N iGPU via QSV/VAAPI (accelerationDevices).
     #
-    # Machine learning does NOT run from nixpkgs here — machine-learning.enable
-    # is false and ML runs in a pinned OpenVINO container instead (see
-    # virtualisation.oci-containers below), because nixpkgs's OpenVINO crashes on
-    # immich's face-detection model. The server reaches the container via
-    # IMMICH_MACHINE_LEARNING_URL = http://localhost:3003 (module default).
+    # ML runs natively on the iGPU via OpenVINO. It needed a pinned container
+    # while the old buffalo_l model tripped OpenVINO's Intel-GPU plugin (2026.x
+    # crashed on its unbounded dynamic input shape, 2025.x silently dropped faces
+    # — immich#27637, immich#25830). Neither reproduces here: 3.1.0 defaults to
+    # antelopev2 and this openvino has ENABLE_ONEDNN_FOR_GPU (overlay in
+    # flake.nix). Verified on this host against a CPU reference: antelopev2/CLIP/
+    # PP-OCRv5 all on GPU, identical bbox, cosine 0.9995/0.9997, ~210 vs ~670
+    # ms/image. First inference after a model load costs ~32 s (OpenVINO kernel
+    # compile); models unload after MACHINE_LEARNING_MODEL_TTL (default 300 s).
     services.immich = {
       enable = true;
       host = "127.0.0.1";
       port = immichInternalPort;
       mediaLocation = "/var/lib/immich";
-      machine-learning.enable = false;
-      # renderD128 = iGPU render node. accelerationDevices flips the server unit's
-      # PrivateDevices=false and DeviceAllow's the node, so server-side QSV/VAAPI
-      # transcoding can reach the GPU. (Postgres + redis are auto-provisioned.)
+      # Models download to /var/cache/immich (CacheDirectory), ~2 GB.
+      machine-learning.enable = true;
+      # renderD128 = iGPU render node; shared commonServiceConfig means this
+      # covers both units — OpenVINO for ML, QSV/VAAPI for server transcoding.
+      # (Postgres + redis are auto-provisioned.)
       accelerationDevices = [ "/dev/dri/renderD128" ];
-    };
-
-    # ML container — replaces the nixpkgs immich-machine-learning (disabled
-    # above), because nixpkgs's OpenVINO crashes on immich's face-detection model.
-    #
-    # History: this was pinned to v2.4.1-openvino because immich's buffalo_l
-    # face-detection model has an unbounded dynamic input shape that OpenVINO's
-    # Intel-GPU plugin mishandles — nixpkgs's 2026.x crashes outright ("[GPU]
-    # get_tensor() ... dynamic shape without upper bound") and the 2025.x line
-    # silently dropped faces (immich#27637, immich#25830). But server 2.7.5 moved
-    # on: it defaults face detection to antelopev2 and added an OCR pipeline
-    # (PP-OCRv5), neither of which the 2.4.1 image can serve — its onnxruntime-
-    # openvino 1.18 segfaulted under the new requests during bulk import.
-    #
-    # Now matched to the server version (v2.7.5-openvino) so CLIP, antelopev2 and
-    # OCR all line up. Pinned by digest so the tag can't drift. If face detection
-    # crashes again on the OpenVINO GPU plugin, revert to the v2.4.1-openvino
-    # digest below and disable OCR in the Immich UI:
-    #   v2.4.1-openvino@sha256:1c6c703477072b8878b5285d2186af7861f941458a55f2d994158bef373ef010
-    virtualisation.podman.enable = true;
-    virtualisation.oci-containers = {
-      backend = "podman";
-      containers.immich-machine-learning = {
-        image = "ghcr.io/immich-app/immich-machine-learning:v2.7.5-openvino@sha256:71cd5a681823c4b818f4b24b3f05816eccc3d085559e7615f695bde77e64f1f2";
-        autoStart = true;
-        # Loopback only; the host immich-server connects here (localhost:3003).
-        ports = [ "127.0.0.1:3003:3003" ];
-        # iGPU render node for OpenVINO. Rootful podman runs the container as
-        # root, which can open the 0660 root:render node directly (no group-add).
-        devices = [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
-        # Persist downloaded ONNX models across container restarts.
-        volumes = [ "immich-ml-models:/cache" ];
-        environment.MACHINE_LEARNING_CACHE_FOLDER = "/cache";
-      };
     };
 
     # The immich module provisions postgres but inherits services.postgresql.package,
@@ -1088,22 +1059,22 @@ in
     # it. Safe to pick freely since this is a fresh DB with nothing to migrate.
     services.postgresql.package = pkgs.postgresql_17;
 
-    # immich-server runs as the `immich` user and needs the GPU groups for
-    # QSV/VAAPI video transcoding (the render node is what ffmpeg opens; video
-    # added defensively). The module does not add these itself. (ML no longer
-    # runs as this user — it's the OpenVINO container above.)
+    # Both immich units run as the `immich` user and need the GPU groups: the
+    # server for QSV/VAAPI transcoding (the render node is what ffmpeg opens) and
+    # machine-learning for OpenVINO. DeviceAllow lets the unit *see* the node;
+    # opening the 0660 root:render node still needs the group. The module does
+    # not add these itself (video added defensively alongside render).
     users.users.immich.extraGroups = [
       "render"
       "video"
     ];
 
-    # iGPU userspace (vpl-gpu-rt + intel-media-driver for QSV/VAAPI transcode)
-    # comes from gpu_intel.nix via custom.gpu = "intel" above; hardware.graphics
-    # .enable is set by gpu.nix. Quick Sync still has to be enabled in the Immich
-    # UI (Administration -> Video Transcoding -> Hardware Acceleration). Note: the
-    # host's intel-compute-runtime (OpenCL/Level-Zero) was for the native
-    # OpenVINO ML and is now unused here — the ML container bundles its own;
-    # kernel i915 + /dev/dri is all the container needs from the host.
+    # iGPU userspace comes from gpu_intel.nix via custom.gpu = "intel" above;
+    # hardware.graphics.enable is set by gpu.nix. vpl-gpu-rt + intel-media-driver
+    # back QSV/VAAPI transcode; intel-compute-runtime provides the OpenCL ICD that
+    # OpenVINO's GPU plugin needs — load-bearing again now that ML runs natively.
+    # Quick Sync still has to be enabled in the Immich UI (Administration ->
+    # Video Transcoding -> Hardware Acceleration).
 
     # services.jellyseerr = {
     #   enable = true;
