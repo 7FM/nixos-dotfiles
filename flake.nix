@@ -200,14 +200,6 @@
             deviceName = "octoprint";
             system = "aarch64-linux";
             customModules = [ nixos-hardware.nixosModules.raspberry-pi-4 ];
-            nixpkgsOverlays = [
-              (self: super: {
-                # Add not yet packaged octoprint plugins
-                octoprint = super.octoprint.override (prevArgs: {
-                  packageOverrides = super.callPackage ./custom_pkgs/octoprint_plugins.nix { };
-                });
-              })
-            ];
           }
 
           {
