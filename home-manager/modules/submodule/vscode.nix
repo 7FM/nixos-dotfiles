@@ -233,6 +233,8 @@ in
           "**/.ammonite" = true;
         };
         "remote.SSH.lockfilesInTmp" = true;
+        "remote.SSH.remoteServerListenOnSocket" = true;
+        "remote.SSH.remotePlatform" = "linux";
       };
     };
   };
