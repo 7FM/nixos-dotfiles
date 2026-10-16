@@ -45,6 +45,138 @@ let
   giteaAppName = myMiscSecrets.giteaAppName;
   ebookDir = "${opencloudStateDir}/${myMiscSecrets.ebookDir}";
 
+  # SMART check of the four QNAP TR-004 bays, see systemd.services."qnap-smart-check".
+  #   qnap-smart-check --if-awake  check bays that are spinning anyway (run
+  #                                before every force-hdd-to-sleep pass)
+  #   qnap-smart-check --stale     check bays not checked for a week, waking
+  #                                them if needed (daily timer)
+  #   qnap-smart-check --test      check all bays, send a test notification each
+  qnapSmartCheck =
+    let
+      zed = config.services.zfs.zed.settings;
+      # smartd_warning.sh runs `-M exec` targets as `PROG -s SUBJECT ADDRESS`
+      # with the message on stdin -- the same convention ZED uses for
+      # ZED_EMAIL_PROG, so the ZED telegram script works as-is. It does strip
+      # PATH down to sed+hostname though, so hand back ZED's PATH.
+      telegramNotify = pkgs.writeShellScript "smartd-telegram-notify" ''
+        export PATH=${zed.PATH}
+        exec ${zed.ZED_EMAIL_PROG} "$@"
+      '';
+      # Only IDENTIFY, SMART values/thresholds and a few logs work through the
+      # jmb39x tunnel: no -H (falls back to "not capable"), no -n standby, no
+      # self-tests, no selftest log. -f still flags any attribute that is at or
+      # below its threshold (prefail included).
+      directives = "-f -C 197+ -U 198+ -l error -m ${zed.ZED_EMAIL} -M exec ${telegramNotify} -M daily";
+      # `smartctl -d jmb39x-q,N` works through any bay's LUN (verified: bay 1
+      # reports the same serial via the bay-0 and bay-1 LUN), so each bay is
+      # tunnelled through its own LUN and a check only touches that disk.
+      # With false, every query goes through bay 0, which must be awake too.
+      tunnelViaOwnLun = true;
+    in
+    pkgs.writeShellApplication {
+      name = "qnap-smart-check";
+      runtimeInputs = [
+        pkgs.smartmontools
+        pkgs.hdparm
+        pkgs.coreutils
+        pkgs.util-linux
+      ];
+      text = ''
+        mode=''${1:-}
+        case "$mode" in
+          --if-awake | --stale | --test) ;;
+          *)
+            echo "usage: qnap-smart-check --if-awake|--stale|--test" >&2
+            exit 2
+            ;;
+        esac
+
+        state=/var/lib/qnap-smart
+        mkdir -p "$state"
+        # Never let two tunnel sessions on LBA 33 overlap; force-hdd-to-sleep
+        # takes the same lock so it can't send standby mid-check.
+        exec 9>/run/qnap-bays.lock
+        flock 9
+
+        notify() {
+          ${telegramNotify} -s "$1" ${zed.ZED_EMAIL} \
+            || echo "Sending the notification failed" >&2
+        }
+
+        shopt -s nullglob
+        declare -a lun
+        for bay in 0 1 2 3; do
+          luns=(/dev/disk/by-id/usb-QNAP_TR-004_DISK0"$bay"_*-0:"$bay")
+          if [ "''${#luns[@]}" -ne 1 ]; then
+            msg="Expected one TR-004 LUN for bay $bay, found: ''${luns[*]}"
+            echo "$msg" >&2
+            # --if-awake runs every 30 min; leave the alerting to --stale.
+            if [ "$mode" != --if-awake ]; then
+              echo "$msg" | notify "qnap-smart-check on $HOSTNAME: TR-004 not found"
+            fi
+            exit 1
+          fi
+          lun[bay]=''${luns[0]}
+        done
+
+        # force-hdd-to-sleep's marker: standby was sent and the disk saw no
+        # block I/O since. Any I/O clears it on that script's next pass.
+        asleep() {
+          local drive
+          drive=$(basename "$(readlink -f "''${lun[$1]}")")
+          [ -f "/tmp/diskaccess-''${drive}_sleep.txt" ]
+        }
+        # Last attempt (success or not), so a broken bay alerts at most daily.
+        attempted_within() {
+          local f="$state/bay$1.last-attempt"
+          [ -f "$f" ] && [ $(($(date +%s) - $(stat -c %Y "$f"))) -lt "$2" ]
+        }
+
+        rc=0
+        woken=()
+        for bay in 0 1 2 3; do
+          tunnel_bay=${if tunnelViaOwnLun then "$bay" else "0"}
+          extra=""
+          case "$mode" in
+            --if-awake)
+              attempted_within "$bay" 86400 && continue
+              asleep "$bay" && continue
+              asleep "$tunnel_bay" && continue
+              ;;
+            --stale)
+              attempted_within "$bay" $((7 * 86400)) && continue
+              ;;
+            --test)
+              extra="-M test"
+              ;;
+          esac
+          asleep "$bay" && woken+=("$bay")
+          asleep "$tunnel_bay" && woken+=("$tunnel_bay")
+
+          # One smartd run per bay, so a bay that fails to register (smartd
+          # exits on that) doesn't skip the others. State files keep the
+          # -C/-U "+" baselines and -M bookkeeping across runs.
+          touch "$state/bay$bay.last-attempt"
+          if ! out=$(echo "''${lun[tunnel_bay]} -d jmb39x-q,$bay $extra ${directives}" \
+            | smartd -q onecheck -c - -s "$state/" 2>&1); then
+            rc=1
+            echo "$out" | tail -n 15 | notify "qnap-smart-check on $HOSTNAME: smartd failed for bay $bay"
+          fi
+          echo "$out"
+        done
+
+        # The tunnel and SMART commands are SCSI pass-through: they spin disks
+        # up without touching /sys/block/*/stat, so force-hdd-to-sleep can't
+        # see them and, its marker still being set, won't send another
+        # standby. Put back to sleep whatever this run woke up.
+        for bay in $(printf '%s\n' "''${woken[@]}" | sort -u); do
+          hdparm -y "$(readlink -f "''${lun[bay]}")" >/dev/null 2>&1 || true
+        done
+
+        exit "$rc"
+      '';
+    };
+
   # Exposed ports
   ebookPort = myTools.extractPort myPorts.ebook "proxy";
   ebookInternalPort = myTools.extractPort myPorts.ebook "internal";
@@ -619,6 +751,10 @@ in
 
       systemd.services."force-hdd-to-sleep" = {
         script = ''
+          # Don't send standby while qnap-smart-check is talking to a bay.
+          exec 9>/run/qnap-bays.lock
+          ${pkgs.util-linux}/bin/flock 9
+
           # This script looks for recent disk access, and if nothing has changed, puts /dev/"drive" into spindown mode.
           # This should be used only if the hdparm power management function is not working.
           # Call this script with cron or manually as desired
@@ -671,6 +807,37 @@ in
         serviceConfig = {
           Type = "oneshot";
           User = "root";
+          # SMART-check bays that are still spinning before they get put to
+          # sleep. "-": a failed check must not block the spin-down.
+          ExecStartPre = "-${lib.getExe qnapSmartCheck} --if-awake";
+        };
+      };
+
+      # SMART monitoring for the TR-004 bays. Not services.smartd: the bays are
+      # only reachable via smartctl's jmb39x-q tunnel, which issues its
+      # commands as READ/WRITE of LBA 33 on a TR-004 LUN and can't do CHECK
+      # POWER MODE. A resident smartd would spin up every bay on every poll,
+      # ignoring -n standby, and force-hdd-to-sleep
+      # would never put them back to sleep. Instead each bay is checked about
+      # once a day while it's spinning anyway (force-hdd-to-sleep's
+      # ExecStartPre), and only a bay that stayed asleep for a week gets woken
+      # by the daily --stale run, then put back to sleep.
+      # Don't run `smartctl -d jmb39x-q` by hand while this runs: two tunnel
+      # sessions on LBA 33 clobber each other.
+      environment.systemPackages = [ qnapSmartCheck ];
+      systemd.services."qnap-smart-check" = {
+        description = "SMART check of QNAP TR-004 bays unchecked for a week";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${lib.getExe qnapSmartCheck} --stale";
+        };
+      };
+      systemd.timers."qnap-smart-check" = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          # Daytime on purpose: spinning up a bay at night is audible.
+          # No Persistent: catching up a missed run on boot could fire at night.
+          OnCalendar = "*-*-* 13:00:00";
         };
       };
 
