@@ -2008,9 +2008,13 @@ in
               # The capture excludes \r\n so a request like /slug/%0d%0aX-Injected
               # cannot inject headers via $1 in the Location response
               # (http-splitting; gixy plugin: httpsplitting).
+              # $host (not letsEncryptHost) keeps whatever host the client
+              # used, so e.g. https://10.8.0.1/slug over the VPN stays on
+              # 10.8.0.1. nginx validates the Host header and strips any
+              # port, so it is safe to use here (unlike $http_host).
               name = "~ ^/${slug}(/[^\\r\\n]*)?$";
               value = {
-                return = "301 https://${letsEncryptHost}:${toString port}$1$is_args$args";
+                return = "301 https://$host:${toString port}$1$is_args$args";
               };
             };
         in
