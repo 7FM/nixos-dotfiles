@@ -103,6 +103,7 @@ deviceName:
             identity_scripts.enable = mkEnableOption "the git author set/fix scripts";
           };
           gtk.enable = mkEnableOption "the gtk module";
+          kodi.enable = mkEnableOption "the kodi module";
           neovim.enable = mkEnableDefaultTrueOption "the neovim module";
           nix_index.enable = mkEnableDefaultTrueOption "the nix-index module (pre-built nix-locate database)";
           optimize_storage.enable = mkEnableOption "storage optimizations";

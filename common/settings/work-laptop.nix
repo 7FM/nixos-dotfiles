@@ -32,6 +32,7 @@ lib.mkMerge [
             identity_scripts.enable = true;
           };
           gtk.enable = true;
+          kodi.enable = true;
           neovim.enable = true;
           optimize_storage.enable = true;
           qt.enable = true;

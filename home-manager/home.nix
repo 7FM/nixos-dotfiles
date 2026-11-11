@@ -15,6 +15,7 @@
     ./modules/email.nix
     ./modules/git.nix
     ./modules/gtk.nix
+    ./modules/kodi.nix
     ./modules/neovim.nix
     ./modules/nix_index.nix
     ./modules/optimize_storage_space.nix
