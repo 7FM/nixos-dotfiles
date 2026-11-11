@@ -415,11 +415,6 @@ in
                 app_id = "^org.keepassxc.KeePassXC$";
                 title = "^KeePassXC - Browser Access Request$";
               }
-              # Cura dialogs
-              {
-                app_id = "^com\/.https:\/\/ultimaker.python3$";
-                title = "^Multiply Selected Model$";
-              }
               # Zoom fixes
               {
                 title = "^.zoom$";
