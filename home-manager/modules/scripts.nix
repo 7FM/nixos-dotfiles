@@ -64,8 +64,6 @@ let
     runtimeInputs = with pkgs; [
       openconnect
       keepassxc
-      gawk
-      gnugrep
     ];
     text = ''
       set -ueo pipefail
@@ -88,15 +86,36 @@ let
       stty echo
       printf "\n"
 
+      # Get sudo out of the way first, so its prompt can't eat into the TOTP validity window
+      sudo -v
+
+      # Avoid fetching a TOTP that is about to expire
+      TOTP_REMAINING=$(( 30 - $(date +%s) % 30 ))
+      if [ "$TOTP_REMAINING" -lt 8 ]; then
+        echo "Waiting ''${TOTP_REMAINING}s for a fresh TOTP"
+        sleep "$TOTP_REMAINING"
+      fi
+
       echo "Trying to extract the VPN credentials from the KeepassXC DB"
       VPN_ENTRY=$(echo "$KP_PASSWORD" | keepassxc-cli search "$KEEPASSDB_PATH" "$KEEPASSDB_SEARCHTERM" 2> /dev/null)
-      VPN_DATA=$(echo "$KP_PASSWORD" | keepassxc-cli show "$KEEPASSDB_PATH" "$VPN_ENTRY" 2> /dev/null)
-      VPN_PASSWORD=$(echo "$VPN_DATA" | grep Password | awk '{print $2}')
-      VPN_USER=$(echo "$VPN_DATA" | grep UserName | awk '{print $2}')
+      # Prints one value per line: UserName, Password, current TOTP
+      mapfile -t VPN_DATA < <(echo "$KP_PASSWORD" | keepassxc-cli show -q -s -t -a UserName -a Password "$KEEPASSDB_PATH" "$VPN_ENTRY" 2> /dev/null)
+      unset KP_PASSWORD
+      if [ "''${#VPN_DATA[@]}" -ne 3 ]; then
+        echo "Failed to read username, password and TOTP from the KeepassXC entry!"
+        exit 1
+      fi
+      VPN_USER="''${VPN_DATA[0]}"
+      VPN_PASSWORD="''${VPN_DATA[1]}"
+      VPN_TOTP="''${VPN_DATA[2]}"
+
+      trap - ERR
 
       echo "USER: $VPN_USER"
       echo "Connecting to the VPN"
-      echo "$VPN_PASSWORD" | sudo openconnect -u "$VPN_USER" --authgroup="$UNI_VPN_GROUP" --passwd-on-stdin --non-inter "$UNI_VPN_URL"
+      # The server asks for the TOTP in a second challenge form after the password was accepted;
+      # openconnect reads both answers line by line from stdin (hence no --non-inter)
+      printf '%s\n%s\n' "$VPN_PASSWORD" "$VPN_TOTP" | sudo openconnect -u "$VPN_USER" --authgroup="$UNI_VPN_GROUP" --passwd-on-stdin "$UNI_VPN_URL"
     '';
   };
 
