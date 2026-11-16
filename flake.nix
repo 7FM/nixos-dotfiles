@@ -146,7 +146,7 @@
             builtins.listToAttrs (
               map (desc: {
                 name = "nixos-" + desc.deviceName + (desc.confNameSuffix or "");
-                value = (mkSys desc);
+                value = mkSys (removeAttrs desc [ "confNameSuffix" ]);
               }) sysDescs
             );
         in
