@@ -45,7 +45,7 @@ let
       # XML
       dotjoshjohnson.xml
       # Languagetool integration
-      valentjn.vscode-ltex
+      ltex-plus.vscode-ltex-plus
     ]
     ++ (pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       marketplaceExtensions

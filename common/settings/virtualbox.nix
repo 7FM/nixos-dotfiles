@@ -9,7 +9,6 @@
 let
   myTools = pkgs.myTools { osConfig = config; };
   useWayland = config.custom.gui.sway;
-  useX11 = config.custom.gui.x11;
 in
 lib.mkMerge [
   {
@@ -100,10 +99,7 @@ lib.mkMerge [
         null;
 
     # VirtualBox specifics
-    virtualisation.virtualbox.guest = {
-      enable = true;
-      x11 = useX11;
-    };
+    virtualisation.virtualbox.guest.enable = true;
 
     # Remove fsck at startup which fails with VirtualBox
     boot.initrd.checkJournalingFS = false;

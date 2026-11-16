@@ -29,9 +29,10 @@ in
           system-config-printer
           # scanner utils
           simple-scan
-          # For MTP connection with an android phone (was jmtpfs, removed from
-          # nixpkgs as unmaintained; simple-mtpfs is the same FUSE-mount idea)
-          simple-mtpfs
+          # For MTP connection with an android phone: `aft-mtp-mount <dir>`
+          # (jmtpfs and simple-mtpfs were both removed from nixpkgs as
+          # unmaintained; this one is the same FUSE-mount idea)
+          android-file-transfer
         ];
       }
       (import ../submodule/firefox.nix {

@@ -34,9 +34,9 @@ in
   documentation.enable = false;
 
   # journal settings
-  services.journald.extraConfig = ''
-    SystemMaxUse=50M
-    RuntimeMaxUse=10M
-  '';
+  services.journald.settings.Journal = {
+    SystemMaxUse = "50M";
+    RuntimeMaxUse = "10M";
+  };
 
 }

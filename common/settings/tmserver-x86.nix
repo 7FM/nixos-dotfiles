@@ -1088,6 +1088,10 @@ in
 
       services.opencloud = {
         enable = true;
+        # No default anymore: stay on the rolling release this server has
+        # always tracked. Switching to pkgs.opencloud-production would be a
+        # downgrade, which OpenCloud does not support.
+        package = pkgs.opencloud;
         port = opencloudInternalPort;
         stateDir = opencloudStateDir;
         url = "https://${letsEncryptHost}:${toString opencloudPort}";
@@ -1127,13 +1131,13 @@ in
         };
         lfs.enable = true;
         settings = {
-          server = rec {
+          server = {
             SSH_PORT = (builtins.elemAt config.services.openssh.ports 0);
             HTTP_ADDR = "127.0.0.1";
-            DOMAIN = letsEncryptHost;
-            SSH_DOMAIN = DOMAIN;
+            # DOMAIN was removed upstream; gitea derives it from ROOT_URL now.
+            SSH_DOMAIN = letsEncryptHost;
             HTTP_PORT = giteaInternalPort;
-            ROOT_URL = "https://${DOMAIN}:${toString giteaPort}/";
+            ROOT_URL = "https://${letsEncryptHost}:${toString giteaPort}/";
             DISABLE_SSH = false;
             LFS_START_SERVER = true;
             LFS_HTTP_AUTH_EXPIRY = "20m";

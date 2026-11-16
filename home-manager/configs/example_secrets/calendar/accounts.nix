@@ -4,7 +4,7 @@
 }:
 
 let
-  calDavServer = urlSuffix: rec {
+  ownCalDavServer = urlSuffix: rec {
     url = "https://definitelyMyServerDomain.com/${userName}/${urlSuffix}";
     userName = "DefinitelyMyUsername";
     passwordCommand = createPasswordLookupCmd "myCalDavServerPwdLookupEntry";
