@@ -26,14 +26,14 @@
   {
     name = "code-spell-checker";
     publisher = "streetsidesoftware";
-    version = "4.6.0";
-    sha256 = "0dk1ra8vfxryl5pz2cxq9zw6ap59xvmcks33xsgh54d622ircwsc";
+    version = "4.10.0";
+    sha256 = "0f2n8xb0vd5sxy00vkp3x8nsppxdpmxp53qmhakqg267qhw7ln0b";
   }
   {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.3.4";
-    sha256 = "0jsc8k9wdqcifzdd13wkk91wqhr4nvm28c9ff3c0pcqfh2zirkfd";
+    version = "3.0.2";
+    sha256 = "0wwkiv8166qzc9icn6nbqrsrs6lfss2mz8z3yz20ra0s1kjd4r51";
   }
   {
     name = "vscode-mlir";
@@ -62,8 +62,8 @@
   {
     name = "veriloghdl";
     publisher = "mshr-h";
-    version = "1.29.0";
-    sha256 = "1rmskrrmkiib8nar8pf2ha755hyz6i0qyziq4xv6w377v57h0lpx";
+    version = "1.29.1";
+    sha256 = "0ckap121sap2ld4af0w7gxmzs57zzkibc1dw8wifjyfmdh24lzzb";
   }
   {
     name = "latex-support";
@@ -80,26 +80,26 @@
   {
     name = "vscode-java-debug";
     publisher = "vscjava";
-    version = "0.59.2026072407";
-    sha256 = "1ilagay5qhiibchyiw167nnpcdjib27xh2z7322fizlk9sik2ylf";
+    version = "0.60.2026110205";
+    sha256 = "067ws25gicc8r8fqwaan93vmbwmzjvgy88jdfr9gqx6ywviq5hia";
   }
   {
     name = "vscode-java-dependency";
     publisher = "vscjava";
-    version = "0.27.2026062300";
-    sha256 = "0hfr9mkqdg96c9myv73njyplxycxpaqmfwi85g3z5kcnkhv2cqrh";
+    version = "0.27.2026092100";
+    sha256 = "1kx0dfjmh2zj5y4yfapg7b3bimmysdhfvgnpz4wgnivjk4zyha7w";
   }
   {
     name = "vscode-java-test";
     publisher = "vscjava";
-    version = "0.46.2026072702";
-    sha256 = "1jl7d2qwcg4g61nxr2kfqx1f8frni7k8vgcfl1akn2ff2ck5kpab";
+    version = "0.47.0";
+    sha256 = "0jr781diqg8i4binpm0097wx3cwh574ls2ngqrxwwxrdzc46rgsh";
   }
   {
     name = "vscode-maven";
     publisher = "vscjava";
-    version = "0.45.2026052803";
-    sha256 = "126mjpik88cpbsmb008pm76aa6hra3w6r2x03gzvikdj8vd4z120";
+    version = "0.46.0";
+    sha256 = "1w367yr170m79lvr8wbv8qc0gnii7akjipsgnlvak3hfpxrm4axs";
   }
   {
     name = "octave";
