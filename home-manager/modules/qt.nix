@@ -16,7 +16,11 @@ in
       platformTheme.name = "adwaita";
       style = {
         name = "adwaita-dark";
-        package = pkgs.adwaita-qt;
+        # Qt5 and Qt6 need separate style plugins
+        package = [
+          pkgs.adwaita-qt
+          pkgs.adwaita-qt6
+        ];
       };
     };
   };
