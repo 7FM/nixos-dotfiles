@@ -77,6 +77,7 @@ lib.mkMerge [
   }
   {
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    programs.nix-ld.enable = true;
     boot.initrd.availableKernelModules = [
       "xhci_pci"
       "ahci"
