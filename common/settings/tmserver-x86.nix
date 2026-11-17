@@ -1327,6 +1327,9 @@ in
         # filesystem-watch timeout under parallel pytest-xdist — a race a busy
         # machine loses. nixpkgs already disables two others from this suite.
         package = pkgs.paperless-ngx.overrideAttrs (old: {
+          # nixpkgs bumped torch to 2.15 while paperless 3.4.2 still pins
+          # `torch<2.15`. Drop once nixpkgs relaxes it / paperless catches up.
+          pythonRelaxDeps = (old.pythonRelaxDeps or [ ]) ++ [ "torch" ];
           disabledTests = (old.disabledTests or [ ]) ++ [
             "test_ignores_macos_files"
             "test_subdirs_as_tags"
