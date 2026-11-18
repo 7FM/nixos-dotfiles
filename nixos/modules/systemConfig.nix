@@ -25,6 +25,7 @@ with lib;
     (import ./ssh.nix userName)
     ./security.nix
     ./nix.nix
+    ./deploy.nix
 
     # Features
     ./audio.nix

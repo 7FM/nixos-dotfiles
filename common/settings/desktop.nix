@@ -76,7 +76,8 @@ lib.mkMerge [
     };
   }
   {
-    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    # Build (emulates aarch64) and deploy the servers / raspberry pis from here
+    custom.deploy.host.enable = true;
     programs.nix-ld.enable = true;
     boot.initrd.availableKernelModules = [
       "xhci_pci"
